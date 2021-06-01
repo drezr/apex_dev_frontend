@@ -12,7 +12,7 @@
 // import Component from '@/components/Component.vue'
 
 export default {
-  name: 'Component',
+  name: 'AccessMixin',
 
   components: {
     

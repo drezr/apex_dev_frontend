@@ -6,15 +6,23 @@ import vuetify from '@/plugins/vuetify'
 import draggable from 'vuedraggable'
 
 import Http from '@/modules/http.js'
-import Requests from '@/modules/requests.js'
+
+import CustomButton from '@/components/CustomButton.vue'
+
+import Access from '@/mixins/Access.vue'
+import Current from '@/mixins/Current.vue'
+import Socket from '@/mixins/Socket.vue'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$http = Http
-Vue.prototype.$req = Requests
-Vue.prototype.$req.http = Vue.prototype.$http
 
-Vue.component('draggable', draggable)
+Vue.component('VueDraggable', draggable)
+Vue.component('CustomButton', CustomButton)
+
+Vue.mixin(Access)
+Vue.mixin(Current)
+Vue.mixin(Socket)
 
 new Vue({
   router,

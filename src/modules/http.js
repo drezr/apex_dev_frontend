@@ -17,7 +17,7 @@ class Http {
     this.media = this.local ? 'http://localhost:8888/' : 'https://media.apex.wf/'
   }
 
-  get(path, params, callback) {
+  _get(path, params, callback) {
     axios({
       method: 'get',
       headers: this.header,
@@ -37,7 +37,7 @@ class Http {
     })
   }
 
-  post(path, data, callback) {
+  _post(path, data, callback) {
     axios({
       method: 'post',
       headers: this.header,
@@ -57,7 +57,7 @@ class Http {
     })
   }
 
-  put(path, data, callback) {
+  _put(path, data, callback) {
     axios({
       method: 'put',
       headers: this.header,
@@ -77,7 +77,7 @@ class Http {
     })
   }
 
-  patch(path, data, callback) {
+  _patch(path, data, callback) {
     axios({
       method: 'patch',
       headers: this.header,
@@ -97,7 +97,7 @@ class Http {
     })
   }
 
-  delete(path, callback) {
+  _delete(path, callback) {
     axios({
       method: 'delete',
       headers: this.header,
@@ -113,6 +113,54 @@ class Http {
         console.error(error.response.headers)
         callback(error.response.status, error.response.data)
       }
+    })
+  }
+
+  get(url, params) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this._get(url, params, (s, result) => resolve(result))
+    })
+  }
+
+  filter(url, params) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this.get(url, params, (s, result) => resolve(result))
+    })
+  }
+
+  post(url, data) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this._post(url, data, (s, result) => resolve(result))
+    })
+  }
+
+  put(url, data) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this._put(url, data, (s, result) => resolve(result))
+    })
+  }
+
+  patch(url, data) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this._patch(url, data, (s, result) => resolve(result))
+    })
+  }
+
+  delete(url) {
+    if (!url.endsWith('/')) url = url + '/'
+
+    return new Promise(resolve => {
+      this._delete(url, (s, result) => resolve(result))
     })
   }
 }
