@@ -117,48 +117,36 @@ class Http {
   }
 
   get(url, params) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this._get(url, params, (s, result) => resolve(result))
     })
   }
 
   filter(url, params) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this.get(url, params, (s, result) => resolve(result))
     })
   }
 
   post(url, data) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this._post(url, data, (s, result) => resolve(result))
     })
   }
 
   put(url, data) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this._put(url, data, (s, result) => resolve(result))
     })
   }
 
   patch(url, data) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this._patch(url, data, (s, result) => resolve(result))
     })
   }
 
   delete(url) {
-    if (!url.endsWith('/')) url = url + '/'
-
     return new Promise(resolve => {
       this._delete(url, (s, result) => resolve(result))
     })

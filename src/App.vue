@@ -3,12 +3,6 @@
 <v-app>
   <div class="main-frame">
 
-    <CustomButton 
-      :text="'Hello World !'"
-      :color="'blue'"
-      :dark="true"
-    />
-
   </div>
 </v-app>
 
@@ -44,20 +38,14 @@ export default {
 
     this.$http.header = {Authorization: 'Token ' + token.token}
 
-    let team_id = 1
-    let app_id = 2
-    let month = 5
-    let year = 2021
+    let result = await this.$http.get('works', {
+      'team_id': 1,
+      'app_id': 3,
+      'month': 5,
+      'year': 2021,
+    })
 
-    let works = await this.$http.get(
-      `team/${team_id}/watcher/${app_id}/calendar/${month}/${year}`
-    )
-
-    console.log(works)
-
-    let home = await this.$http.get(`home`)
-
-    console.log(home)
+    console.log(result)
   },
 
   computed: {
