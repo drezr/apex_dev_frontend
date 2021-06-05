@@ -1,58 +1,21 @@
-<template>
-
-<div>
-
-</div>
-
-</template>
-
-
 <script>
 
-// import Component from '@/components/Component.vue'
-
 export default {
-  name: 'AccessMixin',
-
-  components: {
-    
-  },
-
-  props: {
-    
-  },
-
   data() {
     return {
 
     }
   },
 
-  created() {
-
-  },
-
   computed: {
-
+    $logged_profile() {
+      return this.$store.state.logged_profile
+    },
   },
 
   methods: {
 
   },
-
-  watch: {
-
-  },
 }
 
 </script>
-
-
-<style>
-
-</style>
-
-
-<style scoped>
-
-</style>

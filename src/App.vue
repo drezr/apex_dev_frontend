@@ -2,7 +2,9 @@
 
 <v-app>
   <div class="main-frame">
+    <BarDesktop v-if="$logged_profile" />
 
+    <router-view :key="$route.fullPath" />
   </div>
 </v-app>
 
@@ -11,13 +13,13 @@
 
 <script>
 
-// import Component from '@/components/Component.vue'
+import BarDesktop from '@/components/BarDesktop.vue'
 
 export default {
   name: 'App',
 
   components: {
-    
+    BarDesktop,
   },
 
   props: {
@@ -31,21 +33,7 @@ export default {
   },
 
   async created() {
-    let token = await this.$http.post(`api-token-auth`, {
-      'username': 'ronan.dumont@infrabel.be',
-      'password': 'x',
-    })
-
-    this.$http.header = {Authorization: 'Token ' + token.token}
-
-    let result = await this.$http.get('works', {
-      'team_id': 1,
-      'app_id': 3,
-      'month': 5,
-      'year': 2021,
-    })
-
-    console.log(result)
+    this.log_user()
   },
 
   computed: {
@@ -53,7 +41,44 @@ export default {
   },
 
   methods: {
+    async log_user() {
+      let token = this.$tool.get_cookie('token')
+      let username = this.$tool.get_cookie('username')
 
+      if (!token) {
+        if (this.$current_view != 'login') {
+          this.$router.push({'path': '/login'})
+        }
+      }
+
+      else {
+        this.$http.header = {Authorization: 'Token ' + token}
+
+        let profile = await this.$http.get('profile', {'username': username})
+
+        if (profile.profile) {
+          this.$store.commit('set_logged_profile', profile.profile)
+        }
+
+        else {
+          this.logout()
+        }
+      } 
+    },
+
+    logout() {
+      this.$http.header = {}
+
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+
+      this.$store.commit('set_logged_profile', null)
+
+      setTimeout(() => {
+        this.$router.push({'path': '/login'})
+      }, 100)
+      
+    },
   },
 
   watch: {
@@ -65,6 +90,14 @@ export default {
 
 
 <style>
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.hover-brightness:hover {
+  filter: brightness(1.3);
+}
 
 </style>
 
