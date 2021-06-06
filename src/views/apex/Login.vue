@@ -183,7 +183,7 @@ For reset password button disabling
       })
 
       if (token.token) {
-        this.$http.header = {Authorization: 'Token ' + token.token}
+        this.$http.header = {'Authorization': 'Token ' + token.token}
 
         let request = await this.$http.get('profile', {
           'username': this.login_email,

@@ -25,6 +25,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'add': {
+            'fr': 'Ajouter',
+            'nl': '',
+            'en': '',
+          },
           'remove': {
             'fr': 'Retirer',
             'nl': '',
@@ -77,6 +82,11 @@ export default {
           },
           'not_empty_field': {
             'fr': 'Ce champ ne peut pas être vide.',
+            'nl': '',
+            'en': '',
+          },
+          'no_result': {
+            'fr': 'Aucun résultat',
             'nl': '',
             'en': '',
           },
@@ -194,7 +204,7 @@ export default {
               'en': '',
             },
             'access_reset_password': {
-              'fr': 'Renvoyer un nouveau mot de passe',
+              'fr': 'Envoyer un nouveau mot de passe',
               'nl': '',
               'en': '',
             },
@@ -335,6 +345,16 @@ export default {
             },
             'access_remove_access': {
               'fr': 'Retirer les accès',
+              'nl': '',
+              'en': '',
+            },
+            'access_create_user': {
+              'fr': 'Créer un nouvel utilisateur',
+              'nl': '',
+              'en': '',
+            },
+            'access_add_existing_user': {
+              'fr': 'Ajouter un utilisateur existant',
               'nl': '',
               'en': '',
             },

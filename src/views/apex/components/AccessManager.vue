@@ -6,6 +6,39 @@
     {{ lang.views.team.access_manager_tooltip[lg] }}
   </v-card-title>
 
+  <v-card-text>
+    <v-btn block class="mt-3 mb-6 green" dark>
+      <v-icon class="mr-3">mdi-account-plus</v-icon>
+      {{ lang.views.team.access_create_user[lg] }}
+    </v-btn>
+
+    <div class="d-flex align-center mb-3">
+      <v-autocomplete
+        v-model="picked_profiles"
+        :items="all_profiles"
+        item-text="name"
+        item-value="id"
+        outlined
+        chips
+        small-chips
+        multiple
+        hide-details
+        deletable-chips
+        :allow-overflow="false"
+        :label="lang.views.team.access_add_existing_user[lg]"
+        :no-data-text="lang.generic.no_result[lg]"
+      ></v-autocomplete>
+
+      <v-btn
+        color="green"
+        class="ml-3 white--text"
+      >
+        <v-icon class="mr-3">mdi-account-arrow-left</v-icon>
+        {{ lang.generic.add[lg] }}
+      </v-btn>
+    </div>
+  </v-card-text>
+
   <v-list>
     <VueDraggable
       v-model="profiles"
@@ -79,12 +112,18 @@ export default {
       profiles: Array(),
       selected_profile: Object(),
       profile_editor_dialog: false,
+      all_profiles: Array(),
+      picked_profiles: Array(),
     }
   },
 
   async created() {
     this.profiles = this.$tool.deepcopy(this.team.profiles)
     this.profiles.sort((a, b) => a.link.position - b.link.position)
+
+    let request = await this.$http.get('all_profiles')
+    this.all_profiles = request['all_profiles']
+    this.all_profiles.sort((a, b) => (a.name).localeCompare(b.name))
   },
 
   computed: {

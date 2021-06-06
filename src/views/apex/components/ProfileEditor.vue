@@ -79,7 +79,6 @@
       <CustomButton
         :color="'blue'"
         :dark="true"
-        :block="true"
         :icon="'mdi-lock-plus'"
         :text="lang.views.team.access_reset_password[lg]"
         class="mb-6"
