@@ -39,6 +39,7 @@
             :disabled="disabled"
             :outlined="outlined"
             :dark="dark"
+            :block="block"
             :rounded="rounded"
             :fab="fab"
             :icon="small_fab"
@@ -131,6 +132,7 @@ export default {
     outlined: Boolean,
     rounded: Boolean,
     dark: Boolean,
+    block: Boolean,
     fab: Boolean,
     small_fab: Boolean,
 

@@ -1,10 +1,22 @@
 <template>
 
 <div class="bar-desktop elevation-1">
-  <router-link class="navigation" :to="'/'">
-    <img :src="$tool.get_logo('apex_50x50')" class="logo" />
-    <span class="text-h6 ml-3 mr-3" v-if="breakpoint">APEX</span>
-  </router-link>
+  <div class="d-flex">
+    <router-link class="navigation" :to="'/'">
+      <img :src="$tool.get_logo('apex_50x50')" class="logo" />
+      <span class="text-h6 ml-3 mr-3" v-if="breakpoint">APEX</span>
+    </router-link>
+
+    <div class="d-flex" v-if="$current_team_id">
+      <v-icon>mdi-chevron-right</v-icon>
+
+      <router-link class="navigation" :to="`/team/${$current_team_id}`">
+        <img :src="$tool.get_logo('hub_50x50')" class="logo" />
+        <span class="text-h6 ml-3 mr-3" v-if="breakpoint">HUB</span>
+      </router-link>
+    </div>
+  </div>
+
 
   <v-menu offset-y open-on-hover>
     <template v-slot:activator="{ on, attrs }">
@@ -24,14 +36,14 @@
       <v-list-item link @click="password_dialog = true">
         <v-list-item-title>
           <v-icon class="mr-3">mdi-lock</v-icon>
-          Changer de mot de passe
+          {{ lang.generic.change_password[lg] }}
         </v-list-item-title>
       </v-list-item>
 
       <v-list-item @click="logout" link>
         <v-list-item-title>
           <v-icon class="mr-3">mdi-logout</v-icon>
-          Se déconnecter
+          {{ lang.generic.disconnect[lg] }}
         </v-list-item-title>
       </v-list-item>
     </v-list>
@@ -103,8 +115,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
-  left: 0;
   background-color: rgb(240, 240, 240);
   padding: 0 25px;
   width: 100%;

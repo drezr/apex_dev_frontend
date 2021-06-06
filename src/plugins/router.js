@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 import Login from '@/views/apex/Login.vue'
 import Home from '@/views/apex/Home.vue'
-//import Hub from '@/views/apex/Hub.vue'
+import Team from '@/views/apex/Team.vue'
 
 Vue.use(VueRouter)
 
@@ -27,7 +27,17 @@ const router = new VueRouter({
       meta: {
         'app': 'apex',
         'view': 'login',
-        'title': 'Apex - Login',
+        'title': 'Login',
+      },
+    },
+    {
+      path: '/team/:team_id',
+      name: 'Team',
+      component: Team,
+      meta: {
+        'app': 'apex',
+        'view': 'team',
+        'title': 'Apex',
       },
     },
   ]

@@ -20,8 +20,63 @@ export default {
             'nl': '',
             'en': '',
           },
+          'save': {
+            'fr': 'Enregistrer',
+            'nl': '',
+            'en': '',
+          },
+          'remove': {
+            'fr': 'Retirer',
+            'nl': '',
+            'en': '',
+          },
+          'cancel': {
+            'fr': 'Annuler',
+            'nl': '',
+            'en': '',
+          },
           'connection': {
             'fr': 'Connexion',
+            'nl': '',
+            'en': '',
+          },
+          'disconnect': {
+            'fr': 'Déconnexion',
+            'nl': '',
+            'en': '',
+          },
+          'change_password': {
+            'fr': 'Changer de mot de passe',
+            'nl': '',
+            'en': '',
+          },
+          'name': {
+            'fr': 'Nom',
+            'nl': '',
+            'en': '',
+          },
+          'ident': {
+            'fr': 'Numéro d\'identification',
+            'nl': '',
+            'en': '',
+          },
+          'phone': {
+            'fr': 'Numéro de téléphone',
+            'nl': '',
+            'en': '',
+          },
+          'grade': {
+            'fr': 'Grade',
+            'nl': '',
+            'en': '',
+          },
+          'field': {
+            'fr': 'Spécialité',
+            'nl': '',
+            'en': '',
+          },
+          'not_empty_field': {
+            'fr': 'Ce champ ne peut pas être vide.',
             'nl': '',
             'en': '',
           },
@@ -68,8 +123,223 @@ export default {
               'nl': '',
               'en': '',
             },
-          }
-        }
+          },
+          'home': {
+            'my_team': {
+              'fr': 'Mon équipe',
+              'nl': '',
+              'en': '',
+            },
+            'my_teams': {
+              'fr': 'Mes équipes',
+              'nl': '',
+              'en': '',
+            },
+            'circles': {
+              'fr': 'Arrondissements',
+              'nl': '',
+              'en': '',
+            },
+          },
+          'team': {
+            'draft_desc': {
+              'fr': 'Gestion de projets',
+              'nl': '',
+              'en': '',
+            },
+            'radium_desc': {
+              'fr': 'Agenda de chantiers',
+              'nl': '',
+              'en': '',
+            },
+            'watcher_desc': {
+              'fr': 'Calendrier d\'équipe',
+              'nl': '',
+              'en': '',
+            },
+            'access_manager_tooltip': {
+              'fr': 'Gestion de l\'équipe',
+              'nl': '',
+              'en': '',
+            },
+            'access_manager_edit': {
+              'fr': 'Éditer les informations de',
+              'nl': '',
+              'en': '',
+            },
+            'access_grades': {
+              'fr': [
+                'Agent de maintenance',
+                'Agent de métier',
+                'Ajusteur mécanicien',
+                'Assistant technico-administratif',
+                'Chargeur principal',
+                'Chef de maintenance',
+                'Chef technicien',
+                'Commis écriture',
+                'Coordinateur technique',
+                '1er Chef de secteur technique',
+                'Chef de secteur technique',
+                'Ingénieur',
+                'Manager Maintenance',
+                'Opérateur track',
+                'Opérateur track spécialisé',
+                'Schb',
+                'Sous-chef de secteur technique',
+                'Secrétaire administratif',
+                'Technicien',
+                'Technicien principal',
+              ],
+              'nl': '',
+              'en': '',
+            },
+            'access_reset_password': {
+              'fr': 'Renvoyer un nouveau mot de passe',
+              'nl': '',
+              'en': '',
+            },
+            'access_is_manager': {
+              'fr': 'Est manager de l\'équipe',
+              'nl': '',
+              'en': '',
+            },
+            'access_is_manager_hint': {
+              'fr': 'Peut ajouter des membres à l\'équipe et modifier leurs accès.',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_title': {
+              'fr': 'Paramètres liés à Draft',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_is_editor': {
+              'fr': 'Est éditeur',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_is_editor_hint': {
+              'fr': 'Peut créer, modifier et supprimer les projets et les tâches.',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_is_user': {
+              'fr': 'Est utilisateur',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_is_user_hint': {
+              'fr': 'Peut changer le statut des tâches et des sous-tâches.',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_can_see_private': {
+              'fr': 'Peut voir les projets privés',
+              'nl': '',
+              'en': '',
+            },
+            'access_draft_can_see_private_hint': {
+              'fr': '',
+              'nl': '',
+              'en': '',
+            },
+            'access_radium_title': {
+              'fr': 'Paramètres liés à Radium',
+              'nl': '',
+              'en': '',
+            },
+            'access_radium_is_editor': {
+              'fr': 'Est éditeur',
+              'nl': '',
+              'en': '',
+            },
+            'access_radium_is_editor_hint': {
+              'fr': 'Peut créer, modifier et supprimer les chantiers.',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_title': {
+              'fr': 'Paramètres liés à Watcher',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_editor': {
+              'fr': 'Est éditeur',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_editor_hint': {
+              'fr': 'Peut modifier les cellules, planifier le travail, modifier les éléments (tâches, fichiers, ...).',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_visible': {
+              'fr': 'Est visible',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_visible_hint': {
+              'fr': 'Apparaît dans le calendrier.',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_printable': {
+              'fr': 'Est imprimable',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_printable_hint': {
+              'fr': 'Apparaît dans le calendrier imprimable.',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_can_see_cells': {
+              'fr': 'Peut voir toutes les cellules',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_can_see_cells_hint': {
+              'fr': 'Également les cellules des autres agents.',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_can_see_quotas': {
+              'fr': 'Peut voir toutes les congés',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_can_see_quotas_hint': {
+              'fr': 'Également les congés des autres agents.',
+              'nl': '',
+              'en': '',
+            },
+            'access_password_dialog_title': {
+              'fr': 'Êtes-vous sûr de vouloir envoyer un nouveau mot de passe à cet utilisateur ?',
+              'nl': '',
+              'en': '',
+            },
+            'access_password_dialog_warning': {
+              'fr': 'Attention, cela réinitialisera le mot de passe actuel de l\'utilisateur et il ne pourra se connecter qu\'avec le nouveau mot de passe qui lui sera envoyé par email.',
+              'nl': '',
+              'en': '',
+            },
+            'access_delete_dialog_title': {
+              'fr': 'Êtes-vous sûr de vouloir retirer tous les accès de cet utilisateur ?',
+              'nl': '',
+              'en': '',
+            },
+            'access_delete_dialog_warning': {
+              'fr': 'Le compte utilisateur ne sera pas supprimé d\'Apex mais uniquement ses accès à cette équipe.',
+              'nl': '',
+              'en': '',
+            },
+            'access_remove_access': {
+              'fr': 'Retirer les accès',
+              'nl': '',
+              'en': '',
+            },
+          },
+        },
       },
     }
   },

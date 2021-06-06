@@ -57,7 +57,7 @@ class Tools {
     
   }
 
-  deep_copy(obj) {
+  deepcopy(obj) {
     return JSON.parse(JSON.stringify(obj))
   }
 

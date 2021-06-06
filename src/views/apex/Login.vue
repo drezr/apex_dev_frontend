@@ -185,14 +185,15 @@ For reset password button disabling
       if (token.token) {
         this.$http.header = {Authorization: 'Token ' + token.token}
 
-        let profile = await this.$http.get('profile', {
+        let request = await this.$http.get('profile', {
           'username': this.login_email,
         })
 
-        this.$store.commit('set_logged_profile', profile.profile)
+        this.$store.commit('set_logged_profile', request.profile)
 
         document.cookie = `token=${token.token}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
-        document.cookie = `username=${profile.profile.email}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
+
+        document.cookie = `username=${request.profile.username}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
 
         this.$router.push({'path': '/'})
       }

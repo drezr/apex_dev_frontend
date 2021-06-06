@@ -1,25 +1,43 @@
 <template>
 
-<div>
+<v-card 
+  class="block hover"
+  :class="details[self.app].color"
+  :to="path"
+  width="300"
+  height="300"
+  min-width="300"
+  min-height="300"
+>
+  <v-card-title class="white--text text-h4">
+    {{ details[self.app].title }}
+    <span v-if="self.name" class="ml-3 text-h6">({{ self.name }})</span>
+  </v-card-title>
 
-</div>
+  <v-card-subtitle class="white--text">
+    {{ details[self.app].desc }}
+  </v-card-subtitle>
+
+  <v-img :src="logo" class="logo" />
+</v-card>
 
 </template>
 
 
 <script>
 
-// import Component from '@/components/Component.vue'
-
 export default {
-  name: '',
+  name: 'Tile',
 
   components: {
     
   },
 
   props: {
-    
+    self: {
+      type: Object,
+      required: true,
+    },
   },
 
   data() {
@@ -28,12 +46,58 @@ export default {
     }
   },
 
-  created() {
+  async created() {
 
   },
 
-  computed: {
+  mounted() {
+    
+  },
 
+  computed: {
+    logo() {
+      return require('@/assets/logos/' + this.self.app + '_1000x1000.png')
+    },
+
+    path() {
+      let date = new Date()
+      let month = date.getMonth() + 1
+      let year = date.getFullYear()
+
+      if (this.self.app == 'watcher') {
+        return `/team/${this.self.team}/${this.self.app}/${this.self.id}/calendar/month/${month}/year/${year}`
+      }
+
+      else if (this.self.app == 'radium') {
+        return `/team/${this.self.team}/${this.self.app}/${this.self.id}/works/month/${month}/year/${year}`
+      }
+
+      else if (this.self.app == 'draft') {
+        return `/team/${this.self.team}/${this.self.app}/${this.self.id}/projects`
+      }
+
+      return `/team/${this.self.team}/${this.self.app}/${this.self.id}`
+    },
+
+    details() {
+      return {
+        'draft': {
+          title: 'Draft',
+          desc: this.lang.views.team.draft_desc[this.lg],
+          color: 'deep-purple',
+        },
+        'radium': {
+          title: 'Radium',
+          desc: this.lang.views.team.radium_desc[this.lg],
+          color: 'indigo',
+        },
+        'watcher': {
+          title: 'Watcher',
+          desc: this.lang.views.team.watcher_desc[this.lg],
+          color: 'blue',
+        },
+      }
+    }
   },
 
   methods: {
@@ -42,11 +106,10 @@ export default {
 
   watch: {
 
-  },
+  }
 }
 
 </script>
-
 
 <style>
 
@@ -54,5 +117,21 @@ export default {
 
 
 <style scoped>
+
+.hover {
+  transition: .15s;
+  overflow: hidden;
+}
+
+.hover:hover {
+  filter: contrast(1.5);
+}
+
+.logo {
+  position: relative;
+  top: -15px;
+  left: 25px;
+  opacity: 0.8;
+}
 
 </style>

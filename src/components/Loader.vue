@@ -1,7 +1,13 @@
 <template>
 
-<div>
-
+<div class="loader-frame">
+  <v-progress-circular
+    :size="size"
+    :width="width"
+    color="blue"
+    indeterminate
+    :style="`margin-top: ${mt}px; margin-bottom: ${mb}px;`"
+  ></v-progress-circular>
 </div>
 
 </template>
@@ -9,17 +15,24 @@
 
 <script>
 
-// import Component from '@/components/Component.vue'
-
 export default {
-  name: '',
+  name: 'Loader',
 
   components: {
     
   },
 
   props: {
-    
+    size: Number,
+    width: Number,
+    mt: {
+      type: Number,
+      default: 0,
+    },
+    mb: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {
@@ -42,7 +55,7 @@ export default {
 
   watch: {
 
-  },
+  }
 }
 
 </script>
@@ -54,5 +67,11 @@ export default {
 
 
 <style scoped>
+
+.loader-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 </style>

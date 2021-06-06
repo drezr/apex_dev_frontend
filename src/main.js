@@ -8,6 +8,7 @@ import draggable from 'vuedraggable'
 import Http from '@/modules/http.js'
 import Tools from '@/modules/tools.js'
 
+import Loader from '@/components/Loader.vue'
 import CustomButton from '@/components/CustomButton.vue'
 
 import Access from '@/mixins/Access.vue'
@@ -21,6 +22,7 @@ Vue.prototype.$http = Http
 Vue.prototype.$tool = Tools
 
 Vue.component('VueDraggable', draggable)
+Vue.component('Loader', Loader)
 Vue.component('CustomButton', CustomButton)
 
 Vue.mixin(Access)

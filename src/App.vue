@@ -70,7 +70,7 @@ export default {
       this.$http.header = {}
 
       document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
-      document.cookie = `user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
 
       this.$store.commit('set_logged_profile', null)
 
@@ -95,8 +95,27 @@ export default {
   cursor: pointer !important;
 }
 
+.cursor-move {
+  cursor: move !important;
+}
+
 .hover-brightness:hover {
-  filter: brightness(1.3);
+  filter: brightness(1.3) !important;
+}
+
+.team-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  height: 80px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 </style>
