@@ -383,6 +383,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'access_warning_user_exists': {
+              'fr': 'Avant de créer un nouvel utilisateur, assurez-vous qu\'il n\'existe pas. Sinon, utilisez le champ "Ajouter un utilisateur exisitant".',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },

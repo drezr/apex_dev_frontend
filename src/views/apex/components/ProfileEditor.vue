@@ -21,6 +21,10 @@
   </v-card-title>
 
   <div class="pa-3">
+    <v-alert type="warning" prominent class="mx-3" outlined dense v-if="mode == 'create'">
+      <small>{{ lang.views.team.access_warning_user_exists[lg] }}</small>
+    </v-alert>
+
     <v-text-field
       outlined
       clearable

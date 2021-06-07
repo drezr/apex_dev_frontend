@@ -19,7 +19,7 @@
 
     <div class="d-flex align-center mb-3">
       <v-autocomplete
-        v-model="picked_profiles"
+        v-model="picked_profile"
         :items="all_profiles"
         item-text="name"
         item-value="id"
@@ -36,6 +36,7 @@
       <v-btn
         color="green"
         class="ml-3 white--text"
+        :disabled="!picked_profile"
       >
         <v-icon class="mr-3">mdi-account-arrow-left</v-icon>
         {{ lang.generic.add[lg] }}
@@ -118,7 +119,7 @@ export default {
       selected_profile: Object(),
       profile_editor_dialog: false,
       all_profiles: Array(),
-      picked_profiles: Array(),
+      picked_profile: null,
       profile_editor_mode: null,
     }
   },
