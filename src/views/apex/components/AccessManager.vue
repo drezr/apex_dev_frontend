@@ -7,7 +7,12 @@
   </v-card-title>
 
   <v-card-text>
-    <v-btn block class="mt-3 mb-6 green" dark>
+    <v-btn
+      @click="open_profile_editor_dialog(null)"
+      class="mt-3 mb-6 green"
+      block
+      dark
+    >
       <v-icon class="mr-3">mdi-account-plus</v-icon>
       {{ lang.views.team.access_create_user[lg] }}
     </v-btn>
@@ -21,7 +26,6 @@
         outlined
         chips
         small-chips
-        multiple
         hide-details
         deletable-chips
         :allow-overflow="false"
@@ -80,6 +84,7 @@
   >
     <ProfileEditor
       :profile="selected_profile"
+      :mode="profile_editor_mode"
       @close="profile_editor_dialog = false"
       @delete_link="delete_link"
     />
@@ -114,6 +119,7 @@ export default {
       profile_editor_dialog: false,
       all_profiles: Array(),
       picked_profiles: Array(),
+      profile_editor_mode: null,
     }
   },
 
@@ -124,6 +130,8 @@ export default {
     let request = await this.$http.get('all_profiles')
     this.all_profiles = request['all_profiles']
     this.all_profiles.sort((a, b) => (a.name).localeCompare(b.name))
+
+    this.set_disabled_profiles()
   },
 
   computed: {
@@ -136,7 +144,16 @@ export default {
     },
 
     open_profile_editor_dialog(profile) {
-      this.selected_profile = profile
+      if (profile) {
+        this.selected_profile = profile
+        this.profile_editor_mode = 'edit'
+      }
+
+      else {
+        this.selected_profile = this.get_dummy_profile()
+        this.profile_editor_mode = 'create'
+      }
+      
       this.profile_editor_dialog = true
     },
 
@@ -144,6 +161,49 @@ export default {
       this.profiles = this.profiles.filter(
         p => p.id !== this.selected_profile.id
       )
+
+      this.set_disabled_profiles()
+    },
+
+    set_disabled_profiles() {
+      for (let profile of this.all_profiles) {
+        if (this.profiles.map(p => p.id).includes(profile.id)) {
+          profile.disabled = true
+        }
+
+        else {
+          profile.disabled = false
+        }
+      }
+    },
+
+    get_dummy_profile() {
+      return {
+        'username': '',
+        'is_staff': false,
+        'name': '',
+        'phone': '',
+        'ident': '',
+        'grade': '',
+        'field': '',
+        'user': null,
+        'link':  {
+          'is_manager': false,
+          'draft_is_editor': false,
+          'draft_is_user': false,
+          'draft_can_see_private': false,
+          'radium_is_editor': false,
+          'watcher_is_editor': false,
+          'watcher_is_visible': false,
+          'watcher_is_printable': false,
+          'watcher_can_see_cells': false,
+          'watcher_can_see_quotas': false,
+          'watcher_color': 'blue',
+          'position': null,
+          'profile': null,
+          'team': null,
+        },
+      }
     },
   },
 

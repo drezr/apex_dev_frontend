@@ -1,10 +1,22 @@
 <template>
 
 <v-card>
-  <v-card-title class="teal white--text">
+  <v-card-title class="white--text" :class="mode == 'edit' ? 'teal' : 'green'">
     <div class=" d-flex flex-no-wrap">
-      <v-icon class="mr-3 white--text">mdi-account-outline</v-icon>
-      {{ this.lang.views.team.access_manager_edit[this.lg] }} {{ profile.name }}
+      <v-icon class="mr-3 white--text" v-if="mode == 'edit'">
+        mdi-account-outline
+      </v-icon>
+
+      <v-icon class="mr-3 white--text" v-if="mode == 'create'">
+        mdi-account-plus
+      </v-icon>
+
+      <span v-if="mode == 'edit'">
+        {{ this.lang.views.team.access_manager_edit[this.lg] }} {{ profile.name }}
+      </span>
+      <span v-if="mode == 'create'">
+        {{ this.lang.views.team.access_create_user[this.lg] }}
+      </span>
     </div>
   </v-card-title>
 
@@ -75,7 +87,7 @@
       @click:append-outer="copy.username = profile.username"
     ></v-text-field>
 
-    <div class="text-center">
+    <div class="text-center" v-if="mode == 'edit'">
       <CustomButton
         :color="'blue'"
         :dark="true"
@@ -211,6 +223,7 @@
     <v-spacer></v-spacer>
 
     <CustomButton
+      v-if="mode == 'edit'"
       @click="delete_dialog = true"
       :color="'purple'"
       :dark="true"
@@ -220,11 +233,22 @@
     ></CustomButton>
 
     <CustomButton
+      v-if="mode == 'edit'"
       @click="save"
       :color="'teal'"
       :dark="can_save"
       :icon="'mdi-content-save'"
       :text="lang.generic.save[lg]"
+      :disabled="!can_save"
+    ></CustomButton>
+
+    <CustomButton
+      v-if="mode == 'create'"
+      @click="create_dialog = true"
+      :color="'green'"
+      :dark="can_save"
+      :icon="'mdi-account-plus'"
+      :text="lang.generic.add[lg]"
       :disabled="!can_save"
     ></CustomButton>
   </v-card-actions>
@@ -270,12 +294,50 @@
         <v-spacer></v-spacer>
 
         <v-btn color="grey darken-3" text @click="delete_dialog = false">
+          <v-icon class="mr-2">mdi-close</v-icon>
           {{ lang.generic.cancel[lg] }}
         </v-btn>
 
         <v-btn color="purple darken-1 white--text" @click="delete_link">
           <v-icon class="mr-2">mdi-account-remove</v-icon>
           {{ lang.views.team.access_remove_access[lg] }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+
+  <v-dialog v-model="create_dialog" max-width="495">
+    <v-card>
+      <v-card-title class="mb-6" style="word-break: keep-all;">
+        {{ lang.views.team.access_confirm_create_user[lg] }}
+      </v-card-title>
+
+      <v-alert type="info" class="mx-3" outlined>
+        {{ lang.views.team.access_confirm_create_user_info[lg] }}
+      </v-alert>
+
+      <v-card-text class="mt-9">
+        <v-checkbox
+          v-model="send_password"
+          :label="lang.views.team.access_confirm_create_user_send_password[lg]"
+          :hint="lang.views.team.access_confirm_create_user_send_password_hint[lg]"
+          persistent-hint
+          class="mt-0 mb-6 mx-3"
+        ></v-checkbox>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn color="grey darken-3" text @click="create_dialog = false">
+          <v-icon class="mr-2">mdi-close</v-icon>
+          {{ lang.generic.cancel[lg] }}
+        </v-btn>
+
+        <v-btn color="green darken-1 white--text" @click="create">
+          <v-icon class="mr-2">mdi-check</v-icon>
+          {{ lang.generic.confirm[lg] }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -299,6 +361,10 @@ export default {
       type: Object,
       required: true,
     },
+    mode: {
+      type: String,
+      required: true,
+    },
   },
 
   data() {
@@ -306,6 +372,8 @@ export default {
       copy: Object(),
       password_dialog: false,
       delete_dialog: false,
+      create_dialog: false,
+      send_password: false,
 
       not_empty_rule: [
         value => !!value || this.lang.generic.not_empty_field[this.lg],
@@ -364,6 +432,10 @@ For save button disabling
     },
 
     save() {
+      this.$emit('close')
+    },
+
+    create() {
       this.$emit('close')
     },
   },

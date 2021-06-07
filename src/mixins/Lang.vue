@@ -40,6 +40,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'confirm': {
+            'fr': 'Confirmer',
+            'nl': '',
+            'en': '',
+          },
           'connection': {
             'fr': 'Connexion',
             'nl': '',
@@ -355,6 +360,26 @@ export default {
             },
             'access_add_existing_user': {
               'fr': 'Ajouter un utilisateur existant',
+              'nl': '',
+              'en': '',
+            },
+            'access_confirm_create_user': {
+              'fr': 'Créer un nouvel utilisateur',
+              'nl': '',
+              'en': '',
+            },
+            'access_confirm_create_user_info': {
+              'fr': 'Êtes-vous sûr de vouloir créer un nouvel utilisateur ?\nVous ne pourrez pas le supprimer.',
+              'nl': '',
+              'en': '',
+            },
+            'access_confirm_create_user_send_password': {
+              'fr': 'Envoyer un mot de passe ?',
+              'nl': '',
+              'en': '',
+            },
+            'access_confirm_create_user_send_password_hint': {
+              'fr': 'L\'utilisateur recevera un mot de passe par email et pourra se connecter à Apex.',
               'nl': '',
               'en': '',
             },
