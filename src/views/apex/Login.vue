@@ -36,6 +36,7 @@
         @click="login"
         :dark="can_login"
         :disabled="!can_login"
+        ref="connection"
       >
         <v-icon class="mr-3">mdi-exit-to-app</v-icon>
         {{ lang.generic.connection[lg] }}
@@ -78,6 +79,7 @@
         @click="reset"
         :dark="can_reset"
         :disabled="!can_reset"
+        ref="reset"
       >
         <v-icon class="mr-3">mdi-email</v-icon>
         {{ lang.generic.send[lg] }}
@@ -128,12 +130,24 @@ export default {
     }
   },
 
-  created() {
+  async created() {
+    this.handler = (e) => {
+      if (e.keyCode == 13) {
+        if (this.mode == 'login') {
+          this.$refs.connection.$el.click()
+        }
 
+        else if (this.mode == 'reset') {
+          this.$refs.reset.$el.click()
+        }
+      }
+    }
+
+    window.addEventListener('keyup', this.handler)
   },
 
-  mounted() {
-
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.handler)
   },
 
   computed: {
