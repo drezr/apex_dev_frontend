@@ -319,7 +319,7 @@ export default {
               'en': '',
             },
             'access_watcher_can_see_quotas': {
-              'fr': 'Peut voir toutes les congés',
+              'fr': 'Peut voir tous les congés',
               'nl': '',
               'en': '',
             },
