@@ -257,95 +257,66 @@
     ></CustomButton>
   </v-card-actions>
 
-
-  <v-dialog v-model="password_dialog" max-width="495">
-    <v-card>
-      <v-card-title class="mb-6" style="word-break: keep-all;">
-        {{ lang.views.team.access_password_dialog_title[lg] }}
-      </v-card-title>
-
-      <v-alert type="warning" class="mx-3" icon="mdi-alert" outlined>
-        {{ lang.views.team.access_password_dialog_warning[lg] }}
-      </v-alert>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-
-        <v-btn color="grey darken-3" text @click="password_dialog = false">
-          {{ lang.generic.cancel[lg] }}
-        </v-btn>
-
-        <v-btn color="blue darken-1 white--text" @click="send_new_password">
-          <v-icon class="mr-2">mdi-send</v-icon>
-          {{ lang.generic.send[lg] }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <CustomDialog
+    :open="password_dialog"
+    :width="500"
+    :title_text="lang.views.team.access_password_dialog_title[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-send'"
+    :confirm_text="lang.generic.send[lg]"
+    :confirm_color="'blue darken-1'"
+    @cancel="password_dialog = false"
+    @confirm="send_new_password"
+  >
+    <v-alert type="warning" class="mt-6" icon="mdi-alert" outlined>
+      {{ lang.views.team.access_password_dialog_warning[lg] }}
+    </v-alert>
+  </CustomDialog>
 
 
-  <v-dialog v-model="delete_dialog" max-width="495">
-    <v-card>
-      <v-card-title class="mb-6" style="word-break: keep-all;">
-        {{ lang.views.team.access_delete_dialog_title[lg] }}
-      </v-card-title>
-
-      <v-alert type="info" class="mx-3" outlined>
-        {{ lang.views.team.access_delete_dialog_warning[lg] }}
-      </v-alert>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-
-        <v-btn color="grey darken-3" text @click="delete_dialog = false">
-          <v-icon class="mr-2">mdi-close</v-icon>
-          {{ lang.generic.cancel[lg] }}
-        </v-btn>
-
-        <v-btn color="purple darken-1 white--text" @click="delete_link">
-          <v-icon class="mr-2">mdi-account-remove</v-icon>
-          {{ lang.views.team.access_remove_access[lg] }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.views.team.access_delete_dialog_title[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-account-remove'"
+    :confirm_text="lang.generic.confirm[lg]"
+    :confirm_color="'purple darken-1'"
+    @cancel="delete_dialog = false"
+    @confirm="delete_link"
+  >
+    <v-alert type="info" class="mt-6" outlined>
+      {{ lang.views.team.access_delete_dialog_warning[lg] }}
+    </v-alert>
+  </CustomDialog>
 
 
-  <v-dialog v-model="create_dialog" max-width="495">
-    <v-card>
-      <v-card-title class="mb-6" style="word-break: keep-all;">
-        {{ lang.views.team.access_confirm_create_user[lg] }}
-      </v-card-title>
+  <CustomDialog
+    :open="create_dialog"
+    :width="500"
+    :title_text="lang.views.team.access_confirm_create_user[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-check'"
+    :confirm_text="lang.generic.confirm[lg]"
+    :confirm_color="'green darken-1'"
+    @cancel="create_dialog = false"
+    @confirm="create"
+  >
+    <v-alert type="info" class="mt-6" outlined>
+      {{ lang.views.team.access_confirm_create_user_info[lg] }}
+    </v-alert>
 
-      <v-alert type="info" class="mx-3" outlined>
-        {{ lang.views.team.access_confirm_create_user_info[lg] }}
-      </v-alert>
-
-      <v-card-text class="mt-9">
-        <v-checkbox
-          v-model="send_password"
-          :label="lang.views.team.access_confirm_create_user_send_password[lg]"
-          :hint="lang.views.team.access_confirm_create_user_send_password_hint[lg]"
-          persistent-hint
-          class="mt-0 mb-6 mx-3"
-        ></v-checkbox>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-
-        <v-btn color="grey darken-3" text @click="create_dialog = false">
-          <v-icon class="mr-2">mdi-close</v-icon>
-          {{ lang.generic.cancel[lg] }}
-        </v-btn>
-
-        <v-btn color="green darken-1 white--text" @click="create">
-          <v-icon class="mr-2">mdi-check</v-icon>
-          {{ lang.generic.confirm[lg] }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <v-checkbox
+      v-model="send_password"
+      :label="lang.views.team.access_confirm_create_user_send_password[lg]"
+      :hint="lang.views.team.access_confirm_create_user_send_password_hint[lg]"
+      persistent-hint
+      class="mt-0 mb-6 mx-3"
+    ></v-checkbox>
+  </CustomDialog>
 </v-card>
 
 </template>

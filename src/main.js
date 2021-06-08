@@ -10,6 +10,7 @@ import Tools from '@/modules/tools.js'
 
 import Loader from '@/components/Loader.vue'
 import CustomButton from '@/components/CustomButton.vue'
+import CustomDialog from '@/components/CustomDialog.vue'
 
 import Access from '@/mixins/Access.vue'
 import Current from '@/mixins/Current.vue'
@@ -24,6 +25,7 @@ Vue.prototype.$tool = Tools
 Vue.component('VueDraggable', draggable)
 Vue.component('Loader', Loader)
 Vue.component('CustomButton', CustomButton)
+Vue.component('CustomDialog', CustomDialog)
 
 Vue.mixin(Access)
 Vue.mixin(Current)
