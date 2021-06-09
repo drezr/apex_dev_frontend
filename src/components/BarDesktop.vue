@@ -15,6 +15,15 @@
         <span class="text-h6 ml-3 mr-3" v-if="breakpoint">HUB</span>
       </router-link>
     </div>
+
+    <div class="d-flex" v-if="$current_app_id">
+      <v-icon>mdi-chevron-right</v-icon>
+
+      <router-link class="navigation" :to="app_path">
+        <img :src="$tool.get_logo($route.meta.app + '_50x50')" class="logo" />
+        <span class="text-h6 ml-3 mr-3" v-if="breakpoint">{{ $route.meta.app.toUpperCase() }}</span>
+      </router-link>
+    </div>
   </div>
 
 
@@ -83,6 +92,16 @@ export default {
 
     app() {
       return this.$parent.$parent
+    },
+
+    app_path() {
+      if (this.$current_app_id) {
+        if (this.$route.meta.app == 'watcher') {
+          return `/team/${this.$current_team_id}/watcher/${this.$current_app_id}/calendar/month/${this.$current_month}/year/${this.$current_year}`
+        }
+      }
+
+      return '/'
     },
   },
 
