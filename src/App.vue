@@ -91,6 +91,10 @@ export default {
 
 <style>
 
+html {
+  overflow: hidden !important;
+}
+
 .cursor-pointer {
   cursor: pointer !important;
 }
@@ -99,9 +103,24 @@ export default {
   cursor: move !important;
 }
 
+.opacity-0 {
+  opacity: 0 !important;
+}
+
+.pointer-events-none {
+  pointer-events: none !important;
+}
+
 .hover-brightness:hover {
   filter: brightness(1.3) !important;
 }
+
+.font-size-8 { font-size: 8px !important; }
+.font-size-9 { font-size: 9px !important; }
+.font-size-10 { font-size: 10px !important; }
+.font-size-11 { font-size: 11px !important; }
+.font-size-12 { font-size: 12px !important; }
+.font-size-13 { font-size: 13px !important; }
 
 .team-title {
   display: flex;
@@ -131,6 +150,7 @@ export default {
   min-height: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
+  overflow: auto;
 }
 
 </style>

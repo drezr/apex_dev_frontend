@@ -88,6 +88,8 @@
       :mode="profile_editor_mode"
       @close="profile_editor_dialog = false"
       @delete_link="delete_link"
+      @save="save_user"
+      @create="create_user"
     />
   </v-dialog>
 </v-card>
@@ -142,6 +144,14 @@ export default {
   methods: {
     update_position() {
 
+    },
+
+    save_user(profile) {
+      console.log(profile)
+    },
+
+    create_user(profile) {
+      console.log(profile)
     },
 
     open_profile_editor_dialog(profile) {

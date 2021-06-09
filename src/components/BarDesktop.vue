@@ -119,6 +119,8 @@ export default {
   padding: 0 25px;
   width: 100%;
   height: 60px;
+  position: sticky;
+  left: 0;
 }
 
 .logo {

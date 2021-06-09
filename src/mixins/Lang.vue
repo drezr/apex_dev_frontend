@@ -389,6 +389,38 @@ export default {
               'en': '',
             },
           },
+          'watcher': {
+            'calendar_detail_title': {
+              'fr': 'Informations supplémentaires',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_detail_subtitle_day': {
+              'fr': 'Pour le @@@',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_detail_subtitle_cell': {
+              'fr': 'Pour ### le @@@',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_detail_short': {
+              'fr': 'Texte court',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_detail_short_hint': {
+              'fr': 'Ce texte sera affiché dans la troisième case de la cellule.',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_detail_no_element': {
+              'fr': 'Pas encore d\'élément dans cette journée.',
+              'nl': '',
+              'en': '',
+            },
+          },
         },
       },
     }

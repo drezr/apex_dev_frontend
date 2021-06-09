@@ -96,7 +96,7 @@ class Tools {
     setTimeout(() => {
       const favicon = document.getElementById("favicon")
 
-      favicon.href = this.get_logo(app)
+      favicon.href = this.get_logo(app + '_30x30')
     }, 100)
   }
 
@@ -205,6 +205,45 @@ class Tools {
     return img
   }
 
+  format_date(date) {
+    let [year, month, day] = date.split('-')
+
+    if (day.length == 1) day = '0' + day
+    if (month.length == 1) month = '0' + month
+
+    return `${day}/${month}/${year}`
+  }
+
+  get_fused_children(obj) {
+    let children = Array()
+
+    let child_types = [
+      'task',
+      'subtask',
+      'file',
+      'input',
+      'note',
+      'call',
+      'link',
+    ]
+
+    for (let type of child_types) {
+      if (obj[type + 's']) {
+        for (let child of obj[type + 's']) {
+          child.type = type
+
+          child.children = this.get_fused_children(child)
+        }
+
+
+        children = children.concat(obj[type + 's'])
+      }
+    }
+
+    children.sort((a, b) => a.link.position - b.link.position)
+
+    return children
+  }
 }
 
 export default new Tools

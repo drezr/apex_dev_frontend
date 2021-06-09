@@ -408,10 +408,12 @@ For save button disabling
 
     save() {
       this.$emit('close')
+      this.$emit('save', this.copy)
     },
 
     create() {
       this.$emit('close')
+      this.$emit('create', this.copy)
     },
   },
 

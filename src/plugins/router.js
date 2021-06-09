@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/apex/Login.vue'
 import Home from '@/views/apex/Home.vue'
 import Team from '@/views/apex/Team.vue'
+import Calendar from '@/views/watcher/Calendar.vue'
 
 Vue.use(VueRouter)
 
@@ -40,12 +41,23 @@ const router = new VueRouter({
         'title': 'Apex',
       },
     },
+    {
+      path: '/team/:team_id/watcher/:app_id/calendar/month/:month/year/:year',
+      name: 'Calendar',
+      component: Calendar,
+      meta: {
+        'app': 'watcher',
+        'view': 'calendar',
+        'title': 'Watcher',
+      },
+    },
   ]
 })
 
 router.beforeEach((to, from, next) => {
   setTimeout(() => {
     document.title = to.meta.title
+    router.app.$tool.set_favicon(to.meta.app)
   })
 
   next()

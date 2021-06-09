@@ -3,7 +3,10 @@
 <v-dialog v-model="_open" :max-width="width">
   <v-card>
     <v-card-title
-      :class="title_bg_color ? title_bg_color : ''"
+      :class="[
+        title_bg_color ? title_bg_color : '',
+        subtitle_text ? 'py-1' : '',
+      ]"
       style="word-break: keep-all;"
     >
       <v-icon
@@ -17,6 +20,16 @@
       <span :class="title_text_color + '--text'">
         {{ title_text }}
       </span>
+
+      <v-card-subtitle v-if="subtitle_text" class="pa-0" style="width: 100%;">
+       {{ subtitle_text }}
+      </v-card-subtitle>
+
+      <div class="ml-3 move-button modal-move" v-if="move_window">
+        <v-icon color="pink" class="modal-move">
+          mdi-cursor-move
+        </v-icon>
+      </div>
     </v-card-title>
 
     <v-card-text>
@@ -85,6 +98,7 @@
 
 <script>
 
+
 export default {
   name: 'CustomDialog',
 
@@ -114,6 +128,10 @@ export default {
       required: false,
     },
     title_bg_color: {
+      type: String,
+      required: false,
+    },
+    subtitle_text: {
       type: String,
       required: false,
     },
@@ -150,6 +168,10 @@ export default {
       required: false,
     }, 
     hide_action: {
+      type: Boolean,
+      required: false,
+    }, 
+    move_window: {
       type: Boolean,
       required: false,
     },    
@@ -195,5 +217,14 @@ export default {
 
 
 <style scoped>
+
+.move-button {
+  position: absolute;
+  right: 10px;
+  cursor: move;
+  border: 1px #E91E63 solid;
+  border-radius: 3px;
+  padding: 4px 20px;
+}
 
 </style>
