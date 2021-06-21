@@ -78,7 +78,7 @@
         :class="menu.name == menu_selected ? 'blue lighten-4' : ''"
       >
         <v-list-item-icon v-if="menu.icon" class="mr-6">
-          <v-icon :color="menu.color">{{ menu.icon }}</v-icon>
+          <v-icon :class="menu.color + '--text'">{{ menu.icon }}</v-icon>
         </v-list-item-icon>
           
         <v-list-item-title>

@@ -160,7 +160,9 @@ export default {
         })
 
         this.children = this.$tool.get_fused_children(request.day)
+        this.children.sort((a, b) => a.link.position - b.link.position)
         this.parts = request.day.parts
+        this.parts.sort((a, b) => a.shift.shift.localeCompare(b.shift.shift))
       }
 
       else if (this.type == 'cell') {
@@ -191,7 +193,9 @@ export default {
 
   computed: {
     x() {
-      return this.offset_x - 178
+      let scroll_left = document.getElementById('main-frame').scrollLeft
+
+      return this.offset_x - 178 - scroll_left
     },
   },
 
@@ -199,24 +203,25 @@ export default {
     set_y_position() {
       let height_delta = window.innerHeight - this.offset_y
       let height_center = window.innerHeight / 2
+      let scroll_top = document.getElementById('main-frame').scrollTop
 
       if (height_delta > height_center) {
         if (this.type == 'day') {
-          this.y = this.offset_y + 42
+          this.y = this.offset_y + 42 - scroll_top
         }
 
         else if (this.type == 'cell') {
-          this.y = this.offset_y + 76
+          this.y = this.offset_y + 76 - scroll_top
         }
       }
 
       else {
         if (this.type == 'day') {
-          this.y = this.offset_y - 2 - this.$refs.frame.offsetHeight
+          this.y = this.offset_y - 2 - this.$refs.frame.offsetHeight - scroll_top
         }
 
         else if (this.type == 'cell') {
-          this.y = this.offset_y - 2 - this.$refs.frame.offsetHeight
+          this.y = this.offset_y - 2 - this.$refs.frame.offsetHeight - scroll_top
         }
       }
     },

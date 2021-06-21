@@ -61,7 +61,7 @@
   <CustomDialog
     v-if="detail_dialog"
     :open="detail_dialog"
-    :width="500"
+    :width="600"
     :title_text="lang.views.watcher.calendar_detail_title[lg]"
     :subtitle_text="get_detail_subtitle"
     :title_bg_color="'grey lighten-3'"
@@ -104,27 +104,46 @@
         {{ part.work.description }}
       </div>
 
+      <v-divider
+        v-if="
+          detail_full_object.parts.length > 0 &&
+          detail_full_object.children.length > 0
+        "
+        class="my-6"
+        ></v-divider>
 
-      <div
-        v-for="child in detail_full_object.children"
-        :key="child.id + $tool.gen_uid()"
+      <VueDraggable
+        v-model="detail_full_object.children"
+        @change="update_detail_objects_position"
+        :animation="100"
+        easing="cubic-bezier(1, 0, 0, 1)"
+        handle=".handle"
       >
-        <div v-if="child.type == 'task'">
-          {{ child.name }}
-        </div>
+        <div
+          v-for="child in detail_full_object.children"
+          :key="child.id + $tool.gen_uid()"
+          class="d-flex flex-column"
+        >
+          <div v-if="child.type == 'task'">
+            {{ child.name }}
+          </div>
 
-        <div v-if="child.type == 'note'">
-          {{ child.value }}
-        </div>
+          <Note
+            v-if="child.type == 'note'"
+            :self="child"
+            :parent="detail_full_object"
+            class="my-3"
+          />
 
-        <div v-if="child.type == 'file'">
-          {{ child.name }}
-        </div>
+          <div v-if="child.type == 'file'">
+            {{ child.name }}
+          </div>
 
-        <div v-if="child.type == 'call'">
-          {{ child.name }}
+          <div v-if="child.type == 'call'">
+            {{ child.name }}
+          </div>
         </div>
-      </div>
+      </VueDraggable>
 
       <div class="d-flex justify-end" v-if="$has_xs(['watcher_is_editor'])">
         <div class="command-buttons-bg detail-command-buttons-position">
@@ -165,6 +184,7 @@
 
 import DayCell from '@/views/watcher/components/calendar/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
+import Note from '@/components/Note.vue'
 
 export default {
   name: 'CalendarView',
@@ -172,6 +192,7 @@ export default {
   components: {
     DayCell,
     Profile,
+    Note,
   },
 
   props: {
@@ -298,7 +319,7 @@ export default {
         {
           'icon': 'mdi-chat',
           'name': this.lang.views.watcher.calendar_add_note[this.lg],
-          'color': 'orange',
+          'color': 'text--darken-2 orange',
           'action': 'add_note',
         },
       ]
@@ -438,6 +459,7 @@ export default {
 
         date.cell.id = request.cell.id
         this.detail_full_object = request.cell
+        this.$set(this.detail_full_object, 'children')
         this.detail_full_object.children = this.$tool.get_fused_children(request.cell)
       }
 
@@ -446,6 +468,10 @@ export default {
 
     async detail_action(action) {
       console.log(action)
+    },
+
+    async update_detail_objects_position() {
+      console.log('position updated')
     },
 
     set_today_frame() {
@@ -467,7 +493,7 @@ export default {
           }
         }
       })
-    }
+    },
   },
 
   watch: {

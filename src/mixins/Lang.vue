@@ -30,8 +30,28 @@ export default {
             'nl': '',
             'en': '',
           },
+          'delete': {
+            'fr': 'Supprimer',
+            'nl': '',
+            'en': '',
+          },
           'remove': {
             'fr': 'Retirer',
+            'nl': '',
+            'en': '',
+          },
+          'move': {
+            'fr': 'Déplacer',
+            'nl': '',
+            'en': '',
+          },
+          'sort': {
+            'fr': 'Trier',
+            'nl': '',
+            'en': '',
+          },
+          'update_position': {
+            'fr': 'Changer l\'ordre',
             'nl': '',
             'en': '',
           },
@@ -42,6 +62,16 @@ export default {
           },
           'confirm': {
             'fr': 'Confirmer',
+            'nl': '',
+            'en': '',
+          },
+          'to_copy': {
+            'fr': 'Copier',
+            'nl': '',
+            'en': '',
+          },
+          'to_link': {
+            'fr': 'Lier',
             'nl': '',
             'en': '',
           },
@@ -97,6 +127,16 @@ export default {
           },
           'shift': {
             'fr': 'Prestation',
+            'nl': '',
+            'en': '',
+          },
+          'by_author_on_date': {
+            'fr': 'Par ### le @@@',
+            'nl': '',
+            'en': '',
+          },
+          'edit_options': {
+            'fr': 'Options d\'édition',
             'nl': '',
             'en': '',
           },

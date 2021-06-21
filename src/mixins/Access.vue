@@ -13,8 +13,10 @@ export default {
     },
 
     $xs() {
-      if (this.request && this.request.team) {
-        let profile = this.request.team.profiles.find(
+      if (this.$current_component && 
+          this.$current_component.request && 
+          this.$current_component.request.team) {
+        let profile = this.$current_component.request.team.profiles.find(
           p => p.id == this.$logged_profile.id
         )
 
@@ -36,7 +38,7 @@ export default {
       }*/
 
       for (let xs of xs_list) {
-        if (this.$xs[xs]) {
+        if (this.$xs[xs] == true) {
           return true
         }
       }

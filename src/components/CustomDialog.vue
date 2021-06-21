@@ -25,7 +25,7 @@
        {{ subtitle_text }}
       </v-card-subtitle>
 
-      <div class="ml-3 move-button modal-move" v-if="move_window">
+      <div class="ml-3 move-button modal-move" v-if="move_window && breakpoint">
         <v-icon color="pink" class="modal-move">
           mdi-cursor-move
         </v-icon>
@@ -196,6 +196,10 @@ export default {
       set() {
         setTimeout(() => this.$emit('cancel'), 100)
       }
+    },
+
+    breakpoint() {
+      return this.$vuetify.breakpoint.smAndUp
     },
   },
 

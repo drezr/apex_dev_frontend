@@ -1,7 +1,7 @@
 <template>
 
 <v-app>
-  <div class="main-frame">
+  <div class="main-frame" id="main-frame">
     <BarDesktop v-if="$logged_profile" />
 
     <router-view :key="$route.fullPath" style="max-height: 0px;" />
@@ -101,6 +101,10 @@ html {
 
 .cursor-move {
   cursor: move !important;
+}
+
+.cursor-grab {
+  cursor: grab !important;
 }
 
 .opacity-0 {
