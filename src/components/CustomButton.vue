@@ -77,7 +77,7 @@
         link
         :class="menu.name == menu_selected ? 'blue lighten-4' : ''"
       >
-        <v-list-item-icon v-if="menu.icon" class="mr-3">
+        <v-list-item-icon v-if="menu.icon" class="mr-6">
           <v-icon :color="menu.color">{{ menu.icon }}</v-icon>
         </v-list-item-icon>
           
@@ -114,6 +114,18 @@ export default {
     menus: {
       type: Array,
       default: () => { return Array() },
+
+/*    
+      Template
+
+      {
+        'icon': 'mdi-icon',
+        'name': 'name',
+        'color': 'color',
+        'action': 'action',
+      },
+*/
+
     },
     menu_top: Boolean,
     menu_selected: String,

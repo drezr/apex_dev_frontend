@@ -1,80 +1,90 @@
 <template>
 
 <div>
-  <div class="day-container" v-if="type == 'day'">
-    <div
-      class="day-frame"
-      :class="date.is_cv ? 'day-frame-cv' : 'day-frame-default'"
-      @click="$emit('open_detail_dialog', date)"
-    >
-      <div class="day-name">
-        {{ date.name_short.toUpperCase() }}
-      </div>
-
+  <div @mouseover="hover = true" @mouseleave="hover = false" ref="frame">
+    <div class="day-container" v-if="type == 'day'">
       <div
-        class="day-number"
-        :class="date.day.has_content ? 'day-has-content' : ''"
+        class="day-frame"
+        :class="date.is_cv ? 'day-frame-cv' : 'day-frame-default'"
+        @click="$emit('open_detail_dialog', date)"
       >
-        {{ date.day_number }}
+        <div class="day-name">
+          {{ date.name_short.toUpperCase() }}
+        </div>
+
+        <div
+          class="day-number"
+          :class="date.day.has_content ? 'day-has-content' : ''"
+        >
+          {{ date.day_number }}
+        </div>
+      </div>
+
+      <div class="day-step day-step-week" v-if="date.week_step">
+        {{ date.week_step }}
+      </div>
+
+      <div class="day-step day-step-cv" v-if="date.cv_step">
+        {{ date.cv_step }}
       </div>
     </div>
 
-    <div class="day-step day-step-week" v-if="date.week_step">
-      {{ date.week_step }}
-    </div>
-
-    <div class="day-step day-step-cv" v-if="date.cv_step">
-      {{ date.cv_step }}
-    </div>
-  </div>
 
 
-
-  <div
-    v-if="type == 'cell'"
-    class="cell-frame"
-    :style="date.cell.color ? 
-    `border-color: ${border_colors[date.cell.color]}; border-width: 1px;
-     box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : ''
-    "
-  >
-    <input
-      type="text"
-      class="cell-presence"
-      v-model="date.cell.presence"
-      :class="[
-        'cell-presence-' + cell_backgroud,
-        select_text_color(date.cell.presence),
-        select_text_size(date.cell.presence),
-      ]"
-    />
-
-    <input
-      type="text"
-      class="cell-absence"
-      v-model="date.cell.absence"
-      :class="[
-        'cell-absence-' + cell_backgroud,
-        select_text_color(date.cell.absence),
-        select_text_size(date.cell.absence),
-      ]"
-    />
-    
     <div
-      class="cell-short"
-      :class="[
-        date.cell.has_content ? 'cell-short-has_content' : 'cell-absence-' + cell_backgroud,
-        select_short_size(date.cell.short),
-      ]"
-      @click="$emit('open_detail_dialog', date)"
+      v-if="type == 'cell'"
+      class="cell-frame"
+      :style="date.cell.color ? 
+      `border-color: ${border_colors[date.cell.color]}; border-width: 1px;
+       box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : ''
+      "
     >
-      {{ date.cell.short }}
-    </div>
+      <input
+        type="text"
+        class="cell-presence"
+        v-model="date.cell.presence"
+        :class="[
+          'cell-presence-' + cell_backgroud,
+          select_text_color(date.cell.presence),
+          select_text_size(date.cell.presence),
+        ]"
+      />
 
-    <div class="cell-has-call" v-if="date.cell.has_call">
+      <input
+        type="text"
+        class="cell-absence"
+        v-model="date.cell.absence"
+        :class="[
+          'cell-absence-' + cell_backgroud,
+          select_text_color(date.cell.absence),
+          select_text_size(date.cell.absence),
+        ]"
+      />
       
+      <div
+        class="cell-short"
+        :class="[
+          date.cell.has_content ? 'cell-short-has_content' : 'cell-absence-' + cell_backgroud,
+          select_short_size(date.cell.short),
+        ]"
+        @click="$emit('open_detail_dialog', date)"
+      >
+        {{ date.cell.short }}
+      </div>
+
+      <div class="cell-has-call" v-if="date.cell.has_call">
+        
+      </div>
     </div>
   </div>
+
+  <Tooltip
+    v-if="hover && (date[type].has_call || date[type].has_content)"
+    :date="date"
+    :type="type"
+    :offset_x="offset_x"
+    :offset_y="offset_y"
+  />
 </div>
 
 </template>
@@ -82,13 +92,13 @@
 
 <script>
 
-// import Component from '@/components/Component.vue'
+import Tooltip from '@/views/watcher/components/calendar/Tooltip.vue'
 
 export default {
   name: '',
 
   components: {
-    
+    Tooltip
   },
 
   props: {
@@ -104,6 +114,7 @@ export default {
 
   data() {
     return {
+      hover: false,
       border_colors: {
         'red accent-4': '#D50000',
         'pink': '#E91E63',
@@ -133,6 +144,14 @@ export default {
       else if (this.date.name_short == 'sam') return 'sat'
       else if (this.date.name_short == 'dim') return 'sun'
       else return 'week'
+    },
+
+    offset_x() {
+      return this.$refs.frame.offsetLeft
+    },
+
+    offset_y() {
+      return this.$refs.frame.offsetTop
     },
   },
 
@@ -191,6 +210,7 @@ export default {
   margin-left: 2px;
   margin-bottom: 2px;
   position: relative;
+  z-index: 2;
 }
 
 .day-frame {
@@ -249,7 +269,7 @@ export default {
   border-radius: 8px;
   position: absolute;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 .day-step-week {
@@ -276,6 +296,7 @@ export default {
   position: relative;
   border: 1px #78909C solid;
   border-radius: 5px;
+  z-index: 2;
 }
 
 .cell-presence {

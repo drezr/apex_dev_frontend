@@ -95,6 +95,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'shift': {
+            'fr': 'Prestation',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
@@ -417,6 +422,31 @@ export default {
             },
             'calendar_detail_no_element': {
               'fr': 'Pas encore d\'élément dans cette journée.',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_add_element_tooltip': {
+              'fr': 'Ajouter un élément',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_edit_elements_tooltip': {
+              'fr': 'Éditer les éléments',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_add_call': {
+              'fr': 'Ajouter une intervention',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_add_note': {
+              'fr': 'Ajouter une note',
+              'nl': '',
+              'en': '',
+            },
+            'calendar_add_file': {
+              'fr': 'Ajouter un fichier',
               'nl': '',
               'en': '',
             },

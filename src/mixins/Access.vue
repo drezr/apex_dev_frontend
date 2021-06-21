@@ -30,7 +30,19 @@ export default {
   },
 
   methods: {
+    $has_xs(xs_list) {
+/*      if (this.$is_staff) {
+        return true
+      }*/
 
+      for (let xs of xs_list) {
+        if (this.$xs[xs]) {
+          return true
+        }
+      }
+
+      return false
+    },
   },
 }
 

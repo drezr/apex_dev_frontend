@@ -9,7 +9,37 @@
         {{ team.name }}
       </div>
 
-      <div class="calendar-frame">
+      <div class="calendar-frame" ref="frame">
+        <div class="calendar-days">
+          <div class="calendar-spacer"></div>
+
+          <DayCell
+            v-for="date in calendar"
+            :key="date.day_number + $tool.gen_uid()"
+            :type="'day'"
+            :date="date"
+            @open_detail_dialog="open_detail_dialog"
+          />
+        </div>
+
+        <div
+          class="calendar-profiles"
+          v-for="profile in profiles"
+          :key="profile.id"
+        >
+          <Profile :profile="profile" />
+
+          <DayCell
+            v-for="date in profile.dates"
+            :key="date.day_number + $tool.gen_uid()"
+            :type="'cell'"
+            :date="date"
+            @open_detail_dialog="open_detail_dialog"
+          />
+
+          <Profile :profile="profile" />
+        </div>
+
         <div class="calendar-days">
           <div class="calendar-spacer"></div>
 
@@ -22,38 +52,8 @@
           />
         </div>
       </div>
-
-      <div
-        class="calendar-profiles"
-        v-for="profile in profiles"
-        :key="profile.id"
-      >
-        <Profile :profile="profile" />
-
-        <DayCell
-          v-for="date in profile.dates"
-          :key="date.day_number + $tool.gen_uid()"
-          :type="'cell'"
-          :date="date"
-          @open_detail_dialog="open_detail_dialog"
-        />
-
-        <Profile :profile="profile" />
-      </div>
-
-      <div class="calendar-frame">
-        <div class="calendar-days">
-          <div class="calendar-spacer"></div>
-
-          <DayCell
-            v-for="date in calendar"
-            :key="date.day_number + $tool.gen_uid()"
-            :type="'day'"
-            :date="date"
-            @open_detail_dialog="open_detail_dialog"
-          />
-        </div>
-      </div>
+      
+      <div class="today-frame" ref="today_frame"></div>
     </div>
   </transition>
 
@@ -70,7 +70,7 @@
     @cancel="detail_dialog = false"
   >
     <v-text-field
-      v-if="detail_object.type == 'cell'"
+      v-if="detail_object.type == 'cell' && $has_xs(['watcher_is_editor'])"
       v-model="detail_object.cell.short"
       outlined
       clearable
@@ -125,6 +125,35 @@
           {{ child.name }}
         </div>
       </div>
+
+      <div class="d-flex justify-end" v-if="$has_xs(['watcher_is_editor'])">
+        <div class="command-buttons-bg detail-command-buttons-position">
+          <CustomButton
+            :icon="'mdi-pencil'"
+            :fab="true"
+            :color="'teal'"
+            :outlined="detail_edit_mode"
+            :dark="true"
+            :elevation="1"
+            :small="true"
+            :tooltip="lang.views.watcher.calendar_edit_elements_tooltip[lg]"
+            class="mr-2"
+            @click="detail_edit_mode = !detail_edit_mode"
+          />
+
+          <CustomButton
+            :icon="'mdi-plus'"
+            :fab="true"
+            :color="'green'"
+            :dark="true"
+            :elevation="1"
+            :small="true"
+            :tooltip="lang.views.watcher.calendar_add_element_tooltip[lg]"
+            :menus="detail_add_element_menu"
+            @menu_action="detail_action($event)"
+          />
+        </div>
+      </div>
     </div>
   </CustomDialog>
 </div>
@@ -158,6 +187,7 @@ export default {
       detail_dialog_loading: true,
       detail_object: null,
       detail_full_object: null,
+      detail_edit_mode: false,
     }
   },
 
@@ -179,9 +209,10 @@ export default {
     this.calendar = this.set_calendar()
     this.profiles = this.set_profiles()
 
-    //console.log(this.calendar)
+    this.loading = false
 
-    this.loading = false 
+    setTimeout(() => this.set_today_frame(), 500)
+    
   },
 
   computed: {
@@ -254,7 +285,35 @@ export default {
       }
 
       return ''
-    }
+    },
+
+    detail_add_element_menu() {
+      let menu = [
+        {
+          'icon': 'mdi-file',
+          'name': this.lang.views.watcher.calendar_add_file[this.lg],
+          'color': 'pink',
+          'action': 'add_file',
+        },
+        {
+          'icon': 'mdi-chat',
+          'name': this.lang.views.watcher.calendar_add_note[this.lg],
+          'color': 'orange',
+          'action': 'add_note',
+        },
+      ]
+
+      if (this.detail_object.type == 'cell') {
+        menu.unshift({
+          'icon': 'mdi-hammer-screwdriver',
+          'name': this.lang.views.watcher.calendar_add_call[this.lg],
+          'color': 'indigo',
+          'action': 'add_call',
+        })
+      }
+
+      return menu
+    },
   },
 
   methods: {
@@ -291,7 +350,15 @@ export default {
 
     set_profiles() {
       let profiles = this.$tool.deepcopy(this.team.profiles)
-      profiles.sort((a, b) => a.link.position - b.link.position)
+
+      if (this.$has_xs(['watcher_can_see_cells'])) {
+        profiles.sort((a, b) => a.link.position - b.link.position)
+      }
+
+      else {
+        profiles = profiles.filter(p => p.id == this.$logged_profile.id)
+      }
+
       profiles = profiles.filter(p => p.link.watcher_is_visible)
 
       for (let profile of profiles) {
@@ -376,6 +443,31 @@ export default {
 
       this.detail_dialog_loading = false
     },
+
+    async detail_action(action) {
+      console.log(action)
+    },
+
+    set_today_frame() {
+      setTimeout(() => {
+        // To avoid errors on fast previous/next clicks
+        if (this.$refs.frame) {
+          let today = new Date()
+
+          if (today.getMonth() + 1 == this.$current_month &&
+              today.getFullYear() == this.$current_year) {
+            let today_frame = this.$refs.today_frame
+            let calendar_frame = this.$refs.frame
+            let calendar_height = calendar_frame.offsetHeight
+            let calendar_y = calendar_frame.offsetTop
+
+            today_frame.style.height = calendar_height + 4 + 'px'
+            today_frame.style.top = '-' + calendar_y - 99 + 'px'
+            today_frame.style.left = ((today.getDate() * 47) + 165) + 'px'
+          }
+        }
+      })
+    }
   },
 
   watch: {
@@ -394,7 +486,7 @@ export default {
 <style scoped>
 
 .calendar-frame {
-
+  margin-left: 5px;
 }
 
 .calendar-spacer {
@@ -416,6 +508,21 @@ export default {
   align-items: center;
   width: 100%;
   height: 160px;
+}
+
+.detail-command-buttons-position {
+  position: relative;
+  top: 15px;
+  left: 20px;
+}
+
+.today-frame {
+  position: relative;
+  background-color: green;
+  width: 49px;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 5px;
 }
 
 </style>

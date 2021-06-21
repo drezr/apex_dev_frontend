@@ -194,7 +194,7 @@ export default {
       },
 
       set() {
-        this.$emit('cancel')
+        setTimeout(() => this.$emit('cancel'), 100)
       }
     },
   },

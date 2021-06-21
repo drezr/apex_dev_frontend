@@ -6,7 +6,7 @@
     {{ lang.views.team.access_manager_tooltip[lg] }}
   </v-card-title>
 
-  <v-card-text>
+  <v-card-text class="pb-0">
     <v-btn
       @click="open_profile_editor_dialog(null)"
       class="mt-3 mb-6 green"
@@ -17,7 +17,7 @@
       {{ lang.views.team.access_create_user[lg] }}
     </v-btn>
 
-    <div class="d-flex align-center mb-3">
+    <div class="d-flex align-center">
       <v-autocomplete
         v-model="picked_profile"
         :items="all_profiles"

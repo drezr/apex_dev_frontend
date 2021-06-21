@@ -50,6 +50,10 @@ export default {
     $current_app_id() {
       return this.$route.params.app_id
     },
+
+    $current_instance() {
+      return this
+    },
   },
 
   methods: {

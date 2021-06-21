@@ -4,7 +4,7 @@
   <div class="main-frame">
     <BarDesktop v-if="$logged_profile" />
 
-    <router-view :key="$route.fullPath" />
+    <router-view :key="$route.fullPath" style="max-height: 0px;" />
   </div>
 </v-app>
 
@@ -137,6 +137,12 @@ html {
   opacity: 0;
 }
 
+.command-buttons-bg {
+  background-color: rgb(230, 230, 230);
+  padding: 5px;
+  border-radius: 100px;
+}
+
 </style>
 
 
@@ -150,7 +156,7 @@ html {
   min-height: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
-  overflow: auto;
+  overflow: auto !important;
 }
 
 </style>
