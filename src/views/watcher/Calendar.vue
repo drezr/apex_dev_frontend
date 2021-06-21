@@ -135,11 +135,14 @@
             class="my-3"
           />
 
-          <div v-if="child.type == 'file'">
-            {{ child.name }}
-          </div>
+          <Call
+            v-if="child.type == 'call'"
+            :self="child"
+            :parent="detail_full_object"
+            class="my-3"
+          />
 
-          <div v-if="child.type == 'call'">
+          <div v-if="child.type == 'file'">
             {{ child.name }}
           </div>
         </div>
@@ -185,6 +188,7 @@
 import DayCell from '@/views/watcher/components/calendar/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
 import Note from '@/components/Note.vue'
+import Call from '@/components/Call.vue'
 
 export default {
   name: 'CalendarView',
@@ -193,6 +197,7 @@ export default {
     DayCell,
     Profile,
     Note,
+    Call,
   },
 
   props: {

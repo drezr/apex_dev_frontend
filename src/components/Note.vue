@@ -10,6 +10,8 @@
 >
   <div class="note-frame">
     <div class="d-flex">
+      <v-icon class="mx-2" color="orange darken-2">mdi-chat</v-icon>
+
       <v-textarea
         v-model="self.value"
         class="note-textarea pa-1"
@@ -21,7 +23,7 @@
         :flat="!(edit_mode && $has_xs(['watcher_is_editor']) && self.profile == $logged_profile.id)"
         background-color="white"
         @input="update"
-        placeholder="Note vide"
+        :placeholder="lang.generic.empty_note[lg]"
       ></v-textarea>
 
       <div v-if="edit_mode" class="mx-2 d-flex align-center">

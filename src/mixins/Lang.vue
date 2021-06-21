@@ -140,6 +140,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'empty_note': {
+            'fr': 'Note vide',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
@@ -487,6 +492,21 @@ export default {
             },
             'calendar_add_file': {
               'fr': 'Ajouter un fichier',
+              'nl': '',
+              'en': '',
+            },
+            'call_description': {
+              'fr': 'Déscription de l\'intervention',
+              'nl': '',
+              'en': '',
+            },
+            'call_send_d27': {
+              'fr': 'Envoyer un D27',
+              'nl': '',
+              'en': '',
+            },
+            'call_link_d27': {
+              'fr': 'Ajouter un lien vers un D27',
               'nl': '',
               'en': '',
             },
