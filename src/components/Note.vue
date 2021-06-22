@@ -59,6 +59,20 @@
       </small>
     </div>
   </div>
+
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_dialog = false"
+    @confirm="remove"
+  ></CustomDialog>
 </v-badge>
 
 </template>
@@ -89,6 +103,7 @@ export default {
   data() {
     return {
       grab_cursor: 'grab',
+      delete_dialog: false,
     }
   },
 
@@ -145,17 +160,13 @@ export default {
   },
 
   methods: {
-    update() {
-
-    },
-
-    remove() {
-
-    },
-
     menu_action(event) {
       if (event == 'copy') {
         console.log('copy')
+      }
+
+      else if (event == 'move') {
+        console.log('move')
       }
 
       else if (event == 'link') {
@@ -163,9 +174,17 @@ export default {
       }
 
       else if (event == 'delete') {
-        this.parent.children = this.parent.children.filter(
-          c => c.id !== this.self.id || c.type !== this.self.type)
+        this.delete_dialog = true
       }
+    },
+
+    update() {
+
+    },
+
+    remove() {
+      this.parent.children = this.parent.children.filter(
+        c => c.id !== this.self.id || c.type !== this.self.type)
     },
   },
 

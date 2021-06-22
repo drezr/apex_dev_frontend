@@ -452,7 +452,6 @@ export default {
 
         date.day.id = request.day.id
         this.detail_full_object = request.day
-        this.detail_full_object.children = this.$tool.get_fused_children(request.day)
       }
 
       else if (this.detail_object.type == 'cell') {
@@ -464,9 +463,11 @@ export default {
 
         date.cell.id = request.cell.id
         this.detail_full_object = request.cell
-        this.$set(this.detail_full_object, 'children')
-        this.detail_full_object.children = this.$tool.get_fused_children(request.cell)
       }
+
+      let children = this.$tool.get_fused_children(this.detail_full_object)
+      children = this.$tool.deepcopy(children)
+      this.$set(this.detail_full_object, 'children', children)
 
       this.detail_dialog_loading = false
     },
@@ -490,10 +491,9 @@ export default {
             let today_frame = this.$refs.today_frame
             let calendar_frame = this.$refs.frame
             let calendar_height = calendar_frame.offsetHeight
-            let calendar_y = calendar_frame.offsetTop
 
-            today_frame.style.height = calendar_height + 4 + 'px'
-            today_frame.style.top = '-' + calendar_y - 99 + 'px'
+            today_frame.style.height = (calendar_height + 4) + 'px'
+            today_frame.style.top = '-' + (calendar_height + 3) + 'px'
             today_frame.style.left = ((today.getDate() * 47) + 165) + 'px'
           }
         }

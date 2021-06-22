@@ -1,13 +1,14 @@
 <template>
  
 <div class="call-frame">
-  <div class="indigo lighten-4 d-flex">
+  <div class="blue lighten-4 d-flex">
     <v-icon class="mx-2" color="indigo">mdi-hammer-screwdriver</v-icon>
 
     <input
-      class="call-input call-name indigo lighten-4"
+      class="call-input call-name"
       v-model="self.name"
       :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :placeholder="lang.views.watcher.call_name[lg]"
     />
   </div>
 
@@ -15,6 +16,7 @@
     class="call-input call-kind"
     v-model="self.kind"
     :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+    :placeholder="lang.views.watcher.call_kind[lg]"
   />
 
   <div class="d-flex">
@@ -22,12 +24,14 @@
       class="call-input call-hour"
       v-model="self.start"
       :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :placeholder="lang.generic.start[lg]"
     />
 
     <input
       class="call-input call-hour"
       v-model="self.end"
       :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :placeholder="lang.generic.end[lg]"
     />
 
     <div class="call-calc">
@@ -54,23 +58,68 @@
   ></v-textarea>
 
   <div class="call-commands">
-    <div v-if="edit_mode">
+    <div>
       <CustomButton
+        v-if="d27_file && !edit_mode"
         :text="'D27'"
-        :icon="'mdi-upload'"
-        :color="'blue'"
+        :icon="'mdi-file-pdf'"
+        :color="'black'"
         :dark="true"
-        :tooltip="lang.views.watcher.call_send_d27[lg]"
+        :tooltip="lang.views.watcher.call_download_d27[lg]"
         class="mx-1 mb-1"
       />
 
       <CustomButton
+        v-if="edit_mode"
         :text="'D27'"
-        :icon="'mdi-link'"
-        :color="'blue'"
+        :icon="d27_file ? 'mdi-refresh' : 'mdi-upload'"
+        :color="d27_file ? 'teal' : 'blue'"
         :dark="true"
-        :tooltip="lang.views.watcher.call_link_d27[lg]"
+        :tooltip="d27_file ? lang.views.watcher.call_replace_d27[lg] : lang.views.watcher.call_send_d27[lg]"
         class="mx-1 mb-1"
+      />
+
+      <CustomButton
+        v-if="d27_file && edit_mode"
+        :icon="'mdi-delete'"
+        :color="'red'"
+        :dark="true"
+        :small="true"
+        :tooltip="lang.views.watcher.call_delete_existing_d27[lg]"
+        class="mx-1 mb-1"
+        @click="open_delete_dialog('file')"
+      />
+
+
+      <CustomButton
+        v-if="d27_link && !edit_mode"
+        :text="'D27'"
+        :icon="d27_link.url.includes('drive') ? 'mdi-google-drive' : 'mdi-file-pdf'"
+        :color="'black'"
+        :dark="true"
+        :tooltip="lang.views.watcher.call_download_d27[lg]"
+        class="mx-1 mb-1"
+      />
+
+      <CustomButton
+        v-if="edit_mode"
+        :text="'D27'"
+        :icon="d27_link ? 'mdi-refresh' : 'mdi-link'"
+        :color="d27_link ? 'teal' : 'blue'"
+        :dark="true"
+        :tooltip="d27_file ? lang.views.watcher.call_replace_link_d27[lg] : lang.views.watcher.call_add_link_d27[lg]"
+        class="mx-1 mb-1"
+      />
+
+      <CustomButton
+        v-if="d27_link && edit_mode"
+        :icon="'mdi-delete'"
+        :color="'red'"
+        :dark="true"
+        :small="true"
+        :tooltip="lang.views.watcher.call_delete_link_d27[lg]"
+        class="mx-1 mb-1"
+        @click="open_delete_dialog('link')"
       />
     </div>
 
@@ -97,6 +146,20 @@
       />
     </div>
   </div>
+
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_dialog = false"
+    @confirm="delete_d27"
+  ></CustomDialog>
 </div>
 
 </template>
@@ -119,6 +182,8 @@ export default {
   data() {
     return {
       grab_cursor: 'grab',
+      delete_dialog: false,
+      delete_mode: null,
     }
   },
 
@@ -201,6 +266,14 @@ export default {
         },
       ]
     },
+
+    d27_file() {
+      return this.self.children.find(c => c.kind == 'd27')
+    },
+
+    d27_link() {
+      return this.self.children.find(c => c.type == 'link')
+    },
   },
 
   methods: {
@@ -225,6 +298,42 @@ export default {
 
       return [null, null]
     },
+
+    menu_action(event) {
+      if (event == 'copy') {
+        console.log('copy')
+      }
+
+      else if (event == 'move') {
+        console.log('move')
+      }
+
+      else if (event == 'delete') {
+        this.open_delete_dialog('call')
+      }
+    },
+
+    open_delete_dialog(mode) {
+      this.delete_mode = mode
+      this.delete_dialog = true
+    },
+
+    delete_d27() {
+      if (this.delete_mode == 'link') {
+        this.self.children = this.self.children.filter(c => c.type !== 'link')
+      }
+
+      else if (this.delete_mode == 'file') {
+        this.self.children = this.self.children.filter(c => c.kind !== 'd27')
+      }
+
+      else if (this.delete_mode == 'call') {
+        this.parent.children = this.parent.children.filter(
+          c => c.id !== this.self.id || c.type !== this.self.type)
+      }
+
+      this.delete_dialog = false
+    },
   },
 
   watch: {
@@ -241,8 +350,14 @@ export default {
   color: black !important;
 }
 
+.call-input {
+  box-shadow: inset 0 0 0 1px orange !important;
+  background-color: white !important;
+}
+
 .call-input:disabled {
   color: black !important;
+  box-shadow: none !important;
 }
 
 </style>
@@ -256,21 +371,27 @@ export default {
 }
 
 .call-name {
-  border-radius: 5px 5px 0 0;
   width: 100%;
   font-size: 15px;
   font-weight: bold;
   padding: 5px 5px;
 }
 
+.call-name:disabled {
+  background-color: transparent !important;
+}
+
 .call-kind {
-  border-radius: 5px 5px 0 0;
   width: 100%;
   font-size: 14px;
   padding: 2px 5px;
-  border-bottom: 1px grey solid;
+  border-bottom: 1px rgba(0, 0, 0, 0.3) solid;
   text-align: center;
   font-weight: bold;
+}
+
+.call-kind:disabled {
+  background-color: rgba(180, 180, 150, 0.1) !important;
 }
 
 .call-hour {
@@ -283,15 +404,19 @@ export default {
   font-weight: bold;
 }
 
+.call-hour:disabled {
+  background-color: rgba(180, 180, 150, 0.1) !important;
+}
+
 .call-calc {
-  border: 1px rgba(0, 0, 0, 0.3) solid;
-  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 200, 0, 0.3) solid;
+  background-color: rgba(0, 200, 0, 0.1);
   text-align: center;
   border-radius: 5px;
   padding: 5px;
   margin: 3px;
   width: 20%;
-  color: black;
+  color: rgba(0, 100, 0, 1);
 }
 
 .call-commands {

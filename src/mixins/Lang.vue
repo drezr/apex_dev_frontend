@@ -145,6 +145,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'start': {
+            'fr': 'Début',
+            'nl': '',
+            'en': '',
+          },
+          'end': {
+            'fr': 'Fin',
+            'nl': '',
+            'en': '',
+          },
+          'are_you_sure': {
+            'fr': 'Êtes-vous sûr(e) ?',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
@@ -495,6 +510,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'call_name': {
+              'fr': 'Déscription du dérangement',
+              'nl': '',
+              'en': '',
+            },
+            'call_kind': {
+              'fr': 'Type d\'intervention',
+              'nl': '',
+              'en': '',
+            },
             'call_description': {
               'fr': 'Déscription de l\'intervention',
               'nl': '',
@@ -505,8 +530,38 @@ export default {
               'nl': '',
               'en': '',
             },
-            'call_link_d27': {
+            'call_replace_d27': {
+              'fr': 'Remplacer le D27 existant',
+              'nl': '',
+              'en': '',
+            },
+            'call_add_link_d27': {
               'fr': 'Ajouter un lien vers un D27',
+              'nl': '',
+              'en': '',
+            },
+            'call_replace_link_d27': {
+              'fr': 'Remplacer le lien du D27',
+              'nl': '',
+              'en': '',
+            },
+            'call_from_to': {
+              'fr': 'de @@@ à ###',
+              'nl': '',
+              'en': '',
+            },
+            'call_download_d27': {
+              'fr': 'Télécharger le D27',
+              'nl': '',
+              'en': '',
+            },
+            'call_delete_existing_d27': {
+              'fr': 'Supprimer le D27 existant',
+              'nl': '',
+              'en': '',
+            },
+            'call_delete_link_d27': {
+              'fr': 'Supprimer le lien vers le D27',
               'nl': '',
               'en': '',
             },

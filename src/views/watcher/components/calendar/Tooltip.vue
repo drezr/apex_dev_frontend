@@ -100,7 +100,7 @@
           </div>
 
           <div class="d-flex justify-center align-center mr-2">
-            {{ child.name }}
+            {{ child.name }} {{ get_call_from_to(child) }}
           </div>
         </div>
       </div>
@@ -251,6 +251,15 @@ export default {
       sorted_teammates = sorted_teammates.map(p => p.name)
 
       return sorted_teammates.concat(other_teams_profiles)
+    },
+
+    get_call_from_to(call) {
+      let txt = this.lang.views.watcher.call_from_to[this.lg]
+
+      txt = txt.replace('@@@', call.start)
+      txt = txt.replace('###', call.end)
+
+      return txt
     },
   },
 
