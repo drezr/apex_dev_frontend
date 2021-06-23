@@ -10,14 +10,14 @@
       :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
       :placeholder="lang.views.watcher.call_name[lg]"
     />
-  </div>
 
-  <input
-    class="call-input call-kind"
-    v-model="self.kind"
-    :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-    :placeholder="lang.views.watcher.call_kind[lg]"
-  />
+    <input
+      class="call-input call-kind"
+      v-model="self.kind"
+      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :placeholder="lang.views.watcher.call_kind[lg]"
+    />
+  </div>
 
   <div class="d-flex">
     <input
@@ -43,6 +43,8 @@
     </div>
   </div>
 
+  <v-divider></v-divider>
+
   <v-textarea
     v-model="self.description"
     class="call-description pa-1"
@@ -57,8 +59,12 @@
     :placeholder="lang.views.watcher.call_description[lg]"
   ></v-textarea>
 
+  <v-divider class="mb-1" v-if="d27_file || d27_link.id"></v-divider>
+
   <div class="call-commands">
     <div>
+      <!-- D27 file -->
+
       <CustomButton
         v-if="d27_file && !edit_mode"
         :text="'D27'"
@@ -90,29 +96,32 @@
         @click="open_delete_dialog('file')"
       />
 
+      <!-- D27 link -->
 
       <CustomButton
-        v-if="d27_link && !edit_mode"
+        v-if="d27_link.id && !edit_mode"
         :text="'D27'"
         :icon="d27_link.url.includes('drive') ? 'mdi-google-drive' : 'mdi-file-pdf'"
         :color="'black'"
         :dark="true"
         :tooltip="lang.views.watcher.call_download_d27[lg]"
         class="mx-1 mb-1"
+        @click="open_url"
       />
 
       <CustomButton
         v-if="edit_mode"
         :text="'D27'"
-        :icon="d27_link ? 'mdi-refresh' : 'mdi-link'"
-        :color="d27_link ? 'teal' : 'blue'"
+        :icon="d27_link.id ? 'mdi-refresh' : 'mdi-link'"
+        :color="d27_link.id ? 'teal' : 'blue'"
         :dark="true"
-        :tooltip="d27_file ? lang.views.watcher.call_replace_link_d27[lg] : lang.views.watcher.call_add_link_d27[lg]"
+        :tooltip="d27_link.id ? lang.views.watcher.call_replace_link_d27[lg] : lang.views.watcher.call_add_link_d27[lg]"
         class="mx-1 mb-1"
+        @click="add_link_dialog = true"
       />
 
       <CustomButton
-        v-if="d27_link && edit_mode"
+        v-if="d27_link.id && edit_mode"
         :icon="'mdi-delete'"
         :color="'red'"
         :dark="true"
@@ -122,6 +131,9 @@
         @click="open_delete_dialog('link')"
       />
     </div>
+
+
+    <!-- Edit commands -->
 
     <div v-if="edit_mode" class="mx-2 d-flex align-center">
       <CustomButton
@@ -147,6 +159,7 @@
     </div>
   </div>
 
+  <!-- Delete call dialog -->
 
   <CustomDialog
     :open="delete_dialog"
@@ -160,6 +173,32 @@
     @cancel="delete_dialog = false"
     @confirm="delete_d27"
   ></CustomDialog>
+
+
+  <!-- Add/replace D27 link dialog -->
+
+  <CustomDialog
+    :open="add_link_dialog"
+    :width="500"
+    :title_text="d27_link.id ? lang.views.watcher.call_replace_link_d27[lg] : lang.views.watcher.call_add_link_d27[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="d27_link.id ? 'mdi-refresh' : 'mdi-link-plus'"
+    :confirm_text="d27_link.id ? lang.generic.replace[lg] : lang.generic.add[lg]"
+    :confirm_color="d27_link.id ? 'teal' : 'blue'"
+    @cancel="add_link_dialog = false"
+    @confirm="add_link"
+  >
+    <v-text-field
+      v-model="d27_link.url"
+      outlined
+      clearable
+      autofocus
+      :label="lang.views.watcher.call_link_url[lg]"
+      hide-details
+      class="mt-6"
+    ></v-text-field>
+  </CustomDialog>
 </div>
 
 </template>
@@ -184,6 +223,7 @@ export default {
       grab_cursor: 'grab',
       delete_dialog: false,
       delete_mode: null,
+      add_link_dialog: false,
     }
   },
 
@@ -204,6 +244,9 @@ export default {
       return this.$current_component.detail_edit_mode
     },
 
+/*
+Calculate time delta between start and end of the call in decimal
+*/
     hour_calc_decimal() {
       let [start_hour, start_minute] = this.get_splitted_hour(this.self.start)
       let [end_hour, end_minute] = this.get_splitted_hour(this.self.end)
@@ -272,7 +315,9 @@ export default {
     },
 
     d27_link() {
-      return this.self.children.find(c => c.type == 'link')
+      let link = this.self.children.find(c => c.type == 'link')
+
+      return link ? link : {}
     },
   },
 
@@ -318,6 +363,11 @@ export default {
       this.delete_dialog = true
     },
 
+    add_link() {
+      console.log('add link')
+      this.add_link_dialog = false
+    },
+
     delete_d27() {
       if (this.delete_mode == 'link') {
         this.self.children = this.self.children.filter(c => c.type !== 'link')
@@ -334,6 +384,16 @@ export default {
 
       this.delete_dialog = false
     },
+
+    open_url() {
+      let url = this.d27_link.url
+
+      if (url) {
+        url = url.match(/^http[s]?:\/\//) ? url : 'http://' + url
+
+        window.open(url)
+      }
+    },
   },
 
   watch: {
@@ -348,6 +408,14 @@ export default {
 
 .call-description textarea:disabled {
   color: black !important;
+}
+
+.call-description.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)>.v-input__control>.v-input__slot {
+  box-shadow: inset 0 0 0 1px orange !important;
+}
+
+.call-description.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)>.v-input__control>.v-input__slot:focus-within {
+  box-shadow: inset 0 0 0 2px black !important;
 }
 
 .call-input {
@@ -382,20 +450,20 @@ export default {
 }
 
 .call-kind {
-  width: 100%;
-  font-size: 14px;
-  padding: 2px 5px;
-  border-bottom: 1px rgba(0, 0, 0, 0.3) solid;
-  text-align: center;
+  width: 130px;
+  font-size: 13px;
   font-weight: bold;
+  padding: 5px 5px;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .call-kind:disabled {
-  background-color: rgba(180, 180, 150, 0.1) !important;
+  background-color: transparent !important;
 }
 
 .call-hour {
-  border: 1px grey solid;
+  border: 1px rgba(180, 180, 180, 0.5) solid;
   text-align: center;
   border-radius: 5px;
   padding: 5px;

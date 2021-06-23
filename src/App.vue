@@ -119,6 +119,10 @@ html {
   filter: brightness(1.3) !important;
 }
 
+.white-space-pre {
+  white-space: pre !important;
+}
+
 .font-size-8 { font-size: 8px !important; }
 .font-size-9 { font-size: 9px !important; }
 .font-size-10 { font-size: 10px !important; }

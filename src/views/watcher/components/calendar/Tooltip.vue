@@ -24,7 +24,7 @@
           class="tooltip-teammates"
         >
           <div
-            v-for="(teammate, i) in get_sorted_teammates(part.teammates)"
+            v-for="(teammate, i) in $get_sorted_teammates(part.teammates)"
             :key="i" class="mr-1"
           >
             {{ teammate }}{{ i == part.teammates.length - 2 ? ',' : '' }}
@@ -41,7 +41,7 @@
                 {{ lang.generic.shift[lg] }} : {{ part.shift.shift }}
               </small>
             </div>
-            <div>{{ part.work.description }}</div>
+            <div class="white-space-pre">{{ part.work.description }}</div>
           </div>
         </div>
         
@@ -57,7 +57,7 @@
           class="tooltip-teammates"
         >
           <div
-            v-for="(teammate, i) in get_sorted_teammates(child.teammates)"
+            v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
             :key="i" class="mr-1"
           >
             {{ teammate }}{{ i == child.teammates.length - 2 ? ',' : '' }}
@@ -69,7 +69,7 @@
             <v-icon color="teal">mdi-clipboard-check</v-icon>
           </div>
 
-          <div class="d-flex justify-center align-center mr-2">
+          <div class="d-flex justify-center align-center mr-2 white-space-pre">
             {{ child.name }}
           </div>
         </div>
@@ -79,7 +79,7 @@
             <v-icon color="orange">mdi-chat</v-icon>
           </div>
 
-          <div class="d-flex justify-center align-center mr-2">
+          <div class="d-flex justify-center align-center mr-2 white-space-pre">
             {{ child.value }}
           </div>
         </div>
@@ -89,7 +89,7 @@
             <v-icon color="pink">mdi-file</v-icon>
           </div>
 
-          <div class="d-flex justify-center align-center mr-2">
+          <div class="d-flex justify-center align-center mr-2 white-space-pre">
             {{ child.name }}
           </div>
         </div>
@@ -224,33 +224,6 @@ export default {
           this.y = this.offset_y - 2 - this.$refs.frame.offsetHeight - scroll_top
         }
       }
-    },
-
-    get_sorted_teammates(teammates) {
-      let sorted_teammates = Array()
-      let other_teams_profiles = Array()
-
-      for (let teammate of teammates) {
-        let profile = this.$current_component.profiles.find(
-          p => p.name == teammate)
-
-        if (profile) {
-          let exists = sorted_teammates.find(p => p.name == profile.name)
-
-          if (!exists) {
-            sorted_teammates.push(profile)
-          }
-        }
-
-        else {
-          other_teams_profiles.push(profile)
-        }
-      }
-
-      sorted_teammates.sort((a, b) => a.link.position - b.link.position)
-      sorted_teammates = sorted_teammates.map(p => p.name)
-
-      return sorted_teammates.concat(other_teams_profiles)
     },
 
     get_call_from_to(call) {

@@ -45,6 +45,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'replace': {
+            'fr': 'Remplacer',
+            'nl': '',
+            'en': '',
+          },
           'sort': {
             'fr': 'Trier',
             'nl': '',
@@ -157,6 +162,16 @@ export default {
           },
           'are_you_sure': {
             'fr': 'Êtes-vous sûr(e) ?',
+            'nl': '',
+            'en': '',
+          },
+          'bnx': {
+            'fr': 'BNX',
+            'nl': '',
+            'en': '',
+          },
+          'ilt': {
+            'fr': 'ILT',
             'nl': '',
             'en': '',
           },
@@ -562,6 +577,11 @@ export default {
             },
             'call_delete_link_d27': {
               'fr': 'Supprimer le lien vers le D27',
+              'nl': '',
+              'en': '',
+            },
+            'call_link_url': {
+              'fr': 'URL vers le D27',
               'nl': '',
               'en': '',
             },

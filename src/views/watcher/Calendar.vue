@@ -97,12 +97,13 @@
        {{ lang.views.watcher.calendar_detail_no_element[lg] }}
       </div>
 
-      <div
+      <Part
         v-for="part in detail_full_object.parts"
         :key="part.id"
-      >
-        {{ part.work.description }}
-      </div>
+        :self="part"
+        :parent="detail_full_object"
+        class="my-6"
+      />
 
       <v-divider
         v-if="
@@ -142,9 +143,12 @@
             class="my-3"
           />
 
-          <div v-if="child.type == 'file'">
-            {{ child.name }}
-          </div>
+          <File
+            v-if="child.type == 'file'"
+            :self="child"
+            :parent="detail_full_object"
+            class="my-3"
+          />
         </div>
       </VueDraggable>
 
@@ -187,8 +191,10 @@
 
 import DayCell from '@/views/watcher/components/calendar/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
-import Note from '@/components/Note.vue'
+import Part from '@/components/Part.vue'
 import Call from '@/components/Call.vue'
+import File from '@/components/File.vue'
+import Note from '@/components/Note.vue'
 
 export default {
   name: 'CalendarView',
@@ -196,8 +202,10 @@ export default {
   components: {
     DayCell,
     Profile,
-    Note,
+    Part,
     Call,
+    File,
+    Note,
   },
 
   props: {
@@ -468,6 +476,7 @@ export default {
       let children = this.$tool.get_fused_children(this.detail_full_object)
       children = this.$tool.deepcopy(children)
       this.$set(this.detail_full_object, 'children', children)
+      this.detail_full_object.parts.sort((a, b) => a.shift.shift.localeCompare(b.shift.shift))
 
       this.detail_dialog_loading = false
     },
