@@ -92,7 +92,7 @@
 
 <script>
 
-import Tooltip from '@/views/watcher/components/calendar/Tooltip.vue'
+import Tooltip from '@/views/watcher/components/Tooltip.vue'
 
 export default {
   name: '',

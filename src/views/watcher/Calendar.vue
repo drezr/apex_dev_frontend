@@ -5,9 +5,11 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="team-title">
+      <div class="team-title my-3">
         {{ team.name }}
       </div>
+
+      <NavigationBar />
 
       <div class="calendar-frame" ref="frame">
         <div class="calendar-days">
@@ -189,7 +191,8 @@
 
 <script>
 
-import DayCell from '@/views/watcher/components/calendar/DayCell.vue'
+import NavigationBar from '@/components/NavigationBar.vue'
+import DayCell from '@/views/watcher/components/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
 import Part from '@/components/Part.vue'
 import Call from '@/components/Call.vue'
@@ -200,6 +203,7 @@ export default {
   name: 'CalendarView',
 
   components: {
+    NavigationBar,
     DayCell,
     Profile,
     Part,

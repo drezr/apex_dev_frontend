@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="team-title mb-9">
+      <div class="team-title my-9">
         {{ self.name }}
 
         <CustomButton

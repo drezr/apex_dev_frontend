@@ -135,7 +135,6 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  height: 80px;
 }
 
 .fade-enter-active, .fade-leave-active {
