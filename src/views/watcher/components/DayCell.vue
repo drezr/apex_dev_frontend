@@ -48,6 +48,7 @@
           select_text_color(date.cell.presence),
           select_text_size(date.cell.presence),
         ]"
+        @focus="get_object"
       />
 
       <input
@@ -59,6 +60,7 @@
           select_text_color(date.cell.absence),
           select_text_size(date.cell.absence),
         ]"
+        @focus="get_object"
       />
       
       <div
@@ -114,6 +116,7 @@ export default {
 
   data() {
     return {
+      is_requesting: false,
       hover: false,
       border_colors: {
         'red accent-4': '#D50000',
@@ -188,6 +191,23 @@ export default {
       }
 
       return 'font-size-9'
+    },
+
+    async get_object() {
+      if (!this.is_requesting) {
+        if (this.type == 'cell') {
+          if (!this.date.cell.id) {
+            this.is_requesting = true
+
+            await this.$http.get('cell', {
+              'profile_id': this.date.cell.profile,
+              'date': this.date.cell.date,
+            })
+
+            this.is_requesting = false
+          }
+        }
+      }
     },
   },
 

@@ -332,6 +332,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'fleet_desc': {
+              'fr': 'Gestion des véhicules',
+              'nl': '',
+              'en': '',
+            },
+            'planner_desc': {
+              'fr': 'Planificateur de tâches',
+              'nl': '',
+              'en': '',
+            },
             'radium_desc': {
               'fr': 'Agenda de chantiers',
               'nl': '',

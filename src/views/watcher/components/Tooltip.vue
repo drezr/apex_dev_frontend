@@ -146,6 +146,7 @@ export default {
       children: Array(),
       parts: Array(),
       timer: null,
+      open_delay: 500,
       y: 0,
     }
   },
@@ -180,7 +181,7 @@ export default {
       this.loading = false
 
       setTimeout(() => this.set_y_position())
-    }, 500)
+    }, this.open_delay)
   },
 
   mounted() {
