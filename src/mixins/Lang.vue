@@ -265,6 +265,31 @@ export default {
             'nl': '',
             'en': '',
           },
+          'pending': {
+            'fr': 'En attente',
+            'nl': '',
+            'en': '',
+          },
+          'working': {
+            'fr': 'En cours',
+            'nl': '',
+            'en': '',
+          },
+          'done': {
+            'fr': 'Terminé',
+            'nl': '',
+            'en': '',
+          },
+          'canceled': {
+            'fr': 'Annulé',
+            'nl': '',
+            'en': '',
+          },
+          'expand': {
+            'fr': 'Développer',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {

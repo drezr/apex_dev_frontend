@@ -15,7 +15,7 @@
 
     <v-text-field
       v-model="self.name"
-      class="file-field ma-2"
+      class="custom-field ma-2"
       :label="lang.views.watcher.calendar_detail_short[lg]"
       :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
       :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
@@ -145,10 +145,6 @@ export default {
 
 
 <style>
-
-.file-field input:disabled {
-  color: black !important;
-}
 
 </style>
 

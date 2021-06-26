@@ -150,6 +150,18 @@ html {
   border-radius: 100px;
 }
 
+.custom-field textarea {
+  margin-bottom: 5px !important;
+}
+
+.custom-field textarea:disabled {
+  color: black !important;
+}
+
+.custom-field input:disabled {
+  color: black !important;
+}
+
 </style>
 
 

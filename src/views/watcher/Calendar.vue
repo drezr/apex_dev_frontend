@@ -127,9 +127,12 @@
           :key="child.id + $tool.gen_uid()"
           class="d-flex flex-column"
         >
-          <div v-if="child.type == 'task'">
-            {{ child.name }}
-          </div>
+          <Task
+            v-if="child.type == 'task'"
+            :self="child"
+            :parent="detail_full_object"
+            class="my-3"
+          />
 
           <Note
             v-if="child.type == 'note'"
@@ -195,6 +198,7 @@ import NavigationBar from '@/components/NavigationBar.vue'
 import DayCell from '@/views/watcher/components/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
 import Part from '@/components/Part.vue'
+import Task from '@/components/Task.vue'
 import Call from '@/components/Call.vue'
 import File from '@/components/File.vue'
 import Note from '@/components/Note.vue'
@@ -207,6 +211,7 @@ export default {
     DayCell,
     Profile,
     Part,
+    Task,
     Call,
     File,
     Note,

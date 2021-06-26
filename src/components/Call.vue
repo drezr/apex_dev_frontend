@@ -47,7 +47,7 @@
 
   <v-textarea
     v-model="self.description"
-    class="call-description pa-1"
+    class="call-description custom-field pa-1"
     :rows="1"
     auto-grow
     hide-details
@@ -405,10 +405,6 @@ Calculate time delta between start and end of the call in decimal
 
 
 <style>
-
-.call-description textarea:disabled {
-  color: black !important;
-}
 
 .call-description.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)>.v-input__control>.v-input__slot {
   box-shadow: inset 0 0 0 1px orange !important;

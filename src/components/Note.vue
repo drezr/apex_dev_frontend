@@ -14,7 +14,7 @@
 
       <v-textarea
         v-model="self.value"
-        class="note-textarea pa-1"
+        class="custom-field pa-1"
         :rows="1"
         auto-grow
         hide-details
@@ -197,10 +197,6 @@ export default {
 
 
 <style>
-
-.note-textarea textarea:disabled {
-  color: black !important;
-}
 
 </style>
 
