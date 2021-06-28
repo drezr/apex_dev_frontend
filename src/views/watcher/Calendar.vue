@@ -131,28 +131,28 @@
             v-if="child.type == 'task'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mb-6"
           />
 
           <Note
             v-if="child.type == 'note'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mb-6"
           />
 
           <Call
             v-if="child.type == 'call'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mt-3 mb-6"
           />
 
           <File
             v-if="child.type == 'file'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mb-6"
           />
         </div>
       </VueDraggable>
@@ -163,7 +163,6 @@
             :icon="'mdi-pencil'"
             :fab="true"
             :color="'teal'"
-            :outlined="detail_edit_mode"
             :dark="true"
             :elevation="1"
             :small="true"
@@ -171,6 +170,9 @@
             class="mr-2"
             @click="detail_edit_mode = !detail_edit_mode"
           />
+
+
+          <!-- :outlined="detail_edit_mode" re-render all components-->
 
           <CustomButton
             :icon="'mdi-plus'"
@@ -341,7 +343,7 @@ export default {
         {
           'icon': 'mdi-chat',
           'name': this.lang.views.watcher.calendar_add_note[this.lg],
-          'color': 'text--darken-2 orange',
+          'color': 'text--darken-2 cyan',
           'action': 'add_note',
         },
       ]

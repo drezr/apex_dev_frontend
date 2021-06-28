@@ -1,15 +1,14 @@
 <template>
 
 <div>
-  <div>
+  <div v-if="$current_view == 'calendar'">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
       class="mb-1 mr-1 px-2"
       small
     >
-
-        <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
 
       {{ teammate }}
     </v-chip>

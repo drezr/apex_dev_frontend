@@ -150,6 +150,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'empty_task': {
+            'fr': 'Tâche vide',
+            'nl': '',
+            'en': '',
+          },
+          'empty_subtask': {
+            'fr': 'Sous-tâche vide',
+            'nl': '',
+            'en': '',
+          },
+          'file_name': {
+            'fr': 'Nom du fichier',
+            'nl': '',
+            'en': '',
+          },
           'start': {
             'fr': 'Début',
             'nl': '',
@@ -290,6 +305,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'task_no_element': {
+            'fr': 'Il n\'y pas d\'élément dans cette tâche.',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
@@ -363,7 +383,7 @@ export default {
               'en': '',
             },
             'planner_desc': {
-              'fr': 'Planificateur de tâches',
+              'fr': 'Planificateur de journée',
               'nl': '',
               'en': '',
             },

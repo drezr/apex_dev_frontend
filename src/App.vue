@@ -151,6 +151,7 @@ html {
 }
 
 .custom-field textarea {
+  margin-top: 10px !important;
   margin-bottom: 5px !important;
 }
 

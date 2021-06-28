@@ -50,7 +50,7 @@
           v-if="cancel_icon"
           :class="[
             cancel_text ? 'mr-2' : '',
-            cancel_text_color ? cancel_text_color + '--text' : 'grey--text',
+            cancel_text_color ? cancel_text_color + '--text' : 'black--text',
           ]"
         >
           {{ cancel_icon }}
@@ -59,7 +59,7 @@
         <span
           v-if="cancel_text"
           :class="[
-            cancel_text_color ? cancel_text_color + '--text' : 'grey--text',
+            cancel_text_color ? cancel_text_color + '--text' : 'black--text',
           ]"
         >
           {{ cancel_text }}

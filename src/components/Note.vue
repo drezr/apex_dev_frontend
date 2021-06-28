@@ -1,65 +1,89 @@
 <template>
 
-<v-badge
-  overlap
-  bordered
-  color="purple"
-  style="width: 100%;"
-  icon="mdi-link-variant"
-  :value="!self.link.is_original"
->
-  <div class="note-frame">
-    <div class="d-flex">
-      <v-icon class="mx-2" color="orange darken-2">mdi-chat</v-icon>
-
-      <v-textarea
-        v-model="self.value"
-        class="custom-field pa-1"
-        :rows="1"
-        auto-grow
-        hide-details
-        solo
-        :disabled="!(edit_mode && $has_xs(['watcher_is_editor']) && self.profile == $logged_profile.id)"
-        :flat="!(edit_mode && $has_xs(['watcher_is_editor']) && self.profile == $logged_profile.id)"
-        background-color="white"
-        @input="update"
-        :placeholder="lang.generic.empty_note[lg]"
-      ></v-textarea>
-
-      <div v-if="edit_mode" class="mx-2 d-flex align-center">
-        <CustomButton
-          :icon="'mdi-arrow-split-horizontal'"
-          :small_fab="true"
-          :text_color="'pink'"
-          :tooltip="lang.generic.update_position[lg]"
-          :cursor="grab_cursor"
-          @mousedown="grab_cursor = 'grabbing'"
-          @mouseup="grab_cursor = 'grab'"
-          @mouseleave="grab_cursor = 'grab'"
-          class="handle"
-        />
-
-        <CustomButton
-          :icon="'mdi-cog'"
-          :small_fab="true"
-          :text_color="'teal'"
-          :tooltip="lang.generic.edit_options[lg]"
-          :menus="edit_menus"
-          @menu_action="menu_action($event)"
-        />
-      </div>
-    </div>
-
-    <div
-      v-if="self.author"
-      class="text-right orange darken-2 px-1 white--text"
+<div>
+  <div>
+    <v-chip
+      v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
+      :key="i"
+      class="mb-1 mr-1 px-2"
+      small
     >
-      <small>
-        {{ by_author_on_date }}
-      </small>
-    </div>
+      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+
+      {{ teammate }}
+    </v-chip>
   </div>
 
+  <v-badge
+    overlap
+    bordered
+    color="purple"
+    style="width: 100%;"
+    icon="mdi-link-variant"
+    :value="$show_link_badge"
+  >
+    <div class="note-frame">
+      <div class="d-flex">
+        <v-icon class="mx-2" color="cyan darken-2" large>mdi-chat</v-icon>
+
+        <v-textarea
+          v-model="self.value"
+          class="custom-field pa-1"
+          :rows="1"
+          auto-grow
+          hide-details
+          solo
+          :disabled="!(edit_mode && $has_xs(['watcher_is_editor']) && self.profile == $logged_profile.id)"
+          :flat="!(edit_mode && $has_xs(['watcher_is_editor']) && self.profile == $logged_profile.id)"
+          background-color="white"
+          @input="update"
+          :placeholder="lang.generic.empty_note[lg]"
+        ></v-textarea>
+
+        <div v-if="edit_mode" class="mx-2 d-flex align-center">
+          <CustomButton
+            :icon="'mdi-arrow-split-horizontal'"
+            :small_fab="true"
+            :text_color="'pink'"
+            :tooltip="lang.generic.update_position[lg]"
+            :cursor="grab_cursor"
+            @mousedown="grab_cursor = 'grabbing'"
+            @mouseup="grab_cursor = 'grab'"
+            @mouseleave="grab_cursor = 'grab'"
+            :class="$is_in_task ? 'handle-children' : 'handle'"
+          />
+
+          <CustomButton
+            v-if="$is_in_task"
+            :icon="'mdi-delete'"
+            :small_fab="true"
+            :text_color="'red'"
+            :tooltip="lang.generic.delete[lg]"
+            @click="delete_dialog = true"
+          />
+
+          <CustomButton
+            v-else
+            :icon="'mdi-cog'"
+            :small_fab="true"
+            :text_color="'teal'"
+            :tooltip="lang.generic.edit_options[lg]"
+            :menus="edit_menus"
+            @menu_action="menu_action($event)"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="self.author"
+        class="text-right cyan darken-2 px-1 white--text"
+      >
+        <small>
+          {{ by_author_on_date }}
+        </small>
+      </div>
+    </div>
+  </v-badge>
 
   <CustomDialog
     :open="delete_dialog"
@@ -73,14 +97,12 @@
     @cancel="delete_dialog = false"
     @confirm="remove"
   ></CustomDialog>
-</v-badge>
+</div>
 
 </template>
 
 
 <script>
-
-// import Component from '@/components/Component.vue'
 
 export default {
   name: 'Note',
