@@ -1,52 +1,90 @@
 <template>
 
-<v-badge
-  overlap
-  bordered
-  color="purple"
-  style="width: 100%;"
-  icon="mdi-link-variant"
-  :value="!self.link.is_original"
->
-  <v-card class="d-flex align-center elevation-5">
-    <v-icon color="pink" class="ml-2" large>
-      {{ icon }}
-    </v-icon>
+<div>
+  <div>
+    <v-chip
+      v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
+      :key="i"
+      class="mb-1 mr-1 px-2"
+      small
+    >
+      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
 
-    <v-text-field
-      v-model="self.name"
-      class="file-field ma-2"
-      :label="lang.views.watcher.calendar_detail_short[lg]"
-      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-      :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
-      hide-details
-      solo
-    ></v-text-field>
+      {{ teammate }}
+    </v-chip>
+  </div>
 
-    <div class="ml-1 mr-2" v-if="edit_mode">
-      <CustomButton
-        :icon="'mdi-arrow-split-horizontal'"
-        :small_fab="true"
-        :text_color="'pink'"
-        :tooltip="lang.generic.update_position[lg]"
-        :cursor="grab_cursor"
-        @mousedown="grab_cursor = 'grabbing'"
-        @mouseup="grab_cursor = 'grab'"
-        @mouseleave="grab_cursor = 'grab'"
-        class="handle"
-      />
+  <v-badge
+    overlap
+    bordered
+    color="purple"
+    style="width: 100%;"
+    icon="mdi-link-variant"
+    :value="$show_link_badge"
+  >
+    <div class="file-frame">
+      <v-icon color="pink" class="ml-2" large>
+        {{ icon }}
+      </v-icon>
 
-      <CustomButton
-        :icon="'mdi-cog'"
-        :small_fab="true"
-        :text_color="'teal'"
-        :tooltip="lang.generic.edit_options[lg]"
-        :menus="edit_menus"
-        @menu_action="menu_action($event)"
-      />
+      <v-text-field
+        v-model="self.name"
+        class="custom-field ma-2"
+        :placeholder="lang.generic.file_name[lg]"
+        :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+        :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+        hide-details
+        solo
+      ></v-text-field>
+
+      <div class="ml-1 mr-2" v-if="edit_mode">
+        <CustomButton
+          :icon="'mdi-arrow-split-horizontal'"
+          :small_fab="true"
+          :text_color="'pink'"
+          :tooltip="lang.generic.update_position[lg]"
+          :cursor="grab_cursor"
+          @mousedown="grab_cursor = 'grabbing'"
+          @mouseup="grab_cursor = 'grab'"
+          @mouseleave="grab_cursor = 'grab'"
+            :class="$is_in_task ? 'handle-children' : 'handle'"
+        />
+
+        <CustomButton
+          v-if="$is_in_task"
+          :icon="'mdi-delete'"
+          :small_fab="true"
+          :text_color="'red'"
+          :tooltip="lang.generic.delete[lg]"
+          @click="delete_dialog = true"
+        />
+
+        <CustomButton
+          v-else
+          :icon="'mdi-cog'"
+          :small_fab="true"
+          :text_color="'teal'"
+          :tooltip="lang.generic.edit_options[lg]"
+          :menus="edit_menus"
+          @menu_action="menu_action($event)"
+        />
+      </div>
     </div>
-  </v-card>
-</v-badge>
+  </v-badge>
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_dialog = false"
+    @confirm="remove"
+  ></CustomDialog>
+</div>
 
 </template>
 
@@ -68,6 +106,7 @@ export default {
   data() {
     return {
       grab_cursor: 'grab',
+      delete_dialog: false,
     }
   },
 
@@ -134,6 +173,11 @@ export default {
         this.delete_dialog = true
       }
     },
+
+    remove() {
+      this.parent.children = this.parent.children.filter(
+        c => c.id !== this.self.id || c.type !== this.self.type)
+    },
   },
 
   watch: {
@@ -146,13 +190,16 @@ export default {
 
 <style>
 
-.file-field input:disabled {
-  color: black !important;
-}
-
 </style>
 
 
 <style scoped>
+
+.file-frame {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px grey solid;
+}
 
 </style>

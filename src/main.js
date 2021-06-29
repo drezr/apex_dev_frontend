@@ -16,7 +16,7 @@ import Access from '@/mixins/Access.vue'
 import Current from '@/mixins/Current.vue'
 import Lang from '@/mixins/Lang.vue'
 import Socket from '@/mixins/Socket.vue'
-import SharedFunctions from '@/mixins/SharedFunctions.vue'
+import Shared from '@/mixins/Shared.vue'
 
 Vue.config.productionTip = false
 
@@ -32,7 +32,7 @@ Vue.mixin(Access)
 Vue.mixin(Current)
 Vue.mixin(Lang)
 Vue.mixin(Socket)
-Vue.mixin(SharedFunctions)
+Vue.mixin(Shared)
 
 new Vue({
   router,

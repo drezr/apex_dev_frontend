@@ -5,9 +5,11 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="team-title">
+      <div class="team-title my-3">
         {{ team.name }}
       </div>
+
+      <NavigationBar />
 
       <div class="calendar-frame" ref="frame">
         <div class="calendar-days">
@@ -125,29 +127,32 @@
           :key="child.id + $tool.gen_uid()"
           class="d-flex flex-column"
         >
-          <div v-if="child.type == 'task'">
-            {{ child.name }}
-          </div>
+          <Task
+            v-if="child.type == 'task'"
+            :self="child"
+            :parent="detail_full_object"
+            class="mb-6"
+          />
 
           <Note
             v-if="child.type == 'note'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mb-6"
           />
 
           <Call
             v-if="child.type == 'call'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mt-3 mb-6"
           />
 
           <File
             v-if="child.type == 'file'"
             :self="child"
             :parent="detail_full_object"
-            class="my-3"
+            class="mb-6"
           />
         </div>
       </VueDraggable>
@@ -158,7 +163,6 @@
             :icon="'mdi-pencil'"
             :fab="true"
             :color="'teal'"
-            :outlined="detail_edit_mode"
             :dark="true"
             :elevation="1"
             :small="true"
@@ -166,6 +170,9 @@
             class="mr-2"
             @click="detail_edit_mode = !detail_edit_mode"
           />
+
+
+          <!-- :outlined="detail_edit_mode" re-render all components-->
 
           <CustomButton
             :icon="'mdi-plus'"
@@ -189,9 +196,11 @@
 
 <script>
 
-import DayCell from '@/views/watcher/components/calendar/DayCell.vue'
+import NavigationBar from '@/components/NavigationBar.vue'
+import DayCell from '@/views/watcher/components/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
 import Part from '@/components/Part.vue'
+import Task from '@/components/Task.vue'
 import Call from '@/components/Call.vue'
 import File from '@/components/File.vue'
 import Note from '@/components/Note.vue'
@@ -200,9 +209,11 @@ export default {
   name: 'CalendarView',
 
   components: {
+    NavigationBar,
     DayCell,
     Profile,
     Part,
+    Task,
     Call,
     File,
     Note,
@@ -332,7 +343,7 @@ export default {
         {
           'icon': 'mdi-chat',
           'name': this.lang.views.watcher.calendar_add_note[this.lg],
-          'color': 'text--darken-2 orange',
+          'color': 'text--darken-2 cyan',
           'action': 'add_note',
         },
       ]

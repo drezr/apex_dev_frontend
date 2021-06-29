@@ -66,7 +66,9 @@
 
         <div v-if="child.type == 'task'" class="tooltip-child-frame">
           <div class="d-flex justify-center align-center mr-2">
-            <v-icon color="teal">mdi-clipboard-check</v-icon>
+            <v-icon :color="get_status_color(child)">
+              {{ get_status_icon(child) }}
+            </v-icon>
           </div>
 
           <div class="d-flex justify-center align-center mr-2 white-space-pre">
@@ -76,7 +78,7 @@
 
         <div v-if="child.type == 'note'" class="tooltip-child-frame">
           <div class="d-flex justify-center align-center mr-2">
-            <v-icon color="orange">mdi-chat</v-icon>
+            <v-icon color="cyan darken-1">mdi-chat</v-icon>
           </div>
 
           <div class="d-flex justify-center align-center mr-2 white-space-pre">
@@ -146,6 +148,7 @@ export default {
       children: Array(),
       parts: Array(),
       timer: null,
+      open_delay: 500,
       y: 0,
     }
   },
@@ -180,7 +183,7 @@ export default {
       this.loading = false
 
       setTimeout(() => this.set_y_position())
-    }, 500)
+    }, this.open_delay)
   },
 
   mounted() {
@@ -233,6 +236,28 @@ export default {
       txt = txt.replace('###', call.end)
 
       return txt
+    },
+
+    get_status_color(child) {
+      let status_color = {
+        'pending': 'orange',
+        'working': 'blue',
+        'done': 'green',
+        'canceled': 'red',
+      }
+
+      return status_color[child.status]
+    },
+
+    get_status_icon(child) {
+      let status_icon = {
+        'pending': 'mdi-timer-sand',
+        'working': 'mdi-wrench',
+        'done': 'mdi-check',
+        'canceled': 'mdi-cancel',
+      }
+
+      return status_icon[child.status]
     },
   },
 

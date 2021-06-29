@@ -8,7 +8,24 @@ export default {
   },
 
   computed: {
+    $show_link_badge() {
+      let no_badge_views = []
 
+      if (!this.self.link.is_original && 
+          !no_badge_views.includes(this.$current_view)) {
+        return true
+      }
+
+      return false
+    },
+
+    $is_in_task() {
+      if (this.parent.type == 'task') {
+        return true
+      }
+
+      return false
+    },
   },
 
   methods: {

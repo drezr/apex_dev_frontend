@@ -150,6 +150,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'empty_task': {
+            'fr': 'Tâche vide',
+            'nl': '',
+            'en': '',
+          },
+          'empty_subtask': {
+            'fr': 'Sous-tâche vide',
+            'nl': '',
+            'en': '',
+          },
+          'file_name': {
+            'fr': 'Nom du fichier',
+            'nl': '',
+            'en': '',
+          },
           'start': {
             'fr': 'Début',
             'nl': '',
@@ -172,6 +187,126 @@ export default {
           },
           'ilt': {
             'fr': 'ILT',
+            'nl': '',
+            'en': '',
+          },
+          'month': {
+            'fr': 'Mois',
+            'nl': '',
+            'en': '',
+          },
+          'previous_month': {
+            'fr': 'Mois précédent',
+            'nl': '',
+            'en': '',
+          },
+          'next_month': {
+            'fr': 'Mois suivant',
+            'nl': '',
+            'en': '',
+          },
+          'year': {
+            'fr': 'Année',
+            'nl': '',
+            'en': '',
+          },
+          'previous_year': {
+            'fr': 'Année précédente',
+            'nl': '',
+            'en': '',
+          },
+          'next_year': {
+            'fr': 'Année suivante',
+            'nl': '',
+            'en': '',
+          },
+          'january': {
+            'fr': 'Janvier',
+            'nl': '',
+            'en': '',
+          },
+          'february': {
+            'fr': 'Février',
+            'nl': '',
+            'en': '',
+          },
+          'march': {
+            'fr': 'Mars',
+            'nl': '',
+            'en': '',
+          },
+          'april': {
+            'fr': 'Avril',
+            'nl': '',
+            'en': '',
+          },
+          'may': {
+            'fr': 'Mai',
+            'nl': '',
+            'en': '',
+          },
+          'june': {
+            'fr': 'Juin',
+            'nl': '',
+            'en': '',
+          },
+          'jully': {
+            'fr': 'Juillet',
+            'nl': '',
+            'en': '',
+          },
+          'August': {
+            'fr': 'Août',
+            'nl': '',
+            'en': '',
+          },
+          'september': {
+            'fr': 'Septembre',
+            'nl': '',
+            'en': '',
+          },
+          'october': {
+            'fr': 'Octobre',
+            'nl': '',
+            'en': '',
+          },
+          'november': {
+            'fr': 'Novembre',
+            'nl': '',
+            'en': '',
+          },
+          'december': {
+            'fr': 'Décembre',
+            'nl': '',
+            'en': '',
+          },
+          'pending': {
+            'fr': 'En attente',
+            'nl': '',
+            'en': '',
+          },
+          'working': {
+            'fr': 'En cours',
+            'nl': '',
+            'en': '',
+          },
+          'done': {
+            'fr': 'Terminé',
+            'nl': '',
+            'en': '',
+          },
+          'canceled': {
+            'fr': 'Annulé',
+            'nl': '',
+            'en': '',
+          },
+          'expand': {
+            'fr': 'Développer',
+            'nl': '',
+            'en': '',
+          },
+          'task_no_element': {
+            'fr': 'Il n\'y pas d\'élément dans cette tâche.',
             'nl': '',
             'en': '',
           },
@@ -239,6 +374,16 @@ export default {
           'team': {
             'draft_desc': {
               'fr': 'Gestion de projets',
+              'nl': '',
+              'en': '',
+            },
+            'fleet_desc': {
+              'fr': 'Gestion des véhicules',
+              'nl': '',
+              'en': '',
+            },
+            'planner_desc': {
+              'fr': 'Planificateur de journée',
               'nl': '',
               'en': '',
             },
@@ -582,6 +727,31 @@ export default {
             },
             'call_link_url': {
               'fr': 'URL vers le D27',
+              'nl': '',
+              'en': '',
+            },
+            'calls_summary': {
+              'fr': 'Récapitulatif des interventions',
+              'nl': '',
+              'en': '',
+            },
+            'palette_cells': {
+              'fr': 'Colorer les cellules',
+              'nl': '',
+              'en': '',
+            },
+            'hour_calculator': {
+              'fr': 'Convertisseur heure/décimale',
+              'nl': '',
+              'en': '',
+            },
+            'printable_calendar': {
+              'fr': 'Calendrier imprimable',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_management': {
+              'fr': 'Gestion des congés',
               'nl': '',
               'en': '',
             },

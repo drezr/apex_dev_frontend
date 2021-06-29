@@ -135,8 +135,6 @@ html {
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  height: 80px;
-  width: 100%;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -150,6 +148,19 @@ html {
   background-color: rgb(230, 230, 230);
   padding: 5px;
   border-radius: 100px;
+}
+
+.custom-field textarea {
+  margin-top: 10px !important;
+  margin-bottom: 5px !important;
+}
+
+.custom-field textarea:disabled {
+  color: black !important;
+}
+
+.custom-field input:disabled {
+  color: black !important;
 }
 
 </style>

@@ -86,6 +86,16 @@ export default {
           desc: this.lang.views.team.draft_desc[this.lg],
           color: 'deep-purple',
         },
+        'fleet': {
+          title: 'Fleet',
+          desc: this.lang.views.team.fleet_desc[this.lg],
+          color: 'purple darken-1',
+        },
+        'planner': {
+          title: 'Planner',
+          desc: this.lang.views.team.planner_desc[this.lg],
+          color: 'deep-orange accent-3',
+        },
         'radium': {
           title: 'Radium',
           desc: this.lang.views.team.radium_desc[this.lg],
