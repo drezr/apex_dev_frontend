@@ -26,6 +26,10 @@ export default {
 
       return false
     },
+
+    $mobile_breakpoint() {
+      return this.$vuetify.breakpoint.smAndUp
+    },
   },
 
   methods: {

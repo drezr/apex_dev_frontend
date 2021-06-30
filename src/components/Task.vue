@@ -128,6 +128,46 @@
           >
             {{ lang.generic.task_no_element[lg] }}
           </div>
+
+          <div v-if="edit_mode" class="d-flex justify-space-around mb-3">
+            <CustomButton
+              :icon="'mdi-form-textbox'"
+              :small="true"
+              :color="'purple'"
+              :text_color="'white'"
+              :text="$mobile_breakpoint ? lang.generic.text[lg] : ''"
+              :tooltip="lang.generic.add_input_tooltip[lg]"
+              :menus="input_menus"
+              v-on:menu_action="input_actions($event)"
+            />
+
+            <CustomButton
+              :icon="'mdi-clipboard-check'"
+              :small="true"
+              :color="'green darken-1'"
+              :text_color="'white'"
+              :text="$mobile_breakpoint ? lang.generic.subtask[lg] : ''"
+              :tooltip="lang.generic.add_subtask_tooltip[lg]"
+            />
+
+            <CustomButton
+              :icon="'mdi-chat'"
+              :small="true"
+              :color="'cyan darken-2'"
+              :text_color="'white'"
+              :text="$mobile_breakpoint ? lang.generic.note[lg] : ''"
+              :tooltip="lang.generic.add_note_tooltip[lg]"
+            />
+
+            <CustomButton
+              :icon="'mdi-file'"
+              :small="true"
+              :color="'pink'"
+              :text_color="'white'"
+              :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
+              :tooltip="lang.generic.add_file_tooltip[lg]"
+            />
+          </div>
         </div>
       </v-list-group>
     </div>
@@ -180,6 +220,45 @@ export default {
       grab_cursor: 'grab',
       delete_dialog: false,
       expanded: false,
+
+      input_menus: [
+        {
+          'icon': 'mdi-format-align-bottom',
+          'name': 'Texte court',
+          'color': 'indigo',
+          'action': 'short',
+        },
+        {
+          'icon': 'mdi-format-line-style',
+          'name': 'Texte long',
+          'color': 'purple',
+          'action': 'long',
+        },
+        {
+          'icon': 'mdi-format-text',
+          'name': 'Titre',
+          'color': 'pink',
+          'action': 'title',
+        },
+        {
+          'icon': 'mdi-calendar',
+          'name': 'Date',
+          'color': 'deep-orange',
+          'action': 'date',
+        },
+        {
+          'icon': 'mdi-crosshairs-gps',
+          'name': 'Position GPS',
+          'color': 'teal',
+          'action': 'gps',
+        },
+        {
+          'icon': 'mdi-link-plus',
+          'name': 'Lien',
+          'color': 'cyan',
+          'action': 'link',
+        },
+      ],
     }
   },
 
@@ -303,6 +382,10 @@ export default {
     expand_toggle() {
       this.expanded = !this.expanded
     },
+
+    input_actions(event) {
+      console.log(event)
+    },
   },
 
   watch: {
@@ -331,11 +414,11 @@ export default {
 .task-frame {
   border-radius: 5px;
   border: 1px grey solid;
-  transition: border 0.2s;
+  transition: border 0.2s, border-radius 0.2s;
 }
 
 .task-frame-expanded {
-  border-radius: 8px;
+  border-radius: 18px;
   border: 4px rgba(0, 0, 0, 0.7) solid;
 }
 

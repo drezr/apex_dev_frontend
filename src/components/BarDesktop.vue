@@ -4,7 +4,7 @@
   <div class="d-flex">
     <router-link class="navigation" :to="'/'">
       <img :src="$tool.get_logo('apex_50x50')" class="logo" />
-      <span class="text-h6 ml-3 mr-3" v-if="breakpoint">APEX</span>
+      <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">APEX</span>
     </router-link>
 
     <div class="d-flex" v-if="$current_team_id">
@@ -12,7 +12,7 @@
 
       <router-link class="navigation" :to="`/team/${$current_team_id}`">
         <img :src="$tool.get_logo('hub_50x50')" class="logo" />
-        <span class="text-h6 ml-3 mr-3" v-if="breakpoint">HUB</span>
+        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">HUB</span>
       </router-link>
     </div>
 
@@ -21,7 +21,7 @@
 
       <router-link class="navigation" :to="app_path">
         <img :src="$tool.get_logo($route.meta.app + '_50x50')" class="logo" />
-        <span class="text-h6 ml-3 mr-3" v-if="breakpoint">{{ $route.meta.app.toUpperCase() }}</span>
+        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">{{ $route.meta.app.toUpperCase() }}</span>
       </router-link>
     </div>
   </div>
@@ -35,7 +35,7 @@
         v-on="on"
       >
         <v-icon class="user-icon">mdi-account-circle</v-icon>
-        <span v-if="breakpoint">
+        <span v-if="$mobile_breakpoint">
           {{ $logged_profile.name }}
         </span>
       </span>
@@ -86,10 +86,6 @@ export default {
   },
 
   computed: {
-    breakpoint() {
-      return this.$vuetify.breakpoint.smAndUp
-    },
-
     app() {
       return this.$parent.$parent
     },

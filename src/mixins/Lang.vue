@@ -310,6 +310,46 @@ export default {
             'nl': '',
             'en': '',
           },
+          'text': {
+            'fr': 'Texte',
+            'nl': '',
+            'en': '',
+          },
+          'add_input_tooltip': {
+            'fr': 'Ajouter un champ de texte',
+            'nl': '',
+            'en': '',
+          },
+          'note': {
+            'fr': 'Note',
+            'nl': '',
+            'en': '',
+          },
+          'add_note_tooltip': {
+            'fr': 'Ajouter une note',
+            'nl': '',
+            'en': '',
+          },
+          'file': {
+            'fr': 'Fichier',
+            'nl': '',
+            'en': '',
+          },
+          'add_file_tooltip': {
+            'fr': 'Ajouter un fichier',
+            'nl': '',
+            'en': '',
+          },
+          'subtask': {
+            'fr': 'Sous-tâche',
+            'nl': '',
+            'en': '',
+          },
+          'add_subtask_tooltip': {
+            'fr': 'Ajouter une sous-tâche',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
