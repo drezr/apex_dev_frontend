@@ -76,11 +76,9 @@
 
       <div
         v-if="self.author"
-        class="text-right cyan darken-2 px-1 white--text"
+        class="text-right cyan darken-2 pa-1 white--text"
       >
-        <small>
-          {{ by_author_on_date }}
-        </small>
+        {{ by_author_on_date }}
       </div>
     </div>
   </v-badge>

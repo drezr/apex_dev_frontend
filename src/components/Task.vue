@@ -14,6 +14,17 @@
     </v-chip>
   </div>
 
+  <div>
+    <v-chip
+      v-for="(input, i) in self.children.filter(c => c.type == 'input' && c.heading)"
+      :key="i"
+      class="mb-1 mr-1 px-2 amber lighten-1"
+      small
+    >
+      <b class="mr-1">{{ input.key }}</b> {{ input.value }}
+    </v-chip>
+  </div>
+
   <v-badge
     overlap
     bordered
@@ -87,7 +98,10 @@
           </v-list-item-title>
         </template>
 
-        <div class="task-expension">
+        <div
+          class="task-expension"
+          :style="self.children.length > 0 && self.children[0].type == 'input' ? '' : 'padding-top: 12px;'"
+        >
           <VueDraggable
             v-model="self.children"
             @change="update_children_position"
@@ -99,6 +113,13 @@
               v-for="child in self.children"
               :key="child.id + $tool.gen_uid()"
             >
+              <Input
+                v-if="child.type == 'input'"
+                :self="child"
+                :parent="self"
+                class="mb-3"
+              />
+
               <Subtask
                 v-if="child.type == 'subtask'"
                 :self="child"
@@ -191,6 +212,7 @@
 
 <script>
 
+import Input from '@/components/Input.vue'
 import Subtask from '@/components/Subtask.vue'
 import Note from '@/components/Note.vue'
 import File from '@/components/File.vue'
@@ -202,6 +224,7 @@ export default {
     Subtask,
     Note,
     File,
+    Input,
   },
 
   props: {
@@ -423,8 +446,8 @@ export default {
 }
 
 .task-expension {
-  padding-top: 12px;
   border-top: 2px rgba(0, 0, 0, 0.7) solid;
+  transition: padding-top .1s;
 }
 
 </style>

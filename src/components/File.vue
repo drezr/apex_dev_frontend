@@ -47,7 +47,7 @@
           @mousedown="grab_cursor = 'grabbing'"
           @mouseup="grab_cursor = 'grab'"
           @mouseleave="grab_cursor = 'grab'"
-            :class="$is_in_task ? 'handle-children' : 'handle'"
+          :class="$is_in_task ? 'handle-children' : 'handle'"
         />
 
         <CustomButton
