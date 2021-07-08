@@ -123,8 +123,8 @@
         handle=".handle"
       >
         <div
-          v-for="child in detail_full_object.children"
-          :key="child.id + $tool.gen_uid()"
+          v-for="(child, i) in detail_full_object.children"
+          :key="i"
           class="d-flex flex-column"
         >
           <Task

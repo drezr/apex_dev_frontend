@@ -16,12 +16,12 @@
 
   <div>
     <v-chip
-      v-for="(input, i) in self.children.filter(c => c.type == 'input' && c.heading)"
+      v-for="(tag, i) in tags"
       :key="i"
-      class="mb-1 mr-1 px-2 amber lighten-1"
+      class="mb-1 mr-1 px-2 amber lighten-2"
       small
     >
-      <b class="mr-1">{{ input.key }}</b> {{ input.value }}
+      <b class="mr-1">{{ tag.key }}</b> {{ tag.value }}
     </v-chip>
   </div>
 
@@ -110,8 +110,8 @@
             handle=".handle-children"
           >
             <div
-              v-for="child in self.children"
-              :key="child.id + $tool.gen_uid()"
+              v-for="(child, i) in self.children"
+              :key="i"
             >
               <Input
                 v-if="child.type == 'input'"
@@ -356,6 +356,15 @@ export default {
       }
 
       return status_icon[this.self.status]
+    },
+
+    tags() {
+      return this.self.children.filter(c =>
+        c.type == 'input' &&
+        c.key.length > 0 &&
+        c.value.length > 0 && 
+        c.heading
+      )
     },
   },
 
