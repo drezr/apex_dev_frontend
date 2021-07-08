@@ -60,6 +60,19 @@
       @click="delete_dialog = true"
     />
   </div>
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_dialog = false"
+    @confirm="remove"
+  ></CustomDialog>
 </div>
 
 </template>
@@ -105,6 +118,11 @@ export default {
   methods: {
     update() {
 
+    },
+
+    remove() {
+      this.parent.children = this.parent.children.filter(
+        c => c.id !== this.self.id || c.type !== this.self.type)
     },
   },
 

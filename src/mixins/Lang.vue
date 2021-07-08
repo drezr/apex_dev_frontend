@@ -796,6 +796,173 @@ export default {
               'en': '',
             },
           },
+          'radium': {
+            'palette_works_tooltip': {
+              'fr': 'Colorer les chantier',
+              'nl': '',
+              'en': '',
+            },
+            'filter_works_tooltip': {
+              'fr': 'Filtrer les chantier',
+              'nl': '',
+              'en': '',
+            },
+            'sort_works_tooltip': {
+              'fr': 'Trier les chantiers par jour croissant',
+              'nl': '',
+              'en': '',
+            },
+            'printable_tooltip': {
+              'fr': 'Liste imprimable des chantier du mois',
+              'nl': '',
+              'en': '',
+            },
+            'add_work_tooltip': {
+              'fr': 'Ajouter un chantier',
+              'nl': '',
+              'en': '',
+            },
+            'show_messages_tooltip': {
+              'fr': 'Afficher les messages',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_shifts': {
+              'fr': 'Prestations',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_description': {
+              'fr': 'Déscription',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_note': {
+              'fr': 'Remarques',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_ilt': {
+              'fr': 'ILT',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_ilts': {
+              'fr': 'ILT',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_bnxs': {
+              'fr': 'BNX',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_fmhts': {
+              'fr': 'FMHT',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_upm': {
+              'fr': 'UPM',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_colt_id': {
+              'fr': 'CoLT',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_status': {
+              'fr': 'Statut',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_limits': {
+              'fr': 'Limites de mise hors service',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_s460s': {
+              'fr': 'S460',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_zkl': {
+              'fr': 'ZKL',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_cascat': {
+              'fr': 'Cas caténaire',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_grue': {
+              'fr': 'Grue RR',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_osv': {
+              'fr': 'OSV',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_loco': {
+              'fr': 'Loco',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_hgs': {
+              'fr': 'HGS',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_soudure': {
+              'fr': 'Soudure',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_pn': {
+              'fr': 'PN',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_art': {
+              'fr': 'ART',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_s428': {
+              'fr': 'S428',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_s461': {
+              'fr': 'S461',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_atwtx': {
+              'fr': 'ATW-Tx',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_imputation': {
+              'fr': 'Imputation',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_extra': {
+              'fr': 'Divers',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_scst': {
+              'fr': 'Scst',
+              'nl': '',
+              'en': '',
+            },
+          },
         },
       },
     }

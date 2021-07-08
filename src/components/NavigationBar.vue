@@ -49,6 +49,62 @@
       :tooltip="lang.views.watcher.leaves_management[lg]"
     />
   </div>
+
+  <div class="d-flex flex-wrap" v-if="$current_view == 'works'">
+    <CustomButton
+      :icon="'mdi-palette'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="palette_dialog = true"
+      :tooltip="palette_tooltip"
+    />
+
+    <CustomButton
+      :icon="'mdi-filter'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="filter_dialog = true"
+      :tooltip="lang.views.radium.filter_works_tooltip[lg]"
+    />
+
+    <CustomButton
+      :icon="'mdi-sort'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.sort_works_tooltip[lg]"
+    />
+
+    <CustomButton
+      :icon="'mdi-printer'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.printable_tooltip[lg]"
+    />
+
+    <CustomButton
+      :icon="'mdi-plus'"
+      :height="40"
+      :color="'green'"
+      :dark="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.add_work_tooltip[lg]"
+    />
+
+    <CustomButton
+      :icon="'mdi-android-messages'"
+      :height="40"
+      :color="'deep-orange'"
+      :dark="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.show_messages_tooltip[lg]"
+      :badge="true"
+      :badge_content="'0'"
+    />
+  </div>
 </div>
 
 </template>
@@ -73,6 +129,7 @@ export default {
     return {
       palette_dialog: false,
       calculator_dialog: false,
+      filter_dialog: false,
     }
   },
 
@@ -84,6 +141,10 @@ export default {
     palette_tooltip() {
       if (this.$current_view == 'calendar') {
         return this.lang.views.watcher.palette_cells[this.lg]
+      }
+
+      else if (this.$current_view == 'works') {
+        return this.lang.views.radium.palette_works_tooltip[this.lg]
       }
 
       return ''

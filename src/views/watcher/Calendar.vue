@@ -237,6 +237,7 @@ export default {
   },
 
   async created() {
+    console.log('created')
     this.request = await this.$http.get('calendar', {
       'team_id': this.$current_team_id,
       'app_id': this.$current_app_id,

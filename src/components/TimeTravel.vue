@@ -95,7 +95,7 @@ export default {
     },
 
     mode() {
-      let month_mode_views = ['calendar', ]
+      let month_mode_views = ['calendar', 'works', ]
 
       return month_mode_views.includes(this.$current_view) ? 'month' : 'year'
     },

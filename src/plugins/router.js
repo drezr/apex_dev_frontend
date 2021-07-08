@@ -5,6 +5,7 @@ import Login from '@/views/apex/Login.vue'
 import Home from '@/views/apex/Home.vue'
 import Team from '@/views/apex/Team.vue'
 import Calendar from '@/views/watcher/Calendar.vue'
+import Works from '@/views/radium/Works.vue'
 
 Vue.use(VueRouter)
 
@@ -49,6 +50,16 @@ const router = new VueRouter({
         'app': 'watcher',
         'view': 'calendar',
         'title': 'Watcher',
+      },
+    },
+    {
+      path: '/team/:team_id/radium/:app_id/works/month/:month/year/:year',
+      name: 'Works',
+      component: Works,
+      meta: {
+        'app': 'radium',
+        'view': 'works',
+        'title': 'Radium',
       },
     },
   ]

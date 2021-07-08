@@ -95,6 +95,10 @@ export default {
         if (this.$route.meta.app == 'watcher') {
           return `/team/${this.$current_team_id}/watcher/${this.$current_app_id}/calendar/month/${this.$current_month}/year/${this.$current_year}`
         }
+
+        else if (this.$route.meta.app == 'radium') {
+          return `/team/${this.$current_team_id}/radium/${this.$current_app_id}/works/month/${this.$current_month}/year/${this.$current_year}`
+        }
       }
 
       return '/'
