@@ -12,12 +12,20 @@
       <NavigationBar />
 
       <div class="works-frame">
-        <Work
-          v-for="(work, i) in works"
-          :key="i"
-          :self="work"
-          class="ma-3"
-        />
+        <VueDraggable
+          v-model="works"
+          @change="update_work_position"
+          :animation="100"
+          easing="cubic-bezier(1, 0, 0, 1)"
+          handle=".work-grab-button"
+        >
+          <Work
+            v-for="(work, i) in works"
+            :key="i"
+            :self="work"
+            class="ma-3"
+          />
+        </VueDraggable>
       </div>
     </div>
   </transition>
@@ -94,7 +102,9 @@ export default {
   },
 
   methods: {
+    update_work_position() {
 
+    },
   },
 
   watch: {

@@ -9,6 +9,17 @@
       :style="`min-width: ${column.width}px;`"
     >
       <div class="work-column-title">
+        <div
+          v-if="i == 0"
+          class="work-drag-button pink"
+          :style="`cursor: ${grab_cursor};`"
+          @mousedown="grab_cursor = 'grabbing'"
+          @mouseup="grab_cursor = 'grab'"
+          @mouseleave="grab_cursor = 'grab'"
+        >
+          <v-icon size="16" color="white">mdi-arrow-split-horizontal</v-icon>
+        </div>
+
         {{ lang.views.radium['column_title_' + column.name][lg] }}
       </div>
 
@@ -55,6 +66,7 @@ export default {
   data() {
     return {
       edit_mode: true,
+      grab_cursor: 'grab',
     }
   },
 
@@ -135,6 +147,7 @@ export default {
   font-weight: bold;
   text-align: center;
   border-bottom: 1px grey solid;
+  position: relative;
 }
 
 .work-column-value {
@@ -142,6 +155,16 @@ export default {
   align-items: center;
   flex-grow: 1;
   cursor: text;
+}
+
+.work-drag-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
 }
 
 </style>
