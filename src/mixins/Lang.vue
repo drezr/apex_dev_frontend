@@ -190,6 +190,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'day': {
+            'fr': 'Jour',
+            'nl': '',
+            'en': '',
+          },
+          'week': {
+            'fr': 'Semaine',
+            'nl': '',
+            'en': '',
+          },
+          'schedule': {
+            'fr': 'Horaire',
+            'nl': '',
+            'en': '',
+          },
           'month': {
             'fr': 'Mois',
             'nl': '',

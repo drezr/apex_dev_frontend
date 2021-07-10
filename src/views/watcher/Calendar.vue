@@ -9,7 +9,7 @@
         {{ team.name }}
       </div>
 
-      <NavigationBar />
+      <NavigationBar class="mb-3" />
 
       <div class="calendar-frame" ref="frame">
         <div class="calendar-days">

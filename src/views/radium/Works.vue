@@ -9,7 +9,7 @@
         {{ team.name }}
       </div>
 
-      <NavigationBar />
+      <NavigationBar class="mb-6" />
 
       <div class="works-frame">
         <VueDraggable
@@ -17,7 +17,7 @@
           @change="update_work_position"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
-          handle=".work-grab-button"
+          handle=".work-drag-button"
         >
           <Work
             v-for="(work, i) in works"
@@ -121,5 +121,9 @@ export default {
 
 
 <style scoped>
+
+.works-frame {
+
+}
 
 </style>

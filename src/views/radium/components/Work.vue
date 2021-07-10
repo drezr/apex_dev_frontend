@@ -2,8 +2,12 @@
 
 <div class="work-overframe">
   <div class="work-frame lighten-5" :class="self.color">
+    <div class="work-dropdown-button" :class="self.color">
+      <v-icon>mdi-chevron-down</v-icon>
+    </div>
+
     <div
-      v-for="(column, i) in $parent.columns"
+      v-for="(column, i) in $parent.$parent.columns"
       :key="i"
       class="work-column"
       :style="`min-width: ${column.width}px;`"
@@ -29,6 +33,8 @@
           edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
           edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2' : (self[column.name] && self[column.name].length > 0 ? 'lighten-3' : 'lighten-4')),
         ]"
+        @click="value_click($event)"
+        @blur.capture="value_blur($event)"
       >
         <v-textarea
           v-if="!Array.isArray(self[column.name]) && column.name in self"
@@ -38,10 +44,34 @@
           outlined
           hide-details
           class="work-field"
-          :style="`font-size: ${column.textsize}px; width: ${column.width - 1}px;`"
+          :style="`font-size: ${column.textsize}px;`"
           :disabled="!edit_mode"
           :background-color="edit_mode ? 'white' : 'transparent'"
         />
+
+        <div v-if="column.name == 'shifts'" class="work-shifts">
+          <div v-if="self.shifts.length > 0">
+            <div class="d-flex lighten-4" :class="self.color">
+              <div class="work-column-subtitle" style="width: 30%;">
+                {{ lang.generic.week[lg] }}
+              </div>
+              <div class="work-column-subtitle" style="width: 30%;">
+                {{ lang.generic.day[lg] }}
+              </div>
+              <div class="work-column-subtitle" style="width: 40%;">
+                {{ lang.generic.schedule[lg] }}
+              </div>
+            </div>
+
+            <Shift
+              v-for="(shift, i) in self.shifts"
+              :key="i"
+              :self="shift"
+              :parent="self"
+            />
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -52,11 +82,13 @@
 
 <script>
 
+import Shift from '@/views/radium/components/Shift.vue'
+
 export default {
   name: 'Work',
 
   components: {
-    
+    Shift,
   },
 
   props: {
@@ -79,7 +111,22 @@ export default {
   },
 
   methods: {
+    value_click(event) {
+      if (this.edit_mode) {
+        let cell = event.target.closest('.work-column-value')
+        let textarea = cell.getElementsByTagName('textarea')[0]
 
+        if (textarea) {
+          cell.classList.add('work-column-value-focused')
+          textarea.focus()
+        }
+      }
+    },
+
+    value_blur(event) {
+      let content = event.srcElement.closest('.work-column-value')
+      content.classList.remove('work-column-value-focused')
+    },
   },
 
   watch: {
@@ -92,6 +139,10 @@ export default {
 
 <style>
 
+.work-field {
+  margin: 2px !important;
+}
+
 .work-field textarea:disabled {
   color: black !important;
 }
@@ -102,16 +153,12 @@ export default {
   text-align: center;
 }
 
-.work-field .v-text-field--filled>.v-input__control>.v-input__slot, .v-text-field--full-width>.v-input__control>.v-input__slot, .v-text-field--outlined>.v-input__control>.v-input__slot {
+.work-field .v-input__slot {
   min-height: 0px !important;
 }
 
-.work-field.v-text-field--outlined fieldset {
+.work-field fieldset {
   border: none !important;
-}
-
-.work-field .v-text-field .v-input__control, .v-text-field .v-input__slot, .v-text-field fieldset {
-  border-radius: 0px !important;
 }
 
 </style>
@@ -124,12 +171,12 @@ export default {
   min-width: min-content;
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
 }
 
 .work-frame {
   display: flex;
   flex-wrap: nowrap;
-  border: 1px black solid;
 }
 
 .work-column {
@@ -150,11 +197,27 @@ export default {
   position: relative;
 }
 
+.work-column-subtitle {
+  font-size: 12px;
+  font-weight: bold;
+  border-bottom: 1px grey solid;
+  position: relative;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.work-column-subtitle:not(:first-child) {
+  border-left: 1px grey solid;
+}
+
 .work-column-value {
   display: flex;
   align-items: center;
   flex-grow: 1;
   cursor: text;
+  padding: 0px;
 }
 
 .work-drag-button {
@@ -162,9 +225,41 @@ export default {
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 20px;
-  height: 20px;
+  top: 1px;
+  left: 1px;
+  width: 19px;
+  height: 19px;
   border-radius: 10px;
+}
+
+.work-border-right {
+  border-right: 1px grey solid;
+}
+
+.work-border-bottom {
+  border-bottom: 1px grey solid;
+}
+
+.work-column-value-focused {
+  box-shadow: inset 0px 0px 0px 2px orange;
+  transition: box-shadow .2s;
+}
+
+.work-shifts {
+  width: 100%;
+  height: 100%;
+}
+
+.work-dropdown-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  cursor: pointer;
+}
+
+.work-dropdown-button:hover {
+  filter:  brightness(1.3);
 }
 
 </style>
