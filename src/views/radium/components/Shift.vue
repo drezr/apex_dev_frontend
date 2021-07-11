@@ -23,7 +23,7 @@
       <div
         v-for="(color, i) in day_data['shift_colors']"
         :key="i"
-        class="shift-date-color"
+        class="shift-date-color lighten-1"
         :class="color"
       ></div>
     </div>
@@ -34,7 +34,7 @@
       <div
         v-for="(color, i) in day_data['shift_colors']"
         :key="i"
-        class="shift-date-color"
+        class="shift-date-color lighten-1"
         :class="color"
       ></div>
     </div>

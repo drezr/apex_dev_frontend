@@ -2,8 +2,12 @@
 
 <div class="work-overframe">
   <div class="work-frame lighten-5" :class="self.color">
-    <div class="work-dropdown-button" :class="self.color">
-      <v-icon>mdi-chevron-down</v-icon>
+    <div
+      class="work-expand-button"
+      :class="self.color"
+      @click="expanded = !expanded"
+    >
+      <v-icon>mdi-chevron-{{ expanded ? 'up' : 'down' }}</v-icon>
     </div>
 
     <div
@@ -75,6 +79,79 @@
       </div>
     </div>
   </div>
+
+  <div class="work-expand" v-if="expanded">
+    <div class="lighten-5" :class="self.color">
+      <div class="pa-1">
+        <CustomButton
+          :text="edit_mode ? lang.generic.lock[lg] : lang.generic.edit[lg]"
+          :rounded="true"
+          :color="edit_mode ? 'blue' : 'teal'"
+          :dark="true"
+          :icon="edit_mode ? 'mdi-lock' : 'mdi-pencil'"
+          @click="edit_mode = !edit_mode"
+          :tooltip="edit_mode ? lang.views.radium.lock_tooltip[lg] : lang.views.radium.edit_tooltip[lg]"
+          class="mr-3"
+        />
+
+        <CustomButton
+          v-if="edit_mode"
+          :text="lang.generic.delete[lg]"
+          :rounded="true"
+          :color="'red'"
+          :dark="true"
+          :icon="self.link.is_original ? 'mdi-delete' : 'mdi-link-variant-off'"
+          :tooltip="lang.views.radium.delete_tooltip[lg]"
+          class="mr-3"
+        />
+
+        <CustomButton
+          :text="lang.generic.message[lg]"
+          :rounded="true"
+          :color="'deep-orange'"
+          :dark="true"
+          :icon="'mdi-android-messages'"
+          :tooltip="lang.views.radium.message_tooltip[lg]"
+          class="mr-3"
+        />
+
+        <CustomButton
+          :text="lang.generic.to_copy[lg]"
+          :rounded="true"
+          :color="'indigo'"
+          :dark="true"
+          :icon="'mdi-content-copy'"
+          :tooltip="lang.views.radium.copy_tooltip[lg]"
+          class="mr-3"
+        />
+
+        <CustomButton
+          :text="lang.generic.move[lg]"
+          :rounded="true"
+          :color="'light-blue'"
+          :dark="true"
+          :icon="'mdi-flip-to-front'"
+          :tooltip="lang.views.radium.move_tooltip[lg]"
+          class="mr-3"
+        />
+
+        <CustomButton
+          :text="lang.generic.to_link[lg]"
+          :rounded="true"
+          :color="'purple'"
+          :dark="true"
+          :icon="'mdi-link-variant-plus'"
+          :tooltip="lang.views.radium.link_tooltip[lg]"
+          class="mr-3"
+        />
+      </div>
+
+      <Table
+        :parent="self"
+        :parent_cpnt="$current_instance"
+      />
+    </div>
+  </div>
 </div>
 
 </template>
@@ -83,12 +160,14 @@
 <script>
 
 import Shift from '@/views/radium/components/Shift.vue'
+import Table from '@/views/radium/components/Table.vue'
 
 export default {
   name: 'Work',
 
   components: {
     Shift,
+    Table,
   },
 
   props: {
@@ -97,7 +176,8 @@ export default {
 
   data() {
     return {
-      edit_mode: true,
+      edit_mode: false,
+      expanded: false,
       grab_cursor: 'grab',
     }
   },
@@ -126,6 +206,10 @@ export default {
     value_blur(event) {
       let content = event.srcElement.closest('.work-column-value')
       content.classList.remove('work-column-value-focused')
+    },
+
+    remove() {
+
     },
   },
 
@@ -250,7 +334,11 @@ export default {
   height: 100%;
 }
 
-.work-dropdown-button {
+.work-expand {
+  border-top:  1px black solid;
+}
+
+.work-expand-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -258,7 +346,7 @@ export default {
   cursor: pointer;
 }
 
-.work-dropdown-button:hover {
+.work-expand-button:hover {
   filter:  brightness(1.3);
 }
 

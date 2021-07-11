@@ -70,6 +70,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'edit': {
+            'fr': 'Modifier',
+            'nl': '',
+            'en': '',
+          },
+          'lock': {
+            'fr': 'Verrouiller',
+            'nl': '',
+            'en': '',
+          },
+          'unlock': {
+            'fr': 'Déverrouiller',
+            'nl': '',
+            'en': '',
+          },
           'to_copy': {
             'fr': 'Copier',
             'nl': '',
@@ -317,6 +332,11 @@ export default {
           },
           'expand': {
             'fr': 'Développer',
+            'nl': '',
+            'en': '',
+          },
+          'message': {
+            'fr': 'Message',
             'nl': '',
             'en': '',
           },
@@ -974,6 +994,41 @@ export default {
             },
             'column_title_scst': {
               'fr': 'Scst',
+              'nl': '',
+              'en': '',
+            },
+            'edit_tooltip': {
+              'fr': 'Déverrouiller et modifier ce chantier',
+              'nl': '',
+              'en': '',
+            },
+            'lock_tooltip': {
+              'fr': 'Verrouiller ce chantier',
+              'nl': '',
+              'en': '',
+            },
+            'delete_tooltip': {
+              'fr': 'Supprimer ce chantier',
+              'nl': '',
+              'en': '',
+            },
+            'message_tooltip': {
+              'fr': 'Envoyer un message concernant ce chantier',
+              'nl': '',
+              'en': '',
+            },
+            'copy_tooltip': {
+              'fr': 'Créer une copie de ce chantier ici ou dans un autre mois',
+              'nl': '',
+              'en': '',
+            },
+            'move_tooltip': {
+              'fr': 'Déplacer ce chantier dans un autre mois',
+              'nl': '',
+              'en': '',
+            },
+            'link_tooltip': {
+              'fr': 'Lier ce chantier à d\'autres Radium',
               'nl': '',
               'en': '',
             },

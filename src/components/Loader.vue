@@ -1,6 +1,12 @@
 <template>
 
-<div class="loader-frame">
+<div
+  class="loader-frame"
+  :class="[
+    left ? 'justify-start' : '',
+    right ? 'justify-end' : '',
+  ]"
+>
   <v-progress-circular
     :size="size"
     :width="width"
@@ -32,6 +38,14 @@ export default {
     mb: {
       type: Number,
       default: 0,
+    },
+    left: {
+      type: Boolean,
+      default: false
+    },
+    right: {
+      type: Boolean,
+      default: false
     },
   },
 

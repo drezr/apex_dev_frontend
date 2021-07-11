@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       loading: true,
+      cached_teams: Array(),
     }
   },
 
