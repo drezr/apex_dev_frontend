@@ -9,34 +9,49 @@
    <b>{{ self.team.name }}</b>
   </div>
 
-  <v-list dense v-if="participants.length > 0 && !edit_mode">
-    <div class="text-subtitle-2 px-5 mb-3">
-      <b>Agents participants</b>
+  <div v-if="participants.length > 0 && !edit_mode">
+    <div class="px-3 pb-3" v-if="self.needs">
+     <small>{{ lang.views.radium.part_needs[lg] }} <b>{{ self.needs }}</b></small>
     </div>
 
-    <v-list-item
-      three-line
-      v-for="(participant, i) in participants"
-      :key="i"
-    >
-      <v-list-item-icon class="ml-2 mr-5">
-        <v-icon class="mt-7">mdi-account-circle</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>
-          {{ participant.name }}
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          {{ participant.grade }}
+    <v-list dense>
+      <div class="text-subtitle-2 px-5 mb-3">
+        <b>{{ lang.views.radium.participating_profiles[lg] }}</b>
+      </div>
+
+      <v-list-item
+        three-line
+        v-for="(participant, i) in participants"
+        :key="i"
+      >
+        <v-list-item-icon class="ml-2 mr-5">
+          <v-icon class="mt-7">mdi-account-circle</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ participant.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ participant.grade }} {{ participant.field }}
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            {{ participant.phone }}
         </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          {{ participant.phone }}
-      </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </div>
 
   <div dense v-if="edit_mode">
+    <v-text-field
+      outlined
+      clearable
+      dense
+      :label="lang.generic.needs[lg]"
+      v-model="self.needs"
+      class="mx-3"
+    ></v-text-field>
+
     <div
       v-for="(profile, i) in team.profiles"
       :key="i"
@@ -44,7 +59,7 @@
     >
       <div
         class="part-available-button"
-        :class="availables.find(p => p.id == profile.id) ? 'green' : 'red'"
+        :class="is_available(profile.id) ? 'green' : 'red'"
         @click="toggle_available(profile.id)"
       ></div>
 
@@ -56,15 +71,15 @@
       >
       </v-checkbox>
 
-<!--       <div
-        class="presence"
+      <div
+        class="part-presence"
         v-if="profile.presence || profile.absence"
       >
         <span
-          class="cell"
+          class="part-presence-cell"
           :class="[
-            select_color(profile.presence),
-            profile.absence != '' ? 'border-right' : ''
+            select_presence_color(profile.presence),
+            profile.absence != '' ? 'part-presence-border-right' : ''
           ]"
           v-if="profile.presence && profile.presence != ''"
         >
@@ -72,19 +87,48 @@
         </span>
 
         <span
-          class="cell"
+          class="part-presence-cell"
           :class="[
-            select_color(profile.absence),
-            profile.presence != '' ? 'border-left' : ''
+            select_presence_color(profile.absence),
+            profile.presence != '' ? 'part-presence-border-left' : ''
           ]"
           v-if="profile.absence && profile.absence != ''"
         >
           {{ profile.absence }}
         </span>
-      </div> -->
+      </div>
     </div>
   </div>
 
+  <div class="part-project-frame-outer" v-if="self.project">
+    <v-badge
+      overlap
+      bordered
+      color="blue"
+      style="width: 100%;"
+      icon="mdi-open-in-new"
+    >
+      <v-card
+        class="part-project-frame-inner"
+        color="purple darken-4"
+        @click="go_to_project"
+        dark
+      >
+        <img :src="$tool.get_logo('draft_30x30')" class="mr-3" />
+        {{ self.project.name }}
+      </v-card>
+    </v-badge>
+
+    <CustomButton
+      v-if="edit_mode"
+      :icon="'mdi-delete'"
+      :text_color="'red'"
+      :small_fab="true"
+      class="ml-2"
+      :tooltip="lang.views.radium.remove_project[lg]"
+      @click="remove_project"
+    />
+  </div>
 </v-card>
 
 </template>
@@ -112,8 +156,8 @@ export default {
   },
 
   created() {
-    //console.log(this.self)
     this.get_team()
+    this.get_presences()
   },
 
   computed: {
@@ -155,12 +199,66 @@ export default {
       }
     },
 
-    toggle_available(profile_id) {
-      profile_id
+    async get_presences() {
+      this.request = await this.$http.get('presences', {
+        'team_id': this.self.team.id,
+        'date': this.self.date,
+      })
+
+      for (let presence of this.request.presences) {
+        let profile = this.team.profiles.find(p => p.id == presence.profile_id)
+
+        profile.presence = presence.presence
+        profile.absence = presence.absence
+      }
     },
 
-    toggle_participant(profile_id) {
-      profile_id
+    is_available(profile_id) {
+      let profile = this.availables.find(p => p.id == profile_id)
+
+      return profile && profile.link.is_available ? true : false
+    },
+
+    async toggle_available(profile_id) {
+      let profile = this.self.profiles.find(p => p.id == profile_id)
+
+      if (!profile) {
+        // Request new PartProfileLink
+      }
+
+      profile.link.is_available = !profile.link.is_available
+    },
+
+    async toggle_participant(profile_id) {
+      let profile = this.self.profiles.find(p => p.id == profile_id)
+
+      if (!profile) {
+        // Request new PartProfileLink
+      }
+
+      profile.link.is_participant = !profile.link.is_participant
+    },
+
+    select_presence_color(value) {
+      let color = 'red--text text--accent-4'
+
+      if (value) {
+        value = value.toUpperCase()
+
+        if (value.includes('P')) color = 'green--text text--darken-2'
+        if (value.includes('PN')) color = 'blue--text text--darken-4'
+        if (value.includes('AP')) color = 'red--text text--darken-4'
+      }
+
+      return color
+    },
+
+    go_to_project() {
+
+    },
+
+    remove_project() {
+
     },
   },
 
@@ -189,6 +287,54 @@ export default {
   margin-left: 5px;
   margin-right: 20px;
   cursor: pointer;
+}
+
+.part-presence {
+  position: relative;
+  top: -1px;
+  display: inline-flex;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 27px;
+}
+
+.part-presence-cell {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.part-presence-border-left {
+  border-left: 1px rgba(0, 0, 0, 0.2) solid;
+}
+
+.part-presence-border-right {
+  border-right: 1px white solid;
+}
+
+.part-project-frame-outer {
+  padding: 9px;
+  display: flex;
+  align-items: center;
+}
+
+.part-project-frame-inner {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.part-project-frame-inner:hover {
+  filter: brightness(1.2);
 }
 
 </style>

@@ -7,7 +7,7 @@
         mdi-account-group
       </v-icon>
       <div class="mt-1">
-        Services participants au chantier
+        {{ lang.views.radium.participating_teams[lg] }}
       </div>
     </v-toolbar-title>
   </v-toolbar>
@@ -28,7 +28,7 @@
   <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
 
   <v-tabs-items v-else v-model="selected_shift">
-    <v-tab-item v-for="(shift, i) in shifts" :key="i" class="ma-3">
+    <v-tab-item v-for="(shift, i) in shifts" :key="i" class="mx-3 mt-3">
       <Part
         v-for="(part, i) in shift.parts"
         :key="i"
@@ -37,13 +37,13 @@
         :parent_cpnt="$current_instance"
       />
 
-      <div v-if="shift.parts.length == 0">
-        no part
+      <div v-if="shift.parts.length == 0" class="my-9 mx-6">
+        {{ lang.views.radium.no_participating_teams[lg] }}
       </div>
     </v-tab-item>
 
-    <v-tab-item v-if="parent.shifts.length == 0">
-      no shift
+    <v-tab-item v-if="parent.shifts.length == 0" class="my-9 mx-6">
+      {{ lang.views.radium.no_shift[lg] }}
     </v-tab-item>
   </v-tabs-items>
 </v-card>

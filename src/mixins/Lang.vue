@@ -60,6 +60,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'needs': {
+            'fr': 'Besoins',
+            'nl': '',
+            'en': '',
+          },
           'cancel': {
             'fr': 'Annuler',
             'nl': '',
@@ -1029,6 +1034,36 @@ export default {
             },
             'link_tooltip': {
               'fr': 'Lier ce chantier à d\'autres Radium',
+              'nl': '',
+              'en': '',
+            },
+            'participating_teams': {
+              'fr': 'Equipes participantes au chantier',
+              'nl': '',
+              'en': '',
+            },
+            'part_needs': {
+              'fr': 'Besoin de',
+              'nl': '',
+              'en': '',
+            },
+            'participating_profiles': {
+              'fr': 'Agents participants',
+              'nl': '',
+              'en': '',
+            },
+            'no_participating_teams': {
+              'fr': 'Aucune équipe ne participe à ce chantier.',
+              'nl': '',
+              'en': '',
+            },
+            'no_shift': {
+              'fr': 'Pas encore de prestation pour ce chantier.',
+              'nl': '',
+              'en': '',
+            },
+            'remove_project': {
+              'fr': 'Supprimer le lien vers le projet Draft',
               'nl': '',
               'en': '',
             },
