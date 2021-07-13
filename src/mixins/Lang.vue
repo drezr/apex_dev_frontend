@@ -1067,6 +1067,21 @@ export default {
               'nl': '',
               'en': '',
             },
+            'remove_part': {
+              'fr': 'Supprimer la participation de l\'équipe',
+              'nl': '',
+              'en': '',
+            },
+            'send_team_message': {
+              'fr': 'Envoyer un message aux membres de l\'équipe',
+              'nl': '',
+              'en': '',
+            },
+            'lock_part': {
+              'fr': 'Verrouiller la participation',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },

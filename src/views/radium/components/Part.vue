@@ -5,8 +5,29 @@
   max-width="350"
   class="mr-3 mb-3 elevation-3"
 >
-  <div class="text-h6 pa-3">
-   <b>{{ self.team.name }}</b>
+  <div class="d-flex justify-space-between">
+    <div class="text-h6 pa-3">
+     <b>{{ self.team.name }}</b>
+    </div>
+
+    <div>
+      <CustomButton
+        v-if="edit_mode"
+        :icon="'mdi-delete'"
+        :text_color="'red'"
+        :small_fab="true"
+        :tooltip="lang.views.radium.send_team_message[lg]"
+        @click="remove_self"
+      />
+      <CustomButton
+        v-if="edit_mode"
+        :icon="'mdi-delete'"
+        :text_color="'red'"
+        :small_fab="true"
+        :tooltip="lang.views.radium.remove_part[lg]"
+        @click="remove_self"
+      />
+    </div>
   </div>
 
   <div v-if="participants.length > 0 && !edit_mode">
@@ -155,9 +176,9 @@ export default {
     }
   },
 
-  created() {
-    this.get_team()
-    this.get_presences()
+  async created() {
+    await this.get_team()
+    await this.get_presences()
   },
 
   computed: {
@@ -251,6 +272,10 @@ export default {
       }
 
       return color
+    },
+
+    remove_self() {
+
     },
 
     go_to_project() {
