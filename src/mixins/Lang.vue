@@ -1082,6 +1082,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'unlock_part': {
+              'fr': 'Déverrouiller la participation',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },

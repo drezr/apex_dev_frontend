@@ -10,28 +10,29 @@
      <b>{{ self.team.name }}</b>
     </div>
 
-    <div>
+    <div class="ma-1">
       <CustomButton
         v-if="edit_mode"
-        :icon="'mdi-delete'"
-        :text_color="'red'"
+        :icon="self.locked ? 'mdi-lock' : 'mdi-lock-open'"
+        :text_color="self.locked ? 'orange' : 'blue'"
         :small_fab="true"
-        :tooltip="lang.views.radium.send_team_message[lg]"
-        @click="remove_self"
+        :tooltip="self.locked ? lang.views.radium.unlock_part[lg] : lang.views.radium.lock_part[lg]"
+        @click="toggle_lock"
       />
+
       <CustomButton
         v-if="edit_mode"
         :icon="'mdi-delete'"
         :text_color="'red'"
         :small_fab="true"
         :tooltip="lang.views.radium.remove_part[lg]"
-        @click="remove_self"
+        @click="remove_part_dialog = true"
       />
     </div>
   </div>
 
-  <div v-if="participants.length > 0 && !edit_mode">
-    <div class="px-3 pb-3" v-if="self.needs">
+  <div v-if="participants.length > 0 && (!edit_mode || self.locked)">
+    <div class="px-3 pb-3" v-if="self.needs && !self.locked">
      <small>{{ lang.views.radium.part_needs[lg] }} <b>{{ self.needs }}</b></small>
     </div>
 
@@ -63,7 +64,7 @@
     </v-list>
   </div>
 
-  <div dense v-if="edit_mode">
+  <div dense v-if="edit_mode && !self.locked">
     <v-text-field
       outlined
       clearable
@@ -147,9 +148,35 @@
       :small_fab="true"
       class="ml-2"
       :tooltip="lang.views.radium.remove_project[lg]"
-      @click="remove_project"
+      @click="remove_project_dialog = true"
     />
   </div>
+
+  <CustomDialog
+    :open="remove_part_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="remove_part_dialog = false"
+    @confirm="remove_part"
+  ></CustomDialog>
+
+  <CustomDialog
+    :open="remove_project_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="remove_project_dialog = false"
+    @confirm="remove_project"
+  ></CustomDialog>
 </v-card>
 
 </template>
@@ -172,7 +199,8 @@ export default {
 
   data() {
     return {
-
+      remove_part_dialog: false,
+      remove_project_dialog: false,
     }
   },
 
@@ -274,8 +302,9 @@ export default {
       return color
     },
 
-    remove_self() {
-
+    remove_part() {
+      this.remove_part_dialog = false
+      this.parent.parts = this.parent.parts.filter(p => p.id != this.self.id)    
     },
 
     go_to_project() {
@@ -283,7 +312,12 @@ export default {
     },
 
     remove_project() {
+      this.remove_project_dialog = false
+      this.self.project = null
+    },
 
+    toggle_lock() {
+      this.self.locked = !this.self.locked
     },
   },
 
