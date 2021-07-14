@@ -143,6 +143,7 @@
           :icon="'mdi-link-variant-plus'"
           :tooltip="lang.views.radium.link_tooltip[lg]"
           class="mr-3"
+          @click="link_dialog = true"
         />
       </div>
 
@@ -152,6 +153,63 @@
       />
     </div>
   </div>
+
+  <CustomDialog
+    :open="link_dialog"
+    :width="500"
+    :title_text="lang.views.radium.link_tooltip[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-link-variant-plus'"
+    :confirm_text="lang.generic.to_link[lg]"
+    :confirm_color="'purple'"
+    @cancel="link_dialog = false"
+    @confirm="link_teams"
+  >
+    <Loader
+      :size="100"
+      :width="10"
+      :mt="50"
+      :mb="50"
+      v-if="$current_component.circles_loading"
+    />
+
+    <div class="mt-3" v-else>
+      <v-expansion-panels
+        class="work-link-expension-panel"
+        v-for="(circle, x) in $current_component.circles"
+        :key="x"
+      >
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <b>{{ circle.name }}</b>
+          </v-expansion-panel-header>
+
+          <v-expansion-panel-content>
+            <div
+              v-for="(team, y) in circle.teams"
+              :key="y"
+            >
+              <div
+                v-for="(app, z) in team.apps.filter(a => a.app == 'radium')"
+                :key="z"
+              >
+                <v-checkbox
+                  :label="`${team.name} (${app.name})`"
+                  hide-details
+                  @change="toggle_radium(app.id)"
+                  :input-value="self.apps.find(id => id == app.id)"
+                  :disabled="self.apps.find(id => id == app.id) ? true : false"
+                ></v-checkbox>
+              </div>
+            </div>
+
+            <div style="width: 100%; height: 20px;"></div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
+  </CustomDialog>
 </div>
 
 </template>
@@ -179,6 +237,8 @@ export default {
       edit_mode: false,
       expanded: false,
       grab_cursor: 'grab',
+      link_dialog: false,
+      link_selected_radiums: Array(),
     }
   },
 
@@ -210,6 +270,21 @@ export default {
 
     remove() {
 
+    },
+
+    link_teams() {
+
+    },
+
+    toggle_radium(app_id) {
+      if (this.link_selected_radiums.includes(app_id)) {
+        this.link_selected_radiums = this.link_selected_radiums.filter(
+          id => id !== app_id)
+      }
+
+      else {
+        this.link_selected_radiums.push(app_id)
+      }
     },
   },
 
@@ -348,6 +423,10 @@ export default {
 
 .work-expand-button:hover {
   filter:  brightness(1.3);
+}
+
+.work-link-expension-panel {
+  border: 1px rgba(0, 0, 0, 0.3) solid;
 }
 
 </style>

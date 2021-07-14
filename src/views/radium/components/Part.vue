@@ -13,6 +13,15 @@
     <div class="ma-1">
       <CustomButton
         v-if="edit_mode"
+        :icon="'mdi-email-plus'"
+        :text_color="'teal'"
+        :small_fab="true"
+        :tooltip="lang.views.radium.send_team_message[lg]"
+        @click="send_message_dialog = true"
+      />
+
+      <CustomButton
+        v-if="edit_mode"
         :icon="self.locked ? 'mdi-lock' : 'mdi-lock-open'"
         :text_color="self.locked ? 'orange' : 'blue'"
         :small_fab="true"
@@ -120,6 +129,27 @@
         </span>
       </div>
     </div>
+
+    <div class="d-flex mt-3">
+      <v-text-field
+        outlined
+        clearable
+        dense
+        :label="lang.views.radium.info_override[lg]"
+        v-model="info_override"
+        class="ml-3"
+      ></v-text-field>
+
+      <CustomButton
+        v-if="edit_mode"
+        :icon="'mdi-send'"
+        :text_color="'blue'"
+        :small_fab="true"
+        :tooltip="lang.generic.override[lg]"
+        @click="override_info"
+        class="mx-1"
+      />
+    </div>
   </div>
 
   <div class="part-project-frame-outer" v-if="self.project">
@@ -177,6 +207,26 @@
     @cancel="remove_project_dialog = false"
     @confirm="remove_project"
   ></CustomDialog>
+
+  <CustomDialog
+    :open="send_message_dialog"
+    :width="500"
+    :title_text="lang.views.radium.send_team_message[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-email-plus'"
+    :confirm_text="lang.generic.send[lg]"
+    :confirm_color="'teal'"
+    @cancel="send_message_dialog = false"
+    @confirm="send_message"
+  ></CustomDialog>
+
+  <v-snackbar
+    v-model="info_override_snackbar"
+    :timeout="info_override_timeout"
+  >
+    {{ lang.views.radium.info_override_confirm[lg] }}
+  </v-snackbar>
 </v-card>
 
 </template>
@@ -201,6 +251,10 @@ export default {
     return {
       remove_part_dialog: false,
       remove_project_dialog: false,
+      send_message_dialog: false,
+      info_override: '',
+      info_override_snackbar: false,
+      info_override_timeout: 4000,
     }
   },
 
@@ -318,6 +372,15 @@ export default {
 
     toggle_lock() {
       this.self.locked = !this.self.locked
+    },
+
+    send_message() {
+      this.send_message_dialog = false
+    },
+
+    override_info() {
+      this.info_override = ''
+      this.info_override_snackbar = true
     },
   },
 

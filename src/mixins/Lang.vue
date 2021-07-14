@@ -90,6 +90,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'override': {
+            'fr': 'Écraser',
+            'nl': '',
+            'en': '',
+          },
           'to_copy': {
             'fr': 'Copier',
             'nl': '',
@@ -1053,7 +1058,7 @@ export default {
               'en': '',
             },
             'no_participating_teams': {
-              'fr': 'Aucune équipe ne participe à ce chantier.',
+              'fr': 'Aucune équipe ne participe à cette prestation.',
               'nl': '',
               'en': '',
             },
@@ -1084,6 +1089,16 @@ export default {
             },
             'unlock_part': {
               'fr': 'Déverrouiller la participation',
+              'nl': '',
+              'en': '',
+            },
+            'info_override': {
+              'fr': 'Écraser la troisième case des cellules',
+              'nl': '',
+              'en': '',
+            },
+            'info_override_confirm': {
+              'fr': 'La troisième case des cellules des participants ont bien été écrasées.',
               'nl': '',
               'en': '',
             },

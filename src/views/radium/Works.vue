@@ -56,6 +56,8 @@ export default {
     return {
       loading: true,
       cached_teams: Array(),
+      circles_loading: true,
+      circles: Array(),
     }
   },
 
@@ -73,6 +75,11 @@ export default {
     this.works = this.request.works
 
     this.loading = false
+
+    this.request = await this.$http.get('apps')
+    this.circles = this.request.circles
+
+    this.circles_loading = false
   },
 
   computed: {
