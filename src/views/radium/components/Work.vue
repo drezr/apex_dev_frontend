@@ -35,7 +35,7 @@
         class="work-column-value"
         :class="[
           edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
-          edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
+          edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
         ]"
         @click="value_click($event)"
         @blur.capture="value_blur($event)"
