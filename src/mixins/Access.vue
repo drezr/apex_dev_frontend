@@ -20,7 +20,7 @@ export default {
           p => p.id == this.$logged_profile.id
         )
 
-        return profile.link
+        return profile ? profile.link : {}
       }
 
       return {}
