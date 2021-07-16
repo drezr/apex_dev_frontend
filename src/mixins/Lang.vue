@@ -355,6 +355,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'log': {
+            'fr': 'Historique',
+            'nl': '',
+            'en': '',
+          },
           'text': {
             'fr': 'Texte',
             'nl': '',
@@ -1099,6 +1104,11 @@ export default {
             },
             'info_override_confirm': {
               'fr': 'La troisième case des cellules des participants ont bien été écrasées.',
+              'nl': '',
+              'en': '',
+            },
+            'log_title': {
+              'fr': 'Historique des modifications de la cellule',
               'nl': '',
               'en': '',
             },

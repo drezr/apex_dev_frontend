@@ -37,6 +37,8 @@
           edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
           edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
         ]"
+        @mouseover="value_over($event)"
+        @mouseleave="value_leave($event)"
         @click="value_click($event)"
         @blur.capture="value_blur($event)"
       >
@@ -51,6 +53,16 @@
           :style="`font-size: ${column.textsize}px;`"
           :disabled="!edit_mode"
           :background-color="edit_mode ? 'white' : 'transparent'"
+        />
+
+        <CustomButton
+          v-if="!Array.isArray(self[column.name]) && column.name in self"
+          class="work-log-button"
+          :icon="'mdi-clock-time-four-outline'"
+          :small_fab="true"
+          :tooltip="lang.generic.log[lg]"
+          :style="`left: ${column.width - 32}px;`"
+          @click="open_log_dialog(column.name)"
         />
 
         <div v-if="column.name == 'shifts'" class="work-shifts">
@@ -210,6 +222,29 @@
       </v-expansion-panels>
     </div>
   </CustomDialog>
+
+  <CustomDialog
+    :open="log_dialog"
+    :width="600"
+    :title_text="lang.views.radium.log_title[lg]"
+    @cancel="log_dialog = false"
+  >
+    <Loader
+      :size="100"
+      :width="10"
+      :mt="120"
+      :mb="100"
+      v-if="log_dialog_loading"
+    />
+
+    <div class="mt-3" v-else>
+      <div v-for="(log, i) in logs" :key="i">
+        {{ log.old_value }}
+        {{ log.new_value }}
+        {{ new Date(log.date) }}
+      </div>
+    </div>
+  </CustomDialog>
 </div>
 
 </template>
@@ -239,6 +274,8 @@ export default {
       grab_cursor: 'grab',
       link_dialog: false,
       link_selected_radiums: Array(),
+      log_dialog: false,
+      log_dialog_loading: true,
     }
   },
 
@@ -253,11 +290,11 @@ export default {
   methods: {
     value_click(event) {
       if (this.edit_mode) {
-        let cell = event.target.closest('.work-column-value')
-        let textarea = cell.getElementsByTagName('textarea')[0]
+        let content = event.target.closest('.work-column-value')
+        let textarea = content.getElementsByTagName('textarea')[0]
 
         if (textarea) {
-          cell.classList.add('work-column-value-focused')
+          content.classList.add('work-column-value-focused')
           textarea.focus()
         }
       }
@@ -266,6 +303,24 @@ export default {
     value_blur(event) {
       let content = event.srcElement.closest('.work-column-value')
       content.classList.remove('work-column-value-focused')
+    },
+
+    value_over(event) {
+      let content = event.target.closest('.work-column-value')
+      let button = content.getElementsByClassName('work-log-button')[0]
+
+      if (button) {
+        button.style.opacity = 1
+      }
+    },
+
+    value_leave(event) {
+      let content = event.srcElement.closest('.work-column-value')
+      let button = content.getElementsByClassName('work-log-button')[0]
+
+      if (button) {
+        button.style.opacity = 0
+      }
     },
 
     remove() {
@@ -285,6 +340,19 @@ export default {
       else {
         this.link_selected_radiums.push(app_id)
       }
+    },
+
+    async open_log_dialog(field) {
+      this.log_dialog = true
+      this.log_dialog_loading = true
+
+      this.request = await this.$http.get('logs', {
+        'work_id': this.self.id,
+        'field': field,
+      })
+
+      this.logs = this.request.logs
+      this.log_dialog_loading = false
     },
   },
 
@@ -377,6 +445,7 @@ export default {
   flex-grow: 1;
   cursor: text;
   padding: 0px;
+  position: relative;
 }
 
 .work-drag-button {
@@ -427,6 +496,14 @@ export default {
 
 .work-link-expension-panel {
   border: 1px rgba(0, 0, 0, 0.3) solid;
+}
+
+.work-log-button {
+  cursor:  pointer;
+  position: absolute;
+  top: -4px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 </style>

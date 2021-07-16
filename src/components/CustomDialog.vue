@@ -38,7 +38,7 @@
       
     </v-card-text>
 
-    <v-card-actions v-if="!hide_action">
+    <v-card-actions v-if="!hide_action && (confirm_text || cancel_text)">
       <v-spacer></v-spacer>
 
       <v-btn
