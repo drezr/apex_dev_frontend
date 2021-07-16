@@ -5,12 +5,12 @@
   max-width="350"
   class="mr-3 mb-3 elevation-3"
 >
-  <div class="d-flex justify-space-between">
+  <div class="d-flex justify-space-between flex-wrap">
     <div class="text-h6 pa-3">
      <b>{{ self.team.name }}</b>
     </div>
 
-    <div class="ma-1">
+    <div class="ma-1 d-flex flex-nowrap pb-3">
       <CustomButton
         v-if="edit_mode"
         :icon="'mdi-email-plus'"
