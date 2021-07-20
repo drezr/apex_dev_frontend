@@ -295,7 +295,7 @@ export default {
             'nl': '',
             'en': '',
           },
-          'August': {
+          'august': {
             'fr': 'Août',
             'nl': '',
             'en': '',
@@ -397,6 +397,11 @@ export default {
           },
           'add_subtask_tooltip': {
             'fr': 'Ajouter une sous-tâche',
+            'nl': '',
+            'en': '',
+          },
+          'teams': {
+            'fr': 'Équipes',
             'nl': '',
             'en': '',
           },
@@ -1042,8 +1047,13 @@ export default {
               'nl': '',
               'en': '',
             },
-            'link_tooltip': {
+            'link_radiums_tooltip': {
               'fr': 'Lier ce chantier à d\'autres Radium',
+              'nl': '',
+              'en': '',
+            },
+            'link_teams_tooltip': {
+              'fr': 'Ajouter des équipes à cette prestation',
               'nl': '',
               'en': '',
             },

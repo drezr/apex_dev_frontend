@@ -96,11 +96,11 @@
     <div class="lighten-5" :class="self.color">
       <div class="pa-1">
         <CustomButton
-          :text="edit_mode ? lang.generic.lock[lg] : lang.generic.edit[lg]"
+          :text="edit_mode ? lang.generic.save[lg] : lang.generic.edit[lg]"
           :rounded="true"
           :color="edit_mode ? 'blue' : 'teal'"
           :dark="true"
-          :icon="edit_mode ? 'mdi-lock' : 'mdi-pencil'"
+          :icon="edit_mode ? 'mdi-content-save' : 'mdi-pencil'"
           @click="edit_mode = !edit_mode"
           :tooltip="edit_mode ? lang.views.radium.lock_tooltip[lg] : lang.views.radium.edit_tooltip[lg]"
           class="mr-3"
@@ -153,9 +153,9 @@
           :color="'purple'"
           :dark="true"
           :icon="'mdi-link-variant-plus'"
-          :tooltip="lang.views.radium.link_tooltip[lg]"
+          :tooltip="lang.views.radium.link_radiums_tooltip[lg]"
           class="mr-3"
-          @click="link_dialog = true"
+          @click="link_radiums_dialog = true"
         />
       </div>
 
@@ -167,16 +167,16 @@
   </div>
 
   <CustomDialog
-    :open="link_dialog"
+    :open="link_radiums_dialog"
     :width="500"
-    :title_text="lang.views.radium.link_tooltip[lg]"
+    :title_text="lang.views.radium.link_radiums_tooltip[lg]"
     :cancel_icon="'mdi-close'"
     :cancel_text="lang.generic.cancel[lg]"
     :confirm_icon="'mdi-link-variant-plus'"
     :confirm_text="lang.generic.to_link[lg]"
     :confirm_color="'purple'"
-    @cancel="link_dialog = false"
-    @confirm="link_teams"
+    @cancel="link_radiums_dialog = false"
+    @confirm="link_radiums"
   >
     <Loader
       :size="100"
@@ -207,7 +207,7 @@
                 :key="z"
               >
                 <v-checkbox
-                  :label="`${team.name} (${app.name})`"
+                  :label="team.name + (app.name ? ' (' + app.name + ')': '')"
                   hide-details
                   @change="toggle_radium(app.id)"
                   :input-value="self.apps.find(id => id == app.id)"
@@ -225,7 +225,7 @@
 
   <CustomDialog
     :open="log_dialog"
-    :width="600"
+    :width="1000"
     :title_text="lang.views.radium.log_title[lg]"
     @cancel="log_dialog = false"
   >
@@ -238,11 +238,34 @@
     />
 
     <div class="mt-3" v-else>
-      <div v-for="(log, i) in logs" :key="i">
-        {{ log.old_value }}
-        {{ log.new_value }}
-        {{ new Date(log.date) }}
-      </div>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Modifié par
+              </th>
+              <th class="text-left">
+                Ancienne valeur
+              </th>
+              <th class="text-left">
+                Nouvelle valeur
+              </th>
+              <th class="text-left">
+                Date de la modification
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(log, i) in logs" :key="i">
+              <td>{{ log.author }}</td>
+              <td>{{ log.old_value }}</td>
+              <td>{{ log.new_value }}</td>
+              <td>{{ $tool.format_datetime(log.date) }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </div>
   </CustomDialog>
 </div>
@@ -272,7 +295,7 @@ export default {
       edit_mode: false,
       expanded: false,
       grab_cursor: 'grab',
-      link_dialog: false,
+      link_radiums_dialog: false,
       link_selected_radiums: Array(),
       log_dialog: false,
       log_dialog_loading: true,
@@ -327,7 +350,7 @@ export default {
 
     },
 
-    link_teams() {
+    link_radiums() {
 
     },
 
@@ -479,7 +502,7 @@ export default {
 }
 
 .work-expand {
-  border-top:  1px black solid;
+  border-top: 1px black solid;
 }
 
 .work-expand-button {
@@ -491,11 +514,12 @@ export default {
 }
 
 .work-expand-button:hover {
-  filter:  brightness(1.3);
+  filter: brightness(1.3);
 }
 
 .work-link-expension-panel {
   border: 1px rgba(0, 0, 0, 0.3) solid;
+  margin-top: 10px;
 }
 
 .work-log-button {

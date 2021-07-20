@@ -214,6 +214,24 @@ class Tools {
     return `${day}/${month}/${year}`
   }
 
+  format_datetime(datetime) {
+    let date = new Date(datetime)
+
+    let day = date.getDate()
+    let month = date.getMonth()
+    let year = date.getFullYear()
+    let hour = date.getHours()
+    let minute = date.getMinutes()
+
+    if (day < 9) day = '0' + String(day)
+    if (month < 9) month = '0' + String(month)
+    if (hour < 9) hour = '0' + String(hour)
+    if (minute < 9) minute = '0' + String(minute)
+
+
+    return `${day}/${month}/${year} - ${hour}:${minute}`
+  }
+
   get_fused_children(obj) {
     let children = Array()
 

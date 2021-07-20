@@ -25,15 +25,20 @@
     </v-tab>
   </v-tabs>
 
-  <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
-
   <v-tabs-items
-    v-else
     v-model="selected_shift"
     class="lighten-2"
     :class="parent.color"
   >
-    <v-tab-item v-for="(shift, i) in shifts" :key="i" class="mx-3 mt-3">
+
+    <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
+
+    <v-tab-item
+      v-for="(shift, i) in shifts"
+      :key="i"
+      class="mx-3 mt-3"
+      v-else
+    >
       <Part
         v-for="(part, i) in shift.parts"
         :key="i"
@@ -50,7 +55,76 @@
     <v-tab-item v-if="parent.shifts.length == 0" class="my-9 mx-6 white--text">
       {{ lang.views.radium.no_shift[lg] }}
     </v-tab-item>
+
+    <CustomButton
+      :text="lang.generic.teams[lg]"
+      :rounded="true"
+      :color="'yellow darken-3'"
+      :dark="true"
+      :icon="'mdi-account-multiple-plus'"
+      :tooltip="lang.views.radium.link_teams_tooltip[lg]"
+      class="mx-3 mb-3"
+      @click="link_teams_dialog = true"
+    />
   </v-tabs-items>
+
+  <CustomDialog
+    :open="link_teams_dialog"
+    :width="500"
+    :title_text="lang.views.radium.link_teams_tooltip[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-account-multiple-plus'"
+    :confirm_text="lang.generic.add[lg]"
+    :confirm_color="'yellow darken-3'"
+    @cancel="link_teams_dialog = false"
+    @confirm="link_teams"
+  >
+    <Loader
+      v-if="$current_component.circles_loading || loading"
+      :size="100"
+      :width="10"
+      :mt="50"
+      :mb="50"
+    />
+
+    <div class="mt-3" v-else>
+      <v-expansion-panels
+        class="work-link-expension-panel"
+        v-for="(circle, x) in $current_component.circles"
+        :key="x"
+      >
+        <v-expansion-panel>
+          <v-expansion-panel-header>
+            <b>{{ circle.name }}</b>
+          </v-expansion-panel-header>
+
+          <v-expansion-panel-content>
+            <div
+              v-for="(team, y) in circle.teams"
+              :key="y"
+            >
+              <div
+                v-for="(app, z) in team.apps.filter(a => a.app == 'watcher')"
+                :key="z"
+              >
+                <v-checkbox
+                  v-if="loading == false"
+                  :label="team.name + (app.name ? ' (' + app.name + ')': '')"
+                  hide-details
+                  @change="toggle_team(app.id)"
+                  :input-value="shifts[selected_shift].parts.find(p => p.team.id == team.id)"
+                  :disabled="shifts[selected_shift].parts.find(p => p.team.id == team.id) ? true : false"
+                ></v-checkbox>
+              </div>
+            </div>
+
+            <div style="width: 100%; height: 20px;"></div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
+  </CustomDialog>
 </v-card>
 
 </template>
@@ -77,7 +151,9 @@ export default {
       self: null,
       loading: true,
       selected_shift: 0,
-      shifts: null,
+      shifts: Array(),
+      link_teams_dialog: false,
+      link_selected_teams: Array(),
     }
   },
 
@@ -95,7 +171,20 @@ export default {
   },
 
   methods: {
+    link_teams() {
+      this.link_teams_dialog = false
+    },
 
+    toggle_team(app_id) {
+      if (this.link_selected_teams.includes(app_id)) {
+        this.link_selected_teams = this.link_selected_teams.filter(
+          id => id !== app_id)
+      }
+
+      else {
+        this.link_selected_teams.push(app_id)
+      }
+    },
   },
 
   watch: {
@@ -112,5 +201,10 @@ export default {
 
 
 <style scoped>
+
+.work-link-expension-panel {
+  border: 1px rgba(0, 0, 0, 0.3) solid;
+  margin-top: 10px;
+}
 
 </style>
