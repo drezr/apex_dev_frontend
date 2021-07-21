@@ -86,6 +86,15 @@
     />
 
     <CustomButton
+      :icon="'mdi-tune-vertical'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.customize_tooltip[lg]"
+      @click="$emit('open-customize-dialog')"
+    />
+
+    <CustomButton
       :icon="'mdi-plus'"
       :height="40"
       :color="'green'"

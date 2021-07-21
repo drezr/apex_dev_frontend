@@ -1,5 +1,6 @@
 <template>
 
+<div class="pr-3" style="min-width: min-content;">
 <div class="work-overframe">
   <div class="work-frame lighten-5" :class="self.color">
     <div
@@ -225,8 +226,9 @@
 
   <CustomDialog
     :open="log_dialog"
-    :width="1000"
+    :width="1300"
     :title_text="lang.views.radium.log_title[lg]"
+    :title_icon="'mdi-clock-time-four-outline'"
     @cancel="log_dialog = false"
   >
     <Loader
@@ -238,36 +240,41 @@
     />
 
     <div class="mt-3" v-else>
-      <v-simple-table>
+      <v-simple-table v-if="logs.length > 0">
         <template v-slot:default>
           <thead>
             <tr>
               <th class="text-left">
-                Modifié par
+                {{ lang.generic.log_edited_by[lg] }}
               </th>
               <th class="text-left">
-                Ancienne valeur
+                {{ lang.generic.log_new_value[lg] }}
               </th>
               <th class="text-left">
-                Nouvelle valeur
+                {{ lang.generic.log_old_value[lg] }}
               </th>
               <th class="text-left">
-                Date de la modification
+                {{ lang.generic.log_datetime[lg] }}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(log, i) in logs" :key="i">
-              <td>{{ log.author }}</td>
-              <td>{{ log.old_value }}</td>
-              <td>{{ log.new_value }}</td>
+              <td><b>{{ log.author }}</b></td>
+              <td class="work-log-cell">{{ log.new_value }}</td>
+              <td class="work-log-cell">{{ log.old_value }}</td>
               <td>{{ $tool.format_datetime(log.date) }}</td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
+
+      <div class="pa-16 d-flex justify-center" v-else>
+        Pas de modification pour cette cellule
+      </div>
     </div>
   </CustomDialog>
+</div>
 </div>
 
 </template>
@@ -509,6 +516,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 50px;
   width: 50px;
   cursor: pointer;
 }
@@ -528,6 +536,12 @@ export default {
   top: -4px;
   opacity: 0;
   transition: opacity 0.3s;
+}
+
+.work-log-cell {
+  white-space: pre;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
 </style>

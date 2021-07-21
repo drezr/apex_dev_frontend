@@ -9,7 +9,10 @@
         {{ team.name }}
       </div>
 
-      <NavigationBar class="mb-6" />
+      <NavigationBar
+        class="mb-6"
+        @open-customize-dialog="customize_dialog = true"
+      />
 
       <div class="works-frame">
         <VueDraggable
@@ -29,6 +32,54 @@
       </div>
     </div>
   </transition>
+
+  <CustomDialog
+    :open="customize_dialog"
+    :width="800"
+    :title_text="lang.views.radium.customize_tooltip[lg]"
+    :title_icon="'mdi-tune-vertical'"
+    @cancel="customize_dialog = false"
+  >
+    <VueDraggable
+      v-model="columns"
+      @change="update_columns"
+      :animation="100"
+      easing="cubic-bezier(1, 0, 0, 1)"
+      handle=".cursor-move"
+    >
+      <div
+        v-for="(column, i) in columns"
+        :key="i"
+        class="d-flex align-center"
+      >
+        <v-icon class="cursor-move handle mr-3 pink--text">
+          mdi-drag-horizontal-variant
+        </v-icon>
+
+        <div style="width: 200px; text-align: center;">
+          {{ column.name }}
+        </div>
+
+        <v-text-field
+          v-model="column.textsize"
+          :label="'text_size'"
+          class="mx-3"
+        />
+
+        <v-text-field
+          v-model="column.width"
+          :label="'text_size'"
+          class="mx-3"
+        />
+
+        <v-checkbox
+          v-model="column.visible"
+          :label="'visible'"
+          class="mx-3"
+        ></v-checkbox>
+      </div>
+    </VueDraggable>
+  </CustomDialog>
 
 </div>
 
@@ -58,6 +109,12 @@ export default {
       cached_teams: Array(),
       circles_loading: true,
       circles: Array(),
+      customize_dialog: false,
+      team: Object(),
+      app: Object(),
+      config: Object(),
+      works: Array(),
+      columns: Array(),
     }
   },
 
@@ -73,6 +130,7 @@ export default {
     this.app = this.request.app
     this.config = this.request.config
     this.works = this.request.works
+    this.columns = this.get_columns()
 
     this.loading = false
 
@@ -83,7 +141,15 @@ export default {
   },
 
   computed: {
-    columns() {
+
+  },
+
+  methods: {
+    update_work_position() {
+
+    },
+
+    get_columns() {
       let columns = Array()
 
       for (let key in this.config) {
@@ -107,10 +173,8 @@ export default {
 
       return columns
     },
-  },
 
-  methods: {
-    update_work_position() {
+    update_columns() {
 
     },
   },

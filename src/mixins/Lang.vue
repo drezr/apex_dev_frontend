@@ -405,6 +405,26 @@ export default {
             'nl': '',
             'en': '',
           },
+          'log_edited_by': {
+            'fr': 'Modifié par',
+            'nl': '',
+            'en': '',
+          },
+          'log_old_value': {
+            'fr': 'Ancienne valeur',
+            'nl': '',
+            'en': '',
+          },
+          'log_new_value': {
+            'fr': 'Nouvelle valeur',
+            'nl': '',
+            'en': '',
+          },
+          'log_datetime': {
+            'fr': 'Date de la modification',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
@@ -869,6 +889,11 @@ export default {
             },
             'printable_tooltip': {
               'fr': 'Liste imprimable des chantier du mois',
+              'nl': '',
+              'en': '',
+            },
+            'customize_tooltip': {
+              'fr': 'Personnaliser Radium',
               'nl': '',
               'en': '',
             },
