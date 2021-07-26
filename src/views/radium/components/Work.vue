@@ -12,10 +12,10 @@
     </div>
 
     <div
-      v-for="(column, i) in $parent.$parent.columns"
+      v-for="(column, i) in $parent.$parent.columns.filter(c => c.visible)"
       :key="i"
       class="work-column"
-      :style="`min-width: ${column.width}px;`"
+      :style="`min-width: ${column.width}px; max-width: ${column.width}px;`"
     >
       <div class="work-column-title">
         <div
@@ -425,7 +425,7 @@ export default {
 
 .work-overframe {
   border: 1px black solid;
-  min-width: min-content;
+  width: min-content;
   border-radius: 10px;
   overflow: hidden;
   position: relative;

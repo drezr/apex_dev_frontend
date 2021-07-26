@@ -50,32 +50,40 @@
       <div
         v-for="(column, i) in columns"
         :key="i"
-        class="d-flex align-center"
+        class="d-flex align-center my-6"
       >
         <v-icon class="cursor-move handle mr-3 pink--text">
           mdi-drag-horizontal-variant
         </v-icon>
 
-        <div style="width: 200px; text-align: center;">
-          {{ column.name }}
+        <div style="width: 200px; text-align: center;" class="black--text">
+          <b>{{ lang.views.radium['column_title_' + column.name][lg] }}</b>
         </div>
 
         <v-text-field
-          v-model="column.textsize"
-          :label="'text_size'"
+          v-model="column.width"
+          :label="lang.generic.column_width[lg]"
+          type="number"
           class="mx-3"
+          outlined
+          hide-details
         />
 
         <v-text-field
-          v-model="column.width"
-          :label="'text_size'"
+          v-model="column.textsize"
+          :label="lang.generic.text_size[lg]"
+          type="number"
           class="mx-3"
+          outlined
+          hide-details
         />
 
         <v-checkbox
           v-model="column.visible"
-          :label="'visible'"
+          :label="lang.generic.visible[lg]"
           class="mx-3"
+          hide-details
+          style="position: relative; top: -10px;"
         ></v-checkbox>
       </div>
     </VueDraggable>

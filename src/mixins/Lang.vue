@@ -425,6 +425,21 @@ export default {
             'nl': '',
             'en': '',
           },
+          'visible': {
+            'fr': 'Visible',
+            'nl': '',
+            'en': '',
+          },
+          'column_width': {
+            'fr': 'Largeur de la colonne',
+            'nl': '',
+            'en': '',
+          },
+          'text_size': {
+            'fr': 'Taille du texte',
+            'nl': '',
+            'en': '',
+          },
         },
         'views': {
           'login': {
