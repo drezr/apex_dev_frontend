@@ -14,7 +14,7 @@
         @open-customize-dialog="customize_dialog = true"
       />
 
-      <div class="works-frame">
+      <div class="works-frame" v-if="works.length > 0">
         <VueDraggable
           v-model="works"
           @change="update_work_position"
@@ -29,6 +29,10 @@
             class="ma-3"
           />
         </VueDraggable>
+      </div>
+
+      <div v-else class="d-flex justify-center align-center my-16">
+        {{ lang.views.radium.no_works[lg] }}
       </div>
     </div>
   </transition>
@@ -50,7 +54,7 @@
       <div
         v-for="(column, i) in columns"
         :key="i"
-        class="d-flex align-center my-6"
+        class="works-customize-row"
       >
         <v-icon class="cursor-move handle mr-3 pink--text">
           mdi-drag-horizontal-variant
@@ -204,6 +208,15 @@ export default {
 
 .works-frame {
 
+}
+
+.works-customize-row {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px grey solid;
+  padding-bottom: 10px;
 }
 
 </style>

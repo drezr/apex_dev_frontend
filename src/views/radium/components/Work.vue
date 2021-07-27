@@ -37,10 +37,11 @@
         :class="[
           edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
           edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
+          is_clickable(column.name) && !edit_mode ? 'work-column-value-clickable' : '',
         ]"
         @mouseover="value_over($event)"
         @mouseleave="value_leave($event)"
-        @click="value_click($event)"
+        @click="value_click($event, column.name, self[column.name])"
         @blur.capture="value_blur($event)"
       >
         <v-textarea
@@ -126,6 +127,7 @@
           :icon="'mdi-android-messages'"
           :tooltip="lang.views.radium.message_tooltip[lg]"
           class="mr-3"
+          @click="message_dialog = true"
         />
 
         <CustomButton
@@ -210,7 +212,7 @@
                 <v-checkbox
                   :label="team.name + (app.name ? ' (' + app.name + ')': '')"
                   hide-details
-                  @change="toggle_radium(app.id)"
+                  @change="toggle_link_radium(app.id)"
                   :input-value="self.apps.find(id => id == app.id)"
                   :disabled="self.apps.find(id => id == app.id) ? true : false"
                 ></v-checkbox>
@@ -274,6 +276,31 @@
       </div>
     </div>
   </CustomDialog>
+
+  <CustomDialog
+    :open="message_dialog"
+    :width="600"
+    :title_text="lang.views.radium.message_tooltip[lg]"
+    :title_icon="'mdi-android-messages'"
+    @cancel="message_dialog = false"
+  >
+    <v-textarea
+      v-model="message"
+      outlined
+      auto-grow
+      hide-details
+    />
+
+    <div
+      v-for="(linked_radium, i) in linked_radiums"
+      :key="i"
+    >
+      <v-checkbox
+        :label="linked_radium.team_name + (linked_radium.app_name ? ' (' + linked_radium.app_name + ')': '')"
+        hide-details
+      />
+    </div>
+  </CustomDialog>
 </div>
 </div>
 
@@ -306,19 +333,59 @@ export default {
       link_selected_radiums: Array(),
       log_dialog: false,
       log_dialog_loading: true,
+      message_dialog: false,
+      message: '',
+      message_selected_radiums: Array(),
     }
   },
 
   created() {
-    //console.log(this.self)
+    // console.log(this.self)
   },
 
   computed: {
+    linked_radiums() {
+      let radiums = Array()
 
+      for (let circle of this.$current_component.circles) {
+        for (let team of circle.teams) {
+          for (let app of team.apps) {
+            if (this.self.apps.includes(app.id)) {
+              radiums.push({
+                'team_id': team.id,
+                'app_id': app.id,
+                'team_name': team.name,
+                'app_name': app.name,
+              })
+            }
+          }
+        }
+      }
+
+      radiums.sort((a, b) => a.team_name.localeCompare(b.team_name))
+
+      return radiums
+    },
   },
 
   methods: {
-    value_click(event) {
+    is_clickable(column_name) {
+      let clickables = ['colt', ]
+
+      if (clickables.includes(column_name)) {
+        return true
+      }
+
+      return false
+    },
+
+    value_click(event, column_name, value) {
+      if (!this.edit_mode && this.is_clickable(column_name)) {
+        if (column_name == 'colt') {
+          window.open('https://colt-website.infrabel.be/coupure/' + value)
+        }
+      }
+
       if (this.edit_mode) {
         let content = event.target.closest('.work-column-value')
         let textarea = content.getElementsByTagName('textarea')[0]
@@ -361,7 +428,7 @@ export default {
 
     },
 
-    toggle_radium(app_id) {
+    toggle_link_radium(app_id) {
       if (this.link_selected_radiums.includes(app_id)) {
         this.link_selected_radiums = this.link_selected_radiums.filter(
           id => id !== app_id)
@@ -369,6 +436,17 @@ export default {
 
       else {
         this.link_selected_radiums.push(app_id)
+      }
+    },
+
+    toggle_message_radium(app_id) {
+      if (this.message_selected_radiums.includes(app_id)) {
+        this.message_selected_radiums = this.message_selected_radiums.filter(
+          id => id !== app_id)
+      }
+
+      else {
+        this.message_selected_radiums.push(app_id)
       }
     },
 
@@ -476,6 +554,11 @@ export default {
   cursor: text;
   padding: 0px;
   position: relative;
+}
+
+.work-column-value-clickable:hover {
+  filter: brightness(1.3);
+  cursor: pointer;
 }
 
 .work-drag-button {

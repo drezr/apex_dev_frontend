@@ -801,7 +801,7 @@ export default {
               'en': '',
             },
             'call_name': {
-              'fr': 'Déscription du dérangement',
+              'fr': 'Description du dérangement',
               'nl': '',
               'en': '',
             },
@@ -811,7 +811,7 @@ export default {
               'en': '',
             },
             'call_description': {
-              'fr': 'Déscription de l\'intervention',
+              'fr': 'Description de l\'intervention',
               'nl': '',
               'en': '',
             },
@@ -928,7 +928,7 @@ export default {
               'en': '',
             },
             'column_title_description': {
-              'fr': 'Déscription',
+              'fr': 'Description',
               'nl': '',
               'en': '',
             },
@@ -962,7 +962,7 @@ export default {
               'nl': '',
               'en': '',
             },
-            'column_title_colt_id': {
+            'column_title_colt': {
               'fr': 'CoLT',
               'nl': '',
               'en': '',
@@ -1159,6 +1159,11 @@ export default {
             },
             'log_title': {
               'fr': 'Historique des modifications de la cellule',
+              'nl': '',
+              'en': '',
+            },
+            'no_works': {
+              'fr': 'Il n\'y a pas encore de chantier ce mois.',
               'nl': '',
               'en': '',
             },
