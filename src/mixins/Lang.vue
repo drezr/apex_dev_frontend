@@ -1162,8 +1162,63 @@ export default {
               'nl': '',
               'en': '',
             },
+            'log_no_log': {
+              'fr': 'Pas de modification pour cette cellule.',
+              'nl': '',
+              'en': '',
+            },
             'no_works': {
               'fr': 'Il n\'y a pas encore de chantier ce mois.',
+              'nl': '',
+              'en': '',
+            },
+            'message_to_linked_radiums': {
+              'fr': 'Envoyer ce message aux Radium liés :',
+              'nl': '',
+              'en': '',
+            },
+            'message_presets': {
+              'fr': 'Messages prédéfinis',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_work_added': {
+              'fr': 'Un nouveau chantier a été ajouté.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_date_updated': {
+              'fr': 'La date du chantier a été modifiée.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_shift_updated': {
+              'fr': 'La prestation du chantier à été modifiée.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_desc_updated': {
+              'fr': 'Le travail du chantier a été modifié.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_note_added': {
+              'fr': 'Une remarque a été ajoutée.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_bnx_added': {
+              'fr': 'Un nouveau BNX a été publié.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_ilt_added': {
+              'fr': 'Une nouvelle ILT a été publiée.',
+              'nl': '',
+              'en': '',
+            },
+            'message_preset_work_canceled': {
+              'fr': 'Le chantier est annulé.',
               'nl': '',
               'en': '',
             },

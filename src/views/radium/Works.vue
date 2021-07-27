@@ -149,6 +149,19 @@ export default {
     this.request = await this.$http.get('apps')
     this.circles = this.request.circles
 
+    for (let circle of this.circles) {
+      circle.teams.sort((a, b) => a.name.localeCompare(b.name))
+
+      for (let team of circle.teams) {
+        team.apps.sort((a, b) => {
+          a = a.name || ''
+          b = b.name || ''
+          
+          return a.localeCompare(b)
+        })
+      }
+    }
+
     this.circles_loading = false
   },
 

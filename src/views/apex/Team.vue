@@ -71,6 +71,7 @@ export default {
     })
 
     this.self = this.request.team
+    this.self.apps.sort((a, b) => (a.name).localeCompare(b.name))
     this.self.apps.sort((a, b) => (a.app).localeCompare(b.app))
 
     this.loading = false

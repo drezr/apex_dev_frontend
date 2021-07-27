@@ -117,6 +117,7 @@
           :icon="self.link.is_original ? 'mdi-delete' : 'mdi-link-variant-off'"
           :tooltip="lang.views.radium.delete_tooltip[lg]"
           class="mr-3"
+          @click="remove_dialog = true"
         />
 
         <CustomButton
@@ -272,7 +273,7 @@
       </v-simple-table>
 
       <div class="pa-16 d-flex justify-center" v-else>
-        Pas de modification pour cette cellule
+        {{ lang.views.radium.log_no_log[lg] }}
       </div>
     </div>
   </CustomDialog>
@@ -283,7 +284,25 @@
     :title_text="lang.views.radium.message_tooltip[lg]"
     :title_icon="'mdi-android-messages'"
     @cancel="message_dialog = false"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-send'"
+    :confirm_text="lang.generic.send[lg]"
+    :confirm_color="'deep-orange'"
+    :confirm_disabled="message_selected_radiums.length == 0 || message.length == 0"
+    @confirm="send_message"
   >
+    <v-select
+      :items="message_presets"
+      v-model="message_preset"
+      @input="add_to_message($event)"
+      :label="lang.views.radium.message_presets[lg]"
+      outlined
+      class="mb-3"
+      dense
+      hide-details
+    ></v-select>
+
     <v-textarea
       v-model="message"
       outlined
@@ -291,16 +310,35 @@
       hide-details
     />
 
+    <div class="mt-6 black--text">
+      <b>{{ lang.views.radium.message_to_linked_radiums[lg] }}</b>
+    </div>
+
     <div
       v-for="(linked_radium, i) in linked_radiums"
       :key="i"
     >
       <v-checkbox
         :label="linked_radium.team_name + (linked_radium.app_name ? ' (' + linked_radium.app_name + ')': '')"
+        :input-value="message_selected_radiums.find(i => i == linked_radium.app_id)"
+        @change="toggle_message_radium(linked_radium.app_id)"
         hide-details
       />
     </div>
   </CustomDialog>
+
+  <CustomDialog
+    :open="remove_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="remove_dialog = false"
+    @confirm="remove"
+  ></CustomDialog>
 </div>
 </div>
 
@@ -336,6 +374,8 @@ export default {
       message_dialog: false,
       message: '',
       message_selected_radiums: Array(),
+      message_preset: 0,
+      remove_dialog: false,
     }
   },
 
@@ -365,6 +405,19 @@ export default {
       radiums.sort((a, b) => a.team_name.localeCompare(b.team_name))
 
       return radiums
+    },
+    
+    message_presets() {
+      return [
+        this.lang.views.radium.message_preset_work_added[this.lg],
+        this.lang.views.radium.message_preset_date_updated[this.lg],
+        this.lang.views.radium.message_preset_shift_updated[this.lg],
+        this.lang.views.radium.message_preset_desc_updated[this.lg],
+        this.lang.views.radium.message_preset_note_added[this.lg],
+        this.lang.views.radium.message_preset_bnx_added[this.lg],
+        this.lang.views.radium.message_preset_ilt_added[this.lg],
+        this.lang.views.radium.message_preset_work_canceled[this.lg],
+      ]
     },
   },
 
@@ -421,7 +474,9 @@ export default {
     },
 
     remove() {
-
+      this.remove_dialog = false
+      this.$current_component.works = this.$current_component.works.filter(
+        w => w.id !== this.self.id)
     },
 
     link_radiums() {
@@ -461,6 +516,20 @@ export default {
 
       this.logs = this.request.logs
       this.log_dialog_loading = false
+    },
+
+    add_to_message(event) {
+      this.message = this.message + event + '\n'
+      this.$nextTick(() => this.message_preset = 0)
+    },
+
+    send_message() {
+      this.message_dialog = false
+
+      // message request
+
+      this.message = ''
+      this.message_selected_radiums = Array()
     },
   },
 

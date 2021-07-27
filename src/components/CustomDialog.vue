@@ -69,6 +69,7 @@
       <v-btn
         :color="confirm_color ? confirm_color : 'blue'"
         @click="$emit('confirm')"
+        :disabled="confirm_disabled"
       >
         <v-icon
           v-if="confirm_icon"
@@ -165,6 +166,10 @@ export default {
     },
     confirm_text_color: {
       type: String,
+      required: false,
+    }, 
+    confirm_disabled: {
+      type: Boolean,
       required: false,
     }, 
     hide_action: {
