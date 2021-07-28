@@ -38,6 +38,7 @@
           edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
           edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
           is_clickable(column.name) && !edit_mode ? 'work-column-value-clickable' : '',
+          is_palette_active && !edit_mode ? 'work-column-value-painter' : '',
         ]"
         @mouseover="value_over($event)"
         @mouseleave="value_leave($event)"
@@ -95,7 +96,7 @@
   </div>
 
   <div class="work-expand" v-if="expanded">
-    <div class="lighten-5" :class="self.color">
+    <div class="lighten-5 pb-3" :class="self.color">
       <div class="pa-1">
         <CustomButton
           :text="edit_mode ? lang.generic.save[lg] : lang.generic.edit[lg]"
@@ -298,7 +299,7 @@
       @input="add_to_message($event)"
       :label="lang.views.radium.message_presets[lg]"
       outlined
-      class="mb-3"
+      class="mb-3 mt-3"
       dense
       hide-details
     ></v-select>
@@ -418,6 +419,10 @@ export default {
         this.lang.views.radium.message_preset_ilt_added[this.lg],
         this.lang.views.radium.message_preset_work_canceled[this.lg],
       ]
+    },
+
+    is_palette_active() {
+      return false
     },
   },
 

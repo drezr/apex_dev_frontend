@@ -10,8 +10,15 @@
       </div>
 
       <NavigationBar
-        class="mb-6"
         @open-customize-dialog="customize_dialog = true"
+        @open-messages-dialog="messages_dialog = true"
+        @toggle-palette="palette = !palette"
+      />
+
+      <Palette
+        v-if="palette"
+        class="mt-2"
+        @pick-color="palette_pick_color($event)"
       />
 
       <div class="works-frame" v-if="works.length > 0">
@@ -93,6 +100,66 @@
     </VueDraggable>
   </CustomDialog>
 
+  <CustomDialog
+    :open="messages_dialog"
+    :width="600"
+    :title_text="lang.views.radium.messages_dialog_title[lg]"
+    :title_icon="'mdi-android-messages'"
+    @cancel="messages_dialog = false"
+  >
+    <div v-if="messages.length == 0" class="d-flex justify-center pa-16">
+      {{ lang.views.radium.messages_no_message[lg] }}
+    </div>
+
+    <div
+      v-for="(message, i) in messages"
+      :key="i"
+      class="message-frame"
+    >
+      <WorkSimple :self="message.work" />
+
+      <v-alert
+        border="right"
+        :color="message.priority == 'important' ? 'red' : 'blue'"
+        :icon="message.priority == 'important' ? 'mdi-alert' : 'mdi-information'"
+        class="mt-3 mb-3 darken-2"
+        dark
+        prominent
+      >
+        <div class="px-3" style="white-space: pre;">
+          <big>{{ message.message }}</big>
+        </div>
+
+        <div class="text-right" style="position: relative; top: 10px;">
+          <small>{{ by_author_on_date(message.date, message.author) }}</small>
+        </div>
+      </v-alert>
+
+      <div class="text-right">
+        <CustomButton
+          :text="lang.generic.acquit[lg]"
+          :icon="'mdi-check'"
+          :color="'green'"
+          :dark="true"
+          @click="acquit_dialog = true"
+        />
+
+        <CustomDialog
+          :open="acquit_dialog"
+          :width="500"
+          :title_text="lang.generic.are_you_sure[lg]"
+          :cancel_icon="'mdi-close'"
+          :cancel_text="lang.generic.cancel[lg]"
+          :confirm_icon="'mdi-check'"
+          :confirm_text="lang.generic.acquit[lg]"
+          :confirm_color="'green'"
+          @cancel="acquit_dialog = false"
+          @confirm="acquit_message(message.id)"
+        ></CustomDialog>
+      </div>
+    </div>
+  </CustomDialog>
+
 </div>
 
 </template>
@@ -102,6 +169,8 @@
 
 import NavigationBar from '@/components/NavigationBar.vue'
 import Work from '@/views/radium/components/Work.vue'
+import WorkSimple from '@//components/WorkSimple.vue'
+import Palette from '@//components/Palette.vue'
 
 export default {
   name: 'Works',
@@ -109,6 +178,8 @@ export default {
   components: {
     NavigationBar,
     Work,
+    WorkSimple,
+    Palette,
   },
 
   props: {
@@ -127,6 +198,13 @@ export default {
       config: Object(),
       works: Array(),
       columns: Array(),
+      messages: Array(),
+      messages_loading: true,
+      messages_dialog: false,
+      acquit_dialog: false,
+      palette: false,
+      palette_color: 'white',
+      palette_mode: 'works',
     }
   },
 
@@ -145,6 +223,13 @@ export default {
     this.columns = this.get_columns()
 
     this.loading = false
+
+    this.request = await this.$http.get('messages', {
+      'app_id': this.$current_app_id,
+    })
+
+    this.messages = this.request.messages
+    this.messages_loading = false
 
     this.request = await this.$http.get('apps')
     this.circles = this.request.circles
@@ -202,6 +287,24 @@ export default {
     update_columns() {
 
     },
+
+    by_author_on_date(date, author) {
+      let txt = this.lang.generic.by_author_on_date[this.lg]
+
+      txt = txt.replace('@@@', this.$tool.format_date(date))
+      txt = txt.replace('###', author)
+
+      return txt
+    },
+
+    acquit_message(message_id) {
+      this.messages = this.messages.filter(m => m.id !== message_id)
+      this.acquit_dialog = false
+    },
+
+    palette_pick_color(color) {
+      this.palette_color = color
+    },
   },
 
   watch: {
@@ -230,6 +333,14 @@ export default {
   margin-bottom: 10px;
   border-bottom: 1px grey solid;
   padding-bottom: 10px;
+}
+
+.message-frame {
+  margin-top: 9px;
+  padding: 9px;
+  border: 1px orange solid;
+  border-radius: 5px;
+
 }
 
 </style>

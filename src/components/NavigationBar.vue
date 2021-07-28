@@ -56,8 +56,9 @@
       :height="40"
       :outlined="true"
       class="mr-1 mb-1"
-      @click="palette_dialog = true"
       :tooltip="palette_tooltip"
+      @click="$emit('toggle-palette')"
+      :color="$current_component.palette ? 'black' : ''"
     />
 
     <CustomButton
@@ -110,8 +111,10 @@
       :dark="true"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.show_messages_tooltip[lg]"
-      :badge="true"
-      :badge_content="'0'"
+      :badge="!$current_component.messages_loading"
+      :badge_content="String($current_component.messages.length)"
+      :badge_color="$current_component.messages.length == 0 ? 'blue' : 'red'"
+      @click="$emit('open-messages-dialog')"
     />
   </div>
 </div>
@@ -136,7 +139,6 @@ export default {
 
   data() {
     return {
-      palette_dialog: false,
       calculator_dialog: false,
       filter_dialog: false,
     }

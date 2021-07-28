@@ -92,7 +92,7 @@
 <script>
 
 export default {
-  name: '',
+  name: 'File',
 
   components: {
     

@@ -72,11 +72,10 @@ export default {
       document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
       document.cookie = `username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
 
-      this.$store.commit('set_logged_profile', null)
-
       setTimeout(() => {
+        this.$store.commit('set_logged_profile', null)
         this.$router.push({'path': '/login'})
-      }, 100)
+      }, 1000)
       
     },
   },

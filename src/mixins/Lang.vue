@@ -90,6 +90,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'acquit': {
+            'fr': 'Acquitter',
+            'nl': '',
+            'en': '',
+          },
           'override': {
             'fr': 'Écraser',
             'nl': '',
@@ -1219,6 +1224,31 @@ export default {
             },
             'message_preset_work_canceled': {
               'fr': 'Le chantier est annulé.',
+              'nl': '',
+              'en': '',
+            },
+            'messages_dialog_title': {
+              'fr': 'Messages concernant les chantiers de ce Radium',
+              'nl': '',
+              'en': '',
+            },
+            'messages_work_date': {
+              'fr': 'Chantier du',
+              'nl': '',
+              'en': '',
+            },
+            'messages_no_message': {
+              'fr': 'Pas de message pour le moment.',
+              'nl': '',
+              'en': '',
+            },
+            'paint_works': {
+              'fr': 'Colorer les chantiers',
+              'nl': '',
+              'en': '',
+            },
+            'paint_columns': {
+              'fr': 'Colorer les colonnes',
               'nl': '',
               'en': '',
             },
