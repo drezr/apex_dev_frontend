@@ -11,7 +11,7 @@
           color,
           $current_component.palette_color == color ? 'palette-color-selected' : ''
         ]"
-        @click="$emit('pick-color', color)"
+        @click="$current_component.palette_color = color"
       ></div>
     </div>
   </div>
@@ -19,7 +19,7 @@
   <v-select
     v-if="$current_view == 'works'"
     v-model="$current_component.palette_mode"
-    :items="color_mode"
+    :items="palette_modes"
     item-text="name"
     item-value="value"
     style="width: 400px;"
@@ -77,7 +77,7 @@ export default {
   },
 
   computed: {
-    color_mode() {
+    palette_modes() {
       return [
         {
           'name': this.lang.views.radium.paint_works[this.lg],

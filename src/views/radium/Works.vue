@@ -301,10 +301,6 @@ export default {
       this.messages = this.messages.filter(m => m.id !== message_id)
       this.acquit_dialog = false
     },
-
-    palette_pick_color(color) {
-      this.palette_color = color
-    },
   },
 
   watch: {

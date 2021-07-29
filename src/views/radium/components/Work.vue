@@ -1,7 +1,15 @@
 <template>
 
 <div class="pr-3" style="min-width: min-content;">
-<div class="work-overframe">
+  {{ $current_component.palette }}
+  {{ $current_component.palette_mode }}
+  {{ $current_component.palette_color }}
+<div
+  class="work-overframe"
+  :class="[
+    $current_component.palette && $current_component.palette_mode == 'works' ? 'cursor-fill' : '',
+  ]"
+>
   <div class="work-frame lighten-5" :class="self.color">
     <div
       class="work-expand-button"
