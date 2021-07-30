@@ -1,14 +1,12 @@
 <template>
 
 <div class="pr-3" style="min-width: min-content;">
-  {{ $current_component.palette }}
-  {{ $current_component.palette_mode }}
-  {{ $current_component.palette_color }}
 <div
   class="work-overframe"
   :class="[
-    $current_component.palette && $current_component.palette_mode == 'works' ? 'cursor-fill' : '',
+    $current_component.palette ? 'work-cursor-fill' : '',
   ]"
+  @click="set_color()"
 >
   <div class="work-frame lighten-5" :class="self.color">
     <div
@@ -461,6 +459,10 @@ export default {
           textarea.focus()
         }
       }
+
+      if (this.$current_component.palette_mode == 'columns') {
+        this.set_color(column_name)
+      }
     },
 
     value_blur(event) {
@@ -543,6 +545,18 @@ export default {
 
       this.message = ''
       this.message_selected_radiums = Array()
+    },
+
+    set_color(column) {
+      let cc = this.$current_component
+
+      if (cc.palette && cc.palette_mode == 'works') {
+        this.self.color = cc.palette_color
+      }
+
+      else if (cc.palette && cc.palette_mode == 'columns') {
+        this.self[column + '_bg_color'] = cc.palette_color
+      }
     },
   },
 
@@ -707,6 +721,10 @@ export default {
   white-space: pre;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
+}
+
+.work-cursor-fill * {
+  cursor: url('data:image/x-icon;base64,AAACAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAAR0dHAP///wAiIiIAMjIyABYWFgA9PT0AODg4AE9PTwBfX18AKioqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAAKMAAAAAAAAAAAAAAAAAAAoiMAAAAAAAAAAAAAAAAAACIiYAAAAAAAAAAAAAYAAAIiIiMAAAAAAAAAAAADAAAiIiIiAAAAAAAAAAAAUFACIiIiIiQAAAAAAAAAADAKIiIiIiIgAAAAAAAAAAAGMiImIiIiEAAAAAAAAAAAUAIiApIiJgAAAAAAAAAAAApgIiAiIgAAAAAAAAAAAAAAAKIoIiAAAAAAAAAAAAAAAABwICIAAAAAAAAAAAAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAIAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAD/////////////////////////////////////////////////////////////////////////////////////35///58P//8eB///HAP//xgB//8QAP//AAD//wAB//8AA///gAf//8AP///wD////C////5v///+7////x///w=='), auto !important;
 }
 
 </style>

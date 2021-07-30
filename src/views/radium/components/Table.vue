@@ -1,7 +1,12 @@
 <template>
 
 <v-card class="mx-3 mt-3">
-  <v-toolbar :color="parent.color + ' darken-4'" dark flat dense>
+  <v-toolbar
+    :color="parent.color + ' darken-4'"
+    :dark="parent.color != 'white'"
+    flat
+    dense
+  >
     <v-toolbar-title class="d-flex">
       <v-icon class="mr-3" large>
         mdi-account-group
@@ -16,7 +21,7 @@
     v-if="parent.shifts.length > 0"
     v-model="selected_shift"
     :background-color="parent.color + ' darken-3'"
-    dark
+    :dark="parent.color != 'white'"
   >
     <v-tab v-for="(shift, i) in parent.shifts" :key="i">
       <span v-if="shift.date">{{ $tool.format_date(shift.date) }}</span>

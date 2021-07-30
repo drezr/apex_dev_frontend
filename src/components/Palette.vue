@@ -12,7 +12,9 @@
           $current_component.palette_color == color ? 'palette-color-selected' : ''
         ]"
         @click="$current_component.palette_color = color"
-      ></div>
+      >
+        <v-icon v-if="!color">mdi-invert-colors-off</v-icon>
+      </div>
     </div>
   </div>
 
@@ -50,6 +52,7 @@ export default {
   data() {
     return {
       colors: [
+        'white',
         'red',
         'pink',
         'purple',
@@ -67,7 +70,7 @@ export default {
         'deep-orange',
         'brown',
         'blue-grey',
-        'white',
+        null,
       ],
     }
   },
@@ -125,6 +128,9 @@ export default {
   border-radius: 20px;
   box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .palette-color:hover {
