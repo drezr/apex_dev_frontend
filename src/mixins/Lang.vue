@@ -1252,6 +1252,41 @@ export default {
               'nl': '',
               'en': '',
             },
+            'limit_line': {
+              'fr': 'Ligne',
+              'nl': '',
+              'en': '',
+            },
+            'limit_station': {
+              'fr': 'Gare',
+              'nl': '',
+              'en': '',
+            },
+            'limit_lane': {
+              'fr': 'Voie',
+              'nl': '',
+              'en': '',
+            },
+            'limit_signal': {
+              'fr': 'Signal',
+              'nl': '',
+              'en': '',
+            },
+            'limit_pk': {
+              'fr': 'PK',
+              'nl': '',
+              'en': '',
+            },
+            'limit_from': {
+              'fr': 'De',
+              'nl': '',
+              'en': '',
+            },
+            'limit_to': {
+              'fr': 'À',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },

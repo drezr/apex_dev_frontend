@@ -97,6 +97,63 @@
           </div>
         </div>
 
+        <div
+          v-if="column.name == 'limits'"
+          class="work-limits lighten-3"
+          :class="self.color"
+        >
+          <div class="d-flex">
+            <div class="work-limit-field" style="width: calc(50% - 1px);">
+              <div :class="self.color" class="lighten-5">
+                <b>{{ lang.views.radium.limit_from[lg] }}</b>
+              </div>
+            </div>
+            <div class="work-limit-field" style="width: calc(50% + 1px);">
+              <div :class="self.color" class="lighten-5">
+                <b>{{ lang.views.radium.limit_to[lg] }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex">
+            <div
+              v-for="(data, field) in limit_fields"
+              :key="field"
+              :style="`width: ${data.width};`"
+              class="work-limit-field"
+            >
+              <div :class="self.color" class="lighten-5">
+                <b>{{ data.name }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="self.shifts.length > 0">
+            <div
+              v-for="(limit, i) in self.limits"
+              :key="i"
+            >
+              <div class="work-limit">
+                <div
+                  v-for="(data, field) in limit_fields"
+                  :key="field"
+                  :style="`width: ${data.width};`"
+                  class="work-limit-field"
+                >
+                  <v-text-field
+                    v-model="limit[field]"
+                    :disabled="!edit_mode"
+                    hide-details
+                    :background-color="edit_mode ? 'white' : self.color + ' lighten-4'"
+                    :style="`font-size: ${column.textsize}px;`"
+                    class="pa-0 ma-0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -430,6 +487,51 @@ export default {
     is_palette_active() {
       return false
     },
+
+    limit_fields() {
+      return {
+        'from_line': {
+          'name' : this.lang.views.radium.limit_line[this.lg],
+          'width': '6%',
+        },
+        'from_station': {
+          'name' : this.lang.views.radium.limit_station[this.lg],
+          'width': '20%',
+        },
+        'from_lane': {
+          'name' : this.lang.views.radium.limit_lane[this.lg],
+          'width': '5%',
+        },
+        'from_signal': {
+          'name' : this.lang.views.radium.limit_signal[this.lg],
+          'width': '10%',
+        },
+        'from_pk': {
+          'name' : this.lang.views.radium.limit_pk[this.lg],
+          'width': '9%',
+        },
+        'to_line': {
+          'name' : this.lang.views.radium.limit_line[this.lg],
+          'width': '6%',
+        },
+        'to_station': {
+          'name' : this.lang.views.radium.limit_station[this.lg],
+          'width': '20%',
+        },
+        'to_lane': {
+          'name' : this.lang.views.radium.limit_lane[this.lg],
+          'width': '5%',
+        },
+        'to_signal': {
+          'name' : this.lang.views.radium.limit_signal[this.lg],
+          'width': '10%',
+        },
+        'to_pk': {
+          'name' : this.lang.views.radium.limit_pk[this.lg],
+          'width': '9%',
+        },
+      }
+    }
   },
 
   methods: {
@@ -592,6 +694,19 @@ export default {
   border: none !important;
 }
 
+.work-limit .v-input__slot:before {
+  border: 0px black solid !important;
+  border-width: 0px !important;
+}
+
+.work-limit input:disabled {
+  color: black !important;
+}
+
+.work-limit input {
+  text-align: center;
+}
+
 </style>
 
 
@@ -725,6 +840,25 @@ export default {
 
 .work-cursor-fill * {
   cursor: url('data:image/x-icon;base64,AAACAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAAR0dHAP///wAiIiIAMjIyABYWFgA9PT0AODg4AE9PTwBfX18AKioqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAAKMAAAAAAAAAAAAAAAAAAAoiMAAAAAAAAAAAAAAAAAACIiYAAAAAAAAAAAAAYAAAIiIiMAAAAAAAAAAAADAAAiIiIiAAAAAAAAAAAAUFACIiIiIiQAAAAAAAAAADAKIiIiIiIgAAAAAAAAAAAGMiImIiIiEAAAAAAAAAAAUAIiApIiJgAAAAAAAAAAAApgIiAiIgAAAAAAAAAAAAAAAKIoIiAAAAAAAAAAAAAAAABwICIAAAAAAAAAAAAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAIAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAD/////////////////////////////////////////////////////////////////////////////////////35///58P//8eB///HAP//xgB//8QAP//AAD//wAB//8AA///gAf//8AP///wD////C////5v///+7////x///w=='), auto !important;
+}
+
+.work-limits {
+  width: 100%;
+  height: 100%;
+}
+
+.work-limit {
+  display: flex;
+}
+
+.work-limit-field {
+  border-bottom: 1px grey solid;
+  text-align: center;
+  font-size: 12px;
+}
+
+.work-limit-field:not(:last-child) {
+  border-right: 1px grey solid;
 }
 
 </style>

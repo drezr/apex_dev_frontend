@@ -27,7 +27,7 @@
             v-for="(teammate, i) in $get_sorted_teammates(part.teammates)"
             :key="i" class="mr-1"
           >
-            {{ teammate }}{{ i == part.teammates.length - 2 ? ',' : '' }}
+            {{ teammate }}{{ i == part.teammates.length - 1 ? '' : ',' }}
           </div>
         </div>
         <div class="tooltip-child-frame">
@@ -60,7 +60,7 @@
             v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
             :key="i" class="mr-1"
           >
-            {{ teammate }}{{ i == child.teammates.length - 2 ? ',' : '' }}
+            {{ teammate }}{{ i == child.teammates.length - 1 ? '' : ',' }}
           </div>
         </div>
 
