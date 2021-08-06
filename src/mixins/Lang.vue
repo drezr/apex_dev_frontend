@@ -947,6 +947,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'column_title_files': {
+              'fr': 'Fichiers',
+              'nl': '',
+              'en': '',
+            },
             'column_title_ilts': {
               'fr': 'ILT',
               'nl': '',
@@ -1252,37 +1257,37 @@ export default {
               'nl': '',
               'en': '',
             },
-            'limit_line': {
+            'line': {
               'fr': 'Ligne',
               'nl': '',
               'en': '',
             },
-            'limit_station': {
+            'station': {
               'fr': 'Gare',
               'nl': '',
               'en': '',
             },
-            'limit_lane': {
+            'lane': {
               'fr': 'Voie',
               'nl': '',
               'en': '',
             },
-            'limit_signal': {
+            'signal': {
               'fr': 'Signal',
               'nl': '',
               'en': '',
             },
-            'limit_pk': {
+            'pk': {
               'fr': 'PK',
               'nl': '',
               'en': '',
             },
-            'limit_from': {
+            'from': {
               'fr': 'De',
               'nl': '',
               'en': '',
             },
-            'limit_to': {
+            'to': {
               'fr': 'À',
               'nl': '',
               'en': '',

@@ -10,7 +10,7 @@
   <v-progress-circular
     :size="size"
     :width="width"
-    color="blue"
+    :color="color"
     indeterminate
     :style="`margin-top: ${mt}px; margin-bottom: ${mb}px;`"
   ></v-progress-circular>
@@ -31,6 +31,10 @@ export default {
   props: {
     size: Number,
     width: Number,
+    color: {
+      type: String,
+      default: 'blue',
+    },
     mt: {
       type: Number,
       default: 0,

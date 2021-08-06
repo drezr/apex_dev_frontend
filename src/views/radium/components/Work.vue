@@ -95,22 +95,32 @@
               :parent="self"
             />
           </div>
+
+          <div
+            v-if="edit_mode"
+            class="work-add-button"
+            :class="add_shift_loading ? 'work-add-button-disabled grey' : 'green'"
+            @click="add_shift"
+          >
+            <v-icon color="white" v-if="!add_shift_loading">mdi-plus</v-icon>
+            <Loader :size="19" :width="3" :color="'white'" v-else />
+          </div>
         </div>
 
         <div
           v-if="column.name == 'limits'"
-          class="work-limits lighten-3"
+          class="work-rows lighten-3"
           :class="self.color"
         >
           <div class="d-flex">
-            <div class="work-limit-field" style="width: calc(50% - 1px);">
+            <div class="work-row-field" style="width: calc(50% - 1px);">
               <div :class="self.color" class="lighten-5">
-                <b>{{ lang.views.radium.limit_from[lg] }}</b>
+                <b>{{ lang.views.radium.from[lg] }}</b>
               </div>
             </div>
-            <div class="work-limit-field" style="width: calc(50% + 1px);">
+            <div class="work-row-field" style="width: calc(50% + 1px);">
               <div :class="self.color" class="lighten-5">
-                <b>{{ lang.views.radium.limit_to[lg] }}</b>
+                <b>{{ lang.views.radium.to[lg] }}</b>
               </div>
             </div>
           </div>
@@ -120,7 +130,7 @@
               v-for="(data, field) in limit_fields"
               :key="field"
               :style="`width: ${data.width};`"
-              class="work-limit-field"
+              class="work-row-field"
             >
               <div :class="self.color" class="lighten-5">
                 <b>{{ data.name }}</b>
@@ -128,17 +138,17 @@
             </div>
           </div>
 
-          <div v-if="self.shifts.length > 0">
+          <div v-if="self.limits.length > 0">
             <div
               v-for="(limit, i) in self.limits"
               :key="i"
             >
-              <div class="work-limit">
+              <div class="work-row">
                 <div
                   v-for="(data, field) in limit_fields"
                   :key="field"
                   :style="`width: ${data.width};`"
-                  class="work-limit-field"
+                  class="work-row-field"
                 >
                   <v-text-field
                     v-model="limit[field]"
@@ -152,8 +162,157 @@
               </div>
             </div>
           </div>
+
+          <div
+            v-if="edit_mode"
+            class="work-add-button"
+            :class="add_limit_loading ? 'work-add-button-disabled grey' : 'green'"
+            @click="add_limit"
+          >
+            <v-icon color="white" v-if="!add_limit_loading">mdi-plus</v-icon>
+            <Loader :size="19" :width="3" :color="'white'" v-else />
+          </div>
         </div>
 
+        <div
+          v-if="column.name == 's460s'"
+          class="work-rows lighten-3"
+          :class="self.color"
+        >
+          <div class="d-flex">
+            <div
+              v-for="(data, field) in s460_fields"
+              :key="field"
+              :style="`width: ${data.width};`"
+              class="work-row-field"
+            >
+              <div :class="self.color" class="lighten-5">
+                <b>{{ data.name }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="self.s460s.length > 0">
+            <div
+              v-for="(s460, i) in self.s460s"
+              :key="i"
+            >
+              <div class="work-row">
+                <div
+                  v-for="(data, field) in s460_fields"
+                  :key="field"
+                  :style="`width: ${data.width};`"
+                  class="work-row-field"
+                >
+                  <v-text-field
+                    v-model="s460[field]"
+                    :disabled="!edit_mode"
+                    hide-details
+                    :background-color="edit_mode ? 'white' : self.color + ' lighten-4'"
+                    :style="`font-size: ${column.textsize}px;`"
+                    class="pa-0 ma-0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="edit_mode"
+            class="work-add-button"
+            :class="add_s460_loading ? 'work-add-button-disabled grey' : 'green'"
+            @click="add_s460"
+          >
+            <v-icon color="white" v-if="!add_s460_loading">mdi-plus</v-icon>
+            <Loader :size="19" :width="3" :color="'white'" v-else />
+          </div>
+        </div>
+
+        <div
+          v-if="column.name == 'files'"
+          class="work-rows lighten-3"
+          :class="self.color"
+          style="overflow: hidden;"
+        >
+          <div class="d-flex">
+            <div
+              v-for="(data, field) in file_fields"
+              :key="field"
+              :style="`width: ${data.width};`"
+              class="work-row-field"
+            >
+              <div :class="self.color" class="lighten-5">
+                <b>{{ data.name }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="self.files.length > 0"
+            class="d-flex"
+            style="height: 100%;"
+          >
+            <div
+              v-for="(data, field) in file_fields"
+              :key="field + $tool.gen_uid()"
+              :style="`width: ${data.width};`"
+              class="work-subcolumn"
+              
+              @click="value_click($event, field + 's')"
+            >
+              <div
+                class="lighten-3"
+                :class="self[field + 's_bg_color']"
+                style="height: 100%;"
+              >
+                <div
+                  v-for="(file, i) in self.files.filter(f => f.kind == field)"
+                  :key="i"
+                  class="d-flex justify-center"
+                >
+                  <div
+                    class="pa-2 ma-1 rounded text-center"
+                    style="background-color: rgba(0, 0, 0, 0.1);"
+                  >
+                    <CustomButton
+                      :icon="'mdi-file-pdf'"
+                      :tooltip="file.name + '.' + file.extension"
+                    />
+
+                    <div
+                      v-if="edit_mode"
+                      class="d-flex mt-2 justify-space-beetween"
+                    >
+                      <CustomButton
+                        :icon="'mdi-refresh'"
+                        :tooltip="lang.generic.replace[lg]"
+                        :small_fab="true"
+                        :color="'white'"
+                      />
+
+                      <CustomButton
+                        :icon="'mdi-delete'"
+                        :tooltip="lang.generic.delete[lg]"
+                        :small_fab="true"
+                        :color="'white'"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  v-if="edit_mode"
+                  class="work-add-button"
+                  :class="add_file_loading ? 'work-add-button-disabled grey' : 'green'"
+                  @click="add_file(field)"
+                >
+                  <v-icon color="white" v-if="!add_file_loading">mdi-plus</v-icon>
+                  <Loader :size="19" :width="3" :color="'white'" v-else />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -440,6 +599,10 @@ export default {
       message_selected_radiums: Array(),
       message_preset: 0,
       remove_dialog: false,
+      add_shift_loading: false,
+      add_limit_loading: false,
+      add_s460_loading: false,
+      add_file_loading: false,
     }
   },
 
@@ -488,50 +651,88 @@ export default {
       return false
     },
 
+    file_fields() {
+      return {
+        'ilt': {
+          'name' : this.lang.views.radium.column_title_ilts[this.lg],
+          'width': '33%',
+        },
+        'bnx': {
+          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
+          'width': '33%',
+        },
+        'fmht': {
+          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
+          'width': '34%',
+        },
+      }
+    },
+
     limit_fields() {
       return {
         'from_line': {
-          'name' : this.lang.views.radium.limit_line[this.lg],
+          'name' : this.lang.views.radium.line[this.lg],
           'width': '6%',
         },
         'from_station': {
-          'name' : this.lang.views.radium.limit_station[this.lg],
+          'name' : this.lang.views.radium.station[this.lg],
           'width': '20%',
         },
         'from_lane': {
-          'name' : this.lang.views.radium.limit_lane[this.lg],
+          'name' : this.lang.views.radium.lane[this.lg],
           'width': '5%',
         },
         'from_signal': {
-          'name' : this.lang.views.radium.limit_signal[this.lg],
+          'name' : this.lang.views.radium.signal[this.lg],
           'width': '10%',
         },
         'from_pk': {
-          'name' : this.lang.views.radium.limit_pk[this.lg],
+          'name' : this.lang.views.radium.pk[this.lg],
           'width': '9%',
         },
         'to_line': {
-          'name' : this.lang.views.radium.limit_line[this.lg],
+          'name' : this.lang.views.radium.line[this.lg],
           'width': '6%',
         },
         'to_station': {
-          'name' : this.lang.views.radium.limit_station[this.lg],
+          'name' : this.lang.views.radium.station[this.lg],
           'width': '20%',
         },
         'to_lane': {
-          'name' : this.lang.views.radium.limit_lane[this.lg],
+          'name' : this.lang.views.radium.lane[this.lg],
           'width': '5%',
         },
         'to_signal': {
-          'name' : this.lang.views.radium.limit_signal[this.lg],
+          'name' : this.lang.views.radium.signal[this.lg],
           'width': '10%',
         },
         'to_pk': {
-          'name' : this.lang.views.radium.limit_pk[this.lg],
+          'name' : this.lang.views.radium.pk[this.lg],
           'width': '9%',
         },
       }
-    }
+    },
+
+    s460_fields() {
+      return {
+        'line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '15%',
+        },
+        'lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '15%',
+        },
+        'start': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '35%',
+        },
+        'end': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '35%',
+        },
+      }
+    },
   },
 
   methods: {
@@ -554,11 +755,14 @@ export default {
 
       if (this.edit_mode) {
         let content = event.target.closest('.work-column-value')
-        let textarea = content.getElementsByTagName('textarea')[0]
 
-        if (textarea) {
-          content.classList.add('work-column-value-focused')
-          textarea.focus()
+        if (content) {
+          let textarea = content.getElementsByTagName('textarea')[0]
+
+          if (textarea) {
+            content.classList.add('work-column-value-focused')
+            textarea.focus()
+          }
         }
       }
 
@@ -660,6 +864,39 @@ export default {
         this.self[column + '_bg_color'] = cc.palette_color
       }
     },
+
+    add_shift() {
+      this.add_shift_loading = true
+
+      setTimeout(() => {
+        this.add_shift_loading = false
+      }, 1000)
+    },
+
+    add_limit() {
+      this.add_limit_loading = true
+
+      setTimeout(() => {
+        this.add_limit_loading = false
+      }, 1000)
+    },
+
+    add_s460() {
+      this.add_s460_loading = true
+
+      setTimeout(() => {
+        this.add_s460_loading = false
+      }, 1000)
+    },
+
+    add_file(kind) {
+      this.add_file_loading = true
+
+      setTimeout(() => {
+        console.log(kind)
+        this.add_file_loading = false
+      }, 1000)
+    },
   },
 
   watch: {
@@ -694,16 +931,16 @@ export default {
   border: none !important;
 }
 
-.work-limit .v-input__slot:before {
+.work-row .v-input__slot:before {
   border: 0px black solid !important;
   border-width: 0px !important;
 }
 
-.work-limit input:disabled {
+.work-row input:disabled {
   color: black !important;
 }
 
-.work-limit input {
+.work-row input {
   text-align: center;
 }
 
@@ -842,22 +1079,47 @@ export default {
   cursor: url('data:image/x-icon;base64,AAACAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAAR0dHAP///wAiIiIAMjIyABYWFgA9PT0AODg4AE9PTwBfX18AKioqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAAKMAAAAAAAAAAAAAAAAAAAoiMAAAAAAAAAAAAAAAAAACIiYAAAAAAAAAAAAAYAAAIiIiMAAAAAAAAAAAADAAAiIiIiAAAAAAAAAAAAUFACIiIiIiQAAAAAAAAAADAKIiIiIiIgAAAAAAAAAAAGMiImIiIiEAAAAAAAAAAAUAIiApIiJgAAAAAAAAAAAApgIiAiIgAAAAAAAAAAAAAAAKIoIiAAAAAAAAAAAAAAAABwICIAAAAAAAAAAAAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAIAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAD/////////////////////////////////////////////////////////////////////////////////////35///58P//8eB///HAP//xgB//8QAP//AAD//wAB//8AA///gAf//8AP///wD////C////5v///+7////x///w=='), auto !important;
 }
 
-.work-limits {
+.work-rows {
   width: 100%;
   height: 100%;
 }
 
-.work-limit {
+.work-row {
   display: flex;
 }
 
-.work-limit-field {
+.work-row-field {
   border-bottom: 1px grey solid;
   text-align: center;
   font-size: 12px;
 }
 
-.work-limit-field:not(:last-child) {
+.work-row-field:not(:last-child) {
+  border-right: 1px grey solid;
+}
+
+.work-add-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  cursor: pointer;
+}
+
+.work-add-button:hover {
+  filter: brightness(1.1);
+}
+
+.work-add-button-disabled {
+  cursor: default !important;
+}
+
+.work-add-button-disabled:hover {
+  filter: brightness(1) !important;
+}
+
+.work-subcolumn:not(:last-child) {
   border-right: 1px grey solid;
 }
 
