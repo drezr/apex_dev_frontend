@@ -71,7 +71,7 @@
           :small_fab="true"
           :tooltip="lang.generic.log[lg]"
           :style="`left: ${column.width - 32}px;`"
-          @click="open_log_dialog(column.name)"
+          @click.native.stop.prevent="open_log_dialog(column.name)"
         />
 
         <div v-if="column.name == 'shifts'" class="work-shifts">
@@ -230,9 +230,8 @@
 
         <div
           v-if="column.name == 'files'"
-          class="work-rows lighten-3"
+          class="work-rows lighten-3 d-flex flex-column"
           :class="self.color"
-          style="overflow: hidden;"
         >
           <div class="d-flex">
             <div
@@ -249,53 +248,52 @@
 
           <div
             v-if="self.files.length > 0"
-            class="d-flex"
-            style="height: 100%;"
+            class="d-flex flex-grow-1"
           >
             <div
               v-for="(data, field) in file_fields"
               :key="field + $tool.gen_uid()"
               :style="`width: ${data.width};`"
               class="work-subcolumn"
-              
               @click="value_click($event, field + 's')"
             >
               <div
-                class="lighten-3"
+                class="lighten-3 d-flex flex-column"
                 :class="self[field + 's_bg_color']"
                 style="height: 100%;"
               >
-                <div
-                  v-for="(file, i) in self.files.filter(f => f.kind == field)"
-                  :key="i"
-                  class="d-flex justify-center"
-                >
+                <div class="d-flex flex-column justify-center align-center flex-grow-1">
                   <div
-                    class="pa-2 ma-1 rounded text-center"
-                    style="background-color: rgba(0, 0, 0, 0.1);"
+                    v-for="(file, i) in self.files.filter(f => f.kind == field)"
+                    :key="i"
                   >
-                    <CustomButton
-                      :icon="'mdi-file-pdf'"
-                      :tooltip="file.name + '.' + file.extension"
-                    />
-
                     <div
-                      v-if="edit_mode"
-                      class="d-flex mt-2 justify-space-beetween"
+                      class="pa-2 ma-1 rounded text-center"
+                      style="background-color: rgba(0, 0, 0, 0.1);"
                     >
                       <CustomButton
-                        :icon="'mdi-refresh'"
-                        :tooltip="lang.generic.replace[lg]"
-                        :small_fab="true"
-                        :color="'white'"
+                        :icon="'mdi-file-pdf'"
+                        :tooltip="file.name + '.' + file.extension"
                       />
 
-                      <CustomButton
-                        :icon="'mdi-delete'"
-                        :tooltip="lang.generic.delete[lg]"
-                        :small_fab="true"
-                        :color="'white'"
-                      />
+                      <div
+                        v-if="edit_mode"
+                        class="d-flex mt-2 justify-space-beetween"
+                      >
+                        <CustomButton
+                          :icon="'mdi-refresh'"
+                          :tooltip="lang.generic.replace[lg]"
+                          :small_fab="true"
+                          :color="'white'"
+                        />
+
+                        <CustomButton
+                          :icon="'mdi-delete'"
+                          :tooltip="lang.generic.delete[lg]"
+                          :small_fab="true"
+                          :color="'white'"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -739,7 +737,7 @@ export default {
     is_clickable(column_name) {
       let clickables = ['colt', ]
 
-      if (clickables.includes(column_name)) {
+      if (clickables.includes(column_name) && !this.$current_component.palette) {
         return true
       }
 
