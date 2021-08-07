@@ -21,7 +21,7 @@
       v-for="(column, i) in $parent.$parent.columns.filter(c => c.visible)"
       :key="i"
       class="work-column"
-      :style="`min-width: ${column.width}px; max-width: ${column.width}px;`"
+      :style="`min-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 50 : 0)}px; max-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 50 : 0)}px;`"
     >
       <div class="work-column-title">
         <div
@@ -74,9 +74,13 @@
           @click.native.stop.prevent="open_log_dialog(column.name)"
         />
 
-        <div v-if="column.name == 'shifts'" class="work-shifts">
+        <div
+          v-if="column.name == 'shifts'"
+          class="work-shifts lighten-3"
+          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
+        >
           <div v-if="self.shifts.length > 0">
-            <div class="d-flex lighten-4" :class="self.color">
+            <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
               <div class="work-column-subtitle" style="width: 30%;">
                 {{ lang.generic.week[lg] }}
               </div>
@@ -86,14 +90,28 @@
               <div class="work-column-subtitle" style="width: 40%;">
                 {{ lang.generic.schedule[lg] }}
               </div>
+              <div class="work-delete-spacer" v-if="edit_mode"></div>
             </div>
 
-            <Shift
+            <div
               v-for="(shift, i) in self.shifts"
               :key="i"
-              :self="shift"
-              :parent="self"
-            />
+              class="d-flex"
+            >
+              <Shift
+                :self="shift"
+                :parent="self"
+                class="flex-grow-1"
+              />
+
+              <div
+                class="work-row-delete red"
+                v-if="edit_mode"
+                @click="open_remove_child_dialog(shift, 'shifts')"
+              >
+                <v-icon color="white">mdi-delete</v-icon>
+              </div>
+            </div>
           </div>
 
           <div
@@ -110,32 +128,31 @@
         <div
           v-if="column.name == 'limits'"
           class="work-rows lighten-3"
-          :class="self.color"
+          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
         >
-          <div class="d-flex">
-            <div class="work-row-field" style="width: calc(50% - 1px);">
-              <div :class="self.color" class="lighten-5">
-                <b>{{ lang.views.radium.from[lg] }}</b>
-              </div>
+          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
+            <div class="work-column-subtitle" style="width: calc(50% - 1px);">
+              {{ lang.views.radium.from[lg] }}
             </div>
-            <div class="work-row-field" style="width: calc(50% + 1px);">
-              <div :class="self.color" class="lighten-5">
-                <b>{{ lang.views.radium.to[lg] }}</b>
-              </div>
+
+            <div class="work-column-subtitle" style="width: calc(50% + 1px);">
+              {{ lang.views.radium.to[lg] }}
             </div>
+
+            <div class="work-delete-spacer" v-if="edit_mode"></div>
           </div>
 
-          <div class="d-flex">
+          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
             <div
+              class="work-column-subtitle"
               v-for="(data, field) in limit_fields"
               :key="field"
               :style="`width: ${data.width};`"
-              class="work-row-field"
             >
-              <div :class="self.color" class="lighten-5">
-                <b>{{ data.name }}</b>
-              </div>
+              {{ data.name }}
             </div>
+
+            <div class="work-delete-spacer" v-if="edit_mode"></div>
           </div>
 
           <div v-if="self.limits.length > 0">
@@ -154,10 +171,18 @@
                     v-model="limit[field]"
                     :disabled="!edit_mode"
                     hide-details
-                    :background-color="edit_mode ? 'white' : self.color + ' lighten-4'"
+                    :background-color="edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color) + ' lighten-4'"
                     :style="`font-size: ${column.textsize}px;`"
                     class="pa-0 ma-0"
                   />
+                </div>
+
+                <div
+                  class="work-row-delete red"
+                  v-if="edit_mode"
+                  @click="open_remove_child_dialog(limit, 'limits')"
+                >
+                  <v-icon color="white">mdi-delete</v-icon>
                 </div>
               </div>
             </div>
@@ -177,19 +202,19 @@
         <div
           v-if="column.name == 's460s'"
           class="work-rows lighten-3"
-          :class="self.color"
+          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
         >
-          <div class="d-flex">
+          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
             <div
+              class="work-column-subtitle"
               v-for="(data, field) in s460_fields"
               :key="field"
               :style="`width: ${data.width};`"
-              class="work-row-field"
             >
-              <div :class="self.color" class="lighten-5">
-                <b>{{ data.name }}</b>
-              </div>
+              {{ data.name }}
             </div>
+
+            <div class="work-delete-spacer" v-if="edit_mode"></div>
           </div>
 
           <div v-if="self.s460s.length > 0">
@@ -208,10 +233,18 @@
                     v-model="s460[field]"
                     :disabled="!edit_mode"
                     hide-details
-                    :background-color="edit_mode ? 'white' : self.color + ' lighten-4'"
+                    :background-color="edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color) + ' lighten-4'"
                     :style="`font-size: ${column.textsize}px;`"
                     class="pa-0 ma-0"
                   />
+                </div>
+
+                <div
+                  class="work-row-delete red"
+                  v-if="edit_mode"
+                  @click="open_remove_child_dialog(s460, 's460s')"
+                >
+                  <v-icon color="white">mdi-delete</v-icon>
                 </div>
               </div>
             </div>
@@ -560,6 +593,19 @@
     @cancel="remove_dialog = false"
     @confirm="remove"
   ></CustomDialog>
+
+  <CustomDialog
+    :open="remove_child_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="remove_child_dialog = false"
+    @confirm="remove_child"
+  ></CustomDialog>
 </div>
 </div>
 
@@ -601,6 +647,9 @@ export default {
       add_limit_loading: false,
       add_s460_loading: false,
       add_file_loading: false,
+      remove_child_dialog: false,
+      remove_child_type: null,
+      remove_child_item: null,
     }
   },
 
@@ -895,6 +944,17 @@ export default {
         this.add_file_loading = false
       }, 1000)
     },
+
+    open_remove_child_dialog(child, type) {
+      this.remove_child_type = type
+      this.remove_child_item = child
+      this.remove_child_dialog = true
+    },
+
+    remove_child() {
+      this.self[this.remove_child_type] = this.self[this.remove_child_type].filter(c => c.id !== this.remove_child_item.id)
+      this.remove_child_dialog = false
+    },
   },
 
   watch: {
@@ -983,14 +1043,15 @@ export default {
   font-weight: bold;
   border-bottom: 1px grey solid;
   position: relative;
-  height: 15px;
+  height: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
-.work-column-subtitle:not(:first-child) {
-  border-left: 1px grey solid;
+.work-column-subtitle:not(:last-child) {
+  border-right: 1px grey solid;
 }
 
 .work-column-value {
@@ -1119,6 +1180,28 @@ export default {
 
 .work-subcolumn:not(:last-child) {
   border-right: 1px grey solid;
+}
+
+.work-row-delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  max-width: 50px;
+  min-width: 50px;
+  width: 50px;
+}
+
+.work-row-delete:hover {
+  filter:  brightness(1.1);
+}
+
+.work-delete-spacer {
+  max-width: 50px;
+  min-width: 50px;
+  width: 50px;
+  height: 16px;
+  border-bottom: 1px grey solid;
 }
 
 </style>

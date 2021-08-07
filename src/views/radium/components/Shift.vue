@@ -11,14 +11,20 @@
     </div>
   </div>
 
-  <div class="shift-cell">
-    <div class="text-center" style="line-height: 16px;">
+  <div class="shift-cell" :class="edit_mode ? 'shift-background-white' : ''">
+    <div
+      class="text-center"
+      style="line-height: 16px;"
+    >
       <small><b>{{ day_data['day_name'] }}</b><br></small>
       {{ day_data['day_number'] }}/{{ day_data['month'] }}
     </div>
   </div>
 
-  <div class="shift-cell flex-column justify-space-between">
+  <div
+    class="shift-cell flex-column justify-space-between"
+    :class="edit_mode ? 'shift-background-white' : ''"
+  >
     <div class="d-flex" style="width: 100%;">
       <div
         v-for="(color, i) in day_data['shift_colors']"
@@ -127,6 +133,10 @@ export default {
         'shift_colors': shift_colors,
       }
     },
+
+    edit_mode() {
+      return this.$parent.edit_mode
+    },
   },
 
   methods: {
@@ -167,6 +177,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 30%;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .shift-cell:last-child {
@@ -180,6 +191,10 @@ export default {
 .shift-date-color {
   height: 10px;
   width: 50%;
+}
+
+.shift-background-white {
+  background-color: white;
 }
 
 </style>
