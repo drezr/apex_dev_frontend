@@ -41,7 +41,7 @@
       <div
         class="work-column-value"
         :class="[
-          edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color),
+          edit_mode ? 'white' : (get_column_color(column.name)),
           edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
           is_clickable(column.name) && !edit_mode ? 'work-column-value-clickable' : '',
           is_palette_active && !edit_mode ? 'work-column-value-painter' : '',
@@ -51,6 +51,15 @@
         @click="value_click($event, column.name, self[column.name])"
         @blur.capture="value_blur($event)"
       >
+
+
+
+
+        <!-- ############## Textarea ############## -->
+
+
+
+
         <v-textarea
           v-if="!Array.isArray(self[column.name]) && column.name in self"
           v-model="self[column.name]"
@@ -74,13 +83,21 @@
           @click.native.stop.prevent="open_log_dialog(column.name)"
         />
 
+
+
+
+        <!-- ############## Shifts ############## -->
+
+
+
+
         <div
           v-if="column.name == 'shifts'"
           class="work-shifts lighten-3"
-          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
+          :class="get_column_color(column.name)"
         >
           <div v-if="self.shifts.length > 0">
-            <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
+            <div class="d-flex lighten-4" :class="get_column_color(column.name)">
               <div class="work-column-subtitle" style="width: 30%;">
                 {{ lang.generic.week[lg] }}
               </div>
@@ -101,6 +118,7 @@
               <Shift
                 :self="shift"
                 :parent="self"
+                :column="column"
                 class="flex-grow-1"
               />
 
@@ -125,12 +143,20 @@
           </div>
         </div>
 
+
+
+
+        <!-- ############## Limits ############## -->
+
+
+
+
         <div
           v-if="column.name == 'limits'"
           class="work-rows lighten-3"
-          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
+          :class="get_column_color(column.name)"
         >
-          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
+          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
             <div class="work-column-subtitle" style="width: calc(50% - 1px);">
               {{ lang.views.radium.from[lg] }}
             </div>
@@ -142,7 +168,7 @@
             <div class="work-delete-spacer" v-if="edit_mode"></div>
           </div>
 
-          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
+          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
             <div
               class="work-column-subtitle"
               v-for="(data, field) in limit_fields"
@@ -171,7 +197,7 @@
                     v-model="limit[field]"
                     :disabled="!edit_mode"
                     hide-details
-                    :background-color="edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color) + ' lighten-4'"
+                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
                     :style="`font-size: ${column.textsize}px;`"
                     class="pa-0 ma-0"
                   />
@@ -199,12 +225,20 @@
           </div>
         </div>
 
+
+
+
+        <!-- ############## S460s ############## -->
+
+
+
+
         <div
           v-if="column.name == 's460s'"
           class="work-rows lighten-3"
-          :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color"
+          :class="get_column_color(column.name)"
         >
-          <div class="d-flex lighten-4" :class="self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color">
+          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
             <div
               class="work-column-subtitle"
               v-for="(data, field) in s460_fields"
@@ -233,7 +267,7 @@
                     v-model="s460[field]"
                     :disabled="!edit_mode"
                     hide-details
-                    :background-color="edit_mode ? 'white' : (self[column.name + '_bg_color'] ? self[column.name + '_bg_color'] : self.color) + ' lighten-4'"
+                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
                     :style="`font-size: ${column.textsize}px;`"
                     class="pa-0 ma-0"
                   />
@@ -261,6 +295,14 @@
           </div>
         </div>
 
+
+
+
+        <!-- ############## Files ############## -->
+
+
+
+
         <div
           v-if="column.name == 'files'"
           class="work-rows lighten-3 d-flex flex-column"
@@ -279,10 +321,7 @@
             </div>
           </div>
 
-          <div
-            v-if="self.files.length > 0"
-            class="d-flex flex-grow-1"
-          >
+          <div class="d-flex flex-grow-1">
             <div
               v-for="(data, field) in file_fields"
               :key="field + $tool.gen_uid()"
@@ -325,6 +364,7 @@
                           :tooltip="lang.generic.delete[lg]"
                           :small_fab="true"
                           :color="'white'"
+                          @click="open_remove_child_dialog(file, 'files')"
                         />
                       </div>
                     </div>
@@ -347,6 +387,15 @@
       </div>
     </div>
   </div>
+
+
+
+
+  <!-- ############## Expand ############## -->
+
+
+
+
 
   <div class="work-expand" v-if="expanded">
     <div class="lighten-5 pb-3" :class="self.color">
@@ -423,6 +472,16 @@
       />
     </div>
   </div>
+
+
+
+
+
+  <!-- ############## Dialogs ############## -->
+
+
+
+
 
   <CustomDialog
     :open="link_radiums_dialog"
@@ -912,6 +971,10 @@ export default {
       }
     },
 
+    get_column_color(column_name) {
+      return this.self[column_name + '_bg_color'] ? this.self[column_name + '_bg_color'] : this.self.color
+    },
+
     add_shift() {
       this.add_shift_loading = true
 
@@ -1164,6 +1227,7 @@ export default {
   align-items: center;
   height: 24px;
   cursor: pointer;
+  transition: filter .2s;
 }
 
 .work-add-button:hover {
@@ -1190,10 +1254,12 @@ export default {
   max-width: 50px;
   min-width: 50px;
   width: 50px;
+  margin-bottom: 1px;
+  transition: filter .3s;
 }
 
 .work-row-delete:hover {
-  filter:  brightness(1.1);
+  filter: brightness(1.8);
 }
 
 .work-delete-spacer {

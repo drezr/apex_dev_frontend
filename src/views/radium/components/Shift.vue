@@ -1,7 +1,7 @@
 <template>
 
 <div class="shift-frame">
-  <div class="shift-cell">
+  <div class="shift-cell" style="width: calc(30% - 1px);">
     <div
       class="d-flex justify-center align-center lighten-3"
       :class="parent.shifts_bg_color ? parent.shifts_bg_color : parent.color"
@@ -11,7 +11,15 @@
     </div>
   </div>
 
-  <div class="shift-cell" :class="edit_mode ? 'shift-background-white' : ''">
+  <div
+    class="shift-cell"
+    :class="[
+      edit_mode ? 'shift-background-white' : '',
+      edit_mode ? 'cursor-pointer' : '',
+    ]"
+    style="width: 30%;"
+    @click="open_date_dialog()"
+  >
     <div
       class="text-center"
       style="line-height: 16px;"
@@ -24,6 +32,7 @@
   <div
     class="shift-cell flex-column justify-space-between"
     :class="edit_mode ? 'shift-background-white' : ''"
+    style="width: 40%;"
   >
     <div class="d-flex" style="width: 100%;">
       <div
@@ -34,7 +43,16 @@
       ></div>
     </div>
 
-    {{ self.shift }}
+    <v-combobox
+      v-model="self.shift"
+      :items="shift_types"
+      class="shift-combobox"
+      :style="`font-size: ${column.textsize}px;`"
+      hide-details
+      :append-icon="null"
+      :disabled="!edit_mode"
+      :background-color="edit_mode ? 'white' : ''"
+    ></v-combobox>
 
     <div class="d-flex" style="width: 100%;">
       <div
@@ -45,6 +63,20 @@
       ></div>
     </div>
   </div>
+
+  <v-dialog
+    ref="dialog"
+    width="290px"
+    v-model="date_dialog"
+  >
+    <v-date-picker
+      class="work-date-picker pt-5"
+      v-model="self.date"
+      :first-day-of-week="1"
+      locale="fr-fr"
+      no-title
+    ></v-date-picker>
+  </v-dialog>
 </div>
 
 </template>
@@ -62,10 +94,20 @@ export default {
   props: {
     self: Object,
     parent: Object,
+    column: Object,
   },
 
   data() {
     return {
+      shift_types: [
+        '06-14',
+        '08-16',
+        '12-20',
+        '14-22',
+        '22-06',
+        '00-08',
+      ],
+      date_dialog: false,
     }
   },
 
@@ -137,16 +179,24 @@ export default {
     edit_mode() {
       return this.$parent.edit_mode
     },
+
+    date() {
+      return this.self.date
+    }
   },
 
   methods: {
-    async remove() {
-
+    open_date_dialog() {
+      if (this.edit_mode) {
+        this.date_dialog = true
+      }
     },
   },
 
   watch: {
-
+    date() {
+      this.date_dialog = false
+    },
   }
 }
 
@@ -155,6 +205,27 @@ export default {
 
 <style>
 
+.shift-combobox input {
+  text-align: center;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+}
+
+.shift-combobox input:disabled {
+  color: black !important;
+}
+
+.shift-combobox.v-text-field {
+  padding: 0px;
+  margin: 0px;
+}
+
+.shift-combobox .v-input__slot:before {
+  border: none !important;
+}
 
 </style>
 
@@ -189,12 +260,16 @@ export default {
 }
 
 .shift-date-color {
-  height: 10px;
+  height: 9px;
   width: 50%;
 }
 
 .shift-background-white {
   background-color: white;
+}
+
+.shift-combobox {
+  text-align: center;
 }
 
 </style>

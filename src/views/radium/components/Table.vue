@@ -39,7 +39,7 @@
     <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
 
     <v-tab-item
-      v-for="(shift, i) in shifts"
+      v-for="(shift, i) in parent.shifts"
       :key="i"
       class="mx-3 mt-3"
       v-else
@@ -62,6 +62,7 @@
     </v-tab-item>
 
     <CustomButton
+      v-if="parent.shifts.length > 0"
       :text="lang.generic.teams[lg]"
       :rounded="true"
       :color="'yellow darken-3'"
@@ -118,8 +119,8 @@
                   :label="team.name + (app.name ? ' (' + app.name + ')': '')"
                   hide-details
                   @change="toggle_team(app.id)"
-                  :input-value="shifts[selected_shift].parts.find(p => p.team.id == team.id)"
-                  :disabled="shifts[selected_shift].parts.find(p => p.team.id == team.id) ? true : false"
+                  :input-value="parent.shifts.length > 0 && parent.shifts[selected_shift].parts.find(p => p.team.id == team.id)"
+                  :disabled="parent.shifts.length > 0 && parent.shifts[selected_shift].parts.find(p => p.team.id == team.id) ? true : false"
                 ></v-checkbox>
               </div>
             </div>
@@ -156,7 +157,6 @@ export default {
       self: null,
       loading: true,
       selected_shift: 0,
-      shifts: Array(),
       link_teams_dialog: false,
       link_selected_teams: Array(),
     }
@@ -167,7 +167,14 @@ export default {
       'work_id': this.parent.id,
     })
 
-    this.shifts = this.request.shifts
+    for (let shift of this.request.shifts) {
+      let parent_shift = this.parent.shifts.find(s => s.id == shift.id)
+
+      if (parent_shift) {
+        parent_shift.parts = shift.parts
+      }
+    }
+
     this.loading = false
   },
 
