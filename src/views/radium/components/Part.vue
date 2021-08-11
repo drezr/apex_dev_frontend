@@ -4,6 +4,7 @@
   min-width="350"
   max-width="350"
   class="mr-3 mb-3 elevation-3"
+  style="height: fit-content;"
 >
   <div class="d-flex justify-space-between flex-wrap">
     <div class="text-h6 pa-3">
@@ -73,7 +74,11 @@
     </v-list>
   </div>
 
-  <div dense v-if="edit_mode && !self.locked">
+  <div v-if="edit_mode && self.locked" class="my-9 text-center grey--text">
+    {{ lang.views.radium.locked_part[lg] }}
+  </div>
+
+  <div v-if="edit_mode && !self.locked">
     <v-text-field
       outlined
       clearable

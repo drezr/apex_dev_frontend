@@ -41,7 +41,7 @@
     <v-tab-item
       v-for="(shift, i) in parent.shifts"
       :key="i"
-      class="mx-3 mt-3"
+      class="d-flex mx-3 mt-3"
       v-else
     >
       <Part

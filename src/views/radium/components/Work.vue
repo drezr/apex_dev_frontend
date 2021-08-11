@@ -1,5 +1,14 @@
 <template>
 
+<v-badge
+  overlap
+  bordered
+  left
+  top
+  color="purple"
+  icon="mdi-link-variant"
+  :value="$show_link_badge"
+>
 <div class="pr-3" style="min-width: min-content;">
 <div
   class="work-overframe"
@@ -21,7 +30,7 @@
       v-for="(column, i) in $parent.$parent.columns.filter(c => c.visible)"
       :key="i"
       class="work-column"
-      :style="`min-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 50 : 0)}px; max-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 50 : 0)}px;`"
+      :style="`min-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px; max-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px;`"
     >
       <div class="work-column-title">
         <div
@@ -98,38 +107,62 @@
         >
           <div v-if="self.shifts.length > 0">
             <div class="d-flex lighten-4" :class="get_column_color(column.name)">
+              <div class="work-drag-spacer" v-if="edit_mode"></div>
+
               <div class="work-column-subtitle" style="width: 30%;">
                 {{ lang.generic.week[lg] }}
               </div>
+
               <div class="work-column-subtitle" style="width: 30%;">
                 {{ lang.generic.day[lg] }}
               </div>
+
               <div class="work-column-subtitle" style="width: 40%;">
                 {{ lang.generic.schedule[lg] }}
               </div>
+
               <div class="work-delete-spacer" v-if="edit_mode"></div>
             </div>
 
-            <div
-              v-for="(shift, i) in self.shifts"
-              :key="i"
-              class="d-flex"
+            <VueDraggable
+              v-model="self.shifts"
+              @change="update_child_position('shifts')"
+              :animation="100"
+              easing="cubic-bezier(1, 0, 0, 1)"
+              handle=".work-row-drag"
             >
-              <Shift
-                :self="shift"
-                :parent="self"
-                :column="column"
-                class="flex-grow-1"
-              />
-
               <div
-                class="work-row-delete red"
-                v-if="edit_mode"
-                @click="open_remove_child_dialog(shift, 'shifts')"
+                v-for="(shift, i) in self.shifts"
+                :key="i"
+                class="d-flex"
               >
-                <v-icon color="white">mdi-delete</v-icon>
+                <div
+                  class="work-row-drag pink"
+                  v-if="edit_mode"
+                  :style="`cursor: ${grab_cursor};`"
+                  @mousedown="grab_cursor = 'grabbing'"
+                  @mouseup="grab_cursor = 'grab'"
+                  @mouseleave="grab_cursor = 'grab'"
+                >
+                  <v-icon color="white" small>mdi-arrow-split-horizontal</v-icon>
+                </div>
+
+                <Shift
+                  :self="shift"
+                  :parent="self"
+                  :column="column"
+                  class="flex-grow-1"
+                />
+
+                <div
+                  class="work-row-delete red"
+                  v-if="edit_mode"
+                  @click="open_remove_child_dialog(shift, 'shifts')"
+                >
+                  <v-icon color="white">mdi-delete</v-icon>
+                </div>
               </div>
-            </div>
+            </VueDraggable>
           </div>
 
           <div
@@ -157,6 +190,8 @@
           :class="get_column_color(column.name)"
         >
           <div class="d-flex lighten-4" :class="get_column_color(column.name)">
+            <div class="work-drag-spacer" v-if="edit_mode"></div>
+
             <div class="work-column-subtitle" style="width: calc(50% - 1px);">
               {{ lang.views.radium.from[lg] }}
             </div>
@@ -169,6 +204,8 @@
           </div>
 
           <div class="d-flex lighten-4" :class="get_column_color(column.name)">
+            <div class="work-drag-spacer" v-if="edit_mode"></div>
+
             <div
               class="work-column-subtitle"
               v-for="(data, field) in limit_fields"
@@ -182,36 +219,55 @@
           </div>
 
           <div v-if="self.limits.length > 0">
-            <div
-              v-for="(limit, i) in self.limits"
-              :key="i"
+            <VueDraggable
+              v-model="self.limits"
+              @change="update_child_position('limits')"
+              :animation="100"
+              easing="cubic-bezier(1, 0, 0, 1)"
+              handle=".work-row-drag"
             >
-              <div class="work-row">
-                <div
-                  v-for="(data, field) in limit_fields"
-                  :key="field"
-                  :style="`width: ${data.width};`"
-                  class="work-row-field"
-                >
-                  <v-text-field
-                    v-model="limit[field]"
-                    :disabled="!edit_mode"
-                    hide-details
-                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
-                    :style="`font-size: ${column.textsize}px;`"
-                    class="pa-0 ma-0"
-                  />
-                </div>
+              <div
+                v-for="(limit, i) in self.limits"
+                :key="i"
+              >
+                <div class="work-row">
+                  <div
+                    class="work-row-drag pink"
+                    v-if="edit_mode"
+                    :style="`cursor: ${grab_cursor};`"
+                    @mousedown="grab_cursor = 'grabbing'"
+                    @mouseup="grab_cursor = 'grab'"
+                    @mouseleave="grab_cursor = 'grab'"
+                  >
+                    <v-icon color="white" small>mdi-arrow-split-horizontal</v-icon>
+                  </div>
 
-                <div
-                  class="work-row-delete red"
-                  v-if="edit_mode"
-                  @click="open_remove_child_dialog(limit, 'limits')"
-                >
-                  <v-icon color="white">mdi-delete</v-icon>
+                  <div
+                    v-for="(data, field) in limit_fields"
+                    :key="field"
+                    :style="`width: ${data.width};`"
+                    class="work-row-field"
+                  >                  
+                    <v-text-field
+                      v-model="limit[field]"
+                      :disabled="!edit_mode"
+                      hide-details
+                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      :style="`font-size: ${column.textsize}px;`"
+                      class="pa-0 ma-0"
+                    />
+                  </div>
+
+                  <div
+                    class="work-row-delete red"
+                    v-if="edit_mode"
+                    @click="open_remove_child_dialog(limit, 'limits')"
+                  >
+                    <v-icon color="white">mdi-delete</v-icon>
+                  </div>
                 </div>
               </div>
-            </div>
+            </VueDraggable>
           </div>
 
           <div
@@ -239,6 +295,8 @@
           :class="get_column_color(column.name)"
         >
           <div class="d-flex lighten-4" :class="get_column_color(column.name)">
+            <div class="work-drag-spacer" v-if="edit_mode"></div>
+
             <div
               class="work-column-subtitle"
               v-for="(data, field) in s460_fields"
@@ -252,36 +310,55 @@
           </div>
 
           <div v-if="self.s460s.length > 0">
-            <div
-              v-for="(s460, i) in self.s460s"
-              :key="i"
+            <VueDraggable
+              v-model="self.s460s"
+              @change="update_child_position('s460s')"
+              :animation="100"
+              easing="cubic-bezier(1, 0, 0, 1)"
+              handle=".work-row-drag"
             >
-              <div class="work-row">
-                <div
-                  v-for="(data, field) in s460_fields"
-                  :key="field"
-                  :style="`width: ${data.width};`"
-                  class="work-row-field"
-                >
-                  <v-text-field
-                    v-model="s460[field]"
-                    :disabled="!edit_mode"
-                    hide-details
-                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
-                    :style="`font-size: ${column.textsize}px;`"
-                    class="pa-0 ma-0"
-                  />
-                </div>
+              <div
+                v-for="(s460, i) in self.s460s"
+                :key="i"
+              >
+                <div class="work-row">
+                  <div
+                    class="work-row-drag pink"
+                    v-if="edit_mode"
+                    :style="`cursor: ${grab_cursor};`"
+                    @mousedown="grab_cursor = 'grabbing'"
+                    @mouseup="grab_cursor = 'grab'"
+                    @mouseleave="grab_cursor = 'grab'"
+                  >
+                    <v-icon color="white" small>mdi-arrow-split-horizontal</v-icon>
+                  </div>
 
-                <div
-                  class="work-row-delete red"
-                  v-if="edit_mode"
-                  @click="open_remove_child_dialog(s460, 's460s')"
-                >
-                  <v-icon color="white">mdi-delete</v-icon>
+                  <div
+                    v-for="(data, field) in s460_fields"
+                    :key="field"
+                    :style="`width: ${data.width};`"
+                    class="work-row-field"
+                  >
+                    <v-text-field
+                      v-model="s460[field]"
+                      :disabled="!edit_mode"
+                      hide-details
+                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      :style="`font-size: ${column.textsize}px;`"
+                      class="pa-0 ma-0"
+                    />
+                  </div>
+
+                  <div
+                    class="work-row-delete red"
+                    v-if="edit_mode"
+                    @click="open_remove_child_dialog(s460, 's460s')"
+                  >
+                    <v-icon color="white">mdi-delete</v-icon>
+                  </div>
                 </div>
               </div>
-            </div>
+            </VueDraggable>
           </div>
 
           <div
@@ -315,7 +392,7 @@
               :style="`width: ${data.width};`"
               class="work-row-field"
             >
-              <div :class="self.color" class="lighten-5">
+              <div :class="self.color" class="work-column-subtitle lighten-5">
                 <b>{{ data.name }}</b>
               </div>
             </div>
@@ -667,6 +744,7 @@
   ></CustomDialog>
 </div>
 </div>
+</v-badge>
 
 </template>
 
@@ -1018,6 +1096,10 @@ export default {
       this.self[this.remove_child_type] = this.self[this.remove_child_type].filter(c => c.id !== this.remove_child_item.id)
       this.remove_child_dialog = false
     },
+
+    update_child_position(type) {
+      console.log(type)
+    },
   },
 
   watch: {
@@ -1095,10 +1177,13 @@ export default {
 
 .work-column-title {
   font-size: 14px;
+  height: 20px;
   font-weight: bold;
-  text-align: center;
   border-bottom: 1px grey solid;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .work-column-subtitle {
@@ -1136,7 +1221,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 1px;
+  top: 0px;
   left: 1px;
   width: 19px;
   height: 19px;
@@ -1268,6 +1353,30 @@ export default {
   width: 50px;
   height: 16px;
   border-bottom: 1px grey solid;
+}
+
+.work-row-drag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 25px;
+  min-width: 25px;
+  width: 25px;
+  margin-bottom: 1px;
+  transition: filter .3s;
+}
+
+.work-row-drag:hover {
+  filter: brightness(1.8);
+}
+
+.work-drag-spacer {
+  max-width: 25px;
+  min-width: 25px;
+  width: 25px;
+  height: 16px;
+  border-bottom: 1px grey solid;
+  border-right: 1px grey solid;
 }
 
 </style>

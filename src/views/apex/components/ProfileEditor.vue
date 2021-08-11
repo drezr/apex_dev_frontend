@@ -366,7 +366,7 @@ export default {
         'green',
         'yellow darken-1',
         'orange',
-        'red accent-4',
+        'red',
         'pink',
         'purple',
         'deep-purple',

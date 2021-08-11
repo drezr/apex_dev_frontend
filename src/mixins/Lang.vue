@@ -1157,6 +1157,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'locked_part': {
+              'fr': 'Cette participation est verrouillée.',
+              'nl': '',
+              'en': '',
+            },
             'info_override': {
               'fr': 'Écraser la troisième case des cellules',
               'nl': '',
