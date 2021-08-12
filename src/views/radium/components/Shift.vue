@@ -95,6 +95,7 @@ export default {
     self: Object,
     parent: Object,
     column: Object,
+    edit_mode: Boolean,
   },
 
   data() {
@@ -174,10 +175,6 @@ export default {
         'week': week,
         'shift_colors': shift_colors,
       }
-    },
-
-    edit_mode() {
-      return this.$parent.edit_mode
     },
 
     date() {

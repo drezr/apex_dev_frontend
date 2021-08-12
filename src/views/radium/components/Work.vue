@@ -151,6 +151,7 @@
                   :self="shift"
                   :parent="self"
                   :column="column"
+                  :edit_mode="edit_mode"
                   class="flex-grow-1"
                 />
 
@@ -923,7 +924,7 @@ export default {
     is_clickable(column_name) {
       let clickables = ['colt', ]
 
-      if (clickables.includes(column_name) && !this.$current_component.palette) {
+      if (clickables.includes(column_name) && this.self[column_name].length > 0 && !this.$current_component.palette) {
         return true
       }
 
