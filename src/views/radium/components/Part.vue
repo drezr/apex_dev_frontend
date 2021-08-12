@@ -260,21 +260,18 @@ export default {
       info_override: '',
       info_override_snackbar: false,
       info_override_timeout: 4000,
+      team: null,
     }
   },
 
   async created() {
-    await this.get_team()
-    await this.get_presences()
+    await this.set_team()
+    await this.set_presences()
   },
 
   computed: {
     cached_teams() {
       return this.$current_component.cached_teams
-    },
-
-    team() {
-      return this.cached_teams.find(t => t.id == this.self.team.id)
     },
 
     participants() {
@@ -292,7 +289,7 @@ export default {
 
   methods: {
     // Get team profiles if not in Works view's "cached_teams"
-    async get_team() {
+    async set_team() {
       let is_cached = this.cached_teams.find(t => t.id == this.self.team.id)
 
       if (!is_cached) {
@@ -304,10 +301,16 @@ export default {
           (a, b) => a.link.position - b.link.position)
 
         this.$current_component.cached_teams.push(this.request.team)
+
+        this.team = this.request.team
+      }
+
+      else {
+        this.team = this.$tool.deepcopy(is_cached)
       }
     },
 
-    async get_presences() {
+    async set_presences() {
       this.request = await this.$http.get('presences', {
         'team_id': this.self.team.id,
         'date': this.self.date,
