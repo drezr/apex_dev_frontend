@@ -35,15 +35,13 @@
     class="lighten-2"
     :class="parent.color"
   >
-
-    <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
-
     <v-tab-item
       v-for="(shift, i) in parent.shifts"
       :key="i"
       class="d-flex mx-3 mt-3"
-      v-else
     >
+      <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
+
       <Part
         v-for="(part, i) in shift.parts"
         :key="i"
@@ -52,7 +50,9 @@
         :parent_cpnt="$current_instance"
       />
 
-      <div v-if="shift.parts.length == 0" class="my-9 mx-6 white--text">
+      {{shift}}
+
+      <div v-if="!loading && shift.parts.length == 0" class="my-9 mx-6 white--text">
         {{ lang.views.radium.no_participating_teams[lg] }}
       </div>
     </v-tab-item>
