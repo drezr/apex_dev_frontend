@@ -38,28 +38,31 @@
     <v-tab-item
       v-for="(shift, i) in parent.shifts"
       :key="i"
-      class="d-flex mx-3 mt-3"
+      class="mx-3 mt-3"
     >
       <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
 
-      <Part
-        v-for="(part, i) in shift.parts"
-        :key="i"
-        :self="part"
-        :parent="shift"
-        :parent_cpnt="$current_instance"
-      />
+      <div class="d-flex">
+        <Part
+          v-for="(part, i) in shift.parts"
+          :key="i"
+          :self="part"
+          :parent="shift"
+          :parent_cpnt="$current_instance"
+        />
+      </div>
 
-      {{shift}}
-
-      <div v-if="!loading && shift.parts.length == 0" class="my-9 mx-6 white--text">
+      <div
+        v-if="!loading && shift.parts.length == 0"
+        class="my-9 mx-6 white--text"
+      >
         {{ lang.views.radium.no_participating_teams[lg] }}
       </div>
     </v-tab-item>
 
-    <v-tab-item v-if="parent.shifts.length == 0" class="my-9 mx-6 white--text">
+    <div v-if="parent.shifts.length == 0" class="my-9 mx-6 white--text">
       {{ lang.views.radium.no_shift[lg] }}
-    </v-tab-item>
+    </div>
 
     <CustomButton
       v-if="parent.shifts.length > 0"
@@ -156,7 +159,7 @@ export default {
     return {
       self: null,
       loading: true,
-      selected_shift: 0,
+      selected_shift: null,
       link_teams_dialog: false,
       link_selected_teams: Array(),
     }
