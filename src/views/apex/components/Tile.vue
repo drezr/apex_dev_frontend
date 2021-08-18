@@ -76,6 +76,10 @@ export default {
         return `/team/${this.self.team}/${this.self.app}/${this.self.id}/projects`
       }
 
+      else if (this.self.app == 'planner') {
+        return `/team/${this.self.team}/${this.self.app}/${this.self.id}/board/month/${month}/year/${year}`
+      }
+
       return `/team/${this.self.team}/${this.self.app}/${this.self.id}`
     },
 

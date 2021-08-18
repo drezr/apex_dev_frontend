@@ -117,6 +117,17 @@
       @click="$emit('open-messages-dialog')"
     />
   </div>
+
+  <div class="d-flex flex-wrap" v-if="$current_view == 'board'">
+    <CustomButton
+      :icon="'mdi-printer'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="go_printable_board"
+      :tooltip="lang.views.planner.printable_board[lg]"
+    />
+  </div>
 </div>
 
 </template>
@@ -168,6 +179,10 @@ export default {
     },
 
     go_printable_calendar() {
+
+    },
+
+    go_printable_board() {
 
     },
 

@@ -24,7 +24,7 @@
       class="text-center"
       style="line-height: 16px;"
     >
-      <small><b>{{ day_data['day_name'] }}</b><br></small>
+      <small><b>{{ lang.generic[day_data.day_name][lg].toUpperCase().substring(0,3) }}</b><br></small>
       {{ day_data['day_number'] }}/{{ day_data['month'] }}
     </div>
   </div>
@@ -129,20 +129,19 @@ export default {
 
         day_number = date.getDate()
         day_number = day_number > 9 ? day_number : '0' + day_number
-        day_name = date.toLocaleDateString('fr-fr', { weekday: 'short' })
-                   .toUpperCase().slice(0, -1)
+        day_name = date.toLocaleDateString('en-en', { weekday: 'long' }).toLowerCase()
         month = date.getMonth() + 1
         month = month > 9 ? month : '0' + month
-        week = name == 'DIM' ? date.getWeek() - 1 : date.getWeek()
+        week = name == 'sunday' ? date.getWeek() - 1 : date.getWeek()
 
         if (this.self.shift) {
-          if (day_name == 'VEN') {
+          if (day_name == 'friday') {
             if (parseInt(this.self.shift.substring(0, 2)) >= 20) {
               shift_colors = ['grey', 'blue']
             }
           }
 
-          else if (day_name == 'SAM') {
+          else if (day_name == 'saturday') {
             if (parseInt(this.self.shift.substring(0, 2)) >= 20) {
               shift_colors = ['blue', 'red']
             }
@@ -152,7 +151,7 @@ export default {
             }
           }
 
-          else if (day_name == 'DIM') {
+          else if (day_name == 'sunday') {
             if (parseInt(this.self.shift.substring(0, 2)) >= 20) {
               shift_colors = ['red', 'grey']
             }

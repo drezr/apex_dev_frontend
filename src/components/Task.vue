@@ -1,7 +1,7 @@
 <template>
 
 <div>
-  <div>
+  <div v-if="$current_view != 'board'">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
@@ -42,6 +42,20 @@
           <v-list-item-title>
             <div class="d-flex align-center">
               <CustomButton
+                v-if="$current_view == 'board'"
+                :icon="'mdi-drag'"
+                :small_fab="true"
+                :text_color="'pink'"
+                :tooltip="lang.generic.move[lg]"
+                :cursor="grab_cursor"
+                @mousedown="grab_cursor = 'grabbing'"
+                @mouseup="grab_cursor = 'grab'"
+                @mouseleave="grab_cursor = 'grab'"
+                class="handle"
+                @click.native.stop
+              />
+
+              <CustomButton
                 :icon="status_icon"
                 :fab="true"
                 :small="true"
@@ -49,7 +63,7 @@
                 :color="status_color"
                 :tooltip="status_text"
                 :elevation="0"
-                class="mx-2"
+                :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
                 @click="swap_status"
                 @click.native.stop
               />
@@ -71,6 +85,7 @@
 
               <div v-if="edit_mode" class="mr-2 d-flex align-center">
                 <CustomButton
+                  v-if="$current_view != 'board'"
                   :icon="'mdi-arrow-split-horizontal'"
                   :small_fab="true"
                   :text_color="'pink'"
@@ -84,6 +99,7 @@
                 />
 
                 <CustomButton
+                  v-if="$current_view != 'board'"
                   :icon="'mdi-cog'"
                   :small_fab="true"
                   :text_color="'teal'"
@@ -91,6 +107,15 @@
                   :menus="edit_menus"
                   @menu_action="menu_action($event)"
                   @click.native.stop
+                />
+
+                <CustomButton
+                  v-else
+                  :icon="'mdi-delete'"
+                  :small_fab="true"
+                  :text_color="'red'"
+                  :tooltip="lang.generic.delete[lg]"
+                  @click.native.stop="delete_dialog = true"
                 />
               </div>
             </div>
@@ -150,7 +175,7 @@
             {{ lang.generic.task_no_element[lg] }}
           </div>
 
-          <div v-if="edit_mode" class="d-flex justify-space-around mb-3">
+          <div v-if="edit_mode" class="d-flex justify-space-around mb-2">
             <CustomButton
               :icon="'mdi-form-textbox'"
               :small="true"

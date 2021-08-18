@@ -325,6 +325,41 @@ export default {
             'nl': '',
             'en': '',
           },
+          'monday': {
+            'fr': 'lundi',
+            'nl': '',
+            'en': '',
+          },
+          'tuesday': {
+            'fr': 'mardi',
+            'nl': '',
+            'en': '',
+          },
+          'wednesday': {
+            'fr': 'mercredi',
+            'nl': '',
+            'en': '',
+          },
+          'thursday': {
+            'fr': 'jeudi',
+            'nl': '',
+            'en': '',
+          },
+          'friday': {
+            'fr': 'vendredi',
+            'nl': '',
+            'en': '',
+          },
+          'saturday': {
+            'fr': 'samedi',
+            'nl': '',
+            'en': '',
+          },
+          'sunday': {
+            'fr': 'dimanche',
+            'nl': '',
+            'en': '',
+          },
           'pending': {
             'fr': 'En attente',
             'nl': '',
@@ -1294,6 +1329,13 @@ export default {
             },
             'to': {
               'fr': 'À',
+              'nl': '',
+              'en': '',
+            },
+          },
+          'planner': {
+            'printable_board': {
+              'fr': 'Version imprimable du planning',
               'nl': '',
               'en': '',
             },
