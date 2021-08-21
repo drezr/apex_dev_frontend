@@ -1339,6 +1339,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'edit_teammates': {
+              'fr': 'Modifier les agents participants',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },

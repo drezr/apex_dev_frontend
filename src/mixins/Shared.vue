@@ -55,7 +55,9 @@ export default {
       }
 
       sorted_teammates.sort((a, b) => a.link.position - b.link.position)
-      sorted_teammates = sorted_teammates.map(p => p.name)
+      sorted_teammates = sorted_teammates.map(p => {
+        return {'name': p.name, 'color': p.link.watcher_color}
+      })
 
       return sorted_teammates.concat(other_teams_profiles)
     },

@@ -100,8 +100,8 @@
       </div>
 
       <Part
-        v-for="part in detail_full_object.parts"
-        :key="part.id"
+        v-for="(part, i) in detail_full_object.parts"
+        :key="i"
         :self="part"
         :parent="detail_full_object"
         class="my-6"

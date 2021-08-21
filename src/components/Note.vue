@@ -1,16 +1,17 @@
 <template>
 
 <div>
-  <div>
+  <div v-if="$current_view != 'board'">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
-      class="mb-1 mr-1 px-2"
+      class="mb-1 mr-1 px-2 lighten-4"
+      :color="teammate.color"
       small
     >
       <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
 
-      {{ teammate }}
+      {{ teammate.name }}
     </v-chip>
   </div>
 
@@ -78,7 +79,7 @@
         v-if="self.author"
         class="text-right cyan darken-2 pa-1 white--text"
       >
-        {{ by_author_on_date }}
+        <small>{{ by_author_on_date }}</small>
       </div>
     </div>
   </v-badge>
