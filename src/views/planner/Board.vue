@@ -16,6 +16,7 @@
           <VueDraggable
             v-model="app.children"
             @change="update_children_position"
+            group="drag"
             :animation="100"
             easing="cubic-bezier(1, 0, 0, 1)"
             handle=".handle"
@@ -26,6 +27,20 @@
             >
               <Task
                 v-if="child.type == 'task'"
+                :self="child"
+                :parent="app"
+                class="ma-1"
+              />
+
+              <Note
+                v-if="child.type == 'note'"
+                :self="child"
+                :parent="app"
+                class="ma-1"
+              />
+
+              <File
+                v-if="child.type == 'file'"
                 :self="child"
                 :parent="app"
                 class="ma-1"
@@ -50,7 +65,7 @@
               </div>
             </div>
 
-            <div class="board-date-children" v-if="date.data">
+            <div class="board-date-children">
               <div
                 v-for="(part, i) in date.data.parts"
                 :key="i + $tool.gen_uid()"
@@ -93,63 +108,70 @@
                 </div>
               </div>
 
-              <div
-                v-for="(child, i) in date.data.children"
-                :key="i"
-                class="board-date-children-frame"
+              <VueDraggable
+                v-model="date.data.children"
+                @change="update_children_position"
+                group="drag"
+                :animation="100"
+                easing="cubic-bezier(1, 0, 0, 1)"
+                handle=".handle"
               >
-                <div class="board-date-children-child">
-                  <Task
-                    v-if="child.type == 'task'"
-                    :self="child"
-                    :parent="date.data"
-                  />
-                  
-                  <Note
-                    v-if="child.type == 'note'"
-                    :self="child"
-                    :parent="date.data"
-                  />
-                  
-                  <File
-                    v-if="child.type == 'file'"
-                    :self="child"
-                    :parent="date.data"
-                  />
-                </div>
-
                 <div
-                  class="board-date-children-teammates"
-                  @click="open_teammates_dialog(date.data, child)"
+                  v-for="(child, i) in date.data.children"
+                  :key="i"
+                  class="board-date-children-frame"
                 >
-                  <div
-                    v-if="child.teammates.length > 0"
-                    class="d-flex justify-center flex-wrap"
-                  >
-                    <v-chip
-                      v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
-                      :key="i"
-                      class="mb-1 mr-1 px-2 lighten-4 cursor-pointer"
-                      :color="teammate.color"
-                      small
-                    >
-                      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
-
-                      {{ teammate.name }}
-                    </v-chip>
+                  <div class="board-date-children-child">
+                    <Task
+                      v-if="child.type == 'task'"
+                      :self="child"
+                      :parent="date.data"
+                    />
+                    
+                    <Note
+                      v-if="child.type == 'note'"
+                      :self="child"
+                      :parent="date.data"
+                    />
+                    
+                    <File
+                      v-if="child.type == 'file'"
+                      :self="child"
+                      :parent="date.data"
+                    />
                   </div>
 
                   <div
-                    v-else
-                    class="d-flex justify-center align-center"
+                    class="board-date-children-teammates"
+                    @click="open_teammates_dialog(date.data, child)"
                   >
-                    <v-icon>mdi-account-group</v-icon>
+                    <div
+                      v-if="child.teammates.length > 0"
+                      class="d-flex justify-center flex-wrap"
+                    >
+                      <v-chip
+                        v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
+                        :key="i"
+                        class="mb-1 mr-1 px-2 lighten-4 cursor-pointer"
+                        :color="teammate.color"
+                        small
+                      >
+                        <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+
+                        {{ teammate.name }}
+                      </v-chip>
+                    </div>
+
+                    <div
+                      v-else
+                      class="d-flex justify-center align-center"
+                    >
+                      <v-icon>mdi-account-group</v-icon>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </VueDraggable>
             </div>
-
-            <div class="board-date-children" v-else></div>
           </div>
         </div>
       </div>
@@ -287,7 +309,7 @@ export default {
         'day': i = i > 9 ? i : '0' + i,
         'month': m = m > 9 ? m : '0' + m,
         'year': Number(this.$current_year),
-        'data': null,
+        'data': {children: Array()},
       }
 
       let day = this.days.find(d => new Date(d.date).getDay() == i - 1)

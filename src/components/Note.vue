@@ -24,8 +24,28 @@
     :value="$show_link_badge"
   >
     <div class="note-frame">
-      <div class="d-flex">
-        <v-icon class="mx-2" color="cyan darken-2" large>mdi-chat</v-icon>
+      <div class="d-flex align-center">
+        <CustomButton
+          v-if="$current_view == 'board'"
+          :icon="'mdi-drag'"
+          :small_fab="true"
+          :text_color="'pink'"
+          :tooltip="lang.generic.move[lg]"
+          :cursor="grab_cursor"
+          @mousedown="grab_cursor = 'grabbing'"
+          @mouseup="grab_cursor = 'grab'"
+          @mouseleave="grab_cursor = 'grab'"
+          class="handle"
+          @click.native.stop
+        />
+
+        <v-icon
+          :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
+          color="cyan darken-2"
+          large
+        >
+          mdi-chat
+        </v-icon>
 
         <v-textarea
           v-model="self.value"
@@ -43,6 +63,7 @@
 
         <div v-if="edit_mode" class="mx-2 d-flex align-center">
           <CustomButton
+            v-if="$current_view != 'board'"
             :icon="'mdi-arrow-split-horizontal'"
             :small_fab="true"
             :text_color="'pink'"
@@ -55,7 +76,7 @@
           />
 
           <CustomButton
-            v-if="$is_in_task"
+            v-if="$is_in_task || $current_view == 'board'"
             :icon="'mdi-delete'"
             :small_fab="true"
             :text_color="'red'"

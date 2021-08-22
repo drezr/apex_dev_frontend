@@ -24,7 +24,25 @@
     :value="$show_link_badge"
   >
     <div class="file-frame">
-      <v-icon color="pink" class="ml-2" large>
+      <CustomButton
+        v-if="$current_view == 'board'"
+        :icon="'mdi-drag'"
+        :small_fab="true"
+        :text_color="'pink'"
+        :tooltip="lang.generic.move[lg]"
+        :cursor="grab_cursor"
+        @mousedown="grab_cursor = 'grabbing'"
+        @mouseup="grab_cursor = 'grab'"
+        @mouseleave="grab_cursor = 'grab'"
+        class="handle"
+        @click.native.stop
+      />
+
+      <v-icon
+        color="pink"
+        :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
+        large
+      >
         {{ icon }}
       </v-icon>
 
@@ -40,6 +58,7 @@
 
       <div class="ml-1 mr-2" v-if="edit_mode">
         <CustomButton
+          v-if="$current_view != 'board'"
           :icon="'mdi-arrow-split-horizontal'"
           :small_fab="true"
           :text_color="'pink'"
@@ -52,7 +71,7 @@
         />
 
         <CustomButton
-          v-if="$is_in_task"
+          v-if="$is_in_task || $current_view == 'board'"
           :icon="'mdi-delete'"
           :small_fab="true"
           :text_color="'red'"
