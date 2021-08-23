@@ -112,11 +112,11 @@
                     <v-chip
                       v-for="(teammate, i) in $get_sorted_teammates(part.teammates)"
                       :key="i"
-                      class="mb-1 mr-1 pl-0 lighten-4 cursor-pointer"
+                      class="mb-1 mr-1 pl-2 lighten-4 cursor-pointer"
                       :color="teammate.color"
                       small
                     >
-                      <v-icon size="22" class="mr-1">mdi-account-circle</v-icon>
+                      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
 
                       {{ teammate.name }}
                     </v-chip>
@@ -175,11 +175,11 @@
                       <v-chip
                         v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
                         :key="i"
-                        class="mb-1 mr-1 pl-0 lighten-4 cursor-pointer"
+                        class="mb-1 mr-1 pl-2 lighten-4 cursor-pointer"
                         :color="teammate.color"
                         small
                       >
-                        <v-icon size="22" class="mr-1">mdi-account-circle</v-icon>
+                        <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
 
                         {{ teammate.name }}
                       </v-chip>
