@@ -553,7 +553,7 @@ export default {
               'en': '',
             },
             'planner_desc': {
-              'fr': 'Planificateur de journée',
+              'fr': 'Planificateur de journées',
               'nl': '',
               'en': '',
             },
