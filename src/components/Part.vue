@@ -5,11 +5,11 @@
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
-      class="mb-1 mr-1 px-2 lighten-4"
+      class="mb-1 mr-1 pl-0 lighten-4"
       :color="teammate.color"
       small
     >
-      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+      <v-icon size="22" class="mr-1">mdi-account-circle</v-icon>
 
       {{ teammate.name }}
     </v-chip>

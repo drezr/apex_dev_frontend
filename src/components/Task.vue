@@ -5,11 +5,11 @@
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
-      class="mb-1 mr-1 px-2 lighten-4"
+      class="mb-1 mr-1 pl-0 lighten-4"
       :color="teammate.color"
       small
     >
-      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+      <v-icon size="22" class="mr-1">mdi-account-circle</v-icon>
 
       {{ teammate.name }}
     </v-chip>
@@ -269,45 +269,6 @@ export default {
       grab_cursor: 'grab',
       delete_dialog: false,
       expanded: false,
-
-      input_menus: [
-        {
-          'icon': 'mdi-format-align-bottom',
-          'name': 'Texte court',
-          'color': 'indigo',
-          'action': 'short',
-        },
-        {
-          'icon': 'mdi-format-line-style',
-          'name': 'Texte long',
-          'color': 'purple',
-          'action': 'long',
-        },
-        {
-          'icon': 'mdi-format-text',
-          'name': 'Titre',
-          'color': 'pink',
-          'action': 'title',
-        },
-        {
-          'icon': 'mdi-calendar',
-          'name': 'Date',
-          'color': 'deep-orange',
-          'action': 'date',
-        },
-        {
-          'icon': 'mdi-crosshairs-gps',
-          'name': 'Position GPS',
-          'color': 'teal',
-          'action': 'gps',
-        },
-        {
-          'icon': 'mdi-link-plus',
-          'name': 'Lien',
-          'color': 'cyan',
-          'action': 'link',
-        },
-      ],
     }
   },
 
@@ -347,6 +308,47 @@ export default {
           'name': this.lang.generic.delete[this.lg],
           'color': 'red',
           'action': 'delete',
+        },
+      ]
+    },
+
+    input_menus() {
+      return [
+        {
+          'icon': 'mdi-format-align-bottom',
+          'name': this.lang.generic.input_short[this.lg],
+          'color': 'indigo',
+          'action': 'short',
+        },
+        {
+          'icon': 'mdi-format-line-style',
+          'name': this.lang.generic.input_long[this.lg],
+          'color': 'purple',
+          'action': 'long',
+        },
+        {
+          'icon': 'mdi-format-text',
+          'name': this.lang.generic.input_title[this.lg],
+          'color': 'pink',
+          'action': 'title',
+        },
+        {
+          'icon': 'mdi-calendar',
+          'name': this.lang.generic.input_date[this.lg],
+          'color': 'deep-orange',
+          'action': 'date',
+        },
+        {
+          'icon': 'mdi-crosshairs-gps',
+          'name': this.lang.generic.input_gps[this.lg],
+          'color': 'teal',
+          'action': 'gps',
+        },
+        {
+          'icon': 'mdi-link-plus',
+          'name': this.lang.generic.input_link[this.lg],
+          'color': 'cyan',
+          'action': 'link',
         },
       ]
     },

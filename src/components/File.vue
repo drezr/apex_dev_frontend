@@ -5,11 +5,11 @@
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
-      class="mb-1 mr-1 px-2 lighten-4"
+      class="mb-1 mr-1 pl-0 lighten-4"
       :color="teammate.color"
       small
     >
-      <v-icon size="22" class="mr-2">mdi-account-circle</v-icon>
+      <v-icon size="22" class="mr-1">mdi-account-circle</v-icon>
 
       {{ teammate.name }}
     </v-chip>
@@ -25,7 +25,7 @@
   >
     <div class="file-frame">
       <CustomButton
-        v-if="$current_view == 'board'"
+        v-if="!$is_in_task && $current_view == 'board'"
         :icon="'mdi-drag'"
         :small_fab="true"
         :text_color="'pink'"
@@ -40,7 +40,7 @@
 
       <v-icon
         color="pink"
-        :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
+        :class="$is_in_task || $current_view != 'board' ? 'mx-2' : 'mr-2'"
         large
       >
         {{ icon }}
@@ -58,7 +58,7 @@
 
       <div class="ml-1 mr-2" v-if="edit_mode">
         <CustomButton
-          v-if="$current_view != 'board'"
+          v-if="$is_in_task || $current_view != 'board'"
           :icon="'mdi-arrow-split-horizontal'"
           :small_fab="true"
           :text_color="'pink'"

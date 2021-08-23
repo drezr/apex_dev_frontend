@@ -410,6 +410,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'task': {
+            'fr': 'Tâche',
+            'nl': '',
+            'en': '',
+          },
           'note': {
             'fr': 'Note',
             'nl': '',
@@ -477,6 +482,36 @@ export default {
           },
           'text_size': {
             'fr': 'Taille du texte',
+            'nl': '',
+            'en': '',
+          },
+          'input_short': {
+            'fr': 'Texte court',
+            'nl': '',
+            'en': '',
+          },
+          'input_long': {
+            'fr': 'Texte long',
+            'nl': '',
+            'en': '',
+          },
+          'input_title': {
+            'fr': 'Titre',
+            'nl': '',
+            'en': '',
+          },
+          'input_date': {
+            'fr': 'Date',
+            'nl': '',
+            'en': '',
+          },
+          'input_gps': {
+            'fr': 'Position GPS',
+            'nl': '',
+            'en': '',
+          },
+          'input_link': {
+            'fr': 'Lien',
             'nl': '',
             'en': '',
           },
@@ -1341,6 +1376,11 @@ export default {
             },
             'edit_teammates': {
               'fr': 'Modifier les agents participants',
+              'nl': '',
+              'en': '',
+            },
+            'add_foreign_user': {
+              'fr': 'Ajouter un membre d\'une autre équipe',
               'nl': '',
               'en': '',
             },

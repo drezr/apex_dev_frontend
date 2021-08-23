@@ -13,21 +13,27 @@ export default {
     },
 
     $xs() {
-      if (this.$current_component && 
-          this.$current_component.request && 
-          this.$current_component.request.team) {
-        let profile = this.$current_component.request.team.profiles.find(
-          p => p.id == this.$logged_profile.id
-        )
+      if (this.$logged_profile) {
+        if (this.$current_component && 
+            this.$current_component.request && 
+            this.$current_component.request.team) {
+          let profile = this.$current_component.request.team.profiles.find(
+            p => p.id == this.$logged_profile.id
+          )
 
-        return profile ? profile.link : {}
+          return profile ? profile.link : {}
+        }
       }
 
       return {}
     },
 
     $is_staff() {
-      return this.$logged_profile.is_staff
+      if (this.$logged_profile) {
+        return this.$logged_profile.is_staff
+      }
+
+      return false
     },
   },
 
