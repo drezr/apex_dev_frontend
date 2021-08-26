@@ -7,6 +7,7 @@ import Team from '@/views/apex/Team.vue'
 import Calendar from '@/views/watcher/Calendar.vue'
 import Works from '@/views/radium/Works.vue'
 import Board from '@/views/planner/Board.vue'
+import Projects from '@/views/draft/Projects.vue'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,16 @@ const router = new VueRouter({
         'app': 'planner',
         'view': 'board',
         'title': 'Planner',
+      },
+    },
+    {
+      path: '/team/:team_id/draft/:app_id/projects',
+      name: 'Projects',
+      component: Projects,
+      meta: {
+        'app': 'draft',
+        'view': 'projects',
+        'title': 'Draft',
       },
     },
   ]
