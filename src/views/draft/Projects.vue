@@ -122,7 +122,7 @@
                 v-for="project in archived[year][month]"
                 :key="project.id"
                 class="pl-6"
-                :to="`team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
+                :to="`/team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
                 link
               >
                 <v-list-item-icon class="ml-10">

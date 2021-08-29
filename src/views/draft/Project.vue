@@ -76,6 +76,44 @@
         ></CustomButton>
       </v-card>
 
+      <div class="project-filter-sort-frame" v-if="show_filters">
+        <div class="mb-3"><b>Filtrer les tâches</b></div>
+
+        <v-autocomplete
+          v-for="(items, name) in available_filters"
+          :key="name"
+          :label="name"
+          :items="items"
+          v-model="enabled_filters[name]"
+          no-data-text="Aucun résultat"
+          prepend-icon="mdi-filter"
+          outlined
+          hide-details
+          class="py-2"
+          multiple
+          chips
+          small-chips
+          dense
+        ></v-autocomplete>
+      </div>
+
+
+      <div class="project-filter-sort-frame" v-if="show_sorts">
+        <div class="mb-3"><b>Trier les tâches</b></div>
+
+        <v-select
+          v-model="selected_sort"
+          :items="available_sorts"
+          item-text="name"
+          item-value="value"
+          label="Trier par"
+          prepend-icon="mdi-sort"
+          hide-details
+          outlined
+          class="py-2"
+        ></v-select>
+      </div>
+
       <v-card class="mx-auto my-6 pb-1" max-width="600">
         <v-toolbar color="deep-purple" class="elevation-1" dark>
           <v-toolbar-title>
@@ -88,20 +126,28 @@
         </v-toolbar>
 
         <VueDraggable
-          v-model="project.tasks"
+          v-model="computed_tasks"
           @change="update_position"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".handle"
         >
           <Task
-            v-for="(task, i) in project.tasks"
+            v-for="(task, i) in computed_tasks"
             :key="i"
             :self="task"
             :parent="project"
             class="mx-1 my-2"
           />
         </VueDraggable>
+
+        <div 
+          v-if="computed_tasks.length == 0"
+          class="text-center ma-6"
+        >
+          {{ lang.views.draft.tip_no_task_1[lg] }}<br>
+          <small>{{ lang.views.draft.tip_no_task_2[lg] }}</small>
+        </div>
       </v-card>
 
       <div class="d-flex justify-end" v-if="$has_xs(['draft_is_editor'])">
@@ -116,6 +162,7 @@
             :tooltip="lang.views.draft.add_task[lg]"
             class="mr-2"
             @click="add_task"
+            :tooltip_top="true"
           />
 
           <CustomButton
@@ -124,9 +171,10 @@
             :color="'teal'"
             :dark="true"
             :elevation="1"
-            :tooltip="lang.views.watcher.calendar_edit_elements_tooltip[lg]"
+            :tooltip="detail_edit_mode ? lang.views.draft.disable_edit_mode[lg] :lang.views.draft.enable_edit_mode[lg]"
             :outlined="detail_edit_mode"
             @click="detail_edit_mode = !detail_edit_mode"
+            :tooltip_top="true"
           />
         </div>
       </div>
@@ -160,7 +208,9 @@ export default {
       project: Object(),
       detail_edit_mode: false,
       show_filters: false,
+      enabled_filters: Object(),
       show_sorts: false,
+      selected_sort: null,
       edit_dialog: false,
     }
   },
@@ -185,7 +235,155 @@ export default {
   },
 
   computed: {
+    available_filters() {
+      let filters = Object()
 
+      filters[this.lang.views.draft.task_name[this.lg]] = Array()
+      filters[this.lang.views.draft.task_status[this.lg]] = Array()
+
+      for (let task of this.project.children) {
+        if (!filters[this.lang.views.draft.task_status[this.lg]].includes(task.status)) {
+          filters[this.lang.views.draft.task_status[this.lg]].push(this.status_description(task.status))
+        }
+
+        if (task.name && !filters[this.lang.views.draft.task_name[this.lg]].includes(task.name)) {
+          filters[this.lang.views.draft.task_name[this.lg]].push(task.name)
+        }
+
+        for (let child of task.children) {
+          if (child.type == 'input') {
+            if (child.key && child.value) {
+              if (!(child.key in filters)) {
+                filters[child.key] = Array()
+                console.log('ok')
+              }
+
+              if (child.value && child.value.length > 0) {
+                filters[child.key].push(child.value)
+              }
+            }
+          }
+        }
+      }
+
+      return filters
+    },
+
+    available_sorts() {
+      let sorts = Array()
+      let names = Object.keys(this.available_filters)
+
+      sorts.push({
+        'name': this.lang.views.draft.initial_order[this.lg],
+        'value': null,
+      })
+
+      sorts.push({
+        'name': this.lang.views.draft.task_name[this.lg],
+        'value': 'name',
+      })
+
+      for (let name of names) {
+        if (name != this.lang.views.draft.task_name[this.lg]) {
+          sorts.push({
+            'name': name,
+            'value': name,
+          })
+        }
+      }
+
+      return sorts
+    },
+
+    computed_tasks: {
+      get() {
+        let tasks = this.project.children
+
+        // Filtering
+
+        for (let name in this.enabled_filters) {
+          let values = this.enabled_filters[name]
+
+          if (values.length > 0) {
+            tasks = tasks.filter(task => {
+              if (name == this.lang.views.draft.task_status[this.lg]) {
+                return values.includes(this.status_description(task.status))
+              }
+
+              else if (name == this.lang.views.draft.task_name[this.lg]) {
+                return values.includes(task.name)
+              }
+
+              else {
+                return task.children.find(child => {
+                  return child.key == name && values.includes(child.value)
+                })
+              }
+            })
+          }
+        }
+
+        // Sorting
+
+        let name = this.selected_sort ? this.selected_sort : null
+
+        if (name && name != this.lang.views.draft.task_status[this.lg] && name != 'name') {
+          tasks.sort((a, b) => {
+            let child_a = a.children.find(c => c.name == name)
+            let child_b = b.children.find(c => c.name == name)
+
+            if (child_a && child_b) {
+              if (child_a.kind == 'date' && child_b.kind == 'date') {
+                let date_a = new Date(child_a.value)
+                let date_b = new Date(child_b.value)
+
+                return date_a > date_b ? 1 : -1
+              }
+
+              else if (isNaN(child_a.value + child_b.value)) {
+                return (child_a.value).localeCompare(child_b.value)
+              }
+
+              return child_a.value - child_b.value
+            }
+
+            else if (!child_a) {
+              return 1
+            }
+
+            else if (!child_b) {
+              return -1
+            }
+          })
+        }
+
+        else if (name && name == this.lang.views.draft.task_status[this.lg]) {
+          tasks.sort((a, b) => {
+            return (b.status).localeCompare(a.status)
+          })
+        }
+
+        else if (name && name == 'name') {
+          tasks.sort((a, b) => {
+            return (a.name).localeCompare(b.name)
+          })
+        }
+
+        else {
+          tasks.sort((a, b) => {
+            return a.link.position - b.link.position
+          })
+        }
+
+        return tasks
+      },
+
+      set(list) {
+        for (let child of list) {
+          child.link.position = list.indexOf(child)
+        }
+      },
+    },
   },
 
   methods: {
@@ -200,6 +398,13 @@ export default {
     add_task() {
       let main_frame = document.getElementById('main-frame')
       main_frame.scrollTo(0, main_frame.scrollHeight)
+    },
+
+    status_description(status) {
+      if (status == 'pending') return this.lang.generic.pending[this.lg]
+      else if (status == 'working') return this.lang.generic.working[this.lg]
+      else if (status == 'done') return this.lang.generic.done[this.lg]
+      else if (status == 'canceled') return this.lang.generic.canceled[this.lg]
     },
   },
 
@@ -229,6 +434,14 @@ export default {
   justify-content: center;
   position: relative;
   top: -20px;
+}
+
+.project-filter-sort-frame {
+  border: 1px black solid;
+  border-radius: 5px;
+  padding: 10px;
+  width: 400px;
+  margin: auto;
 }
 
 </style>

@@ -1476,6 +1476,41 @@ export default {
               'nl': '',
               'en': '',
             },
+            'tip_no_task_1': {
+              'fr': 'Il n\'y a pas encore de tâche dans ce projet.',
+              'nl': '',
+              'en': '',
+            },
+            'tip_no_task_2': {
+              'fr': 'Pour en ajouter, activez le mode édition en cliquant sur le bouton en bas à droite de la page puis sur le bouton « + ».',
+              'nl': '',
+              'en': '',
+            },
+            'enable_edit_mode': {
+              'fr': 'Basculer en mode édition',
+              'nl': '',
+              'en': '',
+            },
+            'disable_edit_mode': {
+              'fr': 'Désactiver le mode édition',
+              'nl': '',
+              'en': '',
+            },
+            'task_name': {
+              'fr': 'Nom de la tâche',
+              'nl': '',
+              'en': '',
+            },
+            'task_status': {
+              'fr': 'Statut',
+              'nl': '',
+              'en': '',
+            },
+            'initial_order': {
+              'fr': 'Ordre initial',
+              'nl': '',
+              'en': '',
+            },
           },
         },
       },
