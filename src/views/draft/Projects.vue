@@ -5,68 +5,195 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="team-title">
+      <div class="team-title mt-6">
         {{ team.name }}
       </div>
 
-      <v-card class="mx-auto mb-10" max-width="600">
+      <v-card class="mx-auto my-10" max-width="600">
         <v-toolbar color="deep-purple" class="elevation-1" dark>
           <v-toolbar-title>
             <v-icon x-large class="mr-3">mdi-cogs</v-icon>
-            Projets en cours
+            {{ lang.views.draft.ongoing_projects[lg] }}
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
+
+          <CustomButton
+            :icon="'mdi-plus'"
+            :color="'green'"
+            :dark="true"
+            :tooltip="lang.views.draft.create_new_project[lg]"
+            @click="create_dialog = true"
+          />
         </v-toolbar>
-<!-- 
+
         <v-list>
           <v-list-item v-if="ongoing.length == 0">
             <v-list-item-content class="d-flex justify-center py-5 text-center">
-              Il n'y a pas de projet en cours.<br>
-              Créez-en un nouveau en cliquant sur le bouton « + ».
+              {{ lang.views.draft.tip_no_ongoing_project[lg] }}<br>
+              {{ lang.views.draft.tip_create_new_project[lg] }}
             </v-list-item-content>
           </v-list-item>
 
-          <draggable
-            v-model="self.children"
+          <VueDraggable
+            v-model="ongoing"
             @change="update_position"
             :animation="100"
             easing="cubic-bezier(1, 0, 0, 1)"
-            :disabled="!can_drag"
+            handle=".handle"
           >
-            <v-list-item
+            <router-link
               v-for="project in ongoing"
               :key="project.id"
-              :to="`/draft/${$current_circle}/project/${project.id}/`"
-              class="pl-6"
-              link
+              :to="`/team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
+              class="projects-ongoing-project"
             >
-              <v-list-item-icon>
-                <v-icon>mdi-clipboard-check-multiple-outline</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
+              <CustomButton
+                :icon="'mdi-drag'"
+                :small_fab="true"
+                :text_color="'pink'"
+                :tooltip="lang.generic.move[lg]"
+                :cursor="grab_cursor"
+                @mousedown="grab_cursor = 'grabbing'"
+                @mouseup="grab_cursor = 'grab'"
+                @mouseleave="grab_cursor = 'grab'"
+                class="handle"
+                @click.native.stop
+              />
+
+              <v-icon class="mx-3">
+                mdi-clipboard-check-multiple-outline
+              </v-icon>
+
+              <div class="flex-grow-1">
                 {{ project.name }}
-              </v-list-item-content>
+              </div>
 
               <v-chip class="ml-1 white--text grey darken-3" small>
-                {{ format_date(`${project.year}-${project.month}-${project.day}`) }}
+                {{ $tool.format_date(`${project.date}`) }}
               </v-chip>
-            </v-list-item>
-          </draggable>
-        </v-list> -->
+            </router-link>
+          </VueDraggable>
+        </v-list>
+      </v-card>
 
-        {{archived}}
+      <v-card class="mx-auto mb-10" max-width="600">
+        <v-toolbar color="purple" class="elevation-1" dark>
+          <v-toolbar-title>
+            <v-icon x-large class="mr-3">mdi-folder</v-icon>
+            {{ lang.views.draft.archived_projects[lg] }}
+          </v-toolbar-title>
+        </v-toolbar>
+
+        <v-list>
+          <v-list-item v-if="Object.keys(archived).length == 0">
+            <v-list-item-content class="d-flex justify-center py-5 text-center">
+              {{ lang.views.draft.tip_no_archived_project[lg] }}
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-group
+            no-action
+            v-for="(i, year) in archived"
+            :key="year"
+          >
+            <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon>mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ year }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+
+            <v-list-group
+              no-action
+              sub-group
+              v-for="(i, month) in archived[year]"
+              :key="month"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>{{ months[month] }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item
+                v-for="project in archived[year][month]"
+                :key="project.id"
+                class="pl-6"
+                :to="`team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
+                link
+              >
+                <v-list-item-icon class="ml-10">
+                  <v-icon>mdi-clipboard-check-multiple-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  {{ project.name }}
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+          </v-list-group>
+        </v-list>
       </v-card>
     </div>
   </transition>
+
+  <CustomDialog
+    v-if="create_dialog"
+    :open="create_dialog"
+    :width="500"
+    :title_text="lang.views.draft.create_new_project[lg]"
+    @cancel="create_dialog = false"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-plus'"
+    :confirm_text="lang.generic.create[lg]"
+    :confirm_color="'green'"
+    @confirm="create_project"
+  >
+    <v-text-field
+      v-model="new_project_name"
+      :label="lang.views.draft.project_name[lg]"
+      outlined
+      class="mt-6"
+    ></v-text-field>
+
+    <v-dialog
+      ref="dialog"
+      v-model="date_dialog"
+      width="290px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          :value="$tool.format_date(new_project_date)"
+          label="Début du chantier"
+          prepend-icon="mdi-calendar"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+          outlined
+          hide-details
+        ></v-text-field>
+      </template>
+
+      <v-date-picker
+        v-model="new_project_date"
+        :first-day-of-week="1"
+        locale="fr-fr"
+        scrollable
+        no-title
+        @input="date_dialog = false"
+        class="py-6"
+      ></v-date-picker>
+    </v-dialog>
+  </CustomDialog>
 </div>
 
 </template>
 
 
 <script>
-
-// import Component from '@/components/Component.vue'
 
 export default {
   name: 'Projects',
@@ -81,7 +208,17 @@ export default {
 
   data() {
     return {
-      loading: true
+      loading: true,
+      team: Object(),
+      profiles: Array(),
+      app: Object(),
+      ongoing: Array(),
+      archived: Object(),
+      grab_cursor: 'grab',
+      create_dialog: false,
+      date_dialog: false,
+      new_project_name: null,
+      new_project_date: null,
     }
   },
 
@@ -95,21 +232,45 @@ export default {
     this.profiles = this.request.team.profiles
     this.app = this.request.app
 
+    this.ongoing = this.get_ongoing()
+    this.archived = this.get_archived()
+
     this.loading = false
   },
 
   computed: {
-    ongoing() {
+    months() {
+      return {
+        '1': this.lang.generic.january[this.lg],
+        '2': this.lang.generic.february[this.lg],
+        '3': this.lang.generic.march[this.lg],
+        '4': this.lang.generic.april[this.lg],
+        '5': this.lang.generic.may[this.lg],
+        '6': this.lang.generic.june[this.lg],
+        '7': this.lang.generic.july[this.lg],
+        '8': this.lang.generic.august[this.lg],
+        '9': this.lang.generic.september[this.lg],
+        '10': this.lang.generic.october[this.lg],
+        '11': this.lang.generic.november[this.lg],
+        '12': this.lang.generic.december[this.lg],
+      }
+    },
+  },
+
+  methods: {
+    get_ongoing() {
       let ongoing = this.app.projects.filter(p => !p.archived)
 
       if (!this.$xs.draft_can_see_private) {
         ongoing = ongoing.filter(p => !p.private)
       }
 
+      ongoing.sort((a, b) => a.link.position - b.link.position)
+
       return ongoing
     },
 
-    archived() {
+    get_archived() {
       let archived = this.app.projects.filter(p => p.archived)
       let projects = Object()
       let csp = this.$xs.draft_can_see_private
@@ -142,10 +303,22 @@ export default {
 
       return projects
     },
-  },
 
-  methods: {
+    update_position() {
+      for (let project of this.ongoing) {
+        project.link.position = this.ongoing.indexOf(project)
+      }
+    },
 
+    create_project() {
+      this.create_dialog = false
+
+      console.log(this.new_project_name)
+      console.log(this.new_project_date)
+
+      this.new_project_name = ''
+      this.new_project_date = ''
+    },
   },
 
   watch: {
@@ -162,5 +335,20 @@ export default {
 
 
 <style scoped>
+
+.projects-ongoing-project {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  height: 56px;
+  padding: 0 10px 0 5px;
+  color: black;
+  text-decoration: none;
+  transition: background-color .2s;
+}
+
+.projects-ongoing-project:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
 </style>

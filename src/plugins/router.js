@@ -8,6 +8,7 @@ import Calendar from '@/views/watcher/Calendar.vue'
 import Works from '@/views/radium/Works.vue'
 import Board from '@/views/planner/Board.vue'
 import Projects from '@/views/draft/Projects.vue'
+import Project from '@/views/draft/Project.vue'
 
 Vue.use(VueRouter)
 
@@ -81,6 +82,16 @@ const router = new VueRouter({
       meta: {
         'app': 'draft',
         'view': 'projects',
+        'title': 'Draft',
+      },
+    },
+    {
+      path: '/team/:team_id/draft/:app_id/project/:project_id',
+      name: 'Project',
+      component: Project,
+      meta: {
+        'app': 'draft',
+        'view': 'project',
         'title': 'Draft',
       },
     },

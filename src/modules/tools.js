@@ -206,12 +206,16 @@ class Tools {
   }
 
   format_date(date) {
-    let [year, month, day] = date.split('-')
+    if (date) {
+      let [year, month, day] = date.split('-')
 
-    if (day.length == 1) day = '0' + day
-    if (month.length == 1) month = '0' + month
+      if (day.length == 1) day = '0' + day
+      if (month.length == 1) month = '0' + month
 
-    return `${day}/${month}/${year}`
+      return `${day}/${month}/${year}`
+    }
+
+    return ''
   }
 
   format_datetime(datetime) {

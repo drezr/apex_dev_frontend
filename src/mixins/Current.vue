@@ -51,6 +51,10 @@ export default {
       return this.$route.params.app_id
     },
 
+    $current_project_id() {
+      return this.$route.params.project_id
+    },
+
     $current_instance() {
       return this
     },

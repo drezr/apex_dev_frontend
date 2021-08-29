@@ -589,8 +589,9 @@ export default {
 .board-pending {
   width: 35%;
   min-width: 500px;
-  height: calc(100vh - 260px);
-  max-height: calc(100vh - 235px);
+  height: calc(100vh - 280px);
+  max-height: calc(100vh - 280px);
+  min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
   margin: 10px;
@@ -600,8 +601,9 @@ export default {
 .board-planned {
   width: 65%;
   min-width: 880px;
-  height: calc(100vh - 260px);
-  max-height: calc(100vh - 235px);
+  height: calc(100vh - 280px);
+  max-height: calc(100vh - 280px);
+  min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
   margin: 10px;

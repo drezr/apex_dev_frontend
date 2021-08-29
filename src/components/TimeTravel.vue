@@ -85,7 +85,7 @@ export default {
         {month_name: this.lang.generic.april[this.lg], month_number: '4'},
         {month_name: this.lang.generic.may[this.lg], month_number: '5'},
         {month_name: this.lang.generic.june[this.lg], month_number: '6'},
-        {month_name: this.lang.generic.jully[this.lg], month_number: '7'},
+        {month_name: this.lang.generic.july[this.lg], month_number: '7'},
         {month_name: this.lang.generic.august[this.lg], month_number: '8'},
         {month_name: this.lang.generic.september[this.lg], month_number: '9'},
         {month_name: this.lang.generic.october[this.lg], month_number: '10'},

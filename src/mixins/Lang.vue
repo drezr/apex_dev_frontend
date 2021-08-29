@@ -55,6 +55,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'filter': {
+            'fr': 'Filtrer',
+            'nl': '',
+            'en': '',
+          },
           'update_position': {
             'fr': 'Changer l\'ordre',
             'nl': '',
@@ -92,6 +97,11 @@ export default {
           },
           'acquit': {
             'fr': 'Acquitter',
+            'nl': '',
+            'en': '',
+          },
+          'create': {
+            'fr': 'Créer',
             'nl': '',
             'en': '',
           },
@@ -295,7 +305,7 @@ export default {
             'nl': '',
             'en': '',
           },
-          'jully': {
+          'july': {
             'fr': 'Juillet',
             'nl': '',
             'en': '',
@@ -415,6 +425,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'tasks': {
+            'fr': 'Tâches',
+            'nl': '',
+            'en': '',
+          },
           'note': {
             'fr': 'Note',
             'nl': '',
@@ -512,6 +527,16 @@ export default {
           },
           'input_link': {
             'fr': 'Lien',
+            'nl': '',
+            'en': '',
+          },
+          'models': {
+            'fr': 'Modèles',
+            'nl': '',
+            'en': '',
+          },
+          'printable_version': {
+            'fr': 'Version imprimable',
             'nl': '',
             'en': '',
           },
@@ -1381,6 +1406,73 @@ export default {
             },
             'add_foreign_user': {
               'fr': 'Ajouter un membre d\'une autre équipe',
+              'nl': '',
+              'en': '',
+            },
+          },
+          'draft': {
+            'ongoing_projects': {
+              'fr': 'Projets en cours',
+              'nl': '',
+              'en': '',
+            },
+            'archived_projects': {
+              'fr': 'Projets archivés',
+              'nl': '',
+              'en': '',
+            },
+            'create_new_project': {
+              'fr': 'Créer un nouveau projet',
+              'nl': '',
+              'en': '',
+            },
+            'tip_no_ongoing_project': {
+              'fr': 'Il n\'y a pas de projet en cours.',
+              'nl': '',
+              'en': '',
+            },
+            'tip_create_new_project': {
+              'fr': 'Créez-en un nouveau en cliquant sur le bouton « + ».',
+              'nl': '',
+              'en': '',
+            },
+            'tip_no_archived_project': {
+              'fr': 'Il n\'y a pas de projet archivé.',
+              'nl': '',
+              'en': '',
+            },
+            'project_name': {
+              'fr': 'Nom du projet',
+              'nl': '',
+              'en': '',
+            },
+            'add_task': {
+              'fr': 'Ajouter une tâche',
+              'nl': '',
+              'en': '',
+            },
+            'edit_project': {
+              'fr': 'Editer le projet',
+              'nl': '',
+              'en': '',
+            },
+            'ongoing': {
+              'fr': 'En cours',
+              'nl': '',
+              'en': '',
+            },
+            'archived': {
+              'fr': 'Archivé',
+              'nl': '',
+              'en': '',
+            },
+            'private': {
+              'fr': 'Privé',
+              'nl': '',
+              'en': '',
+            },
+            'public': {
+              'fr': 'Public',
               'nl': '',
               'en': '',
             },
