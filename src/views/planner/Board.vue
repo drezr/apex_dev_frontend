@@ -226,8 +226,7 @@
           :label="profile.name"
           :input-value="teammates_object.teammates.find(t => t == profile.name)"
           @change="toggle_teammate(profile)"
-        >
-        </v-checkbox>
+        ></v-checkbox>
 
         <div
           class="board-presence"

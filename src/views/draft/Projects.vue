@@ -144,6 +144,7 @@
     :open="create_dialog"
     :width="500"
     :title_text="lang.views.draft.create_new_project[lg]"
+    :title_bg_color="'green lighten-4'"
     @cancel="create_dialog = false"
     :cancel_icon="'mdi-close'"
     :cancel_text="lang.generic.cancel[lg]"
@@ -187,6 +188,15 @@
         class="py-6"
       ></v-date-picker>
     </v-dialog>
+
+    <div class="mx-3 mt-6 mb-3">
+      <v-checkbox
+        v-model="new_project_private"
+        :label="lang.views.draft.private[lg]"
+        :hint="lang.views.draft.private_hint[lg]"
+        persistent-hint
+      ></v-checkbox>
+    </div>
   </CustomDialog>
 </div>
 
@@ -219,6 +229,7 @@ export default {
       date_dialog: false,
       new_project_name: null,
       new_project_date: null,
+      new_project_private: null,
     }
   },
 

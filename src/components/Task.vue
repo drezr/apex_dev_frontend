@@ -95,8 +95,9 @@
                   @mousedown="grab_cursor = 'grabbing'"
                   @mouseup="grab_cursor = 'grab'"
                   @mouseleave="grab_cursor = 'grab'"
-                  class="handle"
                   @click.native.stop
+                  :class="$current_view == 'project' && $current_component.selected_sort ? '' : 'handle'"
+                  :disabled="$current_view == 'project' && $current_component.selected_sort ? true : false"
                 />
 
                 <CustomButton

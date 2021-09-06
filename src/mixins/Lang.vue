@@ -1476,6 +1476,21 @@ export default {
               'nl': '',
               'en': '',
             },
+            'private_hint': {
+              'fr': 'Seules les personnes autorisées peuvent consulter ce projet.',
+              'nl': '',
+              'en': '',
+            },
+            'archived_hint': {
+              'fr': 'Le projet se trouve dans la liste des projets archivés.',
+              'nl': '',
+              'en': '',
+            },
+            'tip_no_filtered_task': {
+              'fr': 'Il n\'y a pas de tâche correspondante aux filtres sélectionnés',
+              'nl': '',
+              'en': '',
+            },
             'tip_no_task_1': {
               'fr': 'Il n\'y a pas encore de tâche dans ce projet.',
               'nl': '',

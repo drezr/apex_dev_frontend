@@ -76,7 +76,11 @@
         ></CustomButton>
       </v-card>
 
-      <div class="project-filter-sort-frame" v-if="show_filters">
+      <div
+        class="project-filter-sort-frame"
+        v-if="show_filters"
+        :class="show_sorts ? 'mb-3' : ''"
+      >
         <div class="mb-3"><b>Filtrer les tâches</b></div>
 
         <v-autocomplete
@@ -90,7 +94,6 @@
           outlined
           hide-details
           class="py-2"
-          multiple
           chips
           small-chips
           dense
@@ -142,11 +145,18 @@
         </VueDraggable>
 
         <div 
-          v-if="computed_tasks.length == 0"
+          v-if="Object.keys(enabled_filters).length == 0 && computed_tasks.length == 0"
           class="text-center ma-6"
         >
           {{ lang.views.draft.tip_no_task_1[lg] }}<br>
           <small>{{ lang.views.draft.tip_no_task_2[lg] }}</small>
+        </div>
+
+        <div 
+          v-if="Object.keys(enabled_filters).length > 0 && computed_tasks.length == 0"
+          class="text-center ma-12"
+        >
+          {{ lang.views.draft.tip_no_filtered_task[lg] }}
         </div>
       </v-card>
 
@@ -180,6 +190,73 @@
       </div>
     </div>
   </transition>
+
+  <CustomDialog
+    v-if="edit_dialog"
+    :open="edit_dialog"
+    :width="500"
+    :title_text="lang.views.draft.edit_project[lg]"
+    :title_bg_color="'teal lighten-4'"
+    @cancel="edit_dialog = false"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-content-save'"
+    :confirm_text="lang.generic.save[lg]"
+    :confirm_color="'teal'"
+    @confirm="edit_project"
+  >
+    <v-text-field
+      v-model="edit_project_name"
+      :label="lang.views.draft.project_name[lg]"
+      outlined
+      class="mt-6"
+    ></v-text-field>
+
+    <v-dialog
+      ref="dialog"
+      v-model="date_dialog"
+      width="290px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          :value="$tool.format_date(edit_project_date)"
+          label="Début du chantier"
+          prepend-icon="mdi-calendar"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+          outlined
+          hide-details
+        ></v-text-field>
+      </template>
+
+      <v-date-picker
+        v-model="edit_project_date"
+        :first-day-of-week="1"
+        locale="fr-fr"
+        scrollable
+        no-title
+        @input="date_dialog = false"
+        class="py-6"
+      ></v-date-picker>
+    </v-dialog>
+
+    <div class="mx-3 mt-6 mb-3">
+      <v-checkbox
+        v-model="edit_project_private"
+        :label="lang.views.draft.private[lg]"
+        :hint="lang.views.draft.private_hint[lg]"
+        persistent-hint
+      ></v-checkbox>
+
+      <v-checkbox
+        v-model="edit_project_archived"
+        :label="lang.views.draft.archived[lg]"
+        :hint="lang.views.draft.archived_hint[lg]"
+        persistent-hint
+      ></v-checkbox>
+    </div>
+  </CustomDialog>
 </div>
 
 </template>
@@ -212,6 +289,11 @@ export default {
       show_sorts: false,
       selected_sort: null,
       edit_dialog: false,
+      date_dialog: false,
+      edit_project_name: null,
+      edit_project_date: null,
+      edit_project_private: null,
+      edit_project_archived: null,
     }
   },
 
@@ -226,6 +308,11 @@ export default {
     this.team = this.request.team
     this.app = this.request.app
     this.project = this.request.project
+
+    this.edit_project_name = this.$tool.deepcopy(this.project.name)
+    this.edit_project_date = this.$tool.deepcopy(this.project.date)
+    this.edit_project_private = this.$tool.deepcopy(this.project.private)
+    this.edit_project_archived = this.$tool.deepcopy(this.project.archived)
 
     let children = this.$tool.get_fused_children(this.project)
     children = this.$tool.deepcopy(children)
@@ -255,7 +342,6 @@ export default {
             if (child.key && child.value) {
               if (!(child.key in filters)) {
                 filters[child.key] = Array()
-                console.log('ok')
               }
 
               if (child.value && child.value.length > 0) {
@@ -304,7 +390,7 @@ export default {
         for (let name in this.enabled_filters) {
           let values = this.enabled_filters[name]
 
-          if (values.length > 0) {
+          if (values && values.length > 0) {
             tasks = tasks.filter(task => {
               if (name == this.lang.views.draft.task_status[this.lg]) {
                 return values.includes(this.status_description(task.status))
@@ -405,6 +491,15 @@ export default {
       else if (status == 'working') return this.lang.generic.working[this.lg]
       else if (status == 'done') return this.lang.generic.done[this.lg]
       else if (status == 'canceled') return this.lang.generic.canceled[this.lg]
+    },
+
+    edit_project() {
+      this.edit_dialog = false
+
+      this.project.name = this.edit_project_name
+      this.project.date = this.edit_project_date
+      this.project.private = this.edit_project_private
+      this.project.archived = this.edit_project_archived
     },
   },
 
