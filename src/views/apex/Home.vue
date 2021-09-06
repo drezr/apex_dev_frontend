@@ -71,6 +71,23 @@
       </v-card>
     </div>
   </transition>
+
+  <div class="d-flex justify-end">
+    <v-tooltip
+      :top="true"
+      color="black"
+    >
+      <template v-slot:activator="{ on: show_tooltip }">
+          <div class="home-my-apex" v-on="show_tooltip">
+            <router-link :to="'/myapex'">
+              <img :src="$tool.get_logo('myapex_50x50')" class="logo" />
+            </router-link>
+          </div>
+      </template>
+
+      <span>My Apex</span>
+    </v-tooltip>
+  </div>
 </div>
 
 </template>
@@ -136,5 +153,22 @@ export default {
 
 
 <style scoped>
+
+.home-my-apex {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 60px;
+  padding: 5px;
+  border-radius: 200px;
+  transition: filter .5s, box-shadow .5s;
+  cursor: pointer;
+}
+
+.home-my-apex:hover {
+  filter: brightness(1.1) contrast(1.2);
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+}
 
 </style>

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Login from '@/views/apex/Login.vue'
 import Home from '@/views/apex/Home.vue'
+import MyApex from '@/views/apex/MyApex.vue'
 import Team from '@/views/apex/Team.vue'
 import Calendar from '@/views/watcher/Calendar.vue'
 import Works from '@/views/radium/Works.vue'
@@ -33,6 +34,16 @@ const router = new VueRouter({
         'app': 'apex',
         'view': 'login',
         'title': 'Login',
+      },
+    },
+    {
+      path: '/myapex',
+      name: 'MyApex',
+      component: MyApex,
+      meta: {
+        'app': 'apex',
+        'view': 'myapex',
+        'title': 'myapex',
       },
     },
     {
