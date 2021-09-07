@@ -12,7 +12,18 @@
 
       <router-link class="navigation" :to="`/team/${$current_team_id}`">
         <img :src="$tool.get_logo('hub_50x50')" class="logo" />
-        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">HUB</span>
+        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">
+          {{ lang.generic.team[lg].toUpperCase() }}
+        </span>
+      </router-link>
+    </div>
+
+    <div class="d-flex" v-if="$current_view.includes('myapex')">
+      <v-icon>mdi-chevron-right</v-icon>
+
+      <router-link class="navigation" :to="`/myapex`">
+        <img :src="$tool.get_logo('myapex_50x50')" class="logo" />
+        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">MYAPEX</span>
       </router-link>
     </div>
 
@@ -105,7 +116,13 @@ export default {
         }
 
         else if (this.$route.meta.app == 'draft') {
-          return `/team/${this.$current_team_id}/draft/${this.$current_app_id}/projects/`
+          if (['projects', 'project'].includes(this.$current_view)) {
+            return `/team/${this.$current_team_id}/draft/${this.$current_app_id}/projects/`
+          }
+          
+          else if (['myapexprojects', 'myapexproject'].includes(this.$current_view)) {
+            return `/myapex/draft/${this.$current_app_id}/projects`
+          }
         }
       }
 

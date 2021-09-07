@@ -160,7 +160,7 @@
         </div>
       </v-card>
 
-      <div class="d-flex justify-end" v-if="$has_xs(['draft_is_editor'])">
+      <div class="d-flex justify-end" v-if="has_access">
         <div class="project-command-buttons-position command-buttons-bg">
           <CustomButton
             v-if="detail_edit_mode"
@@ -304,7 +304,6 @@ export default {
       'project_id': this.$current_project_id,
     })
 
-
     this.team = this.request.team
     this.app = this.request.app
     this.project = this.request.project
@@ -322,6 +321,10 @@ export default {
   },
 
   computed: {
+    has_access() {
+      return this.$has_xs(['draft_is_editor']) || this.$current_view == 'myapexproject'
+    },
+
     available_filters() {
       let filters = Object()
 

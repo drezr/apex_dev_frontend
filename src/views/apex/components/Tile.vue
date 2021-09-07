@@ -73,7 +73,13 @@ export default {
       }
 
       else if (this.self.app == 'draft') {
-        return `/team/${this.self.team}/${this.self.app}/${this.self.id}/projects`
+        if (this.$current_view == 'team') {
+          return `/team/${this.self.team}/${this.self.app}/${this.self.id}/projects`
+        }
+        
+        else if (this.$current_view == 'myapex') {
+          return `/myapex/${this.self.app}/${this.self.id}/projects`
+        }
       }
 
       else if (this.self.app == 'planner') {

@@ -51,6 +51,20 @@ export default {
 
       return false
     },
+
+    $is_editor() {
+      if (this.$current_view == 'calendar') {
+        return this.$has_xs(['watcher_is_editor'])
+      }
+
+      else if (this.$current_view == 'project') {
+        return this.$has_xs(['draft_is_editor'])
+      }
+
+      else if (this.$current_view == 'myapexproject') {
+        return true
+      }
+    },
   },
 }
 

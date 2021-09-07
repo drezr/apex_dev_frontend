@@ -6,7 +6,7 @@
   <transition name="fade">
     <div v-if="!loading">
       <div class="team-title mt-6">
-        {{ team.name }}
+        {{ team.name ? team.name : $logged_profile.name }}
       </div>
 
       <v-card class="mx-auto my-10" max-width="600">
@@ -45,7 +45,7 @@
             <router-link
               v-for="project in ongoing"
               :key="project.id"
-              :to="`/team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
+              :to="get_route(project.id)"
               class="projects-ongoing-project"
             >
               <CustomButton
@@ -122,7 +122,7 @@
                 v-for="project in archived[year][month]"
                 :key="project.id"
                 class="pl-6"
-                :to="`/team/${$current_team_id}/draft/${$current_app_id}/project/${project.id}/`"
+                :to="get_route(project.id)"
                 link
               >
                 <v-list-item-icon class="ml-10">
@@ -219,6 +219,7 @@ export default {
   data() {
     return {
       loading: true,
+      request: null,
       team: Object(),
       profiles: Array(),
       app: Object(),
@@ -234,13 +235,22 @@ export default {
   },
 
   async created() {
-    this.request = await this.$http.get('draft', {
-      'team_id': this.$current_team_id,
-      'app_id': this.$current_app_id,
-    })
+    if (this.$current_view == 'projects') {
+      this.request = await this.$http.get('draft', {
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+      })
 
-    this.team = this.request.team
-    this.profiles = this.request.team.profiles
+      this.team = this.request.team
+      this.profiles = this.request.team.profiles
+    }
+
+    else if (this.$current_view == 'myapexprojects') {
+      this.request = await this.$http.get('myapexdraft', {
+        'app_id': this.$current_app_id,
+      })
+    }
+
     this.app = this.request.app
 
     this.ongoing = this.get_ongoing()
@@ -272,7 +282,7 @@ export default {
     get_ongoing() {
       let ongoing = this.app.projects.filter(p => !p.archived)
 
-      if (!this.$xs.draft_can_see_private) {
+      if (!this.$xs.draft_can_see_private && this.$current_view != 'myapexprojects') {
         ongoing = ongoing.filter(p => !p.private)
       }
 
@@ -284,7 +294,7 @@ export default {
     get_archived() {
       let archived = this.app.projects.filter(p => p.archived)
       let projects = Object()
-      let csp = this.$xs.draft_can_see_private
+      let csp = this.$xs.draft_can_see_private  && this.$current_view != 'myapexprojects'
 
       for (let project of archived) {
         if (!project.private || (csp && project.private)) {
@@ -329,6 +339,16 @@ export default {
 
       this.new_project_name = ''
       this.new_project_date = ''
+    },
+
+    get_route(project_id) {
+      if (this.$current_view == 'projects') {
+        return `/team/${this.$current_team_id}/draft/${this.$current_app_id}/project/${project_id}/`
+      }
+      
+      else if (this.$current_view == 'myapexprojects') {
+        return `/myapex/draft/${this.$current_app_id}/project/${project_id}/`
+      }
     },
   },
 

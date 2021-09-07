@@ -7,14 +7,14 @@
     <input
       class="call-input call-name"
       v-model="self.name"
-      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.views.watcher.call_name[lg]"
     />
 
     <input
       class="call-input call-kind"
       v-model="self.kind"
-      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.views.watcher.call_kind[lg]"
     />
   </div>
@@ -23,14 +23,14 @@
     <input
       class="call-input call-hour"
       v-model="self.start"
-      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.start[lg]"
     />
 
     <input
       class="call-input call-hour"
       v-model="self.end"
-      :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
+      :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.end[lg]"
     />
 

@@ -205,6 +205,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'team': {
+            'fr': 'Équipe',
+            'nl': '',
+            'en': '',
+          },
           'start': {
             'fr': 'Début',
             'nl': '',

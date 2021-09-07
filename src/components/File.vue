@@ -50,8 +50,8 @@
         v-model="self.name"
         class="custom-field ma-2"
         :placeholder="lang.generic.file_name[lg]"
-        :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-        :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+        :disabled="!(edit_mode && $is_editor)"
+        :flat="!(edit_mode && $is_editor)"
         hide-details
         solo
       ></v-text-field>

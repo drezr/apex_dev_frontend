@@ -1,7 +1,7 @@
 <template>
 
 <div>
-  <div v-if="!['board', 'project'].includes($current_view)">
+  <div v-if="!['board', 'project', 'myapexproject'].includes($current_view)">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"
@@ -76,8 +76,8 @@
                 auto-grow
                 hide-details
                 solo
-                :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-                :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+                :disabled="!(edit_mode && $is_editor)"
+                :flat="!(edit_mode && $is_editor)"
                 :background-color="edit_mode ? 'white' : 'transparent'"
                 @input="update"
                 :placeholder="lang.generic.empty_task[lg]"

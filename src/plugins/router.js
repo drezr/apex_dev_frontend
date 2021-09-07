@@ -97,12 +97,32 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/myapex/draft/:app_id/projects',
+      name: 'MyApexProjects',
+      component: Projects,
+      meta: {
+        'app': 'draft',
+        'view': 'myapexprojects',
+        'title': 'Draft',
+      },
+    },
+    {
       path: '/team/:team_id/draft/:app_id/project/:project_id',
       name: 'Project',
       component: Project,
       meta: {
         'app': 'draft',
         'view': 'project',
+        'title': 'Draft',
+      },
+    },
+    {
+      path: '/myapex/draft/:app_id/project/:project_id',
+      name: 'MyApexProject',
+      component: Project,
+      meta: {
+        'app': 'draft',
+        'view': 'myapexproject',
         'title': 'Draft',
       },
     },
