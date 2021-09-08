@@ -632,6 +632,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'nexus_desc': {
+              'fr': 'Personnes disponibles',
+              'nl': '',
+              'en': '',
+            },
             'access_manager_tooltip': {
               'fr': 'Gestion de l\'équipe',
               'nl': '',
@@ -845,6 +850,23 @@ export default {
             },
             'access_warning_user_exists': {
               'fr': 'Avant de créer un nouvel utilisateur, assurez-vous qu\'il n\'existe pas. Sinon, utilisez le champ "Ajouter un utilisateur exisitant".',
+              'nl': '',
+              'en': '',
+            },
+          },
+          'myapex': {
+            'my_applications': {
+              'fr': 'Mes applications',
+              'nl': '',
+              'en': '',
+            },
+            'not_installed_apps': {
+              'fr': 'Applications pas encore installées',
+              'nl': '',
+              'en': '',
+            },
+            'install_apps': {
+              'fr': 'Installer des applications',
               'nl': '',
               'en': '',
             },

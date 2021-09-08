@@ -10,6 +10,7 @@ import Works from '@/views/radium/Works.vue'
 import Board from '@/views/planner/Board.vue'
 import Projects from '@/views/draft/Projects.vue'
 import Project from '@/views/draft/Project.vue'
+import Contacts from '@/views/nexus/Contacts.vue'
 
 Vue.use(VueRouter)
 
@@ -124,6 +125,16 @@ const router = new VueRouter({
         'app': 'draft',
         'view': 'myapexproject',
         'title': 'Draft',
+      },
+    },
+    {
+      path: '/myapex/nexus/:app_id/contacts/day/:day/month/:month/year/:year',
+      name: 'Nexus',
+      component: Contacts,
+      meta: {
+        'app': 'nexus',
+        'view': 'myapexcontacts',
+        'title': 'Nexus',
       },
     },
   ]

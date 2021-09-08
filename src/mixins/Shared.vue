@@ -30,6 +30,41 @@ export default {
     $mobile_breakpoint() {
       return this.$vuetify.breakpoint.smAndUp
     },
+
+    $app_descriptions() {
+      return {
+        'draft': {
+          title: 'Draft',
+          desc: this.lang.views.team.draft_desc[this.lg],
+          color: 'deep-purple',
+        },
+        'fleet': {
+          title: 'Fleet',
+          desc: this.lang.views.team.fleet_desc[this.lg],
+          color: 'purple darken-1',
+        },
+        'planner': {
+          title: 'Planner',
+          desc: this.lang.views.team.planner_desc[this.lg],
+          color: 'deep-orange accent-3',
+        },
+        'radium': {
+          title: 'Radium',
+          desc: this.lang.views.team.radium_desc[this.lg],
+          color: 'indigo',
+        },
+        'watcher': {
+          title: 'Watcher',
+          desc: this.lang.views.team.watcher_desc[this.lg],
+          color: 'blue',
+        },
+        'nexus': {
+          title: 'Nexus',
+          desc: this.lang.views.team.nexus_desc[this.lg],
+          color: 'orange',
+        },
+      }
+    },
   },
 
   methods: {

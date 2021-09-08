@@ -2,7 +2,7 @@
 
 <v-card 
   class="block hover"
-  :class="details[self.app].color"
+  :class="$app_descriptions[self.app].color"
   :to="path"
   width="300"
   height="300"
@@ -10,12 +10,12 @@
   min-height="300"
 >
   <v-card-title class="white--text text-h4">
-    {{ details[self.app].title }}
+    {{ $app_descriptions[self.app].title }}
     <span v-if="self.name" class="ml-3 text-h6">({{ self.name }})</span>
   </v-card-title>
 
   <v-card-subtitle class="white--text">
-    {{ details[self.app].desc }}
+    {{ $app_descriptions[self.app].desc }}
   </v-card-subtitle>
 
   <v-img :src="logo" class="logo" />
@@ -86,38 +86,12 @@ export default {
         return `/team/${this.self.team}/${this.self.app}/${this.self.id}/board/month/${month}/year/${year}`
       }
 
+      else if (this.self.app == 'nexus') {
+        return `/myapex/${this.self.app}/${this.self.id}/contacts/day/${this.$current_day}/month/${this.$current_month}/year/${this.$current_year}`
+      }
+
       return `/team/${this.self.team}/${this.self.app}/${this.self.id}`
     },
-
-    details() {
-      return {
-        'draft': {
-          title: 'Draft',
-          desc: this.lang.views.team.draft_desc[this.lg],
-          color: 'deep-purple',
-        },
-        'fleet': {
-          title: 'Fleet',
-          desc: this.lang.views.team.fleet_desc[this.lg],
-          color: 'purple darken-1',
-        },
-        'planner': {
-          title: 'Planner',
-          desc: this.lang.views.team.planner_desc[this.lg],
-          color: 'deep-orange accent-3',
-        },
-        'radium': {
-          title: 'Radium',
-          desc: this.lang.views.team.radium_desc[this.lg],
-          color: 'indigo',
-        },
-        'watcher': {
-          title: 'Watcher',
-          desc: this.lang.views.team.watcher_desc[this.lg],
-          color: 'blue',
-        },
-      }
-    }
   },
 
   methods: {

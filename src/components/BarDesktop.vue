@@ -124,6 +124,10 @@ export default {
             return `/myapex/draft/${this.$current_app_id}/projects`
           }
         }
+
+        else if (this.$route.meta.app == 'nexus') {
+          return `/myapex/nexus/${this.$current_app_id}/contacts/day/${this.$current_day}/month/${this.$current_month}/year/${this.$current_year}`
+        }
       }
 
       return '/'
