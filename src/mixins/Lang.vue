@@ -871,6 +871,13 @@ export default {
               'en': '',
             },
           },
+          'nexus': {
+            'select_date': {
+              'fr': 'Sélectionner une date',
+              'nl': '',
+              'en': '',
+            },
+          },
           'watcher': {
             'calendar_detail_title': {
               'fr': 'Informations supplémentaires',
@@ -1470,6 +1477,11 @@ export default {
             },
             'project_name': {
               'fr': 'Nom du projet',
+              'nl': '',
+              'en': '',
+            },
+            'project_date': {
+              'fr': 'Début du chantier',
               'nl': '',
               'en': '',
             },

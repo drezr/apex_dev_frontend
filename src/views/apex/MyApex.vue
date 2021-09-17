@@ -98,8 +98,7 @@ export default {
 
   async created() {
     this.request = await this.$http.get('myapex', {})
-    console.log(this.request)
-
+    
     this.apps = this.request.profile.apps
     this.sort_apps()
 

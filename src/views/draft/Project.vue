@@ -220,7 +220,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
           :value="$tool.format_date(edit_project_date)"
-          label="Début du chantier"
+          :label="lang.views.draft.project_date[lg]"
           prepend-icon="mdi-calendar"
           readonly
           v-bind="attrs"

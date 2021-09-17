@@ -36,7 +36,8 @@
       class="cell-frame"
       :style="date.cell.color ? 
       `border-color: ${border_colors[date.cell.color]}; border-width: 1px;
-       box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : ''
+       box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : '' +
+       $current_view != 'myapexcontacts' ? '' : 'max-height: 56px !important; min-height: 56px !important; pointer-events: none;'
       "
     >
       <input
@@ -64,6 +65,7 @@
       />
       
       <div
+        v-if="$current_view != 'myapexcontacts'"
         class="cell-short"
         :class="[
           date.cell.has_content ? 'cell-short-has_content' : 'cell-absence-' + cell_backgroud,
