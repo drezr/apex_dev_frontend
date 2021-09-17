@@ -240,6 +240,16 @@ export default {
             'nl': '',
             'en': '',
           },
+          'previous_day': {
+            'fr': 'Jour précédent',
+            'nl': '',
+            'en': '',
+          },
+          'next_day': {
+            'fr': 'Jour suivant',
+            'nl': '',
+            'en': '',
+          },
           'week': {
             'fr': 'Semaine',
             'nl': '',
@@ -422,6 +432,11 @@ export default {
           },
           'add_input_tooltip': {
             'fr': 'Ajouter un champ de texte',
+            'nl': '',
+            'en': '',
+          },
+          'loading': {
+            'fr': 'Chargement',
             'nl': '',
             'en': '',
           },
@@ -874,6 +889,11 @@ export default {
           'nexus': {
             'select_date': {
               'fr': 'Sélectionner une date',
+              'nl': '',
+              'en': '',
+            },
+            'add_new_contact': {
+              'fr': 'Ajouter un nouveau contact',
               'nl': '',
               'en': '',
             },

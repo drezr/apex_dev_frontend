@@ -5,38 +5,46 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <v-dialog
-        ref="dialog"
-        v-model="date_dialog"
-        width="290px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            :value="$tool.format_date(date)"
-            :label="lang.views.nexus.select_date[lg]"
-            prepend-icon="mdi-calendar"
-            readonly
-            v-bind="attrs"
-            v-on="on"
+      <div class="d-flex flex-wrap justify-center mt-3">
+        <NavigationBar style="max-width: 320px;" class="mb-3" />
+
+        <div class="d-flex">
+          <v-autocomplete
+            v-model="picked_profile"
+            :items="all_profiles"
+            item-text="name"
+            item-value="id"
             outlined
+            chips
+            small-chips
             hide-details
-            class="my-6 mx-auto"
-            style="width: 180px;"
-          ></v-text-field>
-        </template>
+            deletable-chips
+            :allow-overflow="false"
+            :label="lang.views.nexus.add_new_contact[lg]"
+            :no-data-text="profiles_loading ? lang.generic.loading[lg] + '...' : lang.generic.no_result[lg]"
+            style="min-width: 260px; max-width: 260px;"
+            class="add-profile-text-field mr-1 mb-3"
+            @focus="get_profiles()"
+          ></v-autocomplete>
 
-        <v-date-picker
-          v-model="date"
-          :first-day-of-week="1"
-          :locale="`${lg}-${lg}`"
-          scrollable
-          no-title
-          @input="go_to_date($event)"
-          class="py-6"
-        ></v-date-picker>
-      </v-dialog>
+          <CustomButton
+            :color="'green'"
+            :icon="'mdi-account-plus'"
+            :tooltip="lang.generic.add[lg]"
+            :disabled="!picked_profile"
+            style="position: relative; top: 1px;"
+          />
+        </div>
+      </div>
 
-      <div class="d-flex justify-center">
+      <VueDraggable
+        v-model="app.contacts"
+        @change="update_position"
+        :animation="100"
+        easing="cubic-bezier(1, 0, 0, 1)"
+        handle=".handle"
+        class="d-flex flex-wrap justify-center mt-3"
+      >
         <div
           v-for="(contact, i) in app.contacts"
           :key="i"
@@ -56,12 +64,24 @@
             </div>
 
             <div class="contact-phone">
-              <v-icon>mdi-phone</v-icon>
-              {{ contact.phone }}
+              <div class="flex-grow-1">
+                <v-icon small>mdi-phone</v-icon>
+                {{ contact.phone }}
+              </div>
+
+              <div
+                class="contact-drag-button pink handle"
+                :style="`cursor: ${grab_cursor};`"
+                @mousedown="grab_cursor = 'grabbing'"
+                @mouseup="grab_cursor = 'grab'"
+                @mouseleave="grab_cursor = 'grab'"
+              >
+                <v-icon size="16" color="white">mdi-drag</v-icon>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </VueDraggable>
     </div>
   </transition>
 </div>
@@ -71,12 +91,14 @@
 
 <script>
 
+import NavigationBar from '@/components/NavigationBar.vue'
 import DayCell from '@/views/watcher/components/DayCell.vue'
 
 export default {
   name: 'Contacts',
 
   components: {
+    NavigationBar,
     DayCell,
   },
 
@@ -87,9 +109,11 @@ export default {
   data() {
     return {
       loading: true,
-      date_dialog: false,
-      date: null,
       app: Object(),
+      grab_cursor: 'grab',
+      all_profiles: Array(),
+      picked_profile: null,
+      profiles_loading: true,
     }
   },
 
@@ -103,6 +127,8 @@ export default {
 
     this.app = this.request.app
 
+    this.app.contacts.sort((a, b) => a.link.position - b.link.position)
+
     for (let contact of this.app.contacts) {
       contact.cell = {
         'presence': contact.presence,
@@ -110,9 +136,6 @@ export default {
         'color': null,
       }
     }
-
-    this.date = `${this.$route.params.year}-${this.$route.params.month}-${this.$route.params.day}`
-
 
     this.loading = false
   },
@@ -122,10 +145,31 @@ export default {
   },
 
   methods: {
-    go_to_date(event) {
-      let [year, month, day] = event.split('-')
+    update_position() {
 
-      this.$router.push(`/myapex/nexus/${this.$current_app_id}/contacts/day/${day}/month/${month}/year/${year}`)
+    },
+
+    set_disabled_profiles() {
+      for (let profile of this.all_profiles) {
+        if (this.app.contacts.map(p => p.id).includes(profile.id)) {
+          profile.disabled = true
+        }
+
+        else {
+          profile.disabled = false
+        }
+      }
+    },
+
+    async get_profiles() {
+      if (this.profiles_loading) {
+        let request = await this.$http.get('all_profiles')
+        this.all_profiles = request['all_profiles']
+        this.all_profiles.sort((a, b) => (a.name).localeCompare(b.name))
+
+        this.set_disabled_profiles()
+        this.profiles_loading = false
+      }
     },
   },
 
@@ -138,6 +182,25 @@ export default {
 
 
 <style>
+
+.add-profile-text-field .v-input__slot {
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+.add-profile-text-field .v-label {
+  top: 10px !important;
+}
+
+.add-profile-text-field .v-label--active {
+  top: 16px !important;
+}
+
+.add-profile-text-field .v-text-field--enclosed {
+  margin-top: 10px !important;
+}
+
+
 
 </style>
 
@@ -163,12 +226,22 @@ export default {
 }
 
 .contact-phone {
-  font-size : 13px;
+  display: flex;
+  font-size : 12px;
   border-radius: 5px;
   background-color: rgba(0, 100, 255, 0.05);
   color: rgba(50, 100, 200, 0.9);
-  padding: 2px 6px;
+  padding: 3px 6px;
   width: 198px;
+}
+
+.contact-drag-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 10px;
 }
 
 </style>

@@ -11,6 +11,37 @@
     :tooltip="previous_tooltip"
   />
 
+  <v-dialog
+    ref="dialog"
+    v-model="date_dialog"
+    width="290px"
+    v-if="mode == 'day'"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-text-field
+        :value="$tool.format_date(date)"
+        :label="lang.views.nexus.select_date[lg]"
+        readonly
+        v-bind="attrs"
+        v-on="on"
+        outlined
+        hide-details
+        style="width: 160px;"
+        class="time-travel-text-field mr-1"
+      ></v-text-field>
+    </template>
+
+    <v-date-picker
+      v-model="date"
+      :first-day-of-week="1"
+      :locale="`${lg}-${lg}`"
+      scrollable
+      no-title
+      @input="go_to_date($event)"
+      class="py-6"
+    ></v-date-picker>
+  </v-dialog>
+
   <v-select
     v-if="mode == 'month'"
     :items="months"
@@ -26,6 +57,7 @@
   ></v-select>
 
   <v-select
+    v-if="mode != 'day'"
     :items="years"
     v-model="current_year"
     :label="lang.generic.year[lg]"
@@ -67,13 +99,17 @@ export default {
     return {
       current_month: null,
       current_year: null,
-      years: ['2020', '2021', '2022', '2023']
+      years: ['2020', '2021', '2022', '2023'],
+      date_dialog: false,
+      date: null,
     }
   },
 
   created() {
     this.current_month = this.$current_month
     this.current_year = this.$current_year
+
+    this.date = `${this.$route.params.year}-${this.$route.params.month}-${this.$route.params.day}`
   },
 
   computed: {
@@ -95,9 +131,18 @@ export default {
     },
 
     mode() {
+      let day_mode_views = ['myapexcontacts', ]
       let month_mode_views = ['calendar', 'works', 'board', ]
 
-      return month_mode_views.includes(this.$current_view) ? 'month' : 'year'
+      if (month_mode_views.includes(this.$current_view)) {
+        return 'month'
+      }
+
+      else if (day_mode_views.includes(this.$current_view)) {
+        return 'day'
+      }
+
+      return 'year'
     },
 
     previous_disabled() {
@@ -123,16 +168,32 @@ export default {
     },
 
     previous_tooltip() {
-      if (this.mode == 'month') {
+      if (this.mode == 'day') {
+        return this.lang.generic.previous_day[this.lg]
+      }
+      
+      else if (this.mode == 'month') {
         return this.lang.generic.previous_month[this.lg]
+      }
+
+      else if (this.mode == 'year') {
+        return this.lang.generic.previous_year[this.lg]
       }
 
       return this.lang.generic.previous_year[this.lg]
     },
 
     next_tooltip() {
-      if (this.mode == 'month') {
+      if (this.mode == 'day') {
+        return this.lang.generic.next_day[this.lg]
+      }
+
+      else if (this.mode == 'month') {
         return this.lang.generic.next_month[this.lg]
+      }
+
+      else if (this.mode == 'year') {
+        return this.lang.generic.next_year[this.lg]
       }
 
       return this.lang.generic.next_year[this.lg]
@@ -141,12 +202,35 @@ export default {
 
   methods: {
     step_travel(direction) {
-      let target_month, target_year
+      let target_day, target_month, target_year
 
+      let day = Number(this.$current_day)
       let month = Number(this.$current_month)
       let year = Number(this.$current_year)
 
-      if (this.mode == 'month') {
+      let date = new Date(`${year}-${month}-${day}`)
+
+      if (this.mode == 'day') {
+        if (direction == 'previous') {
+          date.setDate(date.getDate() - 1)
+        }
+        
+        else if (direction == 'next') {
+          date.setDate(date.getDate() + 1)
+        }
+          
+        target_day = date.getDate()
+        target_month = date.getMonth() + 1
+        target_year = date.getFullYear()
+
+        this.$router.replace({params: {
+          day: target_day,
+          month: target_month,
+          year: target_year,
+        }})
+      }
+
+      else if (this.mode == 'month') {
         if (direction == 'previous') {
           target_month = month == 1 ? String(12) : String(month - 1)
           target_year = month == 1 ? String(year - 1) : String(year)
@@ -180,6 +264,14 @@ export default {
     select_travel_year() {
       this.$router.replace({params: {year: this.current_year}})
     },
+
+    go_to_date(event) {
+      let [year, month, day] = event.split('-')
+
+      if (this.$current_view == 'myapexcontacts') {
+        this.$router.push(`/myapex/nexus/${this.$current_app_id}/contacts/day/${day}/month/${month}/year/${year}`)
+      }
+    },
   },
 
   watch: {
@@ -191,6 +283,10 @@ export default {
 
 
 <style>
+
+.time-travel-text-field .v-input__slot {
+  min-height: 40px !important;
+}
 
 </style>
 
