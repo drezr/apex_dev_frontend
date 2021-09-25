@@ -187,7 +187,7 @@ export default {
     },
 
     go_leaves() {
-
+      this.$router.push(`/team/${this.$current_team_id}/watcher/${this.$current_app_id}/leaves/year/${this.$current_year}`)
     },
   },
 

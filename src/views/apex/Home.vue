@@ -78,11 +78,11 @@
       color="black"
     >
       <template v-slot:activator="{ on: show_tooltip }">
-          <div class="home-my-apex" v-on="show_tooltip">
-            <router-link :to="'/myapex'">
-              <img :src="$tool.get_logo('myapex_50x50')" class="logo" />
-            </router-link>
-          </div>
+        <div class="home-my-apex" v-on="show_tooltip">
+          <router-link :to="'/myapex'">
+            <img :src="$tool.get_logo('myapex_50x50')" class="logo" />
+          </router-link>
+        </div>
       </template>
 
       <span>My Apex</span>

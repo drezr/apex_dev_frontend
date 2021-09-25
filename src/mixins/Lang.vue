@@ -1039,6 +1039,21 @@ export default {
               'nl': '',
               'en': '',
             },
+            'leaves_config': {
+              'fr': 'Configuration des congés',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_no_leave_set_1': {
+              'fr': 'Il n\'y a pas encore de types de congé configurés pour cette équipe.',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_no_leave_set_2': {
+              'fr': 'Pour en ajouter, cliquez sur le bouton turquoise en haut de page.',
+              'nl': '',
+              'en': '',
+            },
           },
           'radium': {
             'palette_works_tooltip': {

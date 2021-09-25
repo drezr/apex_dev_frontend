@@ -6,6 +6,7 @@ import Home from '@/views/apex/Home.vue'
 import MyApex from '@/views/apex/MyApex.vue'
 import Team from '@/views/apex/Team.vue'
 import Calendar from '@/views/watcher/Calendar.vue'
+import Leaves from '@/views/watcher/Leaves.vue'
 import Works from '@/views/radium/Works.vue'
 import Board from '@/views/planner/Board.vue'
 import Projects from '@/views/draft/Projects.vue'
@@ -64,6 +65,16 @@ const router = new VueRouter({
       meta: {
         'app': 'watcher',
         'view': 'calendar',
+        'title': 'Watcher',
+      },
+    },
+    {
+      path: '/team/:team_id/watcher/:app_id/leaves/year/:year',
+      name: 'Leaves',
+      component: Leaves,
+      meta: {
+        'app': 'watcher',
+        'view': 'leaves',
         'title': 'Watcher',
       },
     },
