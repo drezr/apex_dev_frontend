@@ -4,7 +4,7 @@
   <Profile :profile="profile" />
 
   <div
-    v-for="(leave_type, i) in parent.leave_types"
+    v-for="(leave_type, i) in parent.leaves_data"
     :key="i"
   >
     <div class="leave-frame">
@@ -108,6 +108,7 @@ export default {
   overflow: hidden;
   height: 33px;
   margin: 1px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 
 .leave-lower {

@@ -235,8 +235,18 @@ export default {
             'nl': '',
             'en': '',
           },
+          'hour': {
+            'fr': 'Heure',
+            'nl': '',
+            'en': '',
+          },
           'day': {
             'fr': 'Jour',
+            'nl': '',
+            'en': '',
+          },
+          'day_alt': {
+            'fr': 'Journée',
             'nl': '',
             'en': '',
           },
@@ -1051,6 +1061,41 @@ export default {
             },
             'leaves_no_leave_set_2': {
               'fr': 'Pour en ajouter, cliquez sur le bouton turquoise en haut de page.',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_leave_name': {
+              'fr': 'Nom du congé',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_leave_desc': {
+              'fr': 'Déscription du congé',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_leave_color': {
+              'fr': 'Couleur du congé',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_leave_type': {
+              'fr': 'Type de congé',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_leave_count': {
+              'fr': 'Nombre de types de congés',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_remove_leave_type': {
+              'fr': 'Retirer un type de congé',
+              'nl': '',
+              'en': '',
+            },
+            'leaves_add_leave_type': {
+              'fr': 'Ajouter un type de congé',
               'nl': '',
               'en': '',
             },

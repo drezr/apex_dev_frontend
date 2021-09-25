@@ -40,50 +40,100 @@
   </transition>
 
   <CustomDialog
-    :open="customize_dialog"
+    :open="leave_config_dialog"
     :width="800"
-    :title_text="lang.views.radium.customize_tooltip[lg]"
+    :title_text="lang.views.watcher.leaves_config[lg]"
     :title_icon="'mdi-tune-vertical'"
-    @cancel="customize_dialog = false"
+    @cancel="leave_config_dialog = false"
   >
-    <div
-      v-for="(column, i) in columns"
-      :key="i"
-      class="works-customize-row"
-    >
-      <v-icon class="cursor-move handle mr-3 pink--text">
-        mdi-drag-horizontal-variant
-      </v-icon>
-
-      <div style="width: 200px; text-align: center;" class="black--text">
-        <b>{{ lang.views.radium['column_title_' + column.name][lg] }}</b>
+    <div class="mt-6">
+      <div class="text-center">
+        {{ lang.views.watcher.leaves_leave_count[lg] }}
       </div>
 
-      <v-text-field
-        v-model="column.width"
-        :label="lang.generic.column_width[lg]"
-        type="number"
-        class="mx-3"
-        outlined
-        hide-details
-      />
+      <div class="d-flex justify-center mb-9">
+        <CustomButton
+          @click="update_leave_count('minus')"
+          :tooltip="lang.views.watcher.leaves_remove_leave_type[lg]"
+          :icon="'mdi-minus'"
+          :small_fab="true"
+          :disabled="config.leave_count == 0"
+        ></CustomButton>
 
-      <v-text-field
-        v-model="column.textsize"
-        :label="lang.generic.text_size[lg]"
-        type="number"
-        class="mx-3"
-        outlined
-        hide-details
-      />
+        <div class="text-h5 mx-3">{{ config.leave_count }}</div>
 
-      <v-checkbox
-        v-model="column.visible"
-        :label="lang.generic.visible[lg]"
-        class="mx-3"
-        hide-details
-        style="position: relative; top: -10px;"
-      ></v-checkbox>
+        <CustomButton
+          @click="update_leave_count('plus')"
+          :tooltip="lang.views.watcher.leaves_add_leave_type[lg]"
+          :icon="'mdi-plus'"
+          :small_fab="true"
+          :disabled="config.leave_count == 10"
+        ></CustomButton>
+      </div>
+
+      <div
+        v-for="(index, i) in config.leave_count"
+        :key="i"
+        class="d-flex align-center mb-3"
+      >
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <div
+              class="leave-color-circle"
+              :class="config['leave_' + i + '_color']"
+              v-bind="attrs"
+              v-on="on"
+            ></div>
+          </template>
+
+          <div
+            class="d-flex flex-wrap white pa-1"
+            style="width: 154px; border: 1px rgba(0, 0, 0, 0.3) solid !important;"
+          >
+            <div
+              v-for="(color, x) in leave_colors"
+              :key="x"
+              class="leave-color-circle"
+              :class="[
+                color,
+                color == config['leave_' + i + '_color'] ? 'leave-color-circle-selected': '',
+              ]"
+              @click="set_leave_color(color, i)"
+            ></div>
+          </div>
+        </v-menu>
+
+        <v-text-field
+          v-model="config['leave_' + i + '_name']"
+          :label="lang.views.watcher.leaves_leave_name[lg]"
+          type="text"
+          class="mx-3"
+          outlined
+          hide-details
+          style="width: 130px;"
+        />
+
+        <v-text-field
+          v-model="config['leave_' + i + '_desc']"
+          :label="lang.views.watcher.leaves_leave_desc[lg]"
+          type="text"
+          class="mx-3"
+          outlined
+          hide-details
+        />
+
+        <v-select
+          v-model="config['leave_' + i + '_type']"
+          :items="leave_types"
+          item-text="name"
+          item-value="value"
+          :label="lang.views.watcher.leaves_leave_type[lg]"
+          outlined
+          hide-details
+          class="mx-3"
+          style="width: 150px;"
+        ></v-select>
+      </div>
     </div>
   </CustomDialog>
 </div>
@@ -114,7 +164,24 @@ export default {
       leaves: Array(),
       config: Object(),
       leave_config_dialog: false,
-      customize_dialog: false,
+      leave_colors: [
+        'red',
+        'pink',
+        'purple',
+        'deep-purple',
+        'indigo',
+        'light-blue',
+        'cyan',
+        'teal',
+        'green',
+        'light-green',
+        'lime',
+        'yellow darken-1',
+        'amber',
+        'orange',
+        'deep-orange',
+        'blue-grey',
+      ],
     }
   },
 
@@ -140,11 +207,11 @@ export default {
   },
 
   computed: {
-    leave_types() {
-      let leave_types = Array()
+    leaves_data() {
+      let leaves_data = Array()
 
       for (let i = 0; i < this.config.leave_count; i++) {
-        leave_types.push({
+        leaves_data.push({
           'generic_name': 'leave_' + i,
           'name': this.config['leave_' + i + '_name'],
           'desc': this.config['leave_' + i + '_desc'],
@@ -153,12 +220,35 @@ export default {
         })
       }
 
-      return leave_types
+      return leaves_data
+    },
+
+    leave_types() {
+      return [
+        {'value': 'day', 'name': this.lang.generic.day_alt[this.lg]},
+        {'value': 'hour', 'name': this.lang.generic.hour[this.lg]},
+      ]
     },
   },
 
   methods: {
+    update_leave_count(action) {
+      if (action == 'minus') {
+        if (this.config.leave_count > 0) {
+          this.config.leave_count--
+        }
+      }
 
+      else if (action == 'plus') {
+        if (this.config.leave_count < 10) {
+          this.config.leave_count++
+        }
+      }
+    },
+
+    set_leave_color(color, i) {
+      this.config['leave_' + i + '_color'] = color
+    },
   },
 
   watch: {
@@ -175,5 +265,24 @@ export default {
 
 
 <style scoped>
+
+.leave-color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin: 3px;
+  cursor: pointer;
+  transition: filter .2s, box-shadow .2s;
+}
+
+.leave-color-circle:hover {
+  filter: brightness(1.3);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, .8);
+}
+
+.leave-color-circle-selected {
+  filter: brightness(1.3);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, .8);
+}
 
 </style>
