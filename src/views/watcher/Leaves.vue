@@ -110,7 +110,7 @@
           class="mx-3"
           outlined
           hide-details
-          style="width: 130px;"
+          style="width: 80px;"
         />
 
         <v-text-field
@@ -131,7 +131,7 @@
           outlined
           hide-details
           class="mx-3"
-          style="width: 150px;"
+          style="width: 100px;"
         ></v-select>
       </div>
     </div>
@@ -176,7 +176,7 @@ export default {
         'green',
         'light-green',
         'lime',
-        'yellow darken-1',
+        'yellow',
         'amber',
         'orange',
         'deep-orange',
@@ -201,6 +201,10 @@ export default {
 
     for (let profile of this.team.profiles) {
       profile.leaves = this.leaves.find(l => l.profile == profile.id)
+
+      for (let i = 0; i < 10; i++) {
+        profile.leaves['type_' + i] = Number(profile.leaves['type_' + i])
+      }
     }
 
     this.loading = false

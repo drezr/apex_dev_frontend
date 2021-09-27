@@ -16,8 +16,11 @@
           <div class="leave-upper" v-on="show_tooltip">
             <div
               style="height: 100%;"
-              class="lighten-1 white--text d-flex justify-center align-center"
-              :class="leave_type.color"
+              class="lighten-4 text--darken-4 white--text d-flex justify-center align-center"
+              :class="[
+                leave_type.color,
+                leave_type.color + '--text'
+              ]"
             >
               <b>{{ leave_type.name }}</b>
             </div>
@@ -28,9 +31,10 @@
       </v-tooltip>
 
       <input
-        type="text"
+        type="number"
         class="leave-lower"
         v-model="profile.leaves['type_' + i]"
+        @input="update_leave(i)"
       >  
     </div>
   </div>
@@ -76,7 +80,19 @@ export default {
   },
 
   methods: {
+    update_leave(i) {
+      console.log('-' + this.profile.leaves['type_' + i])
 
+      let leave = this.profile.leaves['type_' + i]
+
+      leave = leave.replace(/,/g, '.')
+
+      leave = Math.round((parseFloat(leave) + Number.EPSILON) * 100) / 100
+
+      this.profile.leaves['type_' + i] = leave
+
+      console.log('+' + this.profile.leaves['type_' + i])
+    }
   },
 
   watch: {
@@ -108,18 +124,28 @@ export default {
   overflow: hidden;
   height: 33px;
   margin: 1px;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 0px white;
 }
 
 .leave-lower {
-  height: 32px;
-  width: 53.5px;
+  height: 33px;
+  width: 54px;
   margin: 2px;
   background-color: white;
   border-radius: 5px;
-  border: 1px grey solid;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
   outline-color: orange;
   text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
 }
 
 </style>
