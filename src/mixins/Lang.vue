@@ -630,6 +630,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'my_circle': {
+              'fr': 'Mon arrondissement',
+              'nl': '',
+              'en': '',
+            },
+            'my_circles': {
+              'fr': 'Mes arrondissements',
+              'nl': '',
+              'en': '',
+            },
           },
           'team': {
             'draft_desc': {

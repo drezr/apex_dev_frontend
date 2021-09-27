@@ -35,6 +35,7 @@
         class="leave-lower"
         v-model="profile.leaves['type_' + i]"
         @input="update_leave(i)"
+        onkeydown="return ![69, 107, 109].includes(event.keyCode)"
       >  
     </div>
   </div>
@@ -81,17 +82,9 @@ export default {
 
   methods: {
     update_leave(i) {
-      console.log('-' + this.profile.leaves['type_' + i])
+      if (this.profile.leaves['type_' + i] == '') return
 
-      let leave = this.profile.leaves['type_' + i]
-
-      leave = leave.replace(/,/g, '.')
-
-      leave = Math.round((parseFloat(leave) + Number.EPSILON) * 100) / 100
-
-      this.profile.leaves['type_' + i] = leave
-
-      console.log('+' + this.profile.leaves['type_' + i])
+      this.profile.leaves['type_' + i] = Math.round((parseFloat(this.profile.leaves['type_' + i]) + Number.EPSILON) * 100) / 100
     }
   },
 

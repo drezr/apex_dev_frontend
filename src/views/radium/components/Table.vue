@@ -65,7 +65,7 @@
     </div>
 
     <CustomButton
-      v-if="parent.shifts.length > 0"
+      v-if="parent.shifts.length > 0 && $is_editor"
       :text="lang.generic.teams[lg]"
       :rounded="true"
       :color="'yellow darken-3'"

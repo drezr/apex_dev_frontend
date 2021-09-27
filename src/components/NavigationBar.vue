@@ -52,6 +52,7 @@
 
   <div class="d-flex flex-wrap" v-if="$current_view == 'works'">
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-palette'"
       :height="40"
       :outlined="true"
@@ -87,6 +88,7 @@
     />
 
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-tune-vertical'"
       :height="40"
       :outlined="true"
@@ -96,6 +98,7 @@
     />
 
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-plus'"
       :height="40"
       :color="'green'"
@@ -105,6 +108,7 @@
     />
 
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-android-messages'"
       :height="40"
       :color="'deep-orange'"

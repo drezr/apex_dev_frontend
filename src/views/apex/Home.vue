@@ -36,14 +36,16 @@
 
       <v-card class="mx-auto my-6" max-width="600">
         <v-toolbar color="teal" dark>
-          <v-toolbar-title>{{ lang.views.home.circles[lg] }}</v-toolbar-title>
+          <v-toolbar-title>
+            {{ circles.length > 1 ? lang.views.home.my_circles[lg] : lang.views.home.my_circle[lg] }}
+          </v-toolbar-title>
         </v-toolbar>
 
         <v-list>
           <v-list-group
-            v-for="circle in circles"
-            :key="circle.name"
-            :value="false"
+            v-for="(circle, i) in circles"
+            :key="i"
+            :value="i == 0 ? circles.length == 1 ? true : false : false"
             no-action
           >
             <template v-slot:activator>

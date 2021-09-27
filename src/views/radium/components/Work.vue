@@ -34,7 +34,7 @@
     >
       <div class="work-column-title">
         <div
-          v-if="i == 0"
+          v-if="i == 0 && $is_editor"
           class="work-drag-button pink"
           :style="`cursor: ${grab_cursor};`"
           @mousedown="grab_cursor = 'grabbing'"
@@ -477,7 +477,7 @@
 
   <div class="work-expand" v-if="expanded">
     <div class="lighten-5 pb-3" :class="self.color">
-      <div class="pa-1">
+      <div class="pa-1" v-if="$is_editor">
         <CustomButton
           :text="edit_mode ? lang.generic.save[lg] : lang.generic.edit[lg]"
           :rounded="true"
