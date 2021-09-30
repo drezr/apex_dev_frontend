@@ -11,6 +11,7 @@
 
       <NavigationBar
         @open-customize-dialog="customize_dialog = true"
+        @open-filter-dialog="filter_dialog = true"
         @open-messages-dialog="messages_dialog = true"
         @toggle-palette="palette = !palette"
       />
@@ -160,6 +161,36 @@
     </div>
   </CustomDialog>
 
+  <CustomDialog
+    :open="filter_dialog"
+    :width="650"
+    :title_text="lang.views.radium.filter_works_tooltip[lg]"
+    :title_icon="'mdi-filter'"
+    @cancel="filter_dialog = false"
+  >
+    <div
+      v-for="(column, i) in columns"
+      :key="i"
+      class="works-customize-row"
+    >
+      <div style="width: 200px; text-align: center;" class="black--text">
+        <b>{{ lang.views.radium['column_title_' + column.name][lg] }}</b>
+      </div>
+
+      <v-autocomplete
+        :items="[1, 2, 3]"
+        :no-data-text="lang.generic.no_result[lg]"
+        prepend-icon="mdi-filter"
+        outlined
+        hide-details
+        class="py-2"
+        chips
+        small-chips
+        dense
+        multiple
+      ></v-autocomplete>
+    </div>
+  </CustomDialog>
 </div>
 
 </template>
@@ -193,6 +224,7 @@ export default {
       circles_loading: true,
       circles: Array(),
       customize_dialog: false,
+      filter_dialog: false,
       team: Object(),
       app: Object(),
       config: Object(),

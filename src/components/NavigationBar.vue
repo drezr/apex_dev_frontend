@@ -67,17 +67,17 @@
       :height="40"
       :outlined="true"
       class="mr-1 mb-1"
-      @click="filter_dialog = true"
       :tooltip="lang.views.radium.filter_works_tooltip[lg]"
+      @click="$emit('open-filter-dialog')"
     />
 
-    <CustomButton
+<!--     <CustomButton
       :icon="'mdi-sort'"
       :height="40"
       :outlined="true"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.sort_works_tooltip[lg]"
-    />
+    /> -->
 
     <CustomButton
       :icon="'mdi-printer'"
@@ -155,7 +155,6 @@ export default {
   data() {
     return {
       calculator_dialog: false,
-      filter_dialog: false,
     }
   },
 

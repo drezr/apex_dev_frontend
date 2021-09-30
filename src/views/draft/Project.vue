@@ -89,7 +89,7 @@
           :label="name"
           :items="items"
           v-model="enabled_filters[name]"
-          no-data-text="Aucun résultat"
+          :no-data-text="lang.generic.no_result[lg]"
           prepend-icon="mdi-filter"
           outlined
           hide-details
