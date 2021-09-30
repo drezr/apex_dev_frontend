@@ -179,7 +179,7 @@ export default {
 
   methods: {
     go_calls() {
-
+      this.$router.push(`/team/${this.$current_team_id}/watcher/${this.$current_app_id}/calls/month/${this.$current_month}/year/${this.$current_year}`)
     },
 
     go_printable_calendar() {

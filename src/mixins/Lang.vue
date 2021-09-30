@@ -300,6 +300,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'date': {
+            'fr': 'Date',
+            'nl': '',
+            'en': '',
+          },
           'january': {
             'fr': 'Janvier',
             'nl': '',
@@ -567,6 +572,16 @@ export default {
           },
           'printable_version': {
             'fr': 'Version imprimable',
+            'nl': '',
+            'en': '',
+          },
+          'all': {
+            'fr': 'Tout',
+            'nl': '',
+            'en': '',
+          },
+          'all_alt': {
+            'fr': 'Toutes',
             'nl': '',
             'en': '',
           },
@@ -1106,6 +1121,31 @@ export default {
             },
             'leaves_add_leave_type': {
               'fr': 'Ajouter un type de congé',
+              'nl': '',
+              'en': '',
+            },
+            'calls_title': {
+              'fr': 'Récapitulatif des interventions',
+              'nl': '',
+              'en': '',
+            },
+            'calls_worker': {
+              'fr': 'Agent',
+              'nl': '',
+              'en': '',
+            },
+            'calls_kind': {
+              'fr': 'Type',
+              'nl': '',
+              'en': '',
+            },
+            'calls_d27': {
+              'fr': 'D27',
+              'nl': '',
+              'en': '',
+            },
+            'calls_no_call': {
+              'fr': 'Pas d\'interventions',
               'nl': '',
               'en': '',
             },

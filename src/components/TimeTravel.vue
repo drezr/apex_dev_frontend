@@ -132,7 +132,7 @@ export default {
 
     mode() {
       let day_mode_views = ['myapexcontacts', ]
-      let month_mode_views = ['calendar', 'works', 'board', ]
+      let month_mode_views = ['calendar', 'calls', 'works', 'board', ]
 
       if (month_mode_views.includes(this.$current_view)) {
         return 'month'
