@@ -95,8 +95,10 @@
           hide-details
           class="py-2"
           chips
+          deletable-chips
           small-chips
           dense
+          multiple
         ></v-autocomplete>
       </div>
 

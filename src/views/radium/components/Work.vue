@@ -903,7 +903,7 @@ export default {
       return {
         'line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '15%',
+          'width': '21%',
         },
         'lane': {
           'name' : this.lang.views.radium.lane[this.lg],
@@ -911,11 +911,11 @@ export default {
         },
         'start': {
           'name' : this.lang.views.radium.from[this.lg],
-          'width': '35%',
+          'width': '32%',
         },
         'end': {
           'name' : this.lang.views.radium.to[this.lg],
-          'width': '35%',
+          'width': '32%',
         },
       }
     },

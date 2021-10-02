@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="d-flex flex-wrap justify-center mt-3">
+      <div class="d-flex flex-wrap justify-center mt-6">
         <NavigationBar style="max-width: 320px;" class="mb-3" />
 
         <div class="d-flex">
@@ -34,7 +34,7 @@
             :icon="'mdi-account-plus'"
             :text_color="'white'"
             :tooltip="lang.generic.add[lg]"
-            :disabled="!picked_profile"
+            :disabled="picked_profile.length == 0"
             style="position: relative; top: 1px;"
           />
         </div>
@@ -46,7 +46,7 @@
         :animation="100"
         easing="cubic-bezier(1, 0, 0, 1)"
         handle=".handle"
-        class="d-flex flex-wrap justify-center mt-3"
+        class="d-flex flex-wrap justify-center mt-6"
       >
         <div
           v-for="(contact, i) in app.contacts"
@@ -225,6 +225,7 @@ export default {
   border: 1px rgba(50, 100, 200, 1) solid;
   border-radius: 5px;
   width: 250px;
+  height: 62px;
   margin: 5px;
 }
 

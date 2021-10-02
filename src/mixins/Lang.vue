@@ -1331,8 +1331,13 @@ export default {
               'nl': '',
               'en': '',
             },
-            'column_title_scst': {
-              'fr': 'Scst',
+            'column_title_supervisor': {
+              'fr': 'Responsable',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_line': {
+              'fr': 'Ligne',
               'nl': '',
               'en': '',
             },
