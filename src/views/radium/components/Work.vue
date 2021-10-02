@@ -36,6 +36,7 @@
         <div
           v-if="i == 0 && $is_editor"
           class="work-drag-button pink"
+          :class="$current_component.active_filters.length > 0 ? 'work-drag-button-disabled' : ''"
           :style="`cursor: ${grab_cursor};`"
           @mousedown="grab_cursor = 'grabbing'"
           @mouseup="grab_cursor = 'grab'"
@@ -1227,6 +1228,12 @@ export default {
   width: 19px;
   height: 19px;
   border-radius: 10px;
+}
+
+.work-drag-button-disabled {
+  pointer-events: none !important;
+  filter: saturate(0%);
+  opacity: 0.5;
 }
 
 .work-border-right {

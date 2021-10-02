@@ -260,7 +260,7 @@ export default {
       info_override: '',
       info_override_snackbar: false,
       info_override_timeout: 4000,
-      team: null,
+      team: Object(),
     }
   },
 

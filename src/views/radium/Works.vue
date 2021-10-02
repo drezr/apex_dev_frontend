@@ -22,16 +22,16 @@
         @pick-color="palette_pick_color($event)"
       />
 
-      <div class="works-frame" v-if="works.length > 0">
+      <div class="works-frame" v-if="filtered_works.length > 0">
         <VueDraggable
-          v-model="works"
+          v-model="filtered_works"
           @change="update_work_position"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-drag-button"
         >
           <Work
-            v-for="(work, i) in works"
+            v-for="(work, i) in filtered_works"
             :key="i"
             :self="work"
             class="ma-3"
@@ -39,8 +39,18 @@
         </VueDraggable>
       </div>
 
-      <div v-else class="d-flex justify-center align-center my-16">
+      <div
+        v-if="filtered_works.length == 0 && active_filters.length == 0"
+        class="d-flex justify-center align-center my-16"
+      >
         {{ lang.views.radium.no_works[lg] }}
+      </div>
+
+      <div
+        v-if="filtered_works.length == 0 && active_filters.length > 0"
+        class="d-flex justify-center align-center my-16"
+      >
+        {{ lang.views.radium.no_filters_result[lg] }}
       </div>
     </div>
   </transition>
@@ -169,7 +179,7 @@
     @cancel="filter_dialog = false"
   >
     <div
-      v-for="(column, i) in columns"
+      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name)))"
       :key="i"
       class="works-customize-row"
     >
@@ -178,7 +188,7 @@
       </div>
 
       <v-autocomplete
-        :items="[1, 2, 3]"
+        :items="get_filters(column)"
         :no-data-text="lang.generic.no_result[lg]"
         prepend-icon="mdi-filter"
         outlined
@@ -186,8 +196,13 @@
         class="py-2"
         chips
         small-chips
+        deletable-chips
         dense
         multiple
+        clearable
+        :ref="'filter_' + i"
+        @change="set_filters($event, i, column)"
+        style="width: 360px;"
       ></v-autocomplete>
     </div>
   </CustomDialog>
@@ -237,6 +252,14 @@ export default {
       palette: false,
       palette_color: 'white',
       palette_mode: 'works',
+      active_filters: Array(),
+      excluded_filters: [
+        'shifts',
+        'files',
+        'limits',
+        's460s',
+      ],
+      filtered_works: Array(),
     }
   },
 
@@ -253,6 +276,8 @@ export default {
     this.config = this.request.config
     this.works = this.request.works
     this.columns = this.get_columns()
+
+    this.filtered_works = this.get_filtered_works()
 
     this.loading = false
 
@@ -318,6 +343,82 @@ export default {
 
     update_columns() {
 
+    },
+
+    get_filters(column) {
+      let filters = Array()
+      let key = column.name
+
+      for (let work of this.works) {
+        if (key == 'schedules') {
+          for (let shift of work.shifts) {
+            if (!filters.includes(shift.shift) && shift.shift) {
+              filters.push(shift.shift)
+            }
+          }
+        }
+
+        else if (key == 'dates') {
+          for (let shift of work.shifts) {
+            if (!filters.includes(shift.date) && shift.date) {
+              filters.push(this.$tool.format_date(shift.date))
+            }
+          }
+        }
+
+        else if (!filters.includes(work[key]) && work[key]) {
+          filters.push(work[key])
+        }
+      }
+
+      filters.sort((a, b) => a.localeCompare(b))
+
+      return filters
+    },
+
+    set_filters(event, i, column) {
+      this.$refs['filter_' + i][0].lazySearch = ''
+
+      let filter_exists = this.active_filters.find(
+        f => f.column == column.name)
+
+      if (event.length == 0) {
+        if (filter_exists) {
+          this.active_filters = this.active_filters.filter(
+            f => f.column !== column.name)
+        }
+      }
+
+      else {
+        if (!filter_exists) {
+          this.active_filters.push({
+            'column': column.name,
+            'filters': event,
+          })
+        }
+
+        else {
+          filter_exists.filters = event
+        }
+      }
+
+      this.filtered_works = this.get_filtered_works()
+    },
+
+    get_filtered_works() {
+      let works = this.works
+
+      if (this.active_filters.length > 0) {
+        for (let filter of this.active_filters) {
+          works = works.filter(w => {
+            return filter.filters.includes(w[filter.column])
+          })
+        }
+      }
+
+      works.sort((a, b) => a.link.position - b.link.position)
+
+      return works
     },
 
     by_author_on_date(date, author) {

@@ -218,6 +218,20 @@ class Tools {
     return ''
   }
 
+  format_date_no_year(date) {
+    if (date) {
+      let [year, month, day] = date.split('-')
+      year
+
+      if (day.length == 1) day = '0' + day
+      if (month.length == 1) month = '0' + month
+
+      return `${day}/${month}`
+    }
+
+    return ''
+  }
+
   format_datetime(datetime) {
     let date = new Date(datetime)
 

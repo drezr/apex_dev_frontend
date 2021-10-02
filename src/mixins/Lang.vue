@@ -1191,6 +1191,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'column_title_dates': {
+              'fr': 'Dates',
+              'nl': '',
+              'en': '',
+            },
+            'column_title_schedules': {
+              'fr': 'Horaires',
+              'nl': '',
+              'en': '',
+            },
             'column_title_description': {
               'fr': 'Description',
               'nl': '',
@@ -1427,7 +1437,7 @@ export default {
               'en': '',
             },
             'info_override_confirm': {
-              'fr': 'La troisième case des cellules des participants ont bien été écrasées.',
+              'fr': 'La troisième case des cellules des participants ont bien été écrasées dans le calendrier Watcher.',
               'nl': '',
               'en': '',
             },
@@ -1443,6 +1453,11 @@ export default {
             },
             'no_works': {
               'fr': 'Il n\'y a pas encore de chantier ce mois.',
+              'nl': '',
+              'en': '',
+            },
+            'no_filters_result': {
+              'fr': 'Il n\'y a pas de chantier correspondant aux filtres appliqués.',
               'nl': '',
               'en': '',
             },

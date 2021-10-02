@@ -15,8 +15,8 @@ import CustomDialog from '@/components/CustomDialog.vue'
 import Access from '@/mixins/Access.vue'
 import Current from '@/mixins/Current.vue'
 import Lang from '@/mixins/Lang.vue'
-import Socket from '@/mixins/Socket.vue'
 import Shared from '@/mixins/Shared.vue'
+// import WebSocket from '@/mixins/WebSocket.vue' // makes v-autocomplete multiple to bug
 
 Vue.config.productionTip = false
 
@@ -31,8 +31,8 @@ Vue.component('CustomDialog', CustomDialog)
 Vue.mixin(Access)
 Vue.mixin(Current)
 Vue.mixin(Lang)
-Vue.mixin(Socket)
 Vue.mixin(Shared)
+// Vue.mixin(WebSocket) // makes v-autocomplete multiple to bug
 
 new Vue({
   router,
