@@ -50,18 +50,30 @@
             :elevation="elevation"
             v-on="{ ...show_tooltip, ...show_menu }"
           >
-            <v-icon
-              :x-small="xsmall"
-              :small="small"
-              :large="large"
-              :x-large="xlarge"
-            >
-              {{ icon }}
-            </v-icon>
+            <Loader
+              :size="18"
+              :width="3"
+              :color="'white'"
+              v-if="loading"
+            />
 
-            <span v-if="text" class="ml-2">
-              {{ text }}
-            </span>
+            <div
+              v-else
+              style="margin-right: 2px;"
+            >
+              <v-icon
+                :x-small="xsmall"
+                :small="small"
+                :large="large"
+                :x-large="xlarge"
+              >
+                {{ icon }}
+              </v-icon>
+
+              <span v-if="text" class="ml-2">
+                {{ text }}
+              </span>
+            </div>
           </v-btn>
         </template>
 
@@ -155,6 +167,8 @@ export default {
     height: Number,
 
     elevation: Number,
+
+    loading: Boolean,
   },
 
   data() {

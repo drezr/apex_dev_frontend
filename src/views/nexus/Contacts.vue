@@ -28,8 +28,11 @@
           ></v-autocomplete>
 
           <CustomButton
+            @click="add_contact"
+            :loading="add_button_loading"
             :color="'green'"
             :icon="'mdi-account-plus'"
+            :text_color="'white'"
             :tooltip="lang.generic.add[lg]"
             :disabled="!picked_profile"
             style="position: relative; top: 1px;"
@@ -109,10 +112,11 @@ export default {
   data() {
     return {
       loading: true,
+      add_button_loading: false,
       app: Object(),
       grab_cursor: 'grab',
       all_profiles: Array(),
-      picked_profile: null,
+      picked_profile: Array(),
       profiles_loading: true,
     }
   },
@@ -171,6 +175,15 @@ export default {
         this.profiles_loading = false
       }
     },
+
+    add_contact() {
+      this.add_button_loading = true
+
+      setTimeout(() => {
+        this.add_button_loading = false
+        this.picked_profile = Array()
+      }, 1000) 
+    },
   },
 
   watch: {
@@ -196,8 +209,8 @@ export default {
   top: 16px !important;
 }
 
-.add-profile-text-field .v-text-field--enclosed {
-  margin-top: 10px !important;
+.add-profile-text-field .v-input__append-inner {
+  margin-top: 9px !important;
 }
 
 
