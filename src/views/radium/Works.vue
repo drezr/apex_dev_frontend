@@ -6,7 +6,8 @@
   <transition name="fade">
     <div v-if="!loading">
       <div class="team-title">
-        {{ team.name }} ({{ app.name }})
+        {{ team.name }}
+        {{ app.name ? `(${app.name})` : '' }}
       </div>
 
       <NavigationBar

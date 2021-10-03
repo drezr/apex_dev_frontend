@@ -6,7 +6,8 @@
   <transition name="fade">
     <div v-if="!loading" class="works-printable-area">
       <div class="d-flex justify-start align-center my-1 mx-3 text-h5">
-        {{ team.name }} ({{ app.name }}) -
+        {{ team.name }}
+        {{ app.name ? `(${app.name})` : '' }} -
         {{ lang.views.radium.printable_works[lg] }}
         {{ $tool.format_date_month_name_year(`${$current_year}-${$current_month}`, lg) }}
 
