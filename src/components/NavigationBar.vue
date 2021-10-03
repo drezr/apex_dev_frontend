@@ -85,6 +85,7 @@
       :outlined="true"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.printable_tooltip[lg]"
+      @click="go_printable_works"
     />
 
     <CustomButton
@@ -183,6 +184,10 @@ export default {
 
     go_printable_calendar() {
 
+    },
+
+    go_printable_works() {
+      window.open(`/team/${this.$current_team_id}/radium/${this.$current_app_id}/worksprintable/month/${this.$current_month}/year/${this.$current_year}`)
     },
 
     go_printable_board() {

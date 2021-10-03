@@ -599,7 +599,7 @@ export default {
 
 .board-planned {
   width: 65%;
-  min-width: 880px;
+  min-width: 900px;
   height: calc(100vh - 280px);
   max-height: calc(100vh - 280px);
   min-height: 300px;

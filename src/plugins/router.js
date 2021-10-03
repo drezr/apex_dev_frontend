@@ -9,6 +9,7 @@ import Calendar from '@/views/watcher/Calendar.vue'
 import Calls from '@/views/watcher/Calls.vue'
 import Leaves from '@/views/watcher/Leaves.vue'
 import Works from '@/views/radium/Works.vue'
+import WorksPrintable from '@/views/radium/WorksPrintable.vue'
 import Board from '@/views/planner/Board.vue'
 import Projects from '@/views/draft/Projects.vue'
 import Project from '@/views/draft/Project.vue'
@@ -96,6 +97,16 @@ const router = new VueRouter({
       meta: {
         'app': 'radium',
         'view': 'works',
+        'title': 'Radium',
+      },
+    },
+    {
+      path: '/team/:team_id/radium/:app_id/worksprintable/month/:month/year/:year',
+      name: 'WorksPrintable',
+      component: WorksPrintable,
+      meta: {
+        'app': 'radium',
+        'view': 'worksprintable',
         'title': 'Radium',
       },
     },

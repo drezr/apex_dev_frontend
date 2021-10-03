@@ -420,6 +420,11 @@ export default {
             'nl': '',
             'en': '',
           },
+          'print': {
+            'fr': 'Imprimer',
+            'nl': '',
+            'en': '',
+          },
           'expand': {
             'fr': 'Développer',
             'nl': '',
@@ -1573,6 +1578,11 @@ export default {
             },
             'to': {
               'fr': 'À',
+              'nl': '',
+              'en': '',
+            },
+            'printable_works': {
+              'fr': 'Chantiers',
               'nl': '',
               'en': '',
             },

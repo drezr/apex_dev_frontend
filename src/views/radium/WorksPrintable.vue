@@ -4,37 +4,50 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading">
-      <div class="team-title">
-        {{ team.name }} ({{ app.name }})
+    <div v-if="!loading" class="works-printable-area">
+      <div class="d-flex justify-start align-center my-1 mx-3 text-h5">
+        {{ team.name }} ({{ app.name }}) -
+        {{ lang.views.radium.printable_works[lg] }}
+        {{ $tool.format_date_month_name_year(`${$current_year}-${$current_month}`, lg) }}
+
+        <CustomButton
+          :icon="'mdi-filter'"
+          :height="40"
+          :outlined="true"
+          class="ml-3 no-print"
+          :tooltip="lang.views.radium.filter_works_tooltip[lg]"
+          @click="filter_dialog = true"
+        />
+
+        <CustomButton
+          :icon="'mdi-tune-vertical'"
+          :height="40"
+          :outlined="true"
+          class="ml-3 no-print"
+          :tooltip="lang.views.radium.customize_tooltip[lg]"
+          @click="customize_dialog = true"
+        />
+
+        <CustomButton
+          :icon="'mdi-printer'"
+          :height="40"
+          :outlined="true"
+          class="ml-3 no-print"
+          @click="print_document"
+        />
       </div>
-
-      <NavigationBar
-        @open-customize-dialog="customize_dialog = true"
-        @open-filter-dialog="filter_dialog = true"
-        @open-messages-dialog="messages_dialog = true"
-        @toggle-palette="palette = !palette"
-      />
-
-      <Palette
-        v-if="palette"
-        class="mt-2"
-        @pick-color="palette_pick_color($event)"
-      />
 
       <div class="works-frame" v-if="filtered_works.length > 0">
         <VueDraggable
           v-model="filtered_works"
-          @change="update_work_position"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-drag-button"
         >
-          <Work
+          <WorkPrintable
             v-for="(work, i) in filtered_works"
             :key="i"
             :self="work"
-            class="ma-3"
           />
         </VueDraggable>
       </div>
@@ -70,7 +83,7 @@
       handle=".cursor-move"
     >
       <div
-        v-for="(column, i) in columns"
+        v-for="(column, i) in columns.filter(c => c.name != 'files')"
         :key="i"
         class="works-customize-row"
       >
@@ -109,66 +122,6 @@
         ></v-checkbox>
       </div>
     </VueDraggable>
-  </CustomDialog>
-
-  <CustomDialog
-    :open="messages_dialog"
-    :width="600"
-    :title_text="lang.views.radium.messages_dialog_title[lg]"
-    :title_icon="'mdi-android-messages'"
-    @cancel="messages_dialog = false"
-  >
-    <div v-if="messages.length == 0" class="d-flex justify-center pa-16">
-      {{ lang.views.radium.messages_no_message[lg] }}
-    </div>
-
-    <div
-      v-for="(message, i) in messages"
-      :key="i"
-      class="message-frame"
-    >
-      <WorkSimple :self="message.work" />
-
-      <v-alert
-        border="right"
-        :color="message.priority == 'important' ? 'red' : 'blue'"
-        :icon="message.priority == 'important' ? 'mdi-alert' : 'mdi-information'"
-        class="mt-3 mb-3 darken-2"
-        dark
-        prominent
-      >
-        <div class="px-3" style="white-space: pre;">
-          <big>{{ message.message }}</big>
-        </div>
-
-        <div class="text-right" style="position: relative; top: 10px;">
-          <small>{{ by_author_on_date(message.date, message.author) }}</small>
-        </div>
-      </v-alert>
-
-      <div class="text-right">
-        <CustomButton
-          :text="lang.generic.acquit[lg]"
-          :icon="'mdi-check'"
-          :color="'green'"
-          :dark="true"
-          @click="acquit_dialog = true"
-        />
-
-        <CustomDialog
-          :open="acquit_dialog"
-          :width="500"
-          :title_text="lang.generic.are_you_sure[lg]"
-          :cancel_icon="'mdi-close'"
-          :cancel_text="lang.generic.cancel[lg]"
-          :confirm_icon="'mdi-check'"
-          :confirm_text="lang.generic.acquit[lg]"
-          :confirm_color="'green'"
-          @cancel="acquit_dialog = false"
-          @confirm="acquit_message(message.id)"
-        ></CustomDialog>
-      </div>
-    </div>
   </CustomDialog>
 
   <CustomDialog
@@ -213,19 +166,13 @@
 
 <script>
 
-import NavigationBar from '@/components/NavigationBar.vue'
-import Work from '@/views/radium/components/Work.vue'
-import WorkSimple from '@/components/WorkSimple.vue'
-import Palette from '@/components/Palette.vue'
+import WorkPrintable from '@/views/radium/components/WorkPrintable.vue'
 
 export default {
-  name: 'Works',
+  name: 'WorksPrintable',
 
   components: {
-    NavigationBar,
-    Work,
-    WorkSimple,
-    Palette,
+    WorkPrintable,
   },
 
   props: {
@@ -235,23 +182,13 @@ export default {
   data() {
     return {
       loading: true,
-      cached_teams: Array(),
-      circles_loading: true,
-      circles: Array(),
-      customize_dialog: false,
-      filter_dialog: false,
       team: Object(),
       app: Object(),
       config: Object(),
       works: Array(),
       columns: Array(),
-      messages: Array(),
-      messages_loading: true,
-      messages_dialog: false,
-      acquit_dialog: false,
-      palette: false,
-      palette_color: 'white',
-      palette_mode: 'works',
+      customize_dialog: false,
+      filter_dialog: false,
       active_filters: Array(),
       excluded_filters: [
         'shifts',
@@ -280,31 +217,6 @@ export default {
     this.filtered_works = this.get_filtered_works()
 
     this.loading = false
-
-    this.request = await this.$http.get('messages', {
-      'app_id': this.$current_app_id,
-    })
-
-    this.messages = this.request.messages
-    this.messages_loading = false
-
-    this.request = await this.$http.get('apps')
-    this.circles = this.request.circles
-
-    for (let circle of this.circles) {
-      circle.teams.sort((a, b) => a.name.localeCompare(b.name))
-
-      for (let team of circle.teams) {
-        team.apps.sort((a, b) => {
-          a = a.name || ''
-          b = b.name || ''
-          
-          return a.localeCompare(b)
-        })
-      }
-    }
-
-    this.circles_loading = false
   },
 
   computed: {
@@ -312,10 +224,6 @@ export default {
   },
 
   methods: {
-    update_work_position() {
-
-    },
-
     get_columns() {
       let columns = Array()
 
@@ -441,18 +349,8 @@ export default {
       return works
     },
 
-    by_author_on_date(date, author) {
-      let txt = this.lang.generic.by_author_on_date[this.lg]
-
-      txt = txt.replace('@@@', this.$tool.format_date(date))
-      txt = txt.replace('###', author)
-
-      return txt
-    },
-
-    acquit_message(message_id) {
-      this.messages = this.messages.filter(m => m.id !== message_id)
-      this.acquit_dialog = false
+    print_document() {
+      print()
     },
   },
 
@@ -484,12 +382,19 @@ export default {
   padding-bottom: 10px;
 }
 
-.message-frame {
-  margin-top: 9px;
-  padding: 9px;
-  border: 1px orange solid;
-  border-radius: 5px;
-
+@media print {
+  .works-printable-area {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 </style>

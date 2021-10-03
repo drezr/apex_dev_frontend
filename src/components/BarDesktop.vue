@@ -1,6 +1,6 @@
 <template>
 
-<div class="bar-desktop elevation-1">
+<div class="bar-desktop elevation-1" v-if="bar_is_visible">
   <div class="d-flex">
     <router-link class="navigation" :to="'/'">
       <img :src="$tool.get_logo('apex_50x50')" class="logo" />
@@ -131,6 +131,10 @@ export default {
       }
 
       return '/'
+    },
+
+    bar_is_visible() {
+      return !this.$current_view.includes('printable')
     },
   },
 

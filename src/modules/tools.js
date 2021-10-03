@@ -232,6 +232,19 @@ class Tools {
     return ''
   }
 
+  format_date_month_name_year(date, lang) {
+    if (date) {
+      date = new Date(date)
+
+      let month = date.toLocaleString(lang, {month: 'long'})
+      let month_capitalized = month.charAt(0).toUpperCase() + month.slice(1)
+
+      return `${month_capitalized} ${date.getFullYear()}`
+    }
+
+    return ''
+  }
+
   format_datetime(datetime) {
     let date = new Date(datetime)
 

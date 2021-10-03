@@ -121,6 +121,12 @@ html {
   white-space: pre !important;
 }
 
+@media print {    
+  .no-print, .no-print * {
+    display: none !important;
+  }
+}
+
 .font-size-8 { font-size: 8px !important; }
 .font-size-9 { font-size: 9px !important; }
 .font-size-10 { font-size: 10px !important; }
