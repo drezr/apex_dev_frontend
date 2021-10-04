@@ -492,6 +492,8 @@ export default {
         }
       }
 
+      this.set_disabled_profiles()
+
       this.teammates_dialog = true
     },
 
@@ -539,7 +541,8 @@ export default {
 
     set_disabled_profiles() {
       for (let profile of this.all_profiles) {
-        if (this.profiles.map(p => p.id).includes(profile.id)) {
+        if (this.profiles.map(p => p.id).includes(profile.id) ||
+            this.foreign_profiles.map(p => p.name).includes(profile.name)) {
           profile.disabled = true
         }
 

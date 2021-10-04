@@ -322,7 +322,7 @@ export default {
 
       for (let key in this.config) {
         for (let value of ['visible', 'width', 'position', 'textsize']) {
-          if (key.includes(value)) {
+          if (key.includes(value) && !key.includes('printable_')) {
             let name = key.replace('_' + value, '')
             let item = columns.find(i => i.name == name)
 
