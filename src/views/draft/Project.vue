@@ -483,7 +483,7 @@ export default {
     },
 
     go_printable() {
-
+      window.open(`/team/${this.$current_team_id}/draft/${this.$current_app_id}/projectprintable/${this.project.id}`)
     },
 
     add_task() {

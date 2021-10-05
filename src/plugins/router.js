@@ -6,13 +6,17 @@ import Home from '@/views/apex/Home.vue'
 import MyApex from '@/views/apex/MyApex.vue'
 import Team from '@/views/apex/Team.vue'
 import Calendar from '@/views/watcher/Calendar.vue'
+import CalendarPrintable from '@/views/watcher/CalendarPrintable.vue'
+import Quota from '@/views/watcher/Quota.vue'
 import Calls from '@/views/watcher/Calls.vue'
 import Leaves from '@/views/watcher/Leaves.vue'
 import Works from '@/views/radium/Works.vue'
 import WorksPrintable from '@/views/radium/WorksPrintable.vue'
 import Board from '@/views/planner/Board.vue'
+import BoardPrintable from '@/views/planner/BoardPrintable.vue'
 import Projects from '@/views/draft/Projects.vue'
 import Project from '@/views/draft/Project.vue'
+import ProjectPrintable from '@/views/draft/ProjectPrintable.vue'
 import Contacts from '@/views/nexus/Contacts.vue'
 
 Vue.use(VueRouter)
@@ -71,6 +75,26 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/team/:team_id/watcher/:app_id/calendarprintable/month/:month/year/:year',
+      name: 'CalendarPrintable',
+      component: CalendarPrintable,
+      meta: {
+        'app': 'watcher',
+        'view': 'calendarprintable',
+        'title': 'Watcher',
+      },
+    },
+    {
+      path: '/team/:team_id/watcher/:app_id/quota/year/:year',
+      name: 'Quota',
+      component: Quota,
+      meta: {
+        'app': 'watcher',
+        'view': 'quota',
+        'title': 'Watcher',
+      },
+    },
+    {
       path: '/team/:team_id/watcher/:app_id/calls/month/:month/year/:year',
       name: 'Calls',
       component: Calls,
@@ -121,6 +145,16 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/team/:team_id/planner/:app_id/boardprintable/month/:month/year/:year',
+      name: 'BoardPrintable',
+      component: BoardPrintable,
+      meta: {
+        'app': 'planner',
+        'view': 'boardprintable',
+        'title': 'Planner',
+      },
+    },
+    {
       path: '/team/:team_id/draft/:app_id/projects',
       name: 'Projects',
       component: Projects,
@@ -147,6 +181,16 @@ const router = new VueRouter({
       meta: {
         'app': 'draft',
         'view': 'project',
+        'title': 'Draft',
+      },
+    },
+    {
+      path: '/team/:team_id/draft/:app_id/projectprintable/:project_id',
+      name: 'ProjectPrintable',
+      component: ProjectPrintable,
+      meta: {
+        'app': 'draft',
+        'view': 'projectprintable',
         'title': 'Draft',
       },
     },

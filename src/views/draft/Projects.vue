@@ -343,11 +343,11 @@ export default {
 
     get_route(project_id) {
       if (this.$current_view == 'projects') {
-        return `/team/${this.$current_team_id}/draft/${this.$current_app_id}/project/${project_id}/`
+        return `/team/${this.$current_team_id}/draft/${this.$current_app_id}/project/${project_id}`
       }
       
       else if (this.$current_view == 'myapexprojects') {
-        return `/myapex/draft/${this.$current_app_id}/project/${project_id}/`
+        return `/myapex/draft/${this.$current_app_id}/project/${project_id}`
       }
     },
   },

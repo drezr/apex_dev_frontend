@@ -183,7 +183,7 @@ export default {
     },
 
     go_printable_calendar() {
-
+      window.open(`/team/${this.$current_team_id}/watcher/${this.$current_app_id}/calendarprintable/month/${this.$current_month}/year/${this.$current_year}`)
     },
 
     go_printable_works() {
@@ -191,7 +191,7 @@ export default {
     },
 
     go_printable_board() {
-
+      window.open(`/team/${this.$current_team_id}/planner/${this.$current_app_id}/boardprintable/month/${this.$current_month}/year/${this.$current_year}`)
     },
 
     go_leaves() {
