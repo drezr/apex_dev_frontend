@@ -105,6 +105,16 @@ export default {
             'nl': '',
             'en': 'Create',
           },
+          'go': {
+            'fr': 'Aller',
+            'nl': '',
+            'en': 'Go',
+          },
+          'visit': {
+            'fr': 'Visiter',
+            'nl': '',
+            'en': 'Visit',
+          },
           'override': {
             'fr': 'Écraser',
             'nl': '',
@@ -569,6 +579,11 @@ export default {
             'fr': 'Lien',
             'nl': '',
             'en': 'Link',
+          },
+          'input_value': {
+            'fr': 'Valeur',
+            'nl': '',
+            'en': 'Value',
           },
           'models': {
             'fr': 'Modèles',

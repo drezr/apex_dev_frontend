@@ -105,6 +105,10 @@ html {
   cursor: grab !important;
 }
 
+.cursor-text {
+  cursor: text !important;
+}
+
 .opacity-0 {
   opacity: 0 !important;
 }

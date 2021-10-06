@@ -169,8 +169,8 @@
             :tooltip="lang.views.watcher.calendar_edit_elements_tooltip[lg]"
             class="mr-2"
             @click="detail_edit_mode = !detail_edit_mode"
+            :outlined="detail_edit_mode"
           />
-
 
           <!-- :outlined="detail_edit_mode" re-render all components-->
 

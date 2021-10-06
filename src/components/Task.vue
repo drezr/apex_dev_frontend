@@ -127,7 +127,6 @@
 
         <div
           class="task-expension"
-          :style="self.children.length > 0 && self.children[0].type == 'input' ? '' : 'padding-top: 12px;'"
         >
           <VueDraggable
             v-model="self.children"
@@ -144,7 +143,6 @@
                 v-if="child.type == 'input'"
                 :self="child"
                 :parent="self"
-                class="mb-3"
               />
 
               <Subtask
@@ -152,6 +150,7 @@
                 :self="child"
                 :parent="self"
                 class="mx-3 mb-3"
+                :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
               />
 
               <Note
@@ -159,6 +158,7 @@
                 :self="child"
                 :parent="self"
                 class="mx-3 mb-3"
+                :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
               />
 
               <File
@@ -166,6 +166,7 @@
                 :self="child"
                 :parent="self"
                 class="mx-3 mb-3"
+                :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
               />
             </div>
           </VueDraggable>

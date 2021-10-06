@@ -5,15 +5,6 @@
 
   <div class="d-flex flex-wrap" v-if="$current_view == 'calendar'">
     <CustomButton
-      :icon="'mdi-hammer-screwdriver'"
-      :height="40"
-      :outlined="true"
-      class="mr-1 mb-1"
-      @click="go_calls"
-      :tooltip="lang.views.watcher.calls_summary[lg]"
-    />
-
-    <CustomButton
       :icon="'mdi-palette'"
       :height="40"
       :outlined="true"
@@ -32,21 +23,40 @@
     />
 
     <CustomButton
-      :icon="'mdi-printer'"
-      :height="40"
-      :outlined="true"
-      class="mr-1 mb-1"
-      @click="go_printable_calendar"
-      :tooltip="lang.views.watcher.printable_calendar[lg]"
-    />
-
-    <CustomButton
       :icon="'mdi-calendar-account'"
       :height="40"
       :outlined="true"
       class="mr-1 mb-1"
       @click="go_leaves"
       :tooltip="lang.views.watcher.leaves_management[lg]"
+    />
+
+    <CustomButton
+      :icon="'mdi-printer'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="go_printable_calendar"
+      :tooltip="lang.views.watcher.printable_calendar[lg]"
+      :badge="true"
+      :badge_icon="'mdi-open-in-new'"
+      :badge_color="'grey'"
+      :badge_offset_x="18"
+      :badge_offset_y="18"
+    />
+
+    <CustomButton
+      :icon="'mdi-hammer-screwdriver'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="go_calls"
+      :tooltip="lang.views.watcher.calls_summary[lg]"
+      :badge="true"
+      :badge_icon="'mdi-open-in-new'"
+      :badge_color="'grey'"
+      :badge_offset_x="18"
+      :badge_offset_y="18"
     />
   </div>
 
@@ -80,15 +90,6 @@
     /> -->
 
     <CustomButton
-      :icon="'mdi-printer'"
-      :height="40"
-      :outlined="true"
-      class="mr-1 mb-1"
-      :tooltip="lang.views.radium.printable_tooltip[lg]"
-      @click="go_printable_works"
-    />
-
-    <CustomButton
       v-if="$is_editor"
       :icon="'mdi-tune-vertical'"
       :height="40"
@@ -96,6 +97,20 @@
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.customize_tooltip[lg]"
       @click="$emit('open-customize-dialog')"
+    />
+
+    <CustomButton
+      :icon="'mdi-printer'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      :tooltip="lang.views.radium.printable_tooltip[lg]"
+      @click="go_printable_works"
+      :badge="true"
+      :badge_icon="'mdi-open-in-new'"
+      :badge_color="'grey'"
+      :badge_offset_x="18"
+      :badge_offset_y="18"
     />
 
     <CustomButton
@@ -131,6 +146,11 @@
       class="mr-1 mb-1"
       @click="go_printable_board"
       :tooltip="lang.views.planner.printable_board[lg]"
+      :badge="true"
+      :badge_icon="'mdi-open-in-new'"
+      :badge_color="'grey'"
+      :badge_offset_x="18"
+      :badge_offset_y="18"
     />
   </div>
 </div>
