@@ -555,6 +555,11 @@ export default {
             'nl': '',
             'en': 'Text size',
           },
+          'calendar': {
+            'fr': 'Calendrier',
+            'nl': '',
+            'en': 'Calendar',
+          },
           'input_short': {
             'fr': 'Texte court',
             'nl': '',

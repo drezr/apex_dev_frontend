@@ -42,7 +42,7 @@
             :animation="100"
             easing="cubic-bezier(1, 0, 0, 1)"
             handle=".handle"
-            style="height: 100%;"
+            style="height: calc(100% - 5px);"
           >
             <div
               v-for="(child, i) in app.children"
