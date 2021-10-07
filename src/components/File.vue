@@ -23,7 +23,11 @@
     icon="mdi-link-variant"
     :value="$show_link_badge"
   >
-    <div class="file-frame">
+    <div
+      class="file-frame"
+      @click="get_file(false)"
+      :class="!edit_mode ? 'cursor-pointer' : ''"
+    >
       <CustomButton
         v-if="!$is_in_task && $current_view == 'board'"
         :icon="'mdi-drag'"
@@ -38,17 +42,28 @@
         @click.native.stop
       />
 
+      <div
+        v-if="is_image"
+        class="file-mini ml-1"
+        @click="get_file(true)"
+      >
+        <img :src="mini" />
+      </div>
+
       <v-icon
+        v-else
         color="pink"
-        :class="$is_in_task || $current_view != 'board' ? 'mx-2' : 'mr-2'"
         large
+        :class="$is_in_task || $current_view != 'board' ? 'mx-2' : 'mr-2'"
+        @click="get_file"
       >
         {{ icon }}
       </v-icon>
 
       <v-text-field
         v-model="self.name"
-        class="custom-field ma-2"
+        class="custom-field file-input ma-2"
+        :class="is_valid ? 'file-input-valid' : 'file-input-invalid'"
         :placeholder="lang.generic.file_name[lg]"
         :disabled="!(edit_mode && $is_editor)"
         :flat="!(edit_mode && $is_editor)"
@@ -56,7 +71,33 @@
         solo
       ></v-text-field>
 
-      <div class="ml-1 mr-2" v-if="edit_mode">
+      <CustomButton
+        v-if="edit_mode && !file_loading"
+        :icon="'mdi-content-save'"
+        :small_fab="true"
+        :text_color="'teal'"
+        :tooltip="lang.generic.save[lg]"
+        @click="update_name"
+        :disabled="!is_valid"
+      />
+
+      <Loader
+        :size="20"
+        :width="3"
+        class="mx-2"
+        v-if="file_loading"
+      />
+
+      <CustomButton
+        v-if="edit_mode"
+        :icon="'mdi-backup-restore'"
+        :small_fab="true"
+        :text_color="'blue'"
+        :tooltip="lang.generic.restore[lg]"
+        @click="restore_name"
+      />
+
+      <div class="ml-1 mr-2 d-flex" v-if="edit_mode">
         <CustomButton
           v-if="$is_in_task || $current_view != 'board'"
           :icon="'mdi-arrow-split-horizontal'"
@@ -104,6 +145,13 @@
     @cancel="delete_dialog = false"
     @confirm="remove"
   ></CustomDialog>
+
+  <PhotoSwipeWrapper
+    :isOpen="is_photoswipe_open"
+    :items="photos"
+    :options="options"
+    @close="is_photoswipe_open = false"
+  ></PhotoSwipeWrapper>
 </div>
 
 </template>
@@ -111,11 +159,13 @@
 
 <script>
 
+import PhotoSwipeWrapper from '@/components/PhotoSwipeWrapper.vue'
+
 export default {
   name: 'File',
 
   components: {
-    
+    PhotoSwipeWrapper,
   },
 
   props: {
@@ -127,11 +177,18 @@ export default {
     return {
       grab_cursor: 'grab',
       delete_dialog: false,
+      initial_name: '',
+      file_loading: false,
+
+      is_photoswipe_open: false,
+      options: {
+        index: 0
+      },
     }
   },
 
   created() {
-
+    this.initial_name = this.$tool.deepcopy(this.self.name)
   },
 
   computed: {
@@ -140,6 +197,21 @@ export default {
     },
 
     icon() {
+      let ext = this.self.extension.toLowerCase()
+
+      if (ext == 'pdf') return 'mdi-file-pdf'
+      else if (['doc', 'docx'].includes(ext)) return 'mdi-file-word'
+      else if (['xls', 'xlsx'].includes(ext)) return 'mdi-file-excel'
+      else if (['mp3', 'm4a', 'wav', 'wma', 'aac'].includes(ext)) {
+        return 'mdi-file-video'
+      }
+      else if (['mp4', 'avi', 'mov', 'flv', 'mkv'].includes(ext)) {
+        return 'mdi-file-music'
+      }
+      else if (['tiff', 'gif', 'png', 'jpg', 'jpeg'].includes(ext)) {
+        return 'mdi-image'
+      }
+
       return 'mdi-file'
     },
 
@@ -173,6 +245,49 @@ export default {
         },
       ]
     },
+
+    is_image() {
+      let img_extensions = ['jpg', 'jpeg', 'png', 'gif']
+
+      return img_extensions.includes(this.self.extension)
+    },
+
+    is_valid() {
+      var rg1 = /^[^\\/:*?"<>|]+$/
+      var rg2 = /^\./
+
+      return rg1.test(this.self.name) && !rg2.test(this.self.name)
+    },
+
+    mini() {
+      let media = this.$http.media
+      let dir = this.self.uid
+      let ext = this.self.extension
+
+      return `${media}${dir}/mini.${ext}`
+    },
+
+    photos() {
+      if (this.is_image) {
+        let media = this.$http.media
+        let dir = this.self.uid
+        let name = this.self.name
+        let ext = this.self.extension
+
+        let path = `${media}${dir}/${name}.${ext}`
+        let mini = `${media}${dir}/mini.${ext}`
+
+        return [{
+          'title': this.self.name,
+          'src': path,
+          'mini': mini,
+          'w': this.self.width,
+          'h': this.self.height,
+        }]
+      }
+
+      return Array()
+    },
   },
 
   methods: {
@@ -197,6 +312,46 @@ export default {
     remove() {
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
+
+      this.remove_dialog = false
+    },
+
+    get_file(force) {
+      if (!this.edit_mode || force) {
+        if (!this.is_image) {
+          let media = this.$http.media
+          let dir = this.self.uid
+          let name = this.self.name
+          let ext = this.self.extension
+
+          let path = `${media}${dir}/${name}.${ext}`
+          if (ext == '') path = `${media}${dir}/${name}`
+
+          window.open(path)
+        }
+
+        else if (this.$is_in_task) {
+          this.$emit('open-image')
+        }
+
+        else {
+          this.is_photoswipe_open = true
+          this.$set(this.options, 'index', 0)
+        }
+      }
+    },
+
+    update_name() {
+      this.file_loading = true
+
+      setTimeout(() => {
+        this.file_loading = false
+        this.initial_name = this.self.name
+      }, 2000)
+    },
+
+    restore_name() {
+      this.self.name = this.initial_name
     },
   },
 
@@ -210,16 +365,37 @@ export default {
 
 <style>
 
+.file-input-valid .v-text-field__slot input {
+  color: black !important;
+}
+
+.file-input-invalid .v-text-field__slot input {
+  color: red !important;
+}
+
 </style>
 
 
 <style scoped>
 
 .file-frame {
+  position: relative;
   display: flex;
   align-items: center;
   border-radius: 5px;
   border: 1px grey solid;
+}
+
+.file-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  min-width: 75px;
+  cursor: pointer;
 }
 
 </style>

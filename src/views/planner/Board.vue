@@ -460,7 +460,7 @@ export default {
         return 'red'
       }
 
-      return ''
+      return 'grey'
     },
 
     async open_teammates_dialog(day, child) {

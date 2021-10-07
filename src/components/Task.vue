@@ -167,6 +167,7 @@
                 :parent="self"
                 class="mx-3 mb-3"
                 :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+                v-on:open-image="try_open_photo(child)"
               />
             </div>
           </VueDraggable>
@@ -234,11 +235,20 @@
       @confirm="remove"
     ></CustomDialog>
   </v-badge>
+
+  <PhotoSwipeWrapper
+    :isOpen="is_photoswipe_open"
+    :items="photos"
+    :options="options"
+    @close="is_photoswipe_open = false"
+  ></PhotoSwipeWrapper>
 </div>
 
 </template>
 
 <script>
+
+import PhotoSwipeWrapper from '@/components/PhotoSwipeWrapper.vue'
 
 import Input from '@/components/Input.vue'
 import Subtask from '@/components/Subtask.vue'
@@ -249,6 +259,7 @@ export default {
   name: 'Task',
 
   components: {
+    PhotoSwipeWrapper,
     Subtask,
     Note,
     File,
@@ -271,6 +282,11 @@ export default {
       grab_cursor: 'grab',
       delete_dialog: false,
       expanded: false,
+
+      is_photoswipe_open: false,
+      options: {
+        index: 0
+      },
     }
   },
 
@@ -396,6 +412,33 @@ export default {
         c.heading
       )
     },
+
+    photos() {
+      let files = this.self.children.filter(f => f.type.includes('file'))
+      let extensions = ['jpg', 'jpeg', 'png', 'gif']
+      let photos = files.filter(p => extensions.includes(p.extension))
+      let list = Array()
+
+      for (let photo of photos) {
+        let media = this.$http.media
+        let dir = photo.uid
+        let name = photo.name
+        let ext = photo.extension
+
+        let path = `${media}${dir}/${name}.${ext}`
+        let mini = `${media}${dir}/mini.${ext}`
+
+        list.push({
+          'title': photo.name,
+          'src': path,
+          'mini': mini,
+          'w': photo.width,
+          'h': photo.height,
+        })
+      }
+
+      return list
+    },
   },
 
   methods: {
@@ -447,6 +490,14 @@ export default {
 
     input_actions(event) {
       console.log(event)
+    },
+
+    try_open_photo(file) {
+      let photo_names = this.photos.map(p => p.title)
+      let i = photo_names.indexOf(file.name)
+
+      this.is_photoswipe_open = true
+      this.$set(this.options, 'index', i)
     },
   },
 

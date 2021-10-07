@@ -62,6 +62,7 @@
     :title_text="lang.views.radium.customize_tooltip[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="customize_dialog = false"
+    :move_window="true"
   >
     <VueDraggable
       v-model="columns"
@@ -178,6 +179,7 @@
     :title_text="lang.views.radium.filter_works_tooltip[lg]"
     :title_icon="'mdi-filter'"
     @cancel="filter_dialog = false"
+    :move_window="true"
   >
     <div
       v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name)))"

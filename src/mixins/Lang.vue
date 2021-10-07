@@ -50,6 +50,11 @@ export default {
             'nl': '',
             'en': 'Replace',
           },
+          'restore': {
+            'fr': 'Restaurer',
+            'nl': '',
+            'en': 'Restore',
+          },
           'sort': {
             'fr': 'Trier',
             'nl': '',
@@ -1617,6 +1622,11 @@ export default {
               'fr': 'Ajouter un membre d\'une autre équipe',
               'nl': '',
               'en': 'Add a member of another team',
+            },
+            'planning': {
+              'fr': 'Planning',
+              'nl': '',
+              'en': 'Schedule',
             },
           },
           'draft': {
