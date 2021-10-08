@@ -23,7 +23,7 @@ export default {
       else return new Date().getFullYear()
     },
 
-    $current_profile() {
+    $current_profile_id() {
       return this.$route.params.profile_id
     },
 

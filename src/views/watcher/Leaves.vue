@@ -67,7 +67,7 @@
           :tooltip="lang.views.watcher.leaves_add_leave_type[lg]"
           :icon="'mdi-plus'"
           :small_fab="true"
-          :disabled="config.leave_count == 10"
+          :disabled="config.leave_count == 20"
         ></CustomButton>
       </div>
 
@@ -132,7 +132,17 @@
           hide-details
           class="mx-3"
           style="width: 100px;"
+          @change="update('type', i)"
         ></v-select>
+
+        <v-checkbox
+          v-model="config['leave_' + i + '_visible']"
+          :label="lang.generic.visible[lg]"
+          class="mx-3"
+          hide-details
+          style="position: relative; top: -10px;"
+          :disabled="config['leave_' + i + '_type'] == 'counter'"
+        ></v-checkbox>
       </div>
     </div>
   </CustomDialog>
@@ -161,7 +171,7 @@ export default {
       loading: true,
       team: Object(),
       app: Object(),
-      leaves: Array(),
+      quotas: Array(),
       config: Object(),
       leave_config_dialog: false,
       leave_colors: [
@@ -194,16 +204,16 @@ export default {
 
     this.team = this.request.team
     this.app = this.request.app
-    this.leaves = this.request.leaves
+    this.quotas = this.request.quotas
     this.config = this.request.config
 
     this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
     for (let profile of this.team.profiles) {
-      profile.leaves = this.leaves.find(l => l.profile == profile.id)
+      profile.quotas = this.quotas.find(l => l.profile == profile.id)
 
-      for (let i = 0; i < 10; i++) {
-        profile.leaves['type_' + i] = Number(profile.leaves['type_' + i])
+      for (let i = 0; i < 20; i++) {
+        profile.quotas['type_' + i] = Number(profile.quotas['type_' + i])
       }
     }
 
@@ -221,6 +231,7 @@ export default {
           'desc': this.config['leave_' + i + '_desc'],
           'type': this.config['leave_' + i + '_type'],
           'color': this.config['leave_' + i + '_color'],
+          'visible': this.config['leave_' + i + '_visible'],
         })
       }
 
@@ -230,7 +241,11 @@ export default {
     leave_types() {
       return [
         {'value': 'day', 'name': this.lang.generic.day_alt[this.lg]},
+        {'value': 'saturday', 'name': this.lang.generic.saturday[this.lg]},
+        {'value': 'sunday', 'name': this.lang.generic.sunday[this.lg]},
+        {'value': 'holiday', 'name': this.lang.generic.holiday[this.lg]},
         {'value': 'hour', 'name': this.lang.generic.hour[this.lg]},
+        {'value': 'counter', 'name': this.lang.generic.counter[this.lg]},
       ]
     },
   },
@@ -244,7 +259,7 @@ export default {
       }
 
       else if (action == 'plus') {
-        if (this.config.leave_count < 10) {
+        if (this.config.leave_count < 20) {
           this.config.leave_count++
         }
       }
@@ -252,6 +267,14 @@ export default {
 
     set_leave_color(color, i) {
       this.config['leave_' + i + '_color'] = color
+    },
+
+    update(field, i) {
+      let value = `leave_${i}_${field}`
+
+      if (field == 'type' && this.config[value] == 'counter') {
+        this.config[`leave_${i}_visible`] = false
+      }
     },
   },
 

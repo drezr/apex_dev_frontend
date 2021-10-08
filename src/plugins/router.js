@@ -85,7 +85,7 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/team/:team_id/watcher/:app_id/quota/year/:year',
+      path: '/team/:team_id/watcher/:app_id/quota/profile/:profile_id/year/:year',
       name: 'Quota',
       component: Quota,
       meta: {

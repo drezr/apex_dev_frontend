@@ -411,9 +411,19 @@ export default {
             'en': 'saturday',
           },
           'sunday': {
-            'fr': 'dimanche',
+            'fr': 'Dimanche',
             'nl': '',
             'en': 'Sunday',
+          },
+          'holiday': {
+            'fr': 'Férié',
+            'nl': '',
+            'en': 'Holiday',
+          },
+          'counter': {
+            'fr': 'Compteur',
+            'nl': '',
+            'en': 'Counter',
           },
           'pending': {
             'fr': 'En attente',

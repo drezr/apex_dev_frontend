@@ -4,7 +4,7 @@
   <Profile :profile="profile" />
 
   <div
-    v-for="(leave_type, i) in parent.leaves_data"
+    v-for="(leave_type, i) in parent.leaves_data.filter(l => l.visible && l.type != 'counter')"
     :key="i"
   >
     <div class="leave-frame">
@@ -33,7 +33,7 @@
       <input
         type="number"
         class="leave-lower"
-        v-model="profile.leaves['type_' + i]"
+        v-model="profile.quotas['type_' + i]"
         @input="update_leave(i)"
         onkeydown="return ![69, 107, 109].includes(event.keyCode)"
       >  
@@ -82,9 +82,9 @@ export default {
 
   methods: {
     update_leave(i) {
-      if (this.profile.leaves['type_' + i] == '') return
+      if (this.profile.quotas['type_' + i] == '') return
 
-      this.profile.leaves['type_' + i] = Math.round((parseFloat(this.profile.leaves['type_' + i]) + Number.EPSILON) * 100) / 100
+      this.profile.quotas['type_' + i] = Math.round((parseFloat(this.profile.quotas['type_' + i]) + Number.EPSILON) * 100) / 100
     }
   },
 

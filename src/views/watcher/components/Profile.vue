@@ -1,7 +1,7 @@
 <template>
 
 <router-link
-  :to="`/team/${$current_team_id}/watcher/${$current_app_id}/quota/year/${$current_year}`"
+  :to="`/team/${$current_team_id}/watcher/${$current_app_id}/quota/profile/${profile.id}/year/${$current_year}`"
   class="profile-frame lighten-4"
   :class="[
     color + ' lighten-4',
