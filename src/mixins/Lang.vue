@@ -455,6 +455,21 @@ export default {
             'nl': '',
             'en': 'Expand',
           },
+          'presence': {
+            'fr': 'Présence',
+            'nl': '',
+            'en': 'Presence',
+          },
+          'absence': {
+            'fr': 'Absence',
+            'nl': '',
+            'en': 'Absence',
+          },
+          'recovery': {
+            'fr': 'Récupération',
+            'nl': '',
+            'en': 'Recovery',
+          },
           'message': {
             'fr': 'Message',
             'nl': '',

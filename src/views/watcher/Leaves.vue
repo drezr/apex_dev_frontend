@@ -141,7 +141,7 @@
           class="mx-3"
           hide-details
           style="position: relative; top: -10px;"
-          :disabled="config['leave_' + i + '_type'] == 'counter'"
+          :disabled="['counter', 'presence', 'recovery'].includes(config['leave_' + i + '_type'])"
         ></v-checkbox>
       </div>
     </div>
@@ -246,6 +246,8 @@ export default {
         {'value': 'holiday', 'name': this.lang.generic.holiday[this.lg]},
         {'value': 'hour', 'name': this.lang.generic.hour[this.lg]},
         {'value': 'counter', 'name': this.lang.generic.counter[this.lg]},
+        {'value': 'presence', 'name': this.lang.generic.presence[this.lg]},
+        {'value': 'recovery', 'name': this.lang.generic.recovery[this.lg]},
       ]
     },
   },
@@ -272,7 +274,7 @@ export default {
     update(field, i) {
       let value = `leave_${i}_${field}`
 
-      if (field == 'type' && this.config[value] == 'counter') {
+      if (field == 'type' && ['counter', 'presence', 'recovery'].includes(this.config[value])) {
         this.config[`leave_${i}_visible`] = false
       }
     },

@@ -1,7 +1,7 @@
 <template>
 
 <div>
-  <div v-if="$current_view != 'board'">
+  <div v-if="!['board', 'project'].includes($current_view)">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
       :key="i"

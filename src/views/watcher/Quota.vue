@@ -119,14 +119,16 @@ export default {
       let leaves_data = Array()
 
       for (let i = 0; i < this.config.leave_count; i++) {
-        leaves_data.push({
-          'generic_name': 'leave_' + i,
-          'name': this.config['leave_' + i + '_name'],
-          'desc': this.config['leave_' + i + '_desc'],
-          'type': this.config['leave_' + i + '_type'],
-          'color': this.config['leave_' + i + '_color'],
-          'visible': this.config['leave_' + i + '_visible'],
-        })
+        if (!['presence'].includes(this.config['leave_' + i + '_type'])) {
+          leaves_data.push({
+            'generic_name': 'leave_' + i,
+            'name': this.config['leave_' + i + '_name'],
+            'desc': this.config['leave_' + i + '_desc'],
+            'type': this.config['leave_' + i + '_type'],
+            'color': this.config['leave_' + i + '_color'],
+            'visible': this.config['leave_' + i + '_visible'],
+          })
+        }
       }
 
       return leaves_data
