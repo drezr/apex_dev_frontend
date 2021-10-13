@@ -145,7 +145,7 @@ export default {
 
   computed: {
     cell_backgroud() {
-      if (this.date.is_rr) return 'rr'
+      if (this.date.is_holiday) return 'holi'
       else if (this.date.name_short == 'sam') return 'sat'
       else if (this.date.name_short == 'dim') return 'sun'
       else return 'week'
@@ -412,18 +412,18 @@ export default {
   background-color: #cea693;
 }
 
-.cell-presence-rr {
+.cell-presence-holi {
   border-bottom: 1px #B0BEC5 solid;
   background-color: #ebca8f;
 }
 
-.cell-absence-rr {
+.cell-absence-holi {
   border-top: 1px white solid;
   border-bottom: 1px #B0BEC5 solid;
   background-color: #edbd66;
 }
 
-.cell-short-rr {
+.cell-short-holi {
   border-top: 1px #ECEFF1 solid;
   background-color: #edb44e;
 }

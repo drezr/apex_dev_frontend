@@ -248,7 +248,7 @@ export default {
     this.app = this.request.app
     this.days = this.request.days
     this.cells = this.request.cells
-    this.rrs = this.request.rrs
+    this.holidays = this.request.holidays
 
     this.cvs = this.get_cvs()
     this.calendar = this.set_calendar()
@@ -280,7 +280,7 @@ export default {
           'day_number': day_number,
           'month': month + 1,
           'year': year,
-          'is_rr': false,
+          'is_holiday': false,
           'is_cv': false,
           'cv_step': null,
           'week_step': null,
@@ -417,12 +417,12 @@ export default {
         }
 
         for (let date of profile.dates) {
-          let rr = this.rrs.find((rr) => {
-            return new Date(rr.date).getDate() == date.day_number
+          let holiday = this.holidays.find((holiday) => {
+            return new Date(holiday.date).getDate() == date.day_number
           })
 
-          if (rr) {
-            date.is_rr = true
+          if (holiday) {
+            date.is_holiday = true
           }
 
           date.type = 'cell'

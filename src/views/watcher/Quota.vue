@@ -11,7 +11,6 @@
 
       <div class="d-flex justify-center">
         <div
-          class="leave-frame"
           v-for="(leave_type, i) in leaves_data"
           :key="i"
         >
@@ -20,28 +19,49 @@
             color="black"
           >
             <template v-slot:activator="{ on: show_tooltip }">
-              <div class="leave-upper" v-on="show_tooltip">
+              <div
+                class="leave-frame"
+                :class="selected_type == leave_type.name ? 'leave-outlined' : ''"
+                @click="select_type(leave_type.name)"
+                v-on="show_tooltip"
+              >
+                <div class="leave-upper">
+                  <div
+                    style="height: 100%;"
+                    class="lighten-4 text--darken-4 white--text d-flex justify-center align-center"
+                    :class="[
+                      leave_type.color,
+                      leave_type.color + '--text',
+                    ]"
+                  >
+                    <b>{{ leave_type.name }}</b>
+                  </div>
+                </div>
+
                 <div
-                  style="height: 100%;"
-                  class="lighten-4 text--darken-4 white--text d-flex justify-center align-center"
-                  :class="[
-                    leave_type.color,
-                    leave_type.color + '--text'
-                  ]"
+                  class="leave-lower"
                 >
-                  <b>{{ leave_type.name }}</b>
+                  {{ computed_quota[leave_type.generic_name] }}
                 </div>
               </div>
             </template>
 
+
             <span>{{ leave_type.desc }}</span>
           </v-tooltip>
+        </div>
+      </div>
 
+      <div class="d-flex justify-center">
+        <div
+          v-for="(leave_type, i) in leaves_data"
+          :key="i"
+          class="leave-selector-top"
+        >
           <div
-            class="leave-lower"
-          >
-            {{ quota['type_' + i] }}
-          </div>
+            class="leave-selector-center"
+            v-if="leave_type.name == selected_type"
+          ></div>
         </div>
       </div>
     </div>
@@ -103,9 +123,13 @@ export default {
 
     this.team = this.request.team
     this.app = this.request.app
-    this.quota = this.request.quota
+    this.base_quota = this.request.base_quota
+    this.computed_quota = this.request.computed_quota
     this.profile = this.request.profile
     this.config = this.request.config
+
+    this.leaves_data = this.get_leaves_data()
+    this.selected_type = 'CN'
 
     for (let i = 0; i < 20; i++) {
       this.quota['type_' + i] = Number(this.quota['type_' + i])
@@ -115,13 +139,17 @@ export default {
   },
 
   computed: {
-    leaves_data() {
+
+  },
+
+  methods: {
+    get_leaves_data() {
       let leaves_data = Array()
 
       for (let i = 0; i < this.config.leave_count; i++) {
-        if (!['presence'].includes(this.config['leave_' + i + '_type'])) {
+        if (!['presence', 'recovery', 'ignore'].includes(this.config['leave_' + i + '_type'])) {
           leaves_data.push({
-            'generic_name': 'leave_' + i,
+            'generic_name': 'type_' + i,
             'name': this.config['leave_' + i + '_name'],
             'desc': this.config['leave_' + i + '_desc'],
             'type': this.config['leave_' + i + '_type'],
@@ -133,10 +161,11 @@ export default {
 
       return leaves_data
     },
-  },
 
-  methods: {
-
+    select_type(name) {
+      this.selected_type = name
+      console.log(this.selected_type)
+    },
   },
 
   watch: {
@@ -161,6 +190,7 @@ export default {
   width: 60px;
   margin: 0px 5px;
   background-color: rgba(150, 150, 150, 0.1);
+  cursor: pointer;
 }
 
 .leave-upper {
@@ -182,6 +212,22 @@ export default {
   border-radius: 5px;
   outline-color: orange;
   text-align: center;
+}
+
+.leave-outlined {
+  box-shadow: 0px 0px 0px 2px orange; 
+}
+
+.leave-selector-top {
+  border-top: 1px grey solid;
+  width: 70px;
+  margin: 0px 0px;
+}
+
+.leave-selector-center {
+  border-right: 1px grey solid;
+  width: 35px;
+  height: 30px;
 }
 
 </style>
