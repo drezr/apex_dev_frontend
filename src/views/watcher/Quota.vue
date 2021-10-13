@@ -21,8 +21,8 @@
             <template v-slot:activator="{ on: show_tooltip }">
               <div
                 class="leave-frame"
-                :class="selected_type == leave_type.name ? 'leave-outlined' : ''"
-                @click="select_type(leave_type.name)"
+                :class="selected_type == leave_type.generic_name ? 'leave-outlined' : ''"
+                @click="select_type(leave_type.generic_name)"
                 v-on="show_tooltip"
               >
                 <div class="leave-upper">
@@ -60,8 +60,21 @@
         >
           <div
             class="leave-selector-center"
-            v-if="leave_type.name == selected_type"
+            v-if="leave_type.generic_name == selected_type"
           ></div>
+        </div>
+      </div>
+
+      {{detail_quota}}
+
+      <div
+        v-for="(leave_type, i) in leaves_data"
+        :key="i"
+      >
+        <div
+          class="leave-selector-center"
+        >
+
         </div>
       </div>
     </div>
@@ -125,11 +138,12 @@ export default {
     this.app = this.request.app
     this.base_quota = this.request.base_quota
     this.computed_quota = this.request.computed_quota
+    this.detail_quota = this.request.detail_quota
     this.profile = this.request.profile
     this.config = this.request.config
-
+    
     this.leaves_data = this.get_leaves_data()
-    this.selected_type = 'CN'
+    this.selected_type = this.leaves_data[0]['generic_name']
 
     for (let i = 0; i < 20; i++) {
       this.quota['type_' + i] = Number(this.quota['type_' + i])
