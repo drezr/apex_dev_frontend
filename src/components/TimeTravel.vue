@@ -42,22 +42,40 @@
     ></v-date-picker>
   </v-dialog>
 
-  <v-select
+  <v-dialog
+    ref="dialog"
+    v-model="date_dialog"
+    width="290px"
     v-if="mode == 'month'"
-    :items="months"
-    v-model="current_month"
-    item-text="month_name"
-    item-value="month_number"
-    :label="lang.generic.month[lg]"
-    @change="select_travel_month"
-    class="time-travel-select-month mr-1 mb-1"
-    hide-details
-    outlined
-    dense
-  ></v-select>
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-text-field
+        :value="months.find(m => m.month_number == $current_month).month_name"
+        :label="lang.views.nexus.select_date[lg]"
+        readonly
+        v-bind="attrs"
+        v-on="on"
+        outlined
+        hide-details
+        style="width: 160px;"
+        class="time-travel-text-field mr-1"
+      ></v-text-field>
+    </template>
+
+    <v-date-picker
+      v-model="date"
+      :type="'month'"
+      :first-day-of-week="1"
+      :locale="`${lg}-${lg}`"
+      scrollable
+      no-title
+      @input="go_to_date($event)"
+      class="py-6"
+    ></v-date-picker>
+  </v-dialog>
 
   <v-select
-    v-if="mode != 'day'"
+    v-if="mode == 'year'"
     :items="years"
     v-model="current_year"
     :label="lang.generic.year[lg]"
@@ -270,6 +288,18 @@ export default {
 
       if (this.$current_view == 'myapexcontacts') {
         this.$router.push(`/myapex/nexus/${this.$current_app_id}/contacts/day/${day}/month/${month}/year/${year}`)
+      }
+
+      else if (this.$current_view == 'calendar') {
+        this.$router.push(`/team/${this.$current_team_id}/watcher/${this.$current_app_id}/calendar/month/${Number(month)}/year/${year}`)
+      }
+
+      else if (this.$current_view == 'works') {
+        this.$router.push(`/team/${this.$current_team_id}/radium/${this.$current_app_id}/works/month/${Number(month)}/year/${year}`)
+      }
+
+      else if (this.$current_view == 'board') {
+        this.$router.push(`/team/${this.$current_team_id}/planner/${this.$current_app_id}/board/month/${Number(month)}/year/${year}`)
       }
     },
   },

@@ -4,7 +4,7 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading">
+    <div v-if="!loading" style="height: 300px;">
       <div class="team-title my-3">
         {{ team.name }}
       </div>
@@ -36,6 +36,7 @@
             :key="date.day_number + $tool.gen_uid()"
             :type="'cell'"
             :date="date"
+            :parent_cpnt="$current_instance"
             @open_detail_dialog="open_detail_dialog"
           />
 
@@ -50,6 +51,7 @@
             :key="date.day_number + $tool.gen_uid()"
             :type="'day'"
             :date="date"
+            :parent_cpnt="$current_instance"
             @open_detail_dialog="open_detail_dialog"
           />
         </div>
@@ -233,6 +235,7 @@ export default {
       detail_object: null,
       detail_full_object: null,
       detail_edit_mode: false,
+      leave_config: Object(),
     }
   },
 
@@ -249,10 +252,13 @@ export default {
     this.days = this.request.days
     this.cells = this.request.cells
     this.holidays = this.request.holidays
+    this.leave_config = this.request.leave_config
 
     this.cvs = this.get_cvs()
     this.calendar = this.set_calendar()
     this.profiles = this.set_profiles()
+
+    this.type_names = this.get_type_names()
 
     this.loading = false
 
@@ -517,6 +523,32 @@ export default {
           }
         }
       })
+    },
+
+    get_type_names() {
+      let presence_names = Array()
+      let absence_names = Array()
+
+      for (let item in this.leave_config) {
+        if (item.includes('type')) {
+          let i = item.split('_')[1]
+          let name = this.leave_config['leave_' + i + '_name']
+          let type = this.leave_config['leave_' + i + '_type']
+
+          if (type == 'presence') {
+            presence_names.push(name)
+          }
+
+          else {
+            absence_names.push(name)
+          }
+        }
+      }
+
+      return {
+        'presence': presence_names,
+        'absence': absence_names,
+      }
     },
   },
 

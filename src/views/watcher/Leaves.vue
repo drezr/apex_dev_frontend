@@ -41,7 +41,7 @@
 
   <CustomDialog
     :open="leave_config_dialog"
-    :width="800"
+    :width="900"
     :title_text="lang.views.watcher.leaves_config[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="leave_config_dialog = false"
@@ -110,7 +110,7 @@
           class="mx-3"
           outlined
           hide-details
-          style="width: 80px;"
+          style="min-width: 120px; max-width: 120px; width: 120px;"
         />
 
         <v-text-field
@@ -120,6 +120,7 @@
           class="mx-3"
           outlined
           hide-details
+          style="min-width: 310px; max-width: 310px; width: 310px;"
         />
 
         <v-select
@@ -131,7 +132,7 @@
           outlined
           hide-details
           class="mx-3"
-          style="width: 100px;"
+          style="min-width: 190px; max-width: 190px; width: 190px;"
           @change="update('type', i)"
         ></v-select>
 
@@ -141,7 +142,7 @@
           class="mx-3"
           hide-details
           style="position: relative; top: -10px;"
-          :disabled="['counter', 'presence', 'recovery'].includes(config['leave_' + i + '_type'])"
+          :disabled="['counter', 'presence', 'recovery', 'ignore'].includes(config['leave_' + i + '_type'])"
         ></v-checkbox>
       </div>
     </div>
@@ -240,7 +241,9 @@ export default {
 
     leave_types() {
       return [
-        {'value': 'day', 'name': this.lang.generic.day_alt[this.lg]},
+        {'value': 'normal_leave', 'name': this.lang.generic.normal_leave[this.lg]},
+        {'value': 'credit_day', 'name': this.lang.generic.credit_day[this.lg]},
+        {'value': 'variable_leave', 'name': this.lang.generic.variable_leave[this.lg]},
         {'value': 'saturday', 'name': this.lang.generic.saturday[this.lg]},
         {'value': 'sunday', 'name': this.lang.generic.sunday[this.lg]},
         {'value': 'holiday', 'name': this.lang.generic.holiday[this.lg]},
@@ -248,6 +251,7 @@ export default {
         {'value': 'counter', 'name': this.lang.generic.counter[this.lg]},
         {'value': 'presence', 'name': this.lang.generic.presence[this.lg]},
         {'value': 'recovery', 'name': this.lang.generic.recovery[this.lg]},
+        {'value': 'ignore', 'name': this.lang.generic.ignore[this.lg]},
       ]
     },
   },
@@ -274,7 +278,7 @@ export default {
     update(field, i) {
       let value = `leave_${i}_${field}`
 
-      if (field == 'type' && ['counter', 'presence', 'recovery'].includes(this.config[value])) {
+      if (field == 'type' && ['counter', 'presence', 'recovery', 'ignore'].includes(this.config[value])) {
         this.config[`leave_${i}_visible`] = false
       }
     },
@@ -297,6 +301,8 @@ export default {
 
 .leave-color-circle {
   width: 30px;
+  min-width: 30px;
+  max-width: 30px;
   height: 30px;
   border-radius: 15px;
   margin: 3px;

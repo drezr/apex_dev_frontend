@@ -114,6 +114,10 @@ export default {
       type: Object,
       required: false,
     },
+    parent_cpnt: {
+      type: Object,
+      required: false,
+    },
   },
 
   data() {
@@ -165,11 +169,23 @@ export default {
       let color = 'red--text text--accent-4'
 
       if (value) {
-        value = value.toUpperCase()
+        if (this.parent_cpnt && this.parent_cpnt.leave_config) {
+          let type_names = this.parent_cpnt.type_names
 
-        if (value.includes('P')) color = 'green--text text--darken-2'
-        if (value.includes('PN')) color = 'blue--text text--darken-4'
-        if (value.includes('AP')) color = 'red--text text--darken-4'
+          value = value.toUpperCase()
+
+          for (let name of type_names['presence']) {
+            name = name ? name.toUpperCase() : '#$@'
+
+            if (value.includes(name)) color = 'green--text text--darken-2'
+          }
+
+          for (let name of type_names['absence']) {
+            name = name ? name.toUpperCase() : '#$@'
+
+            if (value.includes(name)) color = 'red--text text--darken-2'
+          }
+        }
       }
 
       return color

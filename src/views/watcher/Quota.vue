@@ -5,11 +5,13 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="team-title my-3">
+      <div class="team-title mt-3">
         {{ profile.name }}
       </div>
 
-      <div class="d-flex justify-center">
+      <NavigationBar class="mb-6" />
+
+      <div class="d-flex flex-wrap justify-center">
         <div
           v-for="(leave_type, i) in leaves_data"
           :key="i"
@@ -143,10 +145,13 @@
 
 <script>
 
+import NavigationBar from '@/components/NavigationBar.vue'
+
 export default {
   name: 'Quota',
 
   components: {
+    NavigationBar,
   },
 
   props: {
@@ -310,7 +315,7 @@ export default {
   border-radius: 7px;
   overflow: hidden;
   width: 60px;
-  margin: 0px 5px;
+  margin: 2px 5px;
   background-color: rgba(150, 150, 150, 0.1);
   cursor: pointer;
 }

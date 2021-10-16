@@ -425,10 +425,30 @@ export default {
             'nl': '',
             'en': 'Counter',
           },
+          'ignore': {
+            'fr': 'Ignoré',
+            'nl': '',
+            'en': 'Ignored',
+          },
           'pending': {
             'fr': 'En attente',
             'nl': '',
             'en': 'Pending',
+          },
+          'normal_leave': {
+            'fr': 'Congés normaux',
+            'nl': '',
+            'en': 'Leaves',
+          },
+          'credit_day': {
+            'fr': 'Jours de crédit',
+            'nl': '',
+            'en': 'Credit days',
+          },
+          'variable_leave': {
+            'fr': 'Congés variables',
+            'nl': '',
+            'en': 'Variable leave days',
           },
           'working': {
             'fr': 'En cours',
@@ -1587,14 +1607,14 @@ export default {
               'en': 'No message yet',
             },
             'paint_works': {
-              'fr': 'Color works',
+              'fr': 'Colorer les chantiers',
               'nl': '',
-              'en': '',
+              'en': 'Color works',
             },
             'paint_columns': {
-              'fr': 'Color columns',
+              'fr': 'Colorer les colonnes',
               'nl': '',
-              'en': '',
+              'en': 'Color columns',
             },
             'line': {
               'fr': 'Ligne',
