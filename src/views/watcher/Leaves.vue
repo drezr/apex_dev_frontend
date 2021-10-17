@@ -18,6 +18,8 @@
         ></CustomButton>
       </div>
 
+      <NavigationBar class="mb-6" />
+
       <div v-if="config.leave_count > 0" class="d-flex justify-center mt-3">
         <div>
           <Leave
@@ -154,12 +156,14 @@
 
 <script>
 
+import NavigationBar from '@/components/NavigationBar.vue'
 import Leave from '@/views/watcher/components/Leave.vue'
 
 export default {
   name: 'Leaves',
 
   components: {
+    NavigationBar,
     Leave,
   },
 
