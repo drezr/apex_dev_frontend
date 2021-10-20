@@ -35,8 +35,11 @@
             :color="color"
             :class="[text_color ? text_color + '--text' : '']"
             :style="
-              cursor ? ` cursor: ${cursor}; ` : '' +
-              height ? ` height: ${height}px; ` : ''
+              (width ? `width: ${width}px; min-width: 0px; ` : ' ') +
+              (cursor ? `cursor: ${cursor}; ` : ' ') +
+              (height ? `height: ${height}px; ` : ' ') +
+              (padding_x || padding_x == 0 ? `padding-left: ${padding_x}px; padding-right: ${padding_x}px;` : ' ') + 
+              (padding_y || padding_y == 0 ? `padding-top: ${padding_y}px; padding-bottom: ${padding_y}px;` : ' ') 
             "
             :disabled="disabled"
             :outlined="outlined"
@@ -72,7 +75,7 @@
                 {{ icon }}
               </v-icon>
 
-              <span v-if="text" class="ml-2">
+              <span v-if="text" :class="padding_x || padding_x == 0 ? '' : 'ml-2'">
                 {{ text }}
               </span>
             </div>
@@ -118,6 +121,9 @@ export default {
   props: {
     color: String,
     icon: String,
+
+    padding_x: Number,
+    padding_y: Number,
 
     badge: Boolean,
     badge_color: String,
@@ -175,6 +181,7 @@ export default {
     large: Boolean,
     xlarge: Boolean,
     height: Number,
+    width: Number,
 
     elevation: Number,
 

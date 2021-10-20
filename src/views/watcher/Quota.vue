@@ -57,7 +57,7 @@
       <div v-if="selected_type == type">
         <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
           <div class="quota-table-row">
-            <div class="quota-table-title">Droit de base</div>
+            <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
             <div class="quota-table-value">{{ base_quota[type] }}</div>
           </div>
         </div>
@@ -112,20 +112,6 @@
                     </div>
                   </div>
                 </div>
-
-
-<!--                 <div class="quota-table-row" v-if="!cell['year']">
-                  <div class="quota-table-title">
-                    {{ type == 'cv' ? '28' : '14' }} absences
-                  </div>
-                  <div class="quota-table-value">
-                    <div 
-                      class="quota-table-value-color red lighten-4 red--text text--darken-4 m-1"
-                    >
-                    {{ String(cell['value']).charAt(0) == '-' ? '' : '+' }}{{ cell['value'] }}
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -136,7 +122,7 @@
           v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.generic_name == type).type)"
         >
           <div class="quota-table-row">
-            <div class="quota-table-title">Obtenus</div>
+            <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
             <div class="quota-table-value">{{ obtained[type] }}</div>
           </div>
         </div>
@@ -146,14 +132,14 @@
           :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.generic_name == type).type) ? 'mt-2' : 'mt-5'"
         >
           <div class="quota-table-row">
-            <div class="quota-table-title">Pris</div>
+            <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>
             <div class="quota-table-value">{{ Math.abs(took[type]) }}</div>
           </div>
         </div>
 
         <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
           <div class="quota-table-row">
-            <div class="quota-table-title">Reste</div>
+            <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
             <div class="quota-table-value">{{ computed_quota[type] }}</div>
           </div>
         </div>

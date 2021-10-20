@@ -31,7 +31,6 @@
 
   <div v-if="quota_toggled">
     <v-btn
-      v-if="!start"
       class="white--text lighten-2 elevation-0 refresh px-0"
       style="position: absolute; top: 1px; left: 152px; min-width: 25px;"
       @click.prevent="get_quota('year_end')"
@@ -147,6 +146,10 @@ export default {
 
       return leaves.slice(0, 7)
     },
+
+    trigger_all_quotas() {
+      return this.$current_component.trigger_all_quotas
+    },
   },
 
   methods: {
@@ -169,7 +172,11 @@ export default {
   },
 
   watch: {
-
+    trigger_all_quotas(value) {
+      if (value) {
+        this.get_quota('month_' + (this.start ? 'start' : 'end'))
+      }
+    }
   }
 }
 

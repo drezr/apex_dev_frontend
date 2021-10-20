@@ -39,6 +39,10 @@
        box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : '' +
        $current_view != 'myapexcontacts' ? '' : 'max-height: 56px !important; min-height: 56px !important; pointer-events: none;'
       "
+      :class="[
+        $current_component.palette ? 'cursor-fill' : '',
+      ]"
+      @click="try_set_color"
     >
       <input
         type="text"
@@ -125,20 +129,24 @@ export default {
       is_requesting: false,
       hover: false,
       border_colors: {
-        'red accent-4': '#D50000',
+        'white': '#FFFFFF',
+        'red': '#D50000',
         'pink': '#E91E63',
         'purple': '#9C27B0',
         'deep-purple': '#673AB7',
         'indigo': '#3F51B5',
-        'blue': '#2196F3',
+        'light-blue': '#03A9F4',
         'cyan': '#00BCD4',
         'teal': '#009688',
         'green': '#4CAF50',
+        'light-green': '#8BC34A',
         'lime': '#CDDC39',
+        'yellow': '#FFEB3B',
         'amber': '#FFC107',
         'orange': '#FF9800',
         'deep-orange': '#FF5722',
-        'grey': '#9E9E9E',
+        'brown': '#795548',
+        'blue-grey': '#607D8B',
       },
     }
   },
@@ -225,6 +233,14 @@ export default {
             this.is_requesting = false
           }
         }
+      }
+    },
+
+    try_set_color() {
+      if (this.$current_component.palette) {
+        let color = this.$current_component.palette_color
+
+        this.date.cell.color = color
       }
     },
   },

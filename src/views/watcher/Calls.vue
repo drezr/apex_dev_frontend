@@ -22,6 +22,18 @@
 
             {{ lang.views.watcher.calls_title[lg] }}
           </v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <div class="d-flex align-center">
+            {{ lang.views.watcher.calls_with_d27[lg] }}
+
+            <v-switch
+              class="ml-3"
+              v-model="with_d27"
+              hide-details
+            ></v-switch>
+          </div>
         </v-toolbar>
 
         <div class="d-flex">
@@ -32,7 +44,7 @@
               </v-icon>
 
               <span class="mt-1">
-                {{ lang.generic.all_alt[lg] }} ({{ calls.length }})
+                {{ lang.generic.all_alt[lg] }} ({{ calls.filter(c => with_d27 ? (c.files.length > 0 || c.links.length > 0) : true).length }})
               </span>
             </v-tab>
 
@@ -48,7 +60,7 @@
               <span class="mt-1">
                 {{ profile.name.substring(0, 18) }}
                 {{ profile.name.length > 18 ? '...' : '' }}
-                ({{ calls.filter(c => c.profile.id == profile.id).length }})
+                ({{ calls.filter(c => (c.profile.id == profile.id) && (with_d27 ? (c.files.length > 0 || c.links.length > 0) > 0 : true)).length }})
               </span>
             </v-tab>
           </v-tabs>
@@ -114,7 +126,7 @@
                       <v-btn
                         small
                         @click="get_d27(call)"
-                        :disabled="!call.file && !call.link"
+                        :disabled="call.files.length == 0 && call.links.length == 0"
                       >
                         <v-icon>
                           mdi-file-pdf
@@ -165,6 +177,7 @@ export default {
       app: Object(),
       calls: Array(),
       tab: null,
+      with_d27: false,
     }
   },
 
@@ -188,10 +201,14 @@ export default {
       if (this.tab > 0) {
         let profile = this.team.profiles[this.tab - 1]
 
-        return this.calls.filter(c => c.profile.id == profile.id)
+        return this.calls.filter(c => {
+          return (c.profile.id == profile.id) && (this.with_d27 ? (c.files.length > 0 || c.links.length > 0) : true)
+        })
       }
 
-      return this.calls
+      return this.calls.filter(c => {
+        return this.with_d27 ? (c.files.length > 0 || c.links.length > 0) : true
+      })
     },
   },
 

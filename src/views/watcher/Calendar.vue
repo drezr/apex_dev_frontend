@@ -9,11 +9,29 @@
         {{ team.name }}
       </div>
 
-      <NavigationBar class="mb-3" />
+      <NavigationBar
+        class="mb-3"
+        @toggle-palette="palette = !palette"
+      />
+
+      <Palette
+        v-if="palette"
+        class="mb-4"
+        @pick-color="palette_pick_color($event)"
+      />
 
       <div class="calendar-frame" ref="frame">
         <div class="calendar-days">
-          <div class="calendar-spacer"></div>
+          <div class="calendar-spacer d-flex align-center justify-center">
+            <CustomButton
+              @click="show_all_quotas"
+              :color="'blue'"
+              :small="true"
+              :padding_x="5"
+              :dark="true"
+              :text="lang.views.watcher.calendar_show_all_quotas[lg]"
+            />
+          </div>
 
           <DayCell
             v-for="date in calendar"
@@ -206,6 +224,7 @@ import Task from '@/components/Task.vue'
 import Call from '@/components/Call.vue'
 import File from '@/components/File.vue'
 import Note from '@/components/Note.vue'
+import Palette from '@/components/Palette.vue'
 
 export default {
   name: 'CalendarView',
@@ -219,6 +238,7 @@ export default {
     Call,
     File,
     Note,
+    Palette,
   },
 
   props: {
@@ -236,6 +256,9 @@ export default {
       detail_full_object: null,
       detail_edit_mode: false,
       leave_config: Object(),
+      trigger_all_quotas: false,
+      palette: false,
+      palette_color: 'white',
     }
   },
 
@@ -549,6 +572,12 @@ export default {
         'presence': presence_names,
         'absence': absence_names,
       }
+    },
+
+    show_all_quotas() {
+      this.trigger_all_quotas = true
+
+      setTimeout(() => this.trigger_all_quotas = false, 10)
     },
   },
 

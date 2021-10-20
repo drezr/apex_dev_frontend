@@ -20,7 +20,6 @@
       <Palette
         v-if="palette"
         class="mt-2"
-        @pick-color="palette_pick_color($event)"
       />
 
       <div class="works-frame" v-if="filtered_works.length > 0">

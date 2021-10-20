@@ -91,7 +91,7 @@ export default {
           'value': 'columns',
         },
       ]
-    }
+    },
   },
 
   methods: {

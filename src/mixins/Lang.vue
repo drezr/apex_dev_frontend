@@ -1074,6 +1074,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'calendar_show_all_quotas': {
+              'fr': 'Afficher tous les quotas',
+              'nl': '',
+              'en': '',
+            },
             'call_name': {
               'fr': 'Description du dérangement',
               'nl': '',
@@ -1229,8 +1234,33 @@ export default {
               'nl': '',
               'en': '',
             },
+            'calls_with_d27': {
+              'fr': 'Avec D27',
+              'nl': '',
+              'en': '',
+            },
             'calls_no_call': {
               'fr': 'Pas d\'interventions',
+              'nl': '',
+              'en': '',
+            },
+            'quota_base_quota': {
+              'fr': 'Droit de base',
+              'nl': '',
+              'en': '',
+            },
+            'quota_took': {
+              'fr': 'Pris',
+              'nl': '',
+              'en': '',
+            },
+            'quota_obtained': {
+              'fr': 'Obtenu',
+              'nl': '',
+              'en': '',
+            },
+            'quota_left': {
+              'fr': 'Reste',
               'nl': '',
               'en': '',
             },

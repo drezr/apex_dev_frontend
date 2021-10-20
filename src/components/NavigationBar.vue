@@ -7,10 +7,12 @@
     <CustomButton
       :icon="'mdi-palette'"
       :height="40"
-      :outlined="true"
       class="mr-1 mb-1"
-      @click="palette_dialog = true"
+      @click="$emit('toggle-palette')"
       :tooltip="palette_tooltip"
+      :outlined="$current_component.palette ? false : true"
+      :dark="$current_component.palette ? true : false"
+      :color="$current_component.palette ? 'black' : ''"
     />
 
     <CustomButton
@@ -65,10 +67,11 @@
       v-if="$is_editor"
       :icon="'mdi-palette'"
       :height="40"
-      :outlined="true"
       class="mr-1 mb-1"
       :tooltip="palette_tooltip"
       @click="$emit('toggle-palette')"
+      :outlined="$current_component.palette ? false : true"
+      :dark="$current_component.palette ? true : false"
       :color="$current_component.palette ? 'black' : ''"
     />
 
