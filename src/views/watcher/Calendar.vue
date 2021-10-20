@@ -29,7 +29,7 @@
           v-for="profile in profiles"
           :key="profile.id"
         >
-          <Profile :profile="profile" />
+          <Profile :profile="profile" :start="true" />
 
           <DayCell
             v-for="date in profile.dates"
@@ -40,7 +40,7 @@
             @open_detail_dialog="open_detail_dialog"
           />
 
-          <Profile :profile="profile" />
+          <Profile :profile="profile" :start="false" />
         </div>
 
         <div class="calendar-days">

@@ -8,13 +8,78 @@
     color + '--text text--darken-4',
   ]"
 >
-  <div><b>{{ profile.name }}</b></div>
   <div v-if="!quota_toggled">
+    <div><b>{{ profile.name }}</b></div>
+
     <div class="profile-grade">
       {{ profile.grade }} {{ profile.field }}
     </div>
     <div>{{ profile.ident }}</div>
     <div>{{ profile.phone }}</div>
+
+    <v-btn
+      v-if="$current_view == 'calendar'"
+      @click.prevent="get_quota('month_' + (start ? 'start' : 'end'))"
+      outlined
+      class="profile-toggle"
+    >
+      <v-icon :class="color + '--text text--darken-4'">
+        mdi-calendar-range
+      </v-icon>
+    </v-btn>
+  </div>
+
+  <div v-if="quota_toggled">
+    <v-btn
+      v-if="!start"
+      class="white--text lighten-2 elevation-0 refresh px-0"
+      style="position: absolute; top: 1px; left: 152px; min-width: 25px;"
+      @click.prevent="get_quota('year_end')"
+      :color="color"
+      x-small
+    >
+      <v-icon small>mdi-skip-next-outline</v-icon>
+    </v-btn>
+
+    <v-btn
+      class="white--text lighten-2 elevation-0 refresh px-0"
+      style="position: absolute; top: 1px; left: 179px; min-width: 25px;"
+      @click.prevent="get_quota('month_' + (start ? 'start' : 'end'))"
+      :color="color"
+      x-small
+    >
+      <v-icon small>mdi-calendar-range</v-icon>
+    </v-btn>
+
+    <div><b>{{ profile.name }}</b></div>
+
+    <table>
+      <tr>
+        <td
+          class="leave text--darken-4"
+          :class="[leave.color + '--text']"
+          v-for="(leave, i) in leaves"
+          :key="i"
+        >
+          <b>{{ leave.name.toUpperCase() }}</b>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="value" v-for="(leave, i) in leaves" :key="i">
+          <v-progress-circular
+            size="15"
+            color="blue"
+            indeterminate
+            v-if="quota_loading"
+          ></v-progress-circular>
+
+          <span v-if="!quota_loading">
+            {{quota[leave.generic_name]}}
+          </span>
+        </td>
+      </tr>
+    </table>
   </div>
 </router-link>
 
@@ -32,14 +97,17 @@ export default {
 
   props: {
     profile: Object,
+    start: {
+      type: Boolean,
+      required: false,
+    },
   },
 
   data() {
     return {
-      quota_toggled: false,
       quota_loading: true,
-      leaves: ['cn', 'jc', 'cv', 'ch', 'rh', 'rr', 'hs'],
-      quota: {'cn': 0, 'jc': 0, 'cv': 0, 'ch': 0, 'rh': 0, 'rr': 0, 'hs': 0},
+      quota_toggled: false,
+      quota: null,
     }
   },
 
@@ -59,10 +127,45 @@ export default {
 
       return this.profile.link.watcher_color
     },
+
+    leaves() {
+      let config = this.$current_component.leave_config
+      let leaves = Array()
+
+      for (let i = 0; i < config.leave_count; i++) {
+        if (!['presence', 'recovery', 'ignore'].includes(config['leave_' + i + '_type']) && config['leave_' + i + '_visible']) {
+          leaves.push({
+            'generic_name': 'type_' + i,
+            'name': config['leave_' + i + '_name'],
+            'desc': config['leave_' + i + '_desc'],
+            'type': config['leave_' + i + '_type'],
+            'color': config['leave_' + i + '_color'],
+            'visible': config['leave_' + i + '_visible'],
+          })
+        }
+      }
+
+      return leaves.slice(0, 7)
+    },
   },
 
   methods: {
+    async get_quota(end) {
+      this.quota_loading = true
+      this.quota_toggled = true
 
+      let request = await this.$http.get('quota_simple', {
+        'end': end,
+        'app_id': this.$current_app_id,
+        'profile_id': this.profile.id,
+        'month': this.$current_month,
+        'year': this.$current_year,
+      })
+
+      this.quota = request.quota
+
+      this.quota_loading = false
+    },
   },
 
   watch: {
@@ -76,6 +179,7 @@ export default {
 <style scoped>
 
 .profile-frame {
+  position: relative;
   display: block;
   max-width: 205px;
   min-width: 205px;
@@ -103,6 +207,50 @@ export default {
 
 .profile-grade {
   font-size: 12px;
+}
+
+.profile-toggle {
+  max-width: 30px !important;
+  max-height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  margin-top: -85px;
+  margin-right: -30px;
+  position: relative;
+  top: 21px;
+  left: 167px;
+  border-color: rgba(255, 255, 255, 0);
+}
+
+table {
+  border-collapse: collapse;
+  position: relative;
+  left: -5px;
+  top: 1px;
+}
+
+td {
+  border: 1px rgb(190, 190, 190) solid;
+  text-align: center;
+  min-width: 28px;
+  max-width: 28px;
+  height: 26px;
+  background-color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+}
+
+td:last-child {
+  min-width: 36px;
+  max-width: 36px;
+}
+
+.leave {
+  font-size: 14px;
+}
+
+.value {
+  font-size: 12px;
+  color: black;
 }
 
 </style>

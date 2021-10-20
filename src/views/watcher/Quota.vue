@@ -64,22 +64,45 @@
 
         <div v-for="(month, number) in months" :key="number">
           <div v-if="month.length > 0">
-            <div class="text-center mt-2 mb-2">
+            <div
+              class="text-center mt-2 mb-2"
+              :class="number < 13 ? '' : 'mt-6'"
+            >
               <b>{{ months_name[number] }}</b>
             </div>
 
             <div class="quota-table">
-              <div v-for="(cell, i) in month" :key="i" class="quota-table-parent">
+              <div
+                v-for="(cell, i) in month"
+                :key="i"
+                class="quota-table-parent"
+              >
                 <div class="quota-table-row">
-                  <div class="quota-table-presence">
-                    {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
+                  <div
+                    class="d-flex flex-grow-1"
+                    v-if="number < 13"
+                  >
+                    <div class="quota-table-presence">
+                      {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
+                    </div>
+
+                    <div class="quota-table-presence">
+                      {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
+                    </div>
+
+                    <div class="quota-table-date">
+                      {{ $tool.format_date(cell['date']) }}
+                    </div>
                   </div>
-                  <div class="quota-table-presence">
-                    {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
+
+
+                  <div
+                    class="d-flex flex-grow-1 justify-center align-center"
+                    v-else
+                  >
+                    <b>28 {{ lang.generic.absences[lg].toLowerCase() }}</b>
                   </div>
-                  <div class="quota-table-date">
-                    {{ $tool.format_date(cell['date']) }}
-                  </div>
+
                   <div class="quota-table-value">
                     <div 
                       class="quota-table-value-color lighten-4 text--darken-4 m-1"
@@ -221,6 +244,7 @@ export default {
 
     for (let type in this.detail_quota) {
       this.sorted_detail_quota[type] = Object()
+      this.sorted_detail_quota[type]['13'] = Array()
       this.obtained[type] = 0
       this.took[type] = 0
 
@@ -244,7 +268,13 @@ export default {
           this.took[type] += Number(cell.count)
         }
 
-        this.sorted_detail_quota[type][month].push(cell)
+        if (date.getFullYear() > 1970) {
+          this.sorted_detail_quota[type][month].push(cell)
+        }
+
+        else {
+          this.sorted_detail_quota[type]['13'].push(cell)
+        }
       }
 
       this.obtained[type] = Math.round(this.obtained[type] * 100) / 100
@@ -264,7 +294,7 @@ export default {
       10: this.lang.generic.october[this.lg],
       11: this.lang.generic.november[this.lg],
       12: this.lang.generic.december[this.lg],
-      13: this.lang.generic.absence[this.lg],
+      13: this.lang.generic.absences[this.lg],
     }
 
     this.loading = false

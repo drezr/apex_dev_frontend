@@ -480,10 +480,20 @@ export default {
             'nl': '',
             'en': 'Presence',
           },
+          'presences': {
+            'fr': 'Présences',
+            'nl': '',
+            'en': 'Presences',
+          },
           'absence': {
             'fr': 'Absence',
             'nl': '',
             'en': 'Absence',
+          },
+          'absences': {
+            'fr': 'Absences',
+            'nl': '',
+            'en': 'Absences',
           },
           'recovery': {
             'fr': 'Récupération',
