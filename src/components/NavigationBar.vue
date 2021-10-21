@@ -18,10 +18,12 @@
     <CustomButton
       :icon="'mdi-calculator'"
       :height="40"
-      :outlined="true"
       class="mr-1 mb-1"
-      @click="calculator_dialog = true"
       :tooltip="lang.views.watcher.hour_calculator[lg]"
+      @click="$emit('toggle-decimal-calculator')"
+      :outlined="$current_component.decimal_calculator ? false : true"
+      :dark="$current_component.decimal_calculator ? true : false"
+      :color="$current_component.decimal_calculator ? 'black' : ''"
     />
 
     <CustomButton

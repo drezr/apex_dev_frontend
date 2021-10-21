@@ -12,6 +12,7 @@
       <NavigationBar
         class="mb-3"
         @toggle-palette="palette = !palette"
+        @toggle-decimal-calculator="decimal_calculator = !decimal_calculator"
       />
 
       <Palette
@@ -19,6 +20,10 @@
         class="mb-4"
         @pick-color="palette_pick_color($event)"
       />
+
+      <div class="d-flex justify-center mb-3">
+        <DecimalCalculator v-if="decimal_calculator" />
+      </div>
 
       <div class="calendar-frame" ref="frame">
         <div class="calendar-days">
@@ -217,6 +222,7 @@
 <script>
 
 import NavigationBar from '@/components/NavigationBar.vue'
+import DecimalCalculator from '@/components/DecimalCalculator.vue'
 import DayCell from '@/views/watcher/components/DayCell.vue'
 import Profile from '@/views/watcher/components/Profile.vue'
 import Part from '@/components/Part.vue'
@@ -239,6 +245,7 @@ export default {
     File,
     Note,
     Palette,
+    DecimalCalculator,
   },
 
   props: {
@@ -259,6 +266,7 @@ export default {
       trigger_all_quotas: false,
       palette: false,
       palette_color: 'white',
+      decimal_calculator: false,
     }
   },
 
