@@ -425,6 +425,31 @@ export default {
             'nl': '',
             'en': 'Counter',
           },
+          'counter_sick': {
+            'fr': 'Maladie',
+            'nl': '',
+            'en': 'Sick',
+          },
+          'counter_special': {
+            'fr': 'Circonstance',
+            'nl': '',
+            'en': 'Counter',
+          },
+          'counter_unjustified': {
+            'fr': 'Injustifié',
+            'nl': '',
+            'en': 'Counter',
+          },
+          'counter_strike': {
+            'fr': 'Grève',
+            'nl': '',
+            'en': 'Strike',
+          },
+          'counter_wounded': {
+            'fr': 'Blessé',
+            'nl': '',
+            'en': 'Wounded',
+          },
           'ignore': {
             'fr': 'Ignoré',
             'nl': '',
