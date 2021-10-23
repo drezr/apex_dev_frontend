@@ -571,6 +571,7 @@
     :confirm_icon="'mdi-link-variant-plus'"
     :confirm_text="lang.generic.to_link[lg]"
     :confirm_color="'purple'"
+    :confirm_disabled="link_selected_radiums.length == 0"
     @cancel="link_radiums_dialog = false"
     @confirm="link_radiums"
   >
@@ -744,6 +745,13 @@
     @cancel="remove_child_dialog = false"
     @confirm="remove_child"
   ></CustomDialog>
+
+  <v-snackbar
+    v-model="link_radiums_snackbar"
+    :timeout="link_radiums_timeout"
+  >
+    {{ lang.views.radium.link_radiums_snackbar[lg] }}
+  </v-snackbar>
 </div>
 </div>
 </v-badge>
@@ -789,6 +797,8 @@ export default {
       remove_child_dialog: false,
       remove_child_type: null,
       remove_child_item: null,
+      link_radiums_snackbar: false,
+      link_radiums_timeout: 4000,
     }
   },
 
@@ -982,12 +992,15 @@ export default {
 
     remove() {
       this.remove_dialog = false
-      this.$current_component.works = this.$current_component.works.filter(
-        w => w.id !== this.self.id)
+
+      this.$current_component.filtered_works = this.$current_component.filtered_works.filter(w => w.id !== this.self.id)
+      
+      this.$current_component.rerender_count++
     },
 
     link_radiums() {
-
+      this.link_radiums_dialog = false
+      this.link_radiums_snackbar = true
     },
 
     toggle_link_radium(app_id) {

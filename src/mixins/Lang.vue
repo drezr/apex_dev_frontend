@@ -1516,6 +1516,11 @@ export default {
               'nl': '',
               'en': 'Link this work to other Radium',
             },
+            'link_radiums_snackbar': {
+              'fr': 'Ce chantier à bien été liés aux Radium sélectionnés.',
+              'nl': '',
+              'en': 'This work has been successfully linked to selected Radium.',
+            },
             'link_teams_tooltip': {
               'fr': 'Ajouter des équipes à cette prestation',
               'nl': '',

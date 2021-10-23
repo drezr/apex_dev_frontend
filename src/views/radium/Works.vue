@@ -15,6 +15,7 @@
         @open-filter-dialog="filter_dialog = true"
         @open-messages-dialog="messages_dialog = true"
         @toggle-palette="palette = !palette"
+        @add-work="add_work"
       />
 
       <Palette
@@ -32,7 +33,7 @@
         >
           <Work
             v-for="(work, i) in filtered_works"
-            :key="i"
+            :key="i + rerender_count"
             :self="work"
             class="ma-3"
           />
@@ -237,6 +238,7 @@ export default {
   data() {
     return {
       loading: true,
+      add_loading: false,
       cached_teams: Array(),
       circles_loading: true,
       circles: Array(),
@@ -262,6 +264,7 @@ export default {
         's460s',
       ],
       filtered_works: Array(),
+      rerender_count: 0,
     }
   },
 
@@ -314,6 +317,14 @@ export default {
   },
 
   methods: {
+    add_work() {
+      this.add_loading = true
+
+      setTimeout(() => {
+        this.add_loading = false
+      }, 2000)
+    },
+
     update_work_position() {
 
     },

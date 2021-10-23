@@ -86,6 +86,7 @@
     :confirm_icon="'mdi-account-multiple-plus'"
     :confirm_text="lang.generic.add[lg]"
     :confirm_color="'yellow darken-3'"
+    :confirm_disabled="link_selected_teams.length == 0"
     @cancel="link_teams_dialog = false"
     @confirm="link_teams"
   >

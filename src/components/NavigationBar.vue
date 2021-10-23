@@ -123,9 +123,12 @@
       :icon="'mdi-plus'"
       :height="40"
       :color="'green'"
-      :dark="true"
+      :dark="!add_loading"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.add_work_tooltip[lg]"
+      :disabled="add_loading"
+      :loading="add_loading"
+      @click="$emit('add-work')"
     />
 
     <CustomButton
@@ -199,7 +202,11 @@ export default {
       }
 
       return ''
-    }
+    },
+
+    add_loading() {
+      return this.$current_component.add_loading
+    },
   },
 
   methods: {

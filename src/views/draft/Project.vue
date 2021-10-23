@@ -169,7 +169,9 @@
             :icon="'mdi-plus'"
             :fab="true"
             :color="'green'"
-            :dark="true"
+            :dark="!add_loading"
+            :disabled="add_loading"
+            :loading="add_loading"
             :elevation="1"
             :tooltip="lang.views.draft.add_task[lg]"
             class="mr-2"
@@ -282,6 +284,7 @@ export default {
   data() {
     return {
       loading: true,
+      add_loading: false,
       team: Object(),
       app: Object(),
       project: Object(),
@@ -487,8 +490,14 @@ export default {
     },
 
     add_task() {
-      let main_frame = document.getElementById('main-frame')
-      main_frame.scrollTo(0, main_frame.scrollHeight)
+      this.add_loading = true
+
+      setTimeout(() => {
+        let main_frame = document.getElementById('main-frame')
+        main_frame.scrollTo(0, main_frame.scrollHeight)
+
+        this.add_loading = false
+      }, 2000)
     },
 
     status_description(status) {

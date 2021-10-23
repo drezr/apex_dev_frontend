@@ -21,7 +21,9 @@
             :icon="'mdi-plus'"
             :small="true"
             :color="'green'"
-            :dark="true"
+            :dark="!add_loading"
+            :loading="add_loading"
+            :disabled="add_loading"
             :menus="add_menus"
             v-on:menu_action="add_actions($event)"
             :tooltip="lang.views.watcher.calendar_add_element_tooltip[lg]"
@@ -347,6 +349,7 @@ export default {
   data() {
     return {
       loading: true,
+      add_loading: false,
       team: Object(),
       profiles: Array(),
       app: Object(),
@@ -537,6 +540,12 @@ export default {
 
     add_actions(action) {
       console.log(action)
+
+      this.add_loading = true
+
+      setTimeout(() => {
+        this.add_loading = false
+      }, 2000)
     },
 
     set_disabled_profiles() {
