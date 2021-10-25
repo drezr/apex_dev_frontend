@@ -20,7 +20,7 @@ export default {
     },
 
     $is_in_task() {
-      if (this.parent.type == 'task') {
+      if (this.parent.type == 'task' || this.parent.type == 'template') {
         return true
       }
 

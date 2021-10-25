@@ -274,6 +274,7 @@ class Tools {
       'note',
       'call',
       'link',
+      'template',
     ]
 
     for (let type of child_types) {

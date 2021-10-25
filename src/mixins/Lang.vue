@@ -1870,6 +1870,11 @@ export default {
               'nl': '',
               'en': 'Initial order',
             },
+            'task_models': {
+              'fr': 'Modèles de tâche',
+              'nl': '',
+              'en': 'Task models',
+            },
           },
         },
       },

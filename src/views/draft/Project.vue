@@ -40,6 +40,7 @@
           :tooltip="lang.generic.models[lg]"
           :icon="'mdi-webpack'"
           :outlined="true"
+          @click="open_templates_dialog()"
         ></CustomButton>
 
         <CustomButton
@@ -261,6 +262,39 @@
       ></v-checkbox>
     </div>
   </CustomDialog>
+
+
+  <CustomDialog
+    v-if="templates_dialog"
+    :open="templates_dialog"
+    :width="600"
+    :title_text="lang.views.draft.task_models[lg]"
+    :title_bg_color="'purple lighten-4'"
+    :title_icon="'mdi-webpack'"
+    @cancel="templates_dialog = false"
+  >
+    <Loader :size="100" :width="10" class="my-12" v-if="templates_loading" />
+
+    <div v-else>
+      <VueDraggable
+        v-model="app.children"
+        @change="update_templates_position"
+        :animation="100"
+        easing="cubic-bezier(1, 0, 0, 1)"
+        handle=".handle"
+      >
+        <Task
+          v-for="(template, i) in app.children"
+          :key="i"
+          :self="template"
+          :parent="app"
+          :is_template="true"
+          class="mt-3"
+        />
+      </VueDraggable>
+    </div>
+
+  </CustomDialog>
 </div>
 
 </template>
@@ -299,6 +333,10 @@ export default {
       edit_project_date: null,
       edit_project_private: null,
       edit_project_archived: null,
+      templates: Array(),
+      templates_dialog: false,
+      templates_loading: true,
+      templates_loaded: false,
     }
   },
 
@@ -485,6 +523,10 @@ export default {
 
     },
 
+    update_templates_position() {
+
+    },
+
     go_printable() {
       window.open(`/team/${this.$current_team_id}/draft/${this.$current_app_id}/projectprintable/${this.project.id}`)
     },
@@ -514,6 +556,29 @@ export default {
       this.project.date = this.edit_project_date
       this.project.private = this.edit_project_private
       this.project.archived = this.edit_project_archived
+    },
+
+    async open_templates_dialog() {
+      this.templates_dialog = true
+
+      if (!this.templates_loaded) {
+        this.templates_loading = true
+
+        this.request = await this.$http.get('templates', {
+          'app_id': this.$current_app_id,
+        })
+
+
+
+        let children = this.$tool.get_fused_children(this.request.app)
+        children = this.$tool.deepcopy(children)
+        this.$set(this.app, 'children', children)
+
+        this.templates = this.app.children
+
+        this.templates_loaded = true
+        this.templates_loading = false
+      }
     },
   },
 

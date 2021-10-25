@@ -35,8 +35,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-        :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+        :disabled="!(edit_mode && $is_editor)"
+        :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"
@@ -55,8 +55,8 @@
             class="custom-field input-value"
             hide-details
             solo
-            :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-            :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+            :disabled="!(edit_mode && is_editor)"
+            :flat="!(edit_mode && is_editor)"
             :background-color="edit_mode ? 'white' : 'transparent'"
             :placeholder="lang.generic.input_value[lg]"
             v-bind="attrs"
@@ -109,8 +109,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!(edit_mode && $has_xs(['watcher_is_editor']))"
-        :flat="!(edit_mode && $has_xs(['watcher_is_editor']))"
+        :disabled="!(edit_mode && is_editor)"
+        :flat="!(edit_mode && is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"
@@ -177,6 +177,11 @@ export default {
       type: Object,
       required: true,
     },
+    is_template: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
@@ -193,6 +198,10 @@ export default {
 
   computed: {
     edit_mode() {
+      if (this.is_template) {
+        return true
+      }
+      
       return this.$current_component.detail_edit_mode
     },
 
@@ -224,6 +233,8 @@ export default {
     },
 
     remove() {
+      this.delete_dialog = false
+      
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
     },

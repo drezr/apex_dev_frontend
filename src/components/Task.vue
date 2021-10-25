@@ -57,6 +57,7 @@
               />
 
               <CustomButton
+                v-if="!hide_status && !is_template"
                 :icon="status_icon"
                 :fab="true"
                 :small="true"
@@ -72,6 +73,7 @@
               <v-textarea
                 v-model="self.name"
                 class="custom-field py-1 mr-2"
+                :class="hide_status || is_template ? 'ml-1' : ''"
                 :rows="1"
                 auto-grow
                 hide-details
@@ -143,6 +145,8 @@
                 v-if="child.type == 'input'"
                 :self="child"
                 :parent="self"
+                :class="i + 1 == self.children.length ? 'mb-3' : ''"
+                :is_template="is_template"
               />
 
               <Subtask
@@ -216,6 +220,7 @@
               :text_color="'white'"
               :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
               :tooltip="lang.generic.add_file_tooltip[lg]"
+              v-if="!is_template"
             />
           </div>
         </div>
@@ -275,6 +280,21 @@ export default {
       type: Object,
       required: true,
     },
+    hide_status: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    edit_lock: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    is_template: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
@@ -296,6 +316,14 @@ export default {
 
   computed: {
     edit_mode() {
+      if (this.is_template) {
+        return true
+      }
+
+      else if (this.edit_lock) {
+        return this.edit_lock
+      }
+
       return this.$current_component.detail_edit_mode
     },
 
@@ -469,6 +497,8 @@ export default {
     },
 
     remove() {
+      this.delete_dialog = false
+
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
     },

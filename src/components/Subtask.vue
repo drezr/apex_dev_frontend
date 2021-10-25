@@ -117,6 +117,8 @@ export default {
     },
 
     remove() {
+      this.delete_dialog = false
+      
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
     },
