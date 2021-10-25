@@ -78,7 +78,7 @@
         :text_color="'teal'"
         :tooltip="lang.generic.save[lg]"
         @click="update_name"
-        :disabled="!is_valid"
+        :disabled="!is_valid || self.name == initial_name"
       />
 
       <Loader
@@ -95,6 +95,7 @@
         :text_color="'blue'"
         :tooltip="lang.generic.restore[lg]"
         @click="restore_name"
+        :disabled="self.name == initial_name"
       />
 
       <div class="ml-1 mr-2 d-flex" v-if="edit_mode">
