@@ -330,32 +330,39 @@ export default {
     edit_menus() {
       let delete_icon = this.self.link.is_original ? 'mdi-delete' : 'mdi-link-variant-remove'
 
-      return [
-        {
-          'icon': 'mdi-content-copy',
-          'name': this.lang.generic.to_copy[this.lg],
-          'color': 'indigo',
-          'action': 'copy',
-        },
-        {
+      let menus = Array()
+
+      menus.push({
+        'icon': 'mdi-content-copy',
+        'name': this.lang.generic.to_copy[this.lg],
+        'color': 'indigo',
+        'action': 'copy',
+      })
+
+      if (!this.is_template) {
+        menus.push({
           'icon': 'mdi-flip-to-front',
           'name': this.lang.generic.move[this.lg],
           'color': 'light-blue',
           'action': 'move',
-        },
-        {
+        })
+
+        menus.push({
           'icon': 'mdi-link-variant-plus',
           'name': this.lang.generic.to_link[this.lg],
           'color': 'purple',
           'action': 'link',
-        },
-        {
+        })
+      }
+
+      menus.push({
           'icon': delete_icon,
           'name': this.lang.generic.delete[this.lg],
           'color': 'red',
           'action': 'delete',
-        },
-      ]
+        })
+
+      return menus
     },
 
     input_menus() {

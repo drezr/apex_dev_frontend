@@ -1875,6 +1875,16 @@ export default {
               'nl': '',
               'en': 'Task models',
             },
+            'add_template': {
+              'fr': 'Créer un modèle',
+              'nl': '',
+              'en': 'Create model',
+            },
+            'no_template': {
+              'fr': 'Il n\'y a pas encore de modèle.',
+              'nl': '',
+              'en': 'There is no model yet.',
+            },
           },
         },
       },

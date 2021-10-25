@@ -283,17 +283,47 @@
         easing="cubic-bezier(1, 0, 0, 1)"
         handle=".handle"
       >
-        <Task
+        <div
           v-for="(template, i) in app.children"
           :key="i"
-          :self="template"
-          :parent="app"
-          :is_template="true"
-          class="mt-3"
-        />
+          class="mt-3 d-flex align-center"
+        >
+          <v-checkbox
+            class="mr-3"
+            :input-value="selected_template && selected_template == template.id"
+            @change="toggle_template(template)"
+          ></v-checkbox>
+
+          <Task
+            :self="template"
+            :parent="app"
+            :is_template="true"
+            class="flex-grow-1"
+          />
+        </div>
       </VueDraggable>
+
+      <div
+        v-if="app.children.length == 0"
+        class="d-flex justify-center align-center my-12 black--text"
+      >
+        <i>{{ lang.views.draft.no_template[lg] }}</i>
+      </div>
     </div>
 
+    <div class="d-flex justify-end mt-6">
+      <CustomButton
+        :icon="'mdi-plus'"
+        :fab="true"
+        :color="'green'"
+        :dark="!add_template_loading"
+        :disabled="add_template_loading"
+        :loading="add_template_loading"
+        :elevation="1"
+        :tooltip="lang.views.draft.add_template[lg]"
+        @click="add_template"
+      />
+    </div>
   </CustomDialog>
 </div>
 
@@ -333,10 +363,11 @@ export default {
       edit_project_date: null,
       edit_project_private: null,
       edit_project_archived: null,
-      templates: Array(),
       templates_dialog: false,
       templates_loading: true,
       templates_loaded: false,
+      selected_template: null,
+      add_template_loading: false,
     }
   },
 
@@ -350,6 +381,7 @@ export default {
     this.team = this.request.team
     this.app = this.request.app
     this.project = this.request.project
+    this.selected_template = this.request.app.selected_template
 
     this.edit_project_name = this.$tool.deepcopy(this.project.name)
     this.edit_project_date = this.$tool.deepcopy(this.project.date)
@@ -542,6 +574,14 @@ export default {
       }, 2000)
     },
 
+    add_template() {
+      this.add_template_loading = true
+
+      setTimeout(() => {
+        this.add_template_loading = false
+      }, 2000)
+    },
+
     status_description(status) {
       if (status == 'pending') return this.lang.generic.pending[this.lg]
       else if (status == 'working') return this.lang.generic.working[this.lg]
@@ -574,10 +614,18 @@ export default {
         children = this.$tool.deepcopy(children)
         this.$set(this.app, 'children', children)
 
-        this.templates = this.app.children
-
         this.templates_loaded = true
         this.templates_loading = false
+      }
+    },
+
+    toggle_template(template) {
+      if (this.selected_template == template.id) {
+        this.selected_template = null
+      }
+
+      else {
+        this.selected_template = template.id
       }
     },
   },
