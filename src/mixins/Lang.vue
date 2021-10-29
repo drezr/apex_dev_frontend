@@ -1048,6 +1048,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'access_give_all_access': {
+              'fr': 'Donner tous les accès',
+              'nl': '',
+              'en': 'Give all access',
+            },
+            'access_remove_all_access': {
+              'fr': 'Retirer tous les accès',
+              'nl': '',
+              'en': 'Remove all access',
+            },
           },
           'myapex': {
             'my_applications': {

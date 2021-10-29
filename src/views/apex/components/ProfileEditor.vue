@@ -102,13 +102,35 @@
       ></CustomButton>
     </div>
 
-    <v-checkbox
-      v-model="copy.link.is_manager"
-      :label="lang.views.team.access_is_manager[lg]"
-      :hint="lang.views.team.access_is_manager_hint[lg]"
-      persistent-hint
-      class="mt-0 mb-6 mx-3"
-    ></v-checkbox>
+    <div class="d-flex justify-space-between">
+      <v-checkbox
+        v-model="copy.link.is_manager"
+        :label="lang.views.team.access_is_manager[lg]"
+        :hint="lang.views.team.access_is_manager_hint[lg]"
+        persistent-hint
+        class="mt-0 mb-6 mx-3"
+      ></v-checkbox>
+
+      <div>
+        <CustomButton
+          :icon="'mdi-account-check'"
+          :tooltip="lang.views.team.access_give_all_access[lg]"
+          :color="'green darken-1'"
+          :small_fab="true"
+          class="mt-2 mr-1"
+          @click="swap_access(true)"
+        />
+
+        <CustomButton
+          :icon="'mdi-account-minus'"
+          :tooltip="lang.views.team.access_remove_all_access[lg]"
+          :color="'orange darken-1'"
+          :small_fab="true"
+          class="mt-2"
+          @click="swap_access(false)"
+        />
+      </div>
+    </div>
 
 
     <v-expansion-panels class="access">
@@ -465,6 +487,26 @@ For save button disabling
       if (this.copy.link[upper]) {
         this.copy.link[lower] = true
       }
+    },
+
+    swap_access(value) {
+      this.copy.link.is_manager = value
+
+      this.copy.link.planner_is_editor = value
+      this.copy.link.planner_is_user = value
+
+      this.copy.link.draft_is_editor = value
+      this.copy.link.draft_is_user = value
+      this.copy.link.draft_can_see_private = value
+
+      this.copy.link.radium_is_editor = value
+
+      this.copy.link.watcher_is_editor = value
+      this.copy.link.watcher_is_user = value
+      this.copy.link.watcher_is_visible = value
+      this.copy.link.watcher_is_printable = value
+      this.copy.link.watcher_can_see_cells = value
+      this.copy.link.watcher_can_see_quotas = value
     },
   },
 
