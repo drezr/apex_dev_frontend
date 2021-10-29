@@ -23,16 +23,16 @@
       auto-grow
       hide-details
       solo
-      :disabled="!edit_mode"
-      :flat="!edit_mode"
-      :background-color="edit_mode ? 'white' : 'transparent'"
+      :disabled="!(edit_mode && $is_editor)"
+      :flat="!(edit_mode && $is_editor)"
+      :background-color="edit_mode && $is_editor ? 'white' : 'transparent'"
       @input="update"
       :placeholder="lang.generic.empty_subtask[lg]"
       @click.native.stop
     ></v-textarea>
   </div>
 
-  <div v-if="edit_mode" class="mx-2 d-flex align-center">
+  <div v-if="edit_mode && $is_editor" class="mx-2 d-flex align-center">
     <CustomButton
       :icon="'mdi-arrow-split-horizontal'"
       :small_fab="true"

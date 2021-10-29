@@ -13,6 +13,7 @@
       :outlined="$current_component.palette ? false : true"
       :dark="$current_component.palette ? true : false"
       :color="$current_component.palette ? 'black' : ''"
+      v-if="$is_editor"
     />
 
     <CustomButton
@@ -24,6 +25,7 @@
       :outlined="$current_component.decimal_calculator ? false : true"
       :dark="$current_component.decimal_calculator ? true : false"
       :color="$current_component.decimal_calculator ? 'black' : ''"
+      v-if="$is_editor"
     />
 
     <CustomButton
@@ -33,6 +35,7 @@
       class="mr-1 mb-1"
       @click="go_leaves"
       :tooltip="lang.views.watcher.leaves_management[lg]"
+      v-if="$is_editor"
     />
 
     <CustomButton

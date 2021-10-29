@@ -72,7 +72,7 @@
       ></v-text-field>
 
       <CustomButton
-        v-if="edit_mode && !file_loading"
+        v-if="edit_mode && $is_editor && !file_loading"
         :icon="'mdi-content-save'"
         :small_fab="true"
         :text_color="'teal'"
@@ -89,7 +89,7 @@
       />
 
       <CustomButton
-        v-if="edit_mode"
+        v-if="edit_mode && $is_editor"
         :icon="'mdi-backup-restore'"
         :small_fab="true"
         :text_color="'blue'"
@@ -98,7 +98,7 @@
         :disabled="self.name == initial_name"
       />
 
-      <div class="ml-1 mr-2 d-flex" v-if="edit_mode">
+      <div class="ml-1 mr-2 d-flex" v-if="edit_mode && $is_editor">
         <CustomButton
           v-if="$is_in_task || $current_view != 'board'"
           :icon="'mdi-arrow-split-horizontal'"

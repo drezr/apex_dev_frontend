@@ -43,7 +43,7 @@
           <v-list-item-title>
             <div class="d-flex align-center">
               <CustomButton
-                v-if="$current_view == 'board'"
+                v-if="$current_view == 'board' && $is_editor"
                 :icon="'mdi-drag'"
                 :small_fab="true"
                 :text_color="'pink'"
@@ -65,7 +65,7 @@
                 :color="status_color"
                 :tooltip="status_text"
                 :elevation="0"
-                :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
+                :class="($current_view != 'board' || !$is_editor) ? 'mx-2' : 'mr-2'"
                 :cursor="$is_user ? 'pointer' : 'default'"
                 @click="swap_status"
                 @click.native.stop
@@ -79,15 +79,18 @@
                 auto-grow
                 hide-details
                 solo
-                :disabled="!edit_mode"
-                :flat="!edit_mode"
+                :disabled="!(edit_mode && $is_editor)"
+                :flat="!(edit_mode && $is_editor)"
                 :background-color="edit_mode ? 'white' : 'transparent'"
                 @input="update"
                 :placeholder="lang.generic.empty_task[lg]"
                 @click.native.stop
               ></v-textarea>
 
-              <div v-if="edit_mode" class="mr-2 d-flex align-center">
+              <div
+                v-if="edit_mode && $is_editor"
+                class="mr-2 d-flex align-center"
+              >
                 <CustomButton
                   v-if="$current_view != 'board'"
                   :icon="'mdi-arrow-split-horizontal'"
@@ -184,7 +187,7 @@
             {{ lang.generic.task_no_element[lg] }}
           </div>
 
-          <div v-if="edit_mode" class="d-flex justify-space-around mb-2">
+          <div v-if="edit_mode && $is_editor" class="d-flex justify-space-around mb-2">
             <CustomButton
               :icon="'mdi-form-textbox'"
               :small="true"

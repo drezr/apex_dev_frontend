@@ -3,7 +3,7 @@
 <div class="input-frame">
   <div class="d-flex align-center">
     <v-checkbox
-      v-if="edit_mode && ['short', 'date'].includes(self.kind)"
+      v-if="edit_mode && $is_editor && ['short', 'date'].includes(self.kind)"
       class="input-heading"
       v-model="self.heading"
       hide-details
@@ -20,8 +20,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!edit_mode"
-        :flat="!edit_mode"
+        :disabled="!(edit_mode && $is_editor)"
+        :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic['input_' + self.kind][lg]"
@@ -35,8 +35,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!edit_mode"
-        :flat="!edit_mode"
+        :disabled="!(edit_mode && $is_editor)"
+        :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"
@@ -55,8 +55,8 @@
             class="custom-field input-value"
             hide-details
             solo
-            :disabled="!edit_mode"
-            :flat="!edit_mode"
+            :disabled="!(edit_mode && $is_editor)"
+            :flat="!(edit_mode && $is_editor)"
             :background-color="edit_mode ? 'white' : 'transparent'"
             :placeholder="lang.generic.input_value[lg]"
             v-bind="attrs"
@@ -100,8 +100,8 @@
       <v-textarea
         v-if="
           self.kind == 'long' ||
-          (self.kind == 'gps' && edit_mode) ||
-          (self.kind == 'link' && edit_mode)
+          (self.kind == 'gps' && edit_mode && $is_editor) ||
+          (self.kind == 'link' && edit_mode && $is_editor)
         "
         v-model="self.value"
         class="custom-field mt-1"
@@ -109,8 +109,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!edit_mode"
-        :flat="!edit_mode"
+        :disabled="!(edit_mode && $is_editor)"
+        :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"
@@ -119,7 +119,7 @@
     </div>
   </div>
 
-  <div class="d-flex align-center ml-1 mr-2" v-if="edit_mode">
+  <div class="d-flex align-center ml-1 mr-2" v-if="edit_mode && $is_editor">
     <CustomButton
       :icon="'mdi-arrow-split-horizontal'"
       :small_fab="true"

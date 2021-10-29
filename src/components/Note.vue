@@ -54,14 +54,14 @@
           auto-grow
           hide-details
           solo
-          :disabled="!(edit_mode && self.profile == $logged_profile.id)"
-          :flat="!(edit_mode && self.profile == $logged_profile.id)"
+          :disabled="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
+          :flat="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
           background-color="white"
           @input="update"
           :placeholder="lang.generic.empty_note[lg]"
         ></v-textarea>
 
-        <div v-if="edit_mode" class="mx-2 d-flex align-center">
+        <div v-if="edit_mode && $is_editor" class="mx-2 d-flex align-center">
           <CustomButton
             v-if="$is_in_task || $current_view != 'board'"
             :icon="'mdi-arrow-split-horizontal'"

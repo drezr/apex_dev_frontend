@@ -27,6 +27,7 @@
             :menus="add_menus"
             v-on:menu_action="add_actions($event)"
             :tooltip="lang.views.watcher.calendar_add_element_tooltip[lg]"
+            v-if="$is_editor"
           />
         </div>
 
@@ -169,6 +170,7 @@
                   <div
                     class="board-date-children-teammates"
                     @click="open_teammates_dialog(date.data, child)"
+                    :class="!$is_editor ? 'cursor-default' : 'cursor-pointer'"
                   >
                     <div
                       v-if="child.teammates.length > 0"
@@ -467,37 +469,39 @@ export default {
     },
 
     async open_teammates_dialog(day, child) {
-      this.teammates_day = day
-      this.teammates_object = child
-      this.foreign_profiles = Array()
+      if (this.$is_editor) {
+        this.teammates_day = day
+        this.teammates_object = child
+        this.foreign_profiles = Array()
 
-      this.request = await this.$http.get('presences', {
-        'team_id': this.team.id,
-        'date': day.date,
-      })
+        this.request = await this.$http.get('presences', {
+          'team_id': this.team.id,
+          'date': day.date,
+        })
 
-      for (let presence of this.request.presences) {
-        let profile = this.profiles.find(p => p.id == presence.profile_id)
+        for (let presence of this.request.presences) {
+          let profile = this.profiles.find(p => p.id == presence.profile_id)
 
-        profile.presence = presence.presence
-        profile.absence = presence.absence
-      }
-
-      for (let teammate of this.teammates_object.teammates) {
-        if (!this.profiles.find(p => p.name == teammate)) {
-          let profile = this.all_profiles.find(p => p.name == teammate)
-
-          if (this.teammates_object.teammates.includes(profile.name)) {
-            profile.disabled = true
-          }
-
-          this.foreign_profiles.push(profile)
+          profile.presence = presence.presence
+          profile.absence = presence.absence
         }
+
+        for (let teammate of this.teammates_object.teammates) {
+          if (!this.profiles.find(p => p.name == teammate)) {
+            let profile = this.all_profiles.find(p => p.name == teammate)
+
+            if (this.teammates_object.teammates.includes(profile.name)) {
+              profile.disabled = true
+            }
+
+            this.foreign_profiles.push(profile)
+          }
+        }
+
+        this.set_disabled_profiles()
+
+        this.teammates_dialog = true
       }
-
-      this.set_disabled_profiles()
-
-      this.teammates_dialog = true
     },
 
     toggle_teammate(profile) {
@@ -689,7 +693,6 @@ export default {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  cursor: pointer;
   transition: background-color .5s;
   padding: 6px;
 }

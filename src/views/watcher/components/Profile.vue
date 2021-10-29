@@ -6,6 +6,7 @@
   :class="[
     color + ' lighten-4',
     color + '--text text--darken-4',
+    (!$has_xs(['watcher_can_see_quotas']) && profile.id != $logged_profile.id) ? 'pointer-events-none' : '',
   ]"
 >
   <div v-if="!quota_toggled">
@@ -18,7 +19,7 @@
     <div>{{ profile.phone }}</div>
 
     <v-btn
-      v-if="$current_view == 'calendar'"
+      v-if="$current_view == 'calendar' && ($has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id)"
       @click.prevent="get_quota('month_' + (start ? 'start' : 'end'))"
       outlined
       class="profile-toggle"
