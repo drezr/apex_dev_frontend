@@ -765,6 +765,36 @@ export default {
               'nl': '',
               'en': '',
             },
+            'change_password': {
+              'fr': 'Changement de mot de passe',
+              'nl': '',
+              'en': 'Change password',
+            },
+            'current_password': {
+              'fr': 'Mot de passe actuel',
+              'nl': '',
+              'en': 'Current password',
+            },
+            'new_password': {
+              'fr': 'Nouveau mot de passe',
+              'nl': '',
+              'en': 'New password',
+            },
+            'new_password_confirm': {
+              'fr': 'Confirmez le mot de passe',
+              'nl': '',
+              'en': 'Confirm new password',
+            },
+            'min_8_character': {
+              'fr': 'Minimum 8 caractères',
+              'nl': '',
+              'en': '8 characters minimum',
+            },
+            'password_change_success': {
+              'fr': 'Votre mot de passe a bien été changé.',
+              'nl': '',
+              'en': 'Your password has been successfully updated.',
+            },
           },
           'team': {
             'draft_desc': {

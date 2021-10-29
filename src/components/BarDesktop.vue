@@ -68,6 +68,115 @@
       </v-list-item>
     </v-list>
   </v-menu>
+
+  <CustomDialog
+    :open="password_dialog"
+    :width="500"
+    :title_text="lang.views.home.change_password[lg]"
+    :confirm_icon="'mdi-send'"
+    :confirm_text="lang.generic.send[lg]"
+    :confirm_color="'green'"
+    @cancel="password_dialog = false"
+    @confirm="change_password"
+  >
+    <v-card-text class="mt-8 px-8 pb-0">
+      <v-text-field
+        v-model="current_password"
+        :type="show_current ? 'text' : 'password'"
+        :label="lang.views.home.current_password[lg]"
+        required
+        outlined
+        prepend-inner-icon="mdi-lock"
+        class="mb-4"
+      >
+        <template v-slot:append>
+          <v-icon
+            v-if="!show_current"
+            @click="show_current = !show_current"
+            tabindex="-1"
+          >
+            mdi-eye-off
+          </v-icon>
+
+          <v-icon
+            v-if="show_current"
+            @click="show_current = !show_current"
+            tabindex="-1"
+          >
+            mdi-eye
+          </v-icon>
+        </template>
+      </v-text-field>
+
+      <v-text-field
+        v-model="new_password"
+        :type="show_new ? 'text' : 'password'"
+        :label="lang.views.home.new_password[lg]"
+        :hint="lang.views.home.min_8_character[lg]"
+        counter
+        required
+        outlined
+        color="purple"
+        @input="check_passwords_same"
+      >
+        <template v-slot:append>
+          <v-icon
+            v-if="!show_new"
+            @click="show_new = !show_new"
+            tabindex="-1"
+          >
+            mdi-eye-off
+          </v-icon>
+
+          <v-icon
+            v-if="show_new"
+            @click="show_new = !show_new"
+            tabindex="-1"
+          >
+            mdi-eye
+          </v-icon>
+        </template>
+      </v-text-field>
+
+      <v-text-field
+        v-model="new_password2"
+        :type="show_new2 ? 'text' : 'password'"
+        :label="lang.views.home.new_password_confirm[lg]"
+        :hint="lang.views.home.min_8_character[lg]"
+        required
+        outlined
+        color="purple"
+        @input="check_passwords_same"
+        :error="are_passwords_same == false"
+        :success="are_passwords_same == true"
+      >
+        <template v-slot:append>
+          <v-icon
+            v-if="!show_new2"
+            @click="show_new2 = !show_new2"
+            tabindex="-1"
+          >
+            mdi-eye-off
+          </v-icon>
+
+          <v-icon
+            v-if="show_new2"
+            @click="show_new2 = !show_new2"
+            tabindex="-1"
+          >
+            mdi-eye
+          </v-icon>
+        </template>
+      </v-text-field>
+    </v-card-text>
+  </CustomDialog>
+
+  <v-snackbar
+    v-model="password_snackbar"
+    :timeout="password_timeout"
+  >
+    {{ lang.views.home.password_change_success[lg] }}
+  </v-snackbar>
 </div>
 
 </template>
@@ -76,7 +185,7 @@
 <script>
 
 export default {
-  name: '',
+  name: 'BarDesktop',
 
   components: {
     
@@ -89,6 +198,16 @@ export default {
   data() {
     return {
       password_dialog: false,
+      current_password: '',
+      new_password: '',
+      new_password2: '',
+      show_current: false,
+      show_new: false,
+      show_new2: false,
+      alert: '',
+      are_passwords_same: null,
+      password_snackbar: false,
+      password_timeout: 4000,
     }
   },
 
@@ -145,6 +264,16 @@ export default {
 
     logout() {
       this.app.logout()
+    },
+
+    check_passwords_same() {
+      this.are_passwords_same = this.new_password == this.new_password2
+    },
+
+    change_password() {
+      this.password_dialog = false
+
+      this.password_snackbar = true
     },
   },
 
