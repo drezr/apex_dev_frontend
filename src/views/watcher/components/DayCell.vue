@@ -54,6 +54,7 @@
           select_text_size(date.cell.presence),
         ]"
         @focus="get_object"
+        :disabled="!$is_editor"
       />
 
       <input
@@ -66,6 +67,7 @@
           select_text_size(date.cell.absence),
         ]"
         @focus="get_object"
+        :disabled="!$is_editor"
       />
       
       <div

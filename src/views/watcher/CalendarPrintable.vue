@@ -228,7 +228,7 @@ export default {
         profiles = profiles.filter(p => p.id == this.$logged_profile.id)
       }
 
-      profiles = profiles.filter(p => p.link.watcher_is_visible)
+      profiles = profiles.filter(p => p.link.watcher_is_printable)
 
       for (let profile of profiles) {
         profile.dates = this.$tool.deepcopy(this.dates)
