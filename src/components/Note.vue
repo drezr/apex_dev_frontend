@@ -54,8 +54,8 @@
           auto-grow
           hide-details
           solo
-          :disabled="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
-          :flat="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
+          :disabled="!(edit_mode && self.profile == $logged_profile.id)"
+          :flat="!(edit_mode && self.profile == $logged_profile.id)"
           background-color="white"
           @input="update"
           :placeholder="lang.generic.empty_note[lg]"

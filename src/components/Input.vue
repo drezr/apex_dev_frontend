@@ -20,8 +20,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!(edit_mode && $is_editor)"
-        :flat="!(edit_mode && $is_editor)"
+        :disabled="!edit_mode"
+        :flat="!edit_mode"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic['input_' + self.kind][lg]"
@@ -35,8 +35,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!(edit_mode && $is_editor)"
-        :flat="!(edit_mode && $is_editor)"
+        :disabled="!edit_mode"
+        :flat="!edit_mode"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"
@@ -55,8 +55,8 @@
             class="custom-field input-value"
             hide-details
             solo
-            :disabled="!(edit_mode && is_editor)"
-            :flat="!(edit_mode && is_editor)"
+            :disabled="!edit_mode"
+            :flat="!edit_mode"
             :background-color="edit_mode ? 'white' : 'transparent'"
             :placeholder="lang.generic.input_value[lg]"
             v-bind="attrs"
@@ -109,8 +109,8 @@
         auto-grow
         hide-details
         solo
-        :disabled="!(edit_mode && is_editor)"
-        :flat="!(edit_mode && is_editor)"
+        :disabled="!edit_mode"
+        :flat="!edit_mode"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
         :placeholder="lang.generic.input_value[lg]"

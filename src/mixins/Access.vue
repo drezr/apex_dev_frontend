@@ -36,6 +36,50 @@ export default {
 
       return false
     },
+
+    $is_editor() {
+      if (this.$current_view == 'calendar') {
+        return this.$has_xs(['watcher_is_editor'])
+      }
+
+      else if (this.$current_view == 'project') {
+        return this.$has_xs(['draft_is_editor'])
+      }
+
+      else if (this.$current_view == 'works') {
+        return this.$has_xs(['radium_is_editor'])
+      }
+
+      else if (this.$current_view == 'board') {
+        return this.$has_xs(['planner_is_editor'])
+      }
+
+      else if (this.$current_view == 'myapexproject') {
+        return true
+      }
+
+      return false
+    },
+
+    $is_user() {
+      if (this.$current_view == 'calendar') {
+        return this.$has_xs(['watcher_is_user'])
+      }
+
+      else if (this.$current_view == 'project') {
+        return this.$has_xs(['draft_is_user'])
+      }
+
+      else if (this.$current_view == 'board') {
+        return this.$has_xs(['planner_is_user'])
+      }
+
+      else if (this.$current_view == 'myapexproject') {
+        return true
+      }
+
+      return false
+    },
   },
 
   methods: {
@@ -51,25 +95,6 @@ export default {
       }
 
       return false
-    },
-
-    $is_editor() {
-      if (this.$current_view == 'calendar') {
-        return this.$has_xs(['watcher_is_editor'])
-      }
-
-      else if (this.$current_view == 'project') {
-        return this.$has_xs(['draft_is_editor'])
-      }
-
-
-      else if (this.$current_view == 'works') {
-        return this.$has_xs(['radium_is_editor'])
-      }
-
-      else if (this.$current_view == 'myapexproject') {
-        return true
-      }
     },
   },
 }

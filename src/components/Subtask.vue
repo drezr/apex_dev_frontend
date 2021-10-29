@@ -2,8 +2,11 @@
 
 <div class="d-flex align-center">
   <div
-    class="subtask-frame lighten-3 cursor-pointer"
-    :class="self.status == 'pending' ? 'orange' : 'green'"
+    class="subtask-frame lighten-3"
+    :class="[
+      self.status == 'pending' ? 'orange' : 'green',
+      $is_user ? 'cursor-pointer' : 'cursor-default',
+    ]"
     @click="swap_status"
   >
     <v-icon
@@ -20,8 +23,8 @@
       auto-grow
       hide-details
       solo
-      :disabled="!(edit_mode && $is_editor)"
-      :flat="!(edit_mode && $is_editor)"
+      :disabled="!edit_mode"
+      :flat="!edit_mode"
       :background-color="edit_mode ? 'white' : 'transparent'"
       @input="update"
       :placeholder="lang.generic.empty_subtask[lg]"
@@ -111,9 +114,11 @@ export default {
     },
 
     swap_status() {
-      let status = {'pending': 'done', 'done': 'pending'}
+      if (this.$is_user) {
+        let status = {'pending': 'done', 'done': 'pending'}
 
-      this.self.status = status[this.self.status]
+        this.self.status = status[this.self.status]
+      }
     },
 
     remove() {

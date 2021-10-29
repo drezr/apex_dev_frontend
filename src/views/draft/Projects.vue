@@ -24,6 +24,7 @@
             :dark="true"
             :tooltip="lang.views.draft.create_new_project[lg]"
             @click="create_dialog = true"
+            v-if="$has_xs(['draft_is_editor'])"
           />
         </v-toolbar>
 
@@ -59,6 +60,7 @@
                 @mouseleave="grab_cursor = 'grab'"
                 class="handle"
                 @click.native.stop
+                v-if="$has_xs(['draft_is_editor'])"
               />
 
               <v-icon class="mx-3">
@@ -282,7 +284,7 @@ export default {
     get_ongoing() {
       let ongoing = this.app.projects.filter(p => !p.archived)
 
-      if (!this.$xs.draft_can_see_private && this.$current_view != 'myapexprojects') {
+      if (!this.$has_xs(['draft_can_see_private']) && this.$current_view != 'myapexprojects') {
         ongoing = ongoing.filter(p => !p.private)
       }
 
@@ -294,7 +296,7 @@ export default {
     get_archived() {
       let archived = this.app.projects.filter(p => p.archived)
       let projects = Object()
-      let csp = this.$xs.draft_can_see_private  && this.$current_view != 'myapexprojects'
+      let csp = this.$has_xs(['draft_can_see_private'])  && this.$current_view != 'myapexprojects'
 
       for (let project of archived) {
         if (!project.private || (csp && project.private)) {

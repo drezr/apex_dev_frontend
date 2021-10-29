@@ -883,6 +883,31 @@ export default {
               'nl': '',
               'en': '',
             },
+            'access_planner_title': {
+              'fr': 'Paramètres liés à Planner',
+              'nl': '',
+              'en': '',
+            },
+            'access_planner_is_editor': {
+              'fr': 'Est éditeur',
+              'nl': '',
+              'en': '',
+            },
+            'access_planner_is_editor_hint': {
+              'fr': 'Peut créer, planifier, modifier et supprimer les tâches.',
+              'nl': '',
+              'en': '',
+            },
+            'access_planner_is_user': {
+              'fr': 'Est utilisateur',
+              'nl': '',
+              'en': '',
+            },
+            'access_planner_is_user_hint': {
+              'fr': 'Peut changer le statut des tâches et des sous-tâches.',
+              'nl': '',
+              'en': '',
+            },
             'access_radium_title': {
               'fr': 'Paramètres liés à Radium',
               'nl': '',
@@ -910,6 +935,16 @@ export default {
             },
             'access_watcher_is_editor_hint': {
               'fr': 'Peut modifier les cellules, planifier le travail, modifier les éléments (tâches, fichiers, ...).',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_user': {
+              'fr': 'Est utilisateur',
+              'nl': '',
+              'en': '',
+            },
+            'access_watcher_is_user_hint': {
+              'fr': 'Peut changer le statut des tâches et des sous-tâches.',
               'nl': '',
               'en': '',
             },

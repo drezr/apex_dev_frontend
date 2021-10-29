@@ -123,6 +123,7 @@
             v-model="copy.link.draft_is_editor"
             :label="lang.views.team.access_draft_is_editor[lg]"
             :hint="lang.views.team.access_draft_is_editor_hint[lg]"
+            @click="set_lower_access('draft_is_editor', 'draft_is_user')"
             persistent-hint
           ></v-checkbox>
 
@@ -130,6 +131,7 @@
             v-model="copy.link.draft_is_user"
             :label="lang.views.team.access_draft_is_user[lg]"
             :hint="lang.views.team.access_draft_is_user_hint[lg]"
+            :disabled="copy.link.draft_is_editor"
             persistent-hint
           ></v-checkbox>
 
@@ -137,6 +139,34 @@
             v-model="copy.link.draft_can_see_private"
             :label="lang.views.team.access_draft_can_see_private[lg]"
             :hint="lang.views.team.access_draft_can_see_private_hint[lg]"
+            persistent-hint
+          ></v-checkbox>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+
+    <v-expansion-panels class="access mt-3">
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <img :src="$tool.get_logo('planner_30x30')" class="logo" />
+          <b>{{ lang.views.team.access_planner_title[lg] }}</b>
+        </v-expansion-panel-header>
+
+        <v-expansion-panel-content>
+          <v-checkbox
+            v-model="copy.link.planner_is_editor"
+            :label="lang.views.team.access_planner_is_editor[lg]"
+            :hint="lang.views.team.access_planner_is_editor_hint[lg]"
+            @click="set_lower_access('planner_is_editor', 'planner_is_user')"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-checkbox
+            v-model="copy.link.planner_is_user"
+            :label="lang.views.team.access_planner_is_user[lg]"
+            :hint="lang.views.team.access_planner_is_user_hint[lg]"
+            :disabled="copy.link.planner_is_editor"
             persistent-hint
           ></v-checkbox>
         </v-expansion-panel-content>
@@ -188,6 +218,35 @@
             v-model="copy.link.watcher_is_editor"
             :label="lang.views.team.access_watcher_is_editor[lg]"
             :hint="lang.views.team.access_watcher_is_editor_hint[lg]"
+            @click="
+              set_lower_access('watcher_is_editor', 'watcher_is_user');
+              set_lower_access('watcher_is_editor', 'watcher_can_see_quotas');
+              set_lower_access('watcher_is_editor', 'watcher_can_see_cells');
+            "
+            persistent-hint
+          ></v-checkbox>
+
+          <v-checkbox
+            v-model="copy.link.watcher_is_user"
+            :label="lang.views.team.access_watcher_is_user[lg]"
+            :hint="lang.views.team.access_watcher_is_user_hint[lg]"
+            :disabled="copy.link.watcher_is_editor"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-checkbox
+            v-model="copy.link.watcher_can_see_quotas"
+            :label="lang.views.team.access_watcher_can_see_quotas[lg]"
+            :hint="lang.views.team.access_watcher_can_see_quotas_hint[lg]"
+            :disabled="copy.link.watcher_is_editor"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-checkbox
+            v-model="copy.link.watcher_can_see_cells"
+            :label="lang.views.team.access_watcher_can_see_cells[lg]"
+            :hint="lang.views.team.access_watcher_can_see_cells_hint[lg]"
+            :disabled="copy.link.watcher_is_editor"
             persistent-hint
           ></v-checkbox>
 
@@ -202,20 +261,6 @@
             v-model="copy.link.watcher_is_printable"
             :label="lang.views.team.access_watcher_is_printable[lg]"
             :hint="lang.views.team.access_watcher_is_printable_hint[lg]"
-            persistent-hint
-          ></v-checkbox>
-
-          <v-checkbox
-            v-model="copy.link.watcher_can_see_cells"
-            :label="lang.views.team.access_watcher_can_see_cells[lg]"
-            :hint="lang.views.team.access_watcher_can_see_cells_hint[lg]"
-            persistent-hint
-          ></v-checkbox>
-
-          <v-checkbox
-            v-model="copy.link.watcher_can_see_quotas"
-            :label="lang.views.team.access_watcher_can_see_quotas[lg]"
-            :hint="lang.views.team.access_watcher_can_see_quotas_hint[lg]"
             persistent-hint
           ></v-checkbox>
         </v-expansion-panel-content>
@@ -414,6 +459,12 @@ For save button disabling
     create() {
       this.$emit('close')
       this.$emit('create', this.copy)
+    },
+
+    set_lower_access(upper, lower) {
+      if (this.copy.link[upper]) {
+        this.copy.link[lower] = true
+      }
     },
   },
 

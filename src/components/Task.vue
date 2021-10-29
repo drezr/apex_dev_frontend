@@ -66,6 +66,7 @@
                 :tooltip="status_text"
                 :elevation="0"
                 :class="$current_view != 'board' ? 'mx-2' : 'mr-2'"
+                :cursor="$is_user ? 'pointer' : 'default'"
                 @click="swap_status"
                 @click.native.stop
               />
@@ -78,8 +79,8 @@
                 auto-grow
                 hide-details
                 solo
-                :disabled="!(edit_mode && $is_editor)"
-                :flat="!(edit_mode && $is_editor)"
+                :disabled="!edit_mode"
+                :flat="!edit_mode"
                 :background-color="edit_mode ? 'white' : 'transparent'"
                 @input="update"
                 :placeholder="lang.generic.empty_task[lg]"
@@ -511,14 +512,16 @@ export default {
     },
 
     swap_status() {
-      let status = {
-        'pending': 'working',
-        'working': 'done',
-        'done': 'canceled',
-        'canceled': 'pending',
-      }
+      if (this.$is_user) {
+        let status = {
+          'pending': 'working',
+          'working': 'done',
+          'done': 'canceled',
+          'canceled': 'pending',
+        }
 
-      this.self.status = status[this.self.status]
+        this.self.status = status[this.self.status]
+      }
     },
 
     expand_toggle() {

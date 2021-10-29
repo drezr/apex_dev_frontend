@@ -36,7 +36,7 @@
         max-width="600"
       >
         <CustomButton
-          v-if="$xs.draft_is_editor || $is_staff"
+          v-if="$is_editor"
           :tooltip="lang.generic.models[lg]"
           :icon="'mdi-webpack'"
           :outlined="true"
@@ -69,7 +69,7 @@
         ></CustomButton>
 
         <CustomButton
-          v-if="$xs.draft_is_manager || $is_staff"
+          v-if="$has_xs(['is_manager'])"
           :tooltip="lang.views.draft.edit_project[lg]"
           :icon="'mdi-rename-box'"
           :outlined="true"
@@ -397,7 +397,7 @@ export default {
 
   computed: {
     has_access() {
-      return this.$has_xs(['draft_is_editor']) || this.$current_view == 'myapexproject'
+      return this.$is_editor || this.$current_view == 'myapexproject'
     },
 
     available_filters() {

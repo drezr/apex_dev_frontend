@@ -93,6 +93,10 @@ html {
   overflow: hidden !important;
 }
 
+.cursor-default {
+  cursor: default !important;
+}
+
 .cursor-pointer {
   cursor: pointer !important;
 }
