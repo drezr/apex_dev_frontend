@@ -385,6 +385,7 @@ export default {
   align-items: center;
   border-radius: 5px;
   border: 1px grey solid;
+  background-color: white;
 }
 
 .file-mini {

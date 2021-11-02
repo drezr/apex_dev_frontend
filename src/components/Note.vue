@@ -250,6 +250,7 @@ export default {
 .note-frame {
   border-radius: 5px;
   border: 1px grey solid;
+  background-color: white;
 }
 
 </style>

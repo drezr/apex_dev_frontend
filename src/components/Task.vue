@@ -571,6 +571,7 @@ export default {
   border-radius: 5px;
   border: 1px grey solid;
   transition: border 0.2s, border-radius 0.2s;
+  background-color: white;
 }
 
 .task-frame-expanded {

@@ -267,6 +267,7 @@ class Tools {
     let children = Array()
 
     let child_types = [
+      'folder',
       'task',
       'subtask',
       'file',

@@ -277,6 +277,7 @@ export default {
   display: flex;
   border-bottom: 1px grey solid;
   color: black;
+  background-color: white;
 }
 
 .input-key {

@@ -37,42 +37,83 @@
       </div>
 
       <div class="d-flex">
-        <div class="board-pending">
-          <VueDraggable
-            v-model="app.children"
-            @change="update_children_position"
-            group="drag"
-            :animation="100"
-            easing="cubic-bezier(1, 0, 0, 1)"
-            handle=".handle"
-            style="height: calc(100% - 5px);"
-          >
-            <div
-              v-for="(child, i) in app.children"
-              :key="i"
+        <div style="width: 35%; min-width: 500px;">
+          <div class="d-flex justify-center mt-2">
+            <VueDraggable
+              v-model="folders"
+              @change="update_folder_position"
+              group="drag"
+              :animation="100"
+              easing="cubic-bezier(1, 0, 0, 1)"
+              handle=".handle"
             >
-              <Task
-                v-if="child.type == 'task'"
-                :self="child"
-                :parent="app"
-                class="ma-1"
-              />
+              <div
+                v-for="(folder, i) in folders"
+                :key="i"
+              >
+                <v-tooltip bottom color="black">
+                  <template v-slot:activator="{ on, attrs }">
+                    <div
+                      class="board-tab-button"
+                      :class="folder.color"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="selected_folder = folder.link.position"
+                    >
+                      {{ folder.link.position + 1 }}
+                    </div>
+                  </template>
 
-              <Note
-                v-if="child.type == 'note'"
-                :self="child"
-                :parent="app"
-                class="ma-1"
-              />
+                  <span>{{ folder.name }}</span>
+                </v-tooltip>
+              </div>
+            </VueDraggable>
+          </div>
 
-              <File
-                v-if="child.type == 'file'"
-                :self="child"
-                :parent="app"
-                class="ma-1"
-              />
+
+          <div class="board-pending">
+            <div
+              class="lighten-5"
+              :class="folders[selected_folder].color"
+              style="height: 100%; padding-top: 5px; position: relative; top: -5px;"
+            >
+              <VueDraggable
+                v-model="folders[selected_folder].children"
+                @change="update_children_position"
+                group="drag"
+                :animation="100"
+                easing="cubic-bezier(1, 0, 0, 1)"
+                handle=".handle"
+                style="height: 100%;"
+              >
+                <div
+                  v-for="(child, i) in folders[selected_folder].children"
+                  :key="i"
+                >
+                  <Task
+                    v-if="child.type == 'task'"
+                    :self="child"
+                    :parent="app"
+                    class="ma-1"
+                  />
+
+                  <Note
+                    v-if="child.type == 'note'"
+                    :self="child"
+                    :parent="app"
+                    class="ma-1"
+                  />
+
+                  <File
+                    v-if="child.type == 'file'"
+                    :self="child"
+                    :parent="app"
+                    class="ma-1"
+                  />
+                </div>
+              </VueDraggable>
             </div>
-          </VueDraggable>
+          </div>
         </div>
 
         <div class="board-planned">
@@ -355,6 +396,7 @@ export default {
       team: Object(),
       profiles: Array(),
       app: Object(),
+      folders: Array(),
       days: Array(),
       dates: Array(),
       detail_edit_mode: true,
@@ -365,6 +407,7 @@ export default {
       all_profiles: Array(),
       picked_profile: null,
       foreign_profiles: Array(),
+      selected_folder: 0,
     }
   },
 
@@ -379,6 +422,7 @@ export default {
     this.team = this.request.team
     this.profiles = this.request.team.profiles
     this.app = this.request.app
+    this.folders = this.request.app.folders
     this.days = this.request.days
 
     let children = this.$tool.get_fused_children(this.app)
@@ -453,6 +497,10 @@ export default {
 
   methods: {
     update_children_position() {
+
+    },
+
+    update_folder_position() {
 
     },
 
@@ -602,22 +650,20 @@ export default {
 <style scoped>
 
 .board-pending {
-  width: 35%;
-  min-width: 500px;
   height: calc(100vh - 280px);
   max-height: calc(100vh - 280px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
-  margin: 10px;
+  margin: 0 10px 10px 10px;
   overflow-y: scroll;
 }
 
 .board-planned {
   width: 65%;
   min-width: 900px;
-  height: calc(100vh - 280px);
-  max-height: calc(100vh - 280px);
+  height: calc(100vh - 255px);
+  max-height: calc(100vh - 255px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
@@ -643,6 +689,25 @@ export default {
   padding-top: 10px;
   margin: 0 10px;
   text-align: center;
+}
+
+.board-tab-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 5px 0px 0px;
+  margin: 0px 5px;
+  padding-top: 2px;
+  width: 60px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  box-shadow: 0px 0px 0px 1px black;
+}
+
+.board-tab-button:hover {
+  filter: brightness(1.2);
 }
 
 .board-date {
