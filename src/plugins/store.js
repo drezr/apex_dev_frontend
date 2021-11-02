@@ -12,7 +12,7 @@ export default new Vuex.Store({
     can_drag: false,
     palette_toggled: false,
     palette_color: 'red accent-4',
-    planner_is_grabbing: false,
+    is_grabbing: false,
   },
 
   mutations: {
@@ -44,8 +44,8 @@ export default new Vuex.Store({
       state.palette_color = color
     },
 
-    set_planner_is_grabbing(state, is_grabbing) {
-      state.planner_is_grabbing = is_grabbing
+    set_is_grabbing(state, is_grabbing) {
+      state.is_grabbing = is_grabbing
     },
   },
 

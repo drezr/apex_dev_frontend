@@ -100,6 +100,12 @@ export default {
 
       return sorted_teammates.concat(other_teams_profiles)
     },
+
+    $set_is_grabbing(value) {
+      this.grab_cursor = value ? 'grabbing' : 'grab'
+
+      this.$store.commit('set_is_grabbing', value)
+    },
   },
 }
 

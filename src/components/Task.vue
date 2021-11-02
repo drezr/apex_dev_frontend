@@ -49,9 +49,9 @@
                 :text_color="'pink'"
                 :tooltip="lang.generic.move[lg]"
                 :cursor="grab_cursor"
-                @mousedown="grab_cursor = 'grabbing'"
-                @mouseup="grab_cursor = 'grab'"
-                @mouseleave="grab_cursor = 'grab'"
+                @mousedown="$set_is_grabbing(true)"
+                @mouseup="$set_is_grabbing(false)"
+                @mouseleave="$set_is_grabbing(false)"
                 class="handle"
                 @click.native.stop
               />

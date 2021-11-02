@@ -39,35 +39,38 @@
       <div class="d-flex">
         <div style="width: 35%; min-width: 500px;">
           <div class="d-flex justify-center mt-2">
-            <VueDraggable
-              v-model="folders"
-              @change="update_folder_position"
-              group="drag"
-              :animation="100"
-              easing="cubic-bezier(1, 0, 0, 1)"
-              handle=".handle"
+            <div
+              v-for="(folder, i) in folders"
+              :key="i + rerender_count"
             >
-              <div
-                v-for="(folder, i) in folders"
-                :key="i"
-              >
-                <v-tooltip bottom color="black">
-                  <template v-slot:activator="{ on, attrs }">
-                    <div
-                      class="board-tab-button"
-                      :class="folder.color"
-                      v-bind="attrs"
-                      v-on="on"
-                      @click="selected_folder = folder.link.position"
-                    >
-                      {{ folder.link.position + 1 }}
-                    </div>
-                  </template>
+              <v-tooltip bottom color="black">
+                <template v-slot:activator="{ on, attrs }">
+                  <div
+                    class="board-tab-button"
+                    :class="[
+                      folder.color,
+                      selected_folder == folder.link.position ? 'board-tab-button-selected' : ''
+                    ]"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="selected_folder = folder.link.position; rerender_count++"
+                  >
+                    {{ folder.link.position + 1 }}
+                  </div>
 
-                  <span>{{ folder.name }}</span>
-                </v-tooltip>
-              </div>
-            </VueDraggable>
+                  <VueDraggable
+                    v-model="folder.children"
+                    group="drag"
+                    style="position: relative; left: 2px; border: 1px black solid; width: 66px; height: 30px; margin-top: -29px;  opacity: 0;"
+                    :style="is_grabbing ? '' : 'pointer-events: none;'"
+                    v-if="selected_folder != folder.link.position"
+                  >
+                  </VueDraggable>
+                </template>
+
+                <span>{{ folder.name }}</span>
+              </v-tooltip>
+            </div>
           </div>
 
 
@@ -85,10 +88,12 @@
                 easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 style="height: 100%;"
+                @start="set_is_grabbing(true)"
+                @end="set_is_grabbing(false)"
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
-                  :key="i"
+                  :key="i + rerender_count"
                 >
                   <Task
                     v-if="child.type == 'task'"
@@ -182,6 +187,8 @@
                 :animation="100"
                 easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
+                @start="set_is_grabbing(true)"
+                @end="set_is_grabbing(false)"
               >
                 <div
                   v-for="(child, i) in date.data.children"
@@ -270,7 +277,7 @@
           class="my-0 pa-0"
           :label="profile.name"
           :input-value="teammates_object.teammates.find(t => t == profile.name)"
-          @change="toggle_teammate(profile)"
+          @move="toggle_teammate(profile)"
         ></v-checkbox>
 
         <div
@@ -408,6 +415,8 @@ export default {
       picked_profile: null,
       foreign_profiles: Array(),
       selected_folder: 0,
+      rerender_count: 0,
+      is_grabbing: false,
     }
   },
 
@@ -496,8 +505,12 @@ export default {
   },
 
   methods: {
-    update_children_position() {
+    set_is_grabbing(value) {
+      this.is_grabbing = value
+    },
 
+    update_children_position() {
+      this.rerender_count++
     },
 
     update_folder_position() {
@@ -699,14 +712,20 @@ export default {
   margin: 0px 5px;
   padding-top: 2px;
   width: 60px;
+  height: 26px;
   cursor: pointer;
   font-weight: bold;
   color: white;
   text-shadow: 1px 1px 1px black;
-  box-shadow: 0px 0px 0px 1px black;
+  box-shadow: 0px 0px 0px 1px black, inset 0px -2px 2px 0px rgba(0, 0, 0, 0.3);
 }
 
 .board-tab-button:hover {
+  filter: brightness(1.3);
+}
+
+.board-tab-button-selected {
+  box-shadow: 0px 0px 0px 3px black;
   filter: brightness(1.2);
 }
 
