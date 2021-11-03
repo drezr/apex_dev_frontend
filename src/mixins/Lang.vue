@@ -1803,6 +1803,16 @@ export default {
             },
           },
           'planner': {
+            'to_be_planned': {
+              'fr': 'A planifier',
+              'nl': '',
+              'en': 'To be planned',
+            },
+            'planned': {
+              'fr': 'Planifié',
+              'nl': '',
+              'en': 'Planned',
+            },
             'printable_board': {
               'fr': 'Version imprimable du planning',
               'nl': '',
@@ -1827,6 +1837,11 @@ export default {
               'fr': 'Gestion des dossiers',
               'nl': '',
               'en': 'Forlers setting',
+            },
+            'folder_name': {
+              'fr': 'Nom du dossier',
+              'nl': '',
+              'en': 'Folder name',
             },
             'add_folder': {
               'fr': 'Ajouter un dossier',

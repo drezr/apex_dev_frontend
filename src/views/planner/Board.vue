@@ -16,7 +16,7 @@
 
       <div class="d-flex">
         <div class="board-pending-title">
-          Tâches à planifier
+          {{ lang.views.planner.to_be_planned[lg] }}
 
           <CustomButton
             style="position: relative; top: -2px;"
@@ -35,7 +35,7 @@
         </div>
 
         <div class="board-planned-title">
-          Tâches planifiées
+          {{ lang.views.planner.planned[lg] }}
         </div>
       </div>
 
@@ -46,7 +46,11 @@
               v-for="(folder, i) in folders"
               :key="i"
             >
-              <v-tooltip bottom color="black">
+              <v-tooltip
+                bottom
+                color="black"
+                :disabled="folder.name.length == 0"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-badge
                     bordered
@@ -443,6 +447,7 @@
           hide-details
           outlined
           class="mx-3"
+          :label="lang.views.planner.folder_name[lg]"
         />
 
         <CustomButton
@@ -795,6 +800,11 @@ export default {
 
     delete_folder() {
       this.folders = this.folders.filter(f => f.id !== this.deleting_folder.id)
+
+      for (let folder of this.folders) {
+        folder.link.position = this.folders.indexOf(folder)
+      }
+
       this.delete_folder_dialog = false
     },
   },
