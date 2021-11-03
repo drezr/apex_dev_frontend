@@ -1823,6 +1823,26 @@ export default {
               'nl': '',
               'en': 'Schedule',
             },
+            'folders_setting': {
+              'fr': 'Gestion des dossiers',
+              'nl': '',
+              'en': 'Forlers setting',
+            },
+            'add_folder': {
+              'fr': 'Ajouter un dossier',
+              'nl': '',
+              'en': 'Add folder',
+            },
+            'delete_folder': {
+              'fr': 'Supprimer ce dossier',
+              'nl': '',
+              'en': 'Delete folder',
+            },
+            'delete_folder_warning': {
+              'fr': 'Attention, il existe des éléments dans ce dossier. Si vous le supprimez, tous les éléments de ce dossier seront également supprimés.',
+              'nl': '',
+              'en': 'Please note that there are elements in this folder. If you delete it, all elements in that folder will also be deleted.',
+            },
           },
           'draft': {
             'ongoing_projects': {

@@ -9,7 +9,10 @@
         {{ team.name }}
       </div>
 
-      <NavigationBar class="mb-3" />
+      <NavigationBar
+        class="mb-0"
+        @open-folders-dialog="folders_dialog = true"
+      />
 
       <div class="d-flex">
         <div class="board-pending-title">
@@ -41,35 +44,44 @@
           <div class="d-flex justify-center mt-2">
             <div
               v-for="(folder, i) in folders"
-              :key="i + rerender_count"
+              :key="i"
             >
               <v-tooltip bottom color="black">
                 <template v-slot:activator="{ on, attrs }">
-                  <div
-                    class="board-tab-button"
-                    :class="[
-                      folder.color,
-                      selected_folder == folder.link.position ? 'board-tab-button-selected' : ''
-                    ]"
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="selected_folder = folder.link.position; rerender_count++"
+                  <v-badge
+                    bordered
+                    dot
+                    overlap
+                    offset-x="12"
+                    offset-y="8"
+                    :value="folder.children.length > 0 && selected_folder != folder.link.position"
+                    :color="folder.color + ' darken-4'"
                   >
-                    {{ folder.link.position + 1 }}
-                  </div>
-
-                  <VueDraggable
-                    v-model="folder.children"
-                    group="drag"
-                    style="position: relative; left: 2px; border: 1px black solid; width: 66px; height: 30px; margin-top: -29px;  opacity: 0;"
-                    :style="is_grabbing ? '' : 'pointer-events: none;'"
-                    v-if="selected_folder != folder.link.position"
-                  >
-                  </VueDraggable>
+                    <div
+                      class="board-tab-button"
+                      :class="[
+                        folder.color,
+                        selected_folder == folder.link.position ? 'board-tab-button-selected' : ''
+                      ]"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="selected_folder = folder.link.position"
+                    >
+                      {{ folder.link.position + 1 }}
+                    </div>
+                  </v-badge>
                 </template>
 
                 <span>{{ folder.name }}</span>
               </v-tooltip>
+
+              <VueDraggable
+                v-model="folder.children"
+                group="drag"
+                class="board-tab-button-dropzone"
+                :style="is_grabbing ? '' : 'pointer-events: none;'"
+                v-if="selected_folder != folder.link.position"
+              />
             </div>
           </div>
 
@@ -93,7 +105,7 @@
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
-                  :key="i + rerender_count"
+                  :key="i"
                 >
                   <Task
                     v-if="child.type == 'task'"
@@ -368,6 +380,106 @@
 
     <Loader :size="50" :width="5" class="my-6" v-if="all_profiles_loading" />
   </CustomDialog>
+
+  <CustomDialog
+    :open="folders_dialog"
+    :width="500"
+    :title_text="lang.views.planner.folders_setting[lg]"
+    :title_icon="'mdi-folder-cog'"
+    @cancel="folders_dialog = false"
+    :move_window="true"
+    :confirm_icon="'mdi-folder-plus'"
+    :confirm_color="'green'"
+    :confirm_text="lang.views.planner.add_folder[lg]"
+    :confirm_disabled="folders.length == 6"
+    @confirm="add_folder"
+  >
+    <VueDraggable
+      v-model="folders"
+      @change="update_folders_position"
+      :animation="100"
+      easing="cubic-bezier(1, 0, 0, 1)"
+      handle=".cursor-move"
+      class="pt-6"
+    >
+      <div
+        v-for="(folder, i) in folders"
+        :key="i"
+        class="d-flex align-center mt-4"
+      >
+        <v-icon class="cursor-move handle mr-3 pink--text">
+          mdi-drag-horizontal-variant
+        </v-icon>
+
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <div
+              class="board-folder-color-circle"
+              :class="folder.color"
+              v-bind="attrs"
+              v-on="on"
+            ></div>
+          </template>
+
+          <div
+            class="d-flex flex-wrap white pa-1"
+            style="width: 154px; border: 1px rgba(0, 0, 0, 0.3) solid !important;"
+          >
+            <div
+              v-for="(color, x) in folder_colors"
+              :key="x"
+              class="board-folder-color-circle"
+              :class="[
+                color,
+                color == folder.color ? 'board-folder-color-circle-selected': '',
+              ]"
+              @click="set_folder_color(color, folder)"
+            ></div>
+          </div>
+        </v-menu>
+
+        <v-text-field
+          v-model="folder.name"
+          hide-details
+          outlined
+          class="mx-3"
+        />
+
+        <CustomButton
+          :icon="'mdi-folder-remove'"
+          :small_fab="true"
+          :color="'red'"
+          :tooltip="lang.views.planner.delete_folder[lg]"
+          :badge="folder.children.length > 0"
+          :badge_icon="'mdi-exclamation'"
+          :badge_color="'orange'"
+          @click="open_delete_folder_dialog(folder)"
+          :disabled="folders.length == 1"
+        />
+      </div>
+    </VueDraggable>
+  </CustomDialog>
+
+  <CustomDialog
+    :open="delete_folder_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_folder_dialog = false"
+    @confirm="delete_folder"
+  >
+    <v-alert
+      v-if="delete_folder_dialog && deleting_folder.children.length > 0"
+      outlined
+      type="warning"
+    >
+      {{ lang.views.planner.delete_folder_warning[lg] }}
+    </v-alert>
+  </CustomDialog>
 </div>
 
 </template>
@@ -415,8 +527,28 @@ export default {
       picked_profile: null,
       foreign_profiles: Array(),
       selected_folder: 0,
-      rerender_count: 0,
       is_grabbing: false,
+      folders_dialog: false,
+      delete_folder_dialog: false,
+      deleting_folder: null,
+      folder_colors: [
+        'red',
+        'pink',
+        'purple',
+        'deep-purple',
+        'indigo',
+        'light-blue',
+        'cyan',
+        'teal',
+        'green',
+        'light-green',
+        'lime',
+        'yellow',
+        'amber',
+        'orange',
+        'deep-orange',
+        'blue-grey',
+      ],
     }
   },
 
@@ -511,10 +643,6 @@ export default {
 
     update_children_position() {
       this.rerender_count++
-    },
-
-    update_folder_position() {
-
     },
 
     get_day_color(day_name) {
@@ -645,6 +773,30 @@ export default {
       profile = this.all_profiles.find(p => p.id == profile.id)
       profile.disabled = false
     },
+
+    add_folder() {
+
+    },
+
+    update_folders_position() {
+      for (let folder of this.folders) {
+        folder.link.position = this.folders.indexOf(folder)
+      }
+    },
+
+    set_folder_color(color, folder) {
+      folder.color = color
+    },
+
+    open_delete_folder_dialog(folder) {
+      this.deleting_folder = folder
+      this.delete_folder_dialog = true
+    },
+
+    delete_folder() {
+      this.folders = this.folders.filter(f => f.id !== this.deleting_folder.id)
+      this.delete_folder_dialog = false
+    },
   },
 
   watch: {
@@ -663,8 +815,8 @@ export default {
 <style scoped>
 
 .board-pending {
-  height: calc(100vh - 280px);
-  max-height: calc(100vh - 280px);
+  height: calc(100vh - 270px);
+  max-height: calc(100vh - 270px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
@@ -675,8 +827,8 @@ export default {
 .board-planned {
   width: 65%;
   min-width: 900px;
-  height: calc(100vh - 255px);
-  max-height: calc(100vh - 255px);
+  height: calc(100vh - 245px);
+  max-height: calc(100vh - 245px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
@@ -705,6 +857,8 @@ export default {
 }
 
 .board-tab-button {
+  position: relative;
+  top: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -716,8 +870,8 @@ export default {
   cursor: pointer;
   font-weight: bold;
   color: white;
-  text-shadow: 1px 1px 1px black;
-  box-shadow: 0px 0px 0px 1px black, inset 0px -2px 2px 0px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 0px black;
+  box-shadow: inset 0px -3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .board-tab-button:hover {
@@ -725,8 +879,24 @@ export default {
 }
 
 .board-tab-button-selected {
-  box-shadow: 0px 0px 0px 3px black;
+  color: black;
+  text-shadow: none;
+  top: 0px;
+  box-shadow: 0px 0px 0px 1px black,
+              inset 0px -20px 20px 0px rgba(255, 255, 255, 0.7);
   filter: brightness(1.2);
+  height: 28px;
+  margin-bottom: -2px;
+}
+
+.board-tab-button-dropzone {
+  position: relative;
+  left: 2px;
+  border: 1px black solid;
+  width: 66px;
+  height: 30px;
+  margin-top: -29px;
+  opacity: 0;
 }
 
 .board-date {
@@ -832,6 +1002,27 @@ export default {
 .board-foreign-profile:not(:last-child) {
   border-bottom: 1px rgba(0, 0, 0, 0.2) solid;
   margin: 3px;
+}
+
+.board-folder-color-circle {
+  width: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin: 3px;
+  cursor: pointer;
+  transition: filter .2s, box-shadow .2s;
+}
+
+.board-folder-color-circle:hover {
+  filter: brightness(1.3);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, .8);
+}
+
+.board-folder-color-circle-selected {
+  filter: brightness(1.3);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, .8);
 }
 
 </style>

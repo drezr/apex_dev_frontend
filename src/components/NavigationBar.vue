@@ -151,6 +151,15 @@
 
   <div class="d-flex flex-wrap" v-if="$current_view == 'board'">
     <CustomButton
+      :icon="'mdi-folder-cog'"
+      :height="40"
+      :outlined="true"
+      class="mr-1 mb-1"
+      @click="$emit('open-folders-dialog')"
+      :tooltip="lang.views.planner.folders_setting[lg]"
+    />
+
+    <CustomButton
       :icon="'mdi-printer'"
       :height="40"
       :outlined="true"
