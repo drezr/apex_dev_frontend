@@ -232,7 +232,10 @@
                 v-for="(limit, i) in self.limits"
                 :key="i"
               >
-                <div class="work-row">
+                <div
+                  class="work-row"
+                  :class="edit_mode ? 'transparent' : (get_column_color(column.name)) + ' lighten-4'"
+                >
                   <div
                     class="work-row-drag pink"
                     v-if="edit_mode"
@@ -248,15 +251,17 @@
                     v-for="(data, field) in limit_fields"
                     :key="field"
                     :style="`width: ${data.width};`"
-                    class="work-row-field"
+                    class="work-row-field d-flex align-center"
                   >                  
-                    <v-text-field
+                    <v-textarea
                       v-model="limit[field]"
-                      :disabled="!edit_mode"
+                      :rows="1"
+                      auto-grow
                       hide-details
-                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      class="work-field work-field-small no-focus pa-0 ma-0"
                       :style="`font-size: ${column.textsize}px;`"
-                      class="pa-0 ma-0"
+                      :disabled="!edit_mode"
+                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
                     />
                   </div>
 
@@ -323,7 +328,10 @@
                 v-for="(s460, i) in self.s460s"
                 :key="i"
               >
-                <div class="work-row">
+                <div
+                  class="work-row"
+                  :class="edit_mode ? 'transparent' : (get_column_color(column.name)) + ' lighten-4'"
+                >
                   <div
                     class="work-row-drag pink"
                     v-if="edit_mode"
@@ -339,15 +347,17 @@
                     v-for="(data, field) in s460_fields"
                     :key="field"
                     :style="`width: ${data.width};`"
-                    class="work-row-field"
+                    class="work-row-field d-flex align-center"
                   >
-                    <v-text-field
+                    <v-textarea
                       v-model="s460[field]"
-                      :disabled="!edit_mode"
+                      :rows="1"
+                      auto-grow
                       hide-details
-                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      class="work-field work-field-small no-focus pa-0 ma-0"
                       :style="`font-size: ${column.textsize}px;`"
-                      class="pa-0 ma-0"
+                      :disabled="!edit_mode"
+                      :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
                     />
                   </div>
 
@@ -872,7 +882,7 @@ export default {
         },
         'from_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '20%',
+          'width': '18%',
         },
         'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
@@ -880,11 +890,11 @@ export default {
         },
         'from_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '10%',
+          'width': '13%',
         },
         'from_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
-          'width': '9%',
+          'width': '8%',
         },
         'to_line': {
           'name' : this.lang.views.radium.line[this.lg],
@@ -892,7 +902,7 @@ export default {
         },
         'to_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '20%',
+          'width': '18%',
         },
         'to_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
@@ -900,11 +910,11 @@ export default {
         },
         'to_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '10%',
+          'width': '13%',
         },
         'to_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
-          'width': '9%',
+          'width': '8%',
         },
       }
     },
@@ -954,8 +964,9 @@ export default {
 
         if (content) {
           let textarea = content.getElementsByTagName('textarea')[0]
+          let no_focus = content.getElementsByClassName('no-focus')
 
-          if (textarea) {
+          if (textarea && no_focus.length == 0) {
             content.classList.add('work-column-value-focused')
             textarea.focus()
           }
@@ -1139,6 +1150,14 @@ export default {
   margin-top: 10px !important;
   margin-bottom: 5px !important;
   text-align: center;
+}
+
+.work-field-small textarea {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  padding-top: 9px !important;
+  padding-bottom: 0px !important;
+  line-height: 16px !important;
 }
 
 .work-field .v-input__slot {
