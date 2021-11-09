@@ -307,6 +307,9 @@ export default {
       delete_dialog: false,
       expanded: false,
 
+      is_updating: false,
+      update_timer: null,
+
       is_photoswipe_open: false,
       options: {
         index: 0
@@ -500,7 +503,19 @@ export default {
     },
 
     update() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
 
+      this.update_timer = setTimeout(async () => {
+        await this.$http.patch('task', {
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'project_id': this.$current_project_id,
+          'task_id': this.self.id,
+          'name': this.self.name,
+        })
+      }, 1000)
     },
 
     update_children_position() {
@@ -514,7 +529,7 @@ export default {
         c => c.id !== this.self.id || c.type !== this.self.type)
     },
 
-    swap_status() {
+    async swap_status() {
       if (this.$is_user) {
         let status = {
           'pending': 'working',
@@ -524,6 +539,14 @@ export default {
         }
 
         this.self.status = status[this.self.status]
+
+        await this.$http.patch('task', {
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'project_id': this.$current_project_id,
+          'task_id': this.self.id,
+          'status': this.self.status,
+        })
       }
     },
 

@@ -563,10 +563,19 @@ export default {
       window.open(`/team/${this.$current_team_id}/draft/${this.$current_app_id}/projectprintable/${this.project.id}`)
     },
 
-    add_task() {
+    async add_task() {
       this.add_loading = true
 
-      setTimeout(() => {
+      setTimeout(async () => {
+        let request = await this.$http.post('task', {
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'project_id': this.$current_project_id,
+        })
+
+        let task = request.task
+        task.type = 'task'
+
         let main_frame = document.getElementById('main-frame')
         main_frame.scrollTo(0, main_frame.scrollHeight)
 
