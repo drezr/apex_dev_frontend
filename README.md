@@ -22,3 +22,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## License
+
+[MIT License](https://opensource.org/licenses/MIT)
+ 
+Copyright (c) 2021-present, Ronan Dumont
