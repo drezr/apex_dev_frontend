@@ -238,7 +238,7 @@ export default {
 
   async created() {
     if (this.$current_view == 'projects') {
-      this.request = await this.$http.get('draft', {
+      this.request = await this.$http.get('projects', {
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
       })
@@ -248,7 +248,7 @@ export default {
     }
 
     else if (this.$current_view == 'myapexprojects') {
-      this.request = await this.$http.get('myapexdraft', {
+      this.request = await this.$http.get('myapexprojects', {
         'app_id': this.$current_app_id,
       })
     }

@@ -158,7 +158,7 @@ export default {
       this.quota_loading = true
       this.quota_toggled = true
 
-      let request = await this.$http.get('quota_simple', {
+      let request = await this.$http.get('quotalight', {
         'end': end,
         'app_id': this.$current_app_id,
         'profile_id': this.profile.id,

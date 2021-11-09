@@ -158,7 +158,7 @@ export default {
   },
 
   async created() {
-    this.request = await this.$http.get('planner', {
+    this.request = await this.$http.get('board', {
       'team_id': this.$current_team_id,
       'app_id': this.$current_app_id,
       'month': this.$current_month,
