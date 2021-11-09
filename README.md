@@ -1,4 +1,5 @@
-# frontend
+# APEX frontend developement project
+
 
 ## Project setup
 ```
