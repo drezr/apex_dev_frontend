@@ -566,24 +566,25 @@ export default {
     async add_task() {
       this.add_loading = true
 
-      setTimeout(async () => {
-        let request = await this.$http.post('task', {
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'project_id': this.$current_project_id,
-        })
+      let request = await this.$http.post('task', {
+        'action': 'create',
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+      })
 
-        let task = request.task
-        task.type = 'task'
-        task.children = Array()
+      let task = request.task
+      task.type = 'task'
+      task.children = Array()
 
-        this.project.children.push(task)
+      this.project.children.push(task)
 
+      setTimeout(() => {
         let main_frame = document.getElementById('main-frame')
         main_frame.scrollTo(0, main_frame.scrollHeight)
+      }, 100)
 
-        this.add_loading = false
-      }, 2000)
+      this.add_loading = false
     },
 
     add_template() {

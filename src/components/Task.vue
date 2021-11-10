@@ -548,7 +548,8 @@ export default {
 
         this.self.status = status[this.self.status]
 
-        await this.$http.patch('task', {
+        await this.$http.post('task', {
+          'action': 'update',
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
