@@ -502,7 +502,7 @@ export default {
       }
     },
 
-    update() {
+    async update() {
       if (!this.is_updating) {
         clearInterval(this.update_timer)
       }
@@ -522,11 +522,19 @@ export default {
       console.log('children position updated')
     },
 
-    remove() {
+    async remove() {
       this.delete_dialog = false
 
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
+
+      await this.$http.post('task', {
+        'action': 'delete',
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+        'task_id': this.self.id,
+      })
     },
 
     async swap_status() {

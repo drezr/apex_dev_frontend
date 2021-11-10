@@ -575,6 +575,9 @@ export default {
 
         let task = request.task
         task.type = 'task'
+        task.children = Array()
+
+        this.project.children.push(task)
 
         let main_frame = document.getElementById('main-frame')
         main_frame.scrollTo(0, main_frame.scrollHeight)
