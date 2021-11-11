@@ -151,6 +151,7 @@
 
   <div class="d-flex flex-wrap" v-if="$current_view == 'board'">
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-folder-cog'"
       :height="40"
       :outlined="true"

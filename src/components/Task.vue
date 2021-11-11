@@ -508,11 +508,13 @@ export default {
       }
 
       this.update_timer = setTimeout(async () => {
-        await this.$http.patch('task', {
+        await this.$http.post('element', {
+          'action': 'update',
+          'kind': 'task',
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
-          'task_id': this.self.id,
+          'element_id': this.self.id,
           'name': this.self.name,
         })
       }, 1000)
@@ -528,12 +530,13 @@ export default {
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
 
-      await this.$http.post('task', {
+      await this.$http.post('element', {
         'action': 'delete',
+        'kind': 'task',
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
-        'task_id': this.self.id,
+        'element_id': this.self.id,
       })
     },
 
@@ -548,12 +551,13 @@ export default {
 
         this.self.status = status[this.self.status]
 
-        await this.$http.post('task', {
+        await this.$http.post('element', {
           'action': 'update',
+          'kind': 'task',
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
-          'task_id': this.self.id,
+          'element_id': this.self.id,
           'status': this.self.status,
         })
       }

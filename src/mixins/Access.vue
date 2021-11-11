@@ -14,11 +14,10 @@ export default {
 
     $xs() {
       if (this.$logged_profile) {
-        if (this.$current_component && 
-            this.$current_component.request && 
-            this.$current_component.request.team && 
-            this.$current_component.request.team.profiles) {
-          let profile = this.$current_component.request.team.profiles.find(
+        if (this.$current_component &&
+            this.$current_component.team && 
+            this.$current_component.team.profiles) {
+          let profile = this.$current_component.team.profiles.find(
             p => p.id == this.$logged_profile.id
           )
 

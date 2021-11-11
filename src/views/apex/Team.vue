@@ -6,7 +6,7 @@
   <transition name="fade">
     <div v-if="!loading">
       <div class="team-title my-9">
-        {{ self.name }}
+        {{ team.name }}
 
         <CustomButton
           v-if="$has_xs(['is_manager'])"
@@ -21,7 +21,7 @@
 
       <div class="tiles-frame">
         <Tile
-          v-for="app in self.apps"
+          v-for="app in team.apps"
           :key="app.id"
           :self="app"
           class="ma-3"
@@ -32,7 +32,7 @@
 
 
   <v-dialog v-model="access_manager_dialog" max-width="600">
-    <AccessManager :team="self" />
+    <AccessManager :team="team" />
   </v-dialog>
 </div>
 
@@ -58,7 +58,7 @@ export default {
 
   data() {
     return {
-      self: Object(),
+      team: Object(),
       resquest: null,
       loading: true,
       access_manager_dialog: false,
@@ -70,16 +70,16 @@ export default {
       'team_id': this.$current_team_id,
     })
 
-    this.self = this.request.team
+    this.team = this.request.team
 
-    this.self.apps.sort((a, b) => {
+    this.team.apps.sort((a, b) => {
       a = a.name || ''
       b = b.name || ''
       
       return a.localeCompare(b)
     })
 
-    this.self.apps.sort((a, b) => (a.app).localeCompare(b.app))
+    this.team.apps.sort((a, b) => (a.app).localeCompare(b.app))
 
     this.loading = false
   },

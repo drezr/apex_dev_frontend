@@ -148,7 +148,7 @@
         </VueDraggable>
 
         <div 
-          v-if="Object.keys(enabled_filters).length == 0 && computed_tasks.length == 0"
+          v-if="!has_enabled_filter && computed_tasks.length == 0"
           class="text-center ma-6"
         >
           {{ lang.views.draft.tip_no_task_1[lg] }}<br>
@@ -156,7 +156,7 @@
         </div>
 
         <div 
-          v-if="Object.keys(enabled_filters).length > 0 && computed_tasks.length == 0"
+          v-if="has_enabled_filter && computed_tasks.length == 0"
           class="text-center ma-12"
         >
           {{ lang.views.draft.tip_no_filtered_task[lg] }}
@@ -170,8 +170,8 @@
             :icon="'mdi-plus'"
             :fab="true"
             :color="'green'"
-            :dark="!add_loading"
-            :disabled="add_loading"
+            :dark="!(add_loading || has_enabled_filter || selected_sort != null)"
+            :disabled="add_loading || has_enabled_filter || selected_sort != null"
             :loading="add_loading"
             :elevation="1"
             :tooltip="lang.views.draft.add_task[lg]"
@@ -542,17 +542,74 @@ export default {
         return tasks
       },
 
-      set(list) {
+      async set(list) {
+        let list_copy = this.$tool.deepcopy(list)
+        let updates = Array()
+
         for (let child of list) {
           child.link.position = list.indexOf(child)
         }
+
+        for (let child of list) {
+          let child_copy = list_copy.find(c => {
+            return c.id == child.id && c.type == child.type
+          })
+
+          if (child_copy.link.position != child.link.position) {
+            updates.push({
+              'kind': child.type,
+              'element_id': child.id,
+              'position': child.link.position
+            })
+          }
+        }
+
+        await this.$http.post('element', {
+          'action': 'position',
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'project_id': this.$current_project_id,
+          'position_updates': updates,
+        })
       },
+    },
+
+    has_enabled_filter() {
+      let count = 0
+
+      for (let filter in this.enabled_filters) {
+        if (this.enabled_filters[filter].length > 0) {
+          count ++
+        }
+      }
+
+      return count == 0 ? false : true
     },
   },
 
   methods: {
     update_position() {
+/*      let children_copy = this.$tool.deepcopy(this.project.children)
 
+      for (let child of this.project.children) {
+        child.link.position = this.project.children.indexOf(child)
+      }
+
+      let updates = Object()
+
+      for (let child of this.project.children) {
+        let child_copy = children_copy.find(c => {
+          return c.id == child.id && c.type == child.type
+        })
+
+        if (child_copy.link.position != child.link.position) {
+          updates.push({
+            'kind': child.type,
+            'element_id': child.id,
+            'position': child.link.position
+          })
+        }
+      }*/
     },
 
     update_templates_position() {
@@ -566,8 +623,9 @@ export default {
     async add_task() {
       this.add_loading = true
 
-      let request = await this.$http.post('task', {
+      let request = await this.$http.post('element', {
         'action': 'create',
+        'kind': 'task',
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
@@ -644,7 +702,9 @@ export default {
   },
 
   watch: {
-
+    enabled_filters(f) {
+      console.log(f)
+    }
   },
 }
 
