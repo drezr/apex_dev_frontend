@@ -557,7 +557,7 @@ export default {
 
           if (child_copy.link.position != child.link.position) {
             updates.push({
-              'kind': child.type,
+              'type': child.type,
               'element_id': child.id,
               'position': child.link.position
             })
@@ -589,27 +589,7 @@ export default {
 
   methods: {
     update_position() {
-/*      let children_copy = this.$tool.deepcopy(this.project.children)
 
-      for (let child of this.project.children) {
-        child.link.position = this.project.children.indexOf(child)
-      }
-
-      let updates = Object()
-
-      for (let child of this.project.children) {
-        let child_copy = children_copy.find(c => {
-          return c.id == child.id && c.type == child.type
-        })
-
-        if (child_copy.link.position != child.link.position) {
-          updates.push({
-            'kind': child.type,
-            'element_id': child.id,
-            'position': child.link.position
-          })
-        }
-      }*/
     },
 
     update_templates_position() {
@@ -625,7 +605,7 @@ export default {
 
       let request = await this.$http.post('element', {
         'action': 'create',
-        'kind': 'task',
+        'type': 'task',
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,

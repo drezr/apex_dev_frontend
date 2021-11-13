@@ -449,8 +449,8 @@ export default {
     tags() {
       return this.self.children.filter(c =>
         c.type == 'input' &&
-        c.key.length > 0 &&
-        c.value.length > 0 && 
+        c.key && c.key.length > 0 &&
+        c.value && c.value.length > 0 && 
         c.heading
       )
     },
@@ -510,7 +510,7 @@ export default {
       this.update_timer = setTimeout(async () => {
         await this.$http.post('element', {
           'action': 'update',
-          'kind': 'task',
+          'type': 'task',
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
@@ -520,8 +520,36 @@ export default {
       }, 1000)
     },
 
-    update_children_position() {
-      console.log('children position updated')
+    async update_children_position() {
+      let children_copy = this.$tool.deepcopy(this.self.children)
+      let updates = Array()
+
+      for (let child of this.self.children) {
+        child.link.position = this.self.children.indexOf(child)
+      }
+
+      for (let child of this.self.children) {
+        let child_copy = children_copy.find(c => {
+          return c.id == child.id && c.type == child.type
+        })
+
+        if (child_copy.link.position != child.link.position) {
+          updates.push({
+            'type': child.type,
+            'element_id': child.id,
+            'position': child.link.position
+          })
+        }
+      }
+
+      await this.$http.post('element', {
+        'action': 'position',
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+        'task_id': this.self.id,
+        'position_updates': updates,
+      })
     },
 
     async remove() {
@@ -532,7 +560,7 @@ export default {
 
       await this.$http.post('element', {
         'action': 'delete',
-        'kind': 'task',
+        'type': 'task',
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
@@ -553,7 +581,7 @@ export default {
 
         await this.$http.post('element', {
           'action': 'update',
-          'kind': 'task',
+          'type': 'task',
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
@@ -567,8 +595,22 @@ export default {
       this.expanded = !this.expanded
     },
 
-    input_actions(event) {
-      console.log(event)
+    async input_actions(kind) {
+      let request = await this.$http.post('element', {
+        'action': 'create',
+        'type': 'input',
+        'kind': kind,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+        'task_id': this.self.id,
+      })
+
+      let input = request.input
+      input.type = 'input'
+      input.children = Array()
+
+      this.self.children.push(input)
     },
 
     try_open_photo(file) {
