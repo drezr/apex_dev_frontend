@@ -127,7 +127,6 @@
                 />
               </div>
             </div>
-
           </v-list-item-title>
         </template>
 
@@ -196,7 +195,7 @@
               :text="$mobile_breakpoint ? lang.generic.text[lg] : ''"
               :tooltip="lang.generic.add_input_tooltip[lg]"
               :menus="input_menus"
-              v-on:menu_action="input_actions($event)"
+              v-on:menu_action="create_child('input', $event)"
             />
 
             <CustomButton
@@ -206,6 +205,7 @@
               :text_color="'white'"
               :text="$mobile_breakpoint ? lang.generic.subtask[lg] : ''"
               :tooltip="lang.generic.add_subtask_tooltip[lg]"
+              @click="create_child('subtask')"
             />
 
             <CustomButton
@@ -215,6 +215,7 @@
               :text_color="'white'"
               :text="$mobile_breakpoint ? lang.generic.note[lg] : ''"
               :tooltip="lang.generic.add_note_tooltip[lg]"
+              @click="create_child('note')"
             />
 
             <CustomButton
@@ -225,10 +226,16 @@
               :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
               :tooltip="lang.generic.add_file_tooltip[lg]"
               v-if="!is_template"
+              @click="add_file()"
             />
           </div>
         </div>
       </v-list-group>
+
+      <div 
+        v-if="!expanded && self.children.length > 0"
+        class="blue task-has-children"
+      ></div>
     </div>
 
     <CustomDialog
@@ -306,7 +313,6 @@ export default {
       grab_cursor: 'grab',
       delete_dialog: false,
       expanded: false,
-
       is_updating: false,
       update_timer: null,
 
@@ -516,6 +522,7 @@ export default {
           'project_id': this.$current_project_id,
           'element_id': this.self.id,
           'name': this.self.name,
+          'status': this.self.status,
         })
       }, 1000)
     },
@@ -579,38 +586,12 @@ export default {
 
         this.self.status = status[this.self.status]
 
-        await this.$http.post('element', {
-          'action': 'update',
-          'type': 'task',
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'project_id': this.$current_project_id,
-          'element_id': this.self.id,
-          'status': this.self.status,
-        })
+        this.update()
       }
     },
 
     expand_toggle() {
       this.expanded = !this.expanded
-    },
-
-    async input_actions(kind) {
-      let request = await this.$http.post('element', {
-        'action': 'create',
-        'type': 'input',
-        'kind': kind,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'task_id': this.self.id,
-      })
-
-      let input = request.input
-      input.type = 'input'
-      input.children = Array()
-
-      this.self.children.push(input)
     },
 
     try_open_photo(file) {
@@ -619,6 +600,28 @@ export default {
 
       this.is_photoswipe_open = true
       this.$set(this.options, 'index', i)
+    },
+
+    async create_child(type, kind) {
+      let request = await this.$http.post('element', {
+        'action': 'create',
+        'type': type,
+        'kind': kind,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+        'task_id': this.self.id,
+      })
+
+      let child = request[type]
+      child.type = type
+      child.children = Array()
+
+      this.self.children.push(child)
+    },
+
+    add_file() {
+
     },
   },
 
@@ -660,6 +663,13 @@ export default {
 .task-expension {
   border-top: 2px rgba(0, 0, 0, 0.7) solid;
   transition: padding-top .1s;
+}
+
+.task-has-children {
+  width: 100%;
+  height: 3px;
+  margin-top: -3px;
+  border-radius: 0px 0px 3px 3px;
 }
 
 </style>

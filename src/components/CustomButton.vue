@@ -62,10 +62,7 @@
               v-if="loading"
             />
 
-            <div
-              v-else
-              style="margin-right: 2px;"
-            >
+            <div v-else>
               <v-icon
                 :x-small="xsmall"
                 :small="small"

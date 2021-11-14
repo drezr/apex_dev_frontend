@@ -95,6 +95,8 @@ export default {
     return {
       grab_cursor: 'grab',
       delete_dialog: false,
+      is_updating: false,
+      update_timer: null,
     }
   },
 
@@ -110,7 +112,23 @@ export default {
 
   methods: {
     update() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
 
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('element', {
+          'action': 'update',
+          'type': 'subtask',
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'project_id': this.$current_project_id,
+          'task_id': this.parent.id,
+          'element_id': this.self.id,
+          'name': this.self.name,
+          'status': this.self.status,
+        })
+      }, 1000)
     },
 
     swap_status() {
@@ -118,14 +136,26 @@ export default {
         let status = {'pending': 'done', 'done': 'pending'}
 
         this.self.status = status[this.self.status]
+
+        this.update()
       }
     },
 
-    remove() {
+    async remove() {
       this.delete_dialog = false
       
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
+
+      await this.$http.post('element', {
+        'action': 'delete',
+        'type': 'subtask',
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'project_id': this.$current_project_id,
+        'task_id': this.parent.id,
+        'element_id': this.self.id,
+      })
     },
   },
 
