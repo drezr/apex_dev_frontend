@@ -169,6 +169,7 @@
                 <div
                   class="board-date-children-teammates"
                   @click="open_teammates_dialog(date.data, part)"
+                  :class="!$is_editor ? 'cursor-default' : 'cursor-pointer'"
                 >
                   <div
                     v-if="part.teammates.length > 0"
