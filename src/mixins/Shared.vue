@@ -38,6 +38,20 @@ export default {
         source_type = 'project'
       }
 
+      else if (this.$current_view == 'board') {
+        if (this.parent.type == 'folder') {
+          source_type = 'folder'
+        }
+
+        else if (this.parent.type == 'day') {
+          source_type = 'day'
+        }
+
+        else if (this.parent.type == 'task') {
+          source_type = 'task'
+        }
+      }
+
       return source_type
     },
 
@@ -51,6 +65,30 @@ export default {
           else if (this.$current_component.detail_object.day.id) {
             return this.$current_component.detail_object.day.id
           }
+        }
+      }
+
+      else if (this.$current_view == 'board') {
+        if (this.parent.type == 'day') {
+          return this.parent.id
+        }
+
+        else if (this.parent.type == 'task') {
+          return this.parent.link.day
+        }
+      }
+
+      return null
+    },
+
+    $current_folder_id() {
+      if (this.$current_view == 'board') {
+        if (this.parent.type == 'folder') {
+          return this.parent.id
+        }
+
+        else if (this.parent.type == 'task') {
+          return this.parent.link.folder
         }
       }
 

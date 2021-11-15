@@ -127,6 +127,8 @@ export default {
           'day_cell_id': this.$current_day_cell_id,
           'task_id': this.parent.id,
           'element_id': this.self.id,
+          'folder_id': this.$current_folder_id,
+          'view': this.$current_view,
           'name': this.self.name,
           'status': this.self.status,
         })
@@ -159,6 +161,8 @@ export default {
         'day_cell_id': this.$current_day_cell_id,
         'task_id': this.parent.id,
         'element_id': this.self.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
       })
     },
   },

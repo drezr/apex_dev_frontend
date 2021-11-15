@@ -536,6 +536,7 @@ export default {
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'day_cell_id': this.$current_day_cell_id,
+        'view': this.$current_view,
       })
 
       let child = request[type]

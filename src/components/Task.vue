@@ -525,6 +525,8 @@ export default {
           'element_id': this.self.id,
           'name': this.self.name,
           'status': this.self.status,
+          'folder_id': this.$current_folder_id,
+          'view': this.$current_view,
         })
       }, 1000)
     },
@@ -559,6 +561,8 @@ export default {
         'project_id': this.$current_project_id,
         'day_cell_id': this.$current_day_cell_id,
         'task_id': this.self.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
         'position_updates': updates,
       })
     },
@@ -578,6 +582,8 @@ export default {
         'project_id': this.$current_project_id,
         'day_cell_id': this.$current_day_cell_id,
         'element_id': this.self.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
       })
     },
 
@@ -619,6 +625,8 @@ export default {
         'project_id': this.$current_project_id,
         'day_cell_id': this.$current_day_cell_id,
         'task_id': this.self.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
       })
 
       let child = request[type]

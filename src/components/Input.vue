@@ -247,6 +247,8 @@ export default {
           'day_cell_id': this.$current_day_cell_id,
           'task_id': this.parent.id,
           'element_id': this.self.id,
+          'folder_id': this.$current_folder_id,
+          'view': this.$current_view,
           'key': this.self.key,
           'value': this.self.value,
           'heading': this.self.heading,
@@ -270,6 +272,8 @@ export default {
         'day_cell_id': this.$current_day_cell_id,
         'task_id': this.parent.id,
         'element_id': this.self.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
       })
     },
 

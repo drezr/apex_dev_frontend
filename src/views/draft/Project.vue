@@ -569,6 +569,7 @@ export default {
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
+          'view': this.$current_view,
           'position_updates': updates,
         })
       },
@@ -610,6 +611,7 @@ export default {
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
         'source_type': this.$source_type,
+        'view': this.$current_view,
       })
 
       let task = request.task
@@ -660,8 +662,6 @@ export default {
           'app_id': this.$current_app_id,
         })
 
-
-
         let children = this.$tool.get_fused_children(this.request.app)
         children = this.$tool.deepcopy(children)
         this.$set(this.app, 'children', children)
@@ -683,9 +683,7 @@ export default {
   },
 
   watch: {
-    enabled_filters(f) {
-      console.log(f)
-    }
+
   },
 }
 

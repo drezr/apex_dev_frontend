@@ -238,6 +238,8 @@ export default {
           'day_cell_id': this.$current_day_cell_id,
           'task_id': this.parent.id,
           'element_id': this.self.id,
+          'folder_id': this.$current_folder_id,
+          'view': this.$current_view,
           'value': this.self.value,
         })
       }, 1000)
@@ -258,6 +260,8 @@ export default {
         'project_id': this.$current_project_id,
         'day_cell_id': this.$current_day_cell_id,
         'task_id': this.parent.id,
+        'folder_id': this.$current_folder_id,
+        'view': this.$current_view,
         'element_id': this.self.id,
       })
     },

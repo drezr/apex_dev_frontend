@@ -114,21 +114,21 @@
                   <Task
                     v-if="child.type == 'task'"
                     :self="child"
-                    :parent="app"
+                    :parent="folders[selected_folder]"
                     class="ma-1"
                   />
 
                   <Note
                     v-if="child.type == 'note'"
                     :self="child"
-                    :parent="app"
+                    :parent="folders[selected_folder]"
                     class="ma-1"
                   />
 
                   <File
                     v-if="child.type == 'file'"
                     :self="child"
-                    :parent="app"
+                    :parent="folders[selected_folder]"
                     class="ma-1"
                   />
                 </div>
@@ -599,6 +599,7 @@ export default {
         children = this.$tool.get_fused_children(day)
         children = this.$tool.deepcopy(children)
         this.$set(day, 'children', children)
+        day.type = 'day'
 
         day_data.data = day
       }
