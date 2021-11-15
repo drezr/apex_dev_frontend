@@ -517,8 +517,10 @@ export default {
         await this.$http.post('element', {
           'action': 'update',
           'type': 'task',
+          'source_type': this.$source_type,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
+          'day_cell_id': this.$current_day_cell_id,
           'project_id': this.$current_project_id,
           'element_id': this.self.id,
           'name': this.self.name,
@@ -551,9 +553,11 @@ export default {
 
       await this.$http.post('element', {
         'action': 'position',
+        'source_type': this.$source_type,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
+        'day_cell_id': this.$current_day_cell_id,
         'task_id': this.self.id,
         'position_updates': updates,
       })
@@ -568,9 +572,11 @@ export default {
       await this.$http.post('element', {
         'action': 'delete',
         'type': 'task',
+        'source_type': this.$source_type,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
+        'day_cell_id': this.$current_day_cell_id,
         'element_id': this.self.id,
       })
     },
@@ -607,9 +613,11 @@ export default {
         'action': 'create',
         'type': type,
         'kind': kind,
+        'source_type': this.$source_type,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
+        'day_cell_id': this.$current_day_cell_id,
         'task_id': this.self.id,
       })
 

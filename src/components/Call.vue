@@ -9,6 +9,7 @@
       v-model="self.name"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.views.watcher.call_name[lg]"
+      @input="update"
     />
 
     <input
@@ -16,6 +17,7 @@
       v-model="self.kind"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.views.watcher.call_kind[lg]"
+      @input="update"
     />
   </div>
 
@@ -25,6 +27,7 @@
       v-model="self.start"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.start[lg]"
+      @input="update"
     />
 
     <input
@@ -32,6 +35,7 @@
       v-model="self.end"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.end[lg]"
+      @input="update"
     />
 
     <div class="call-calc">
@@ -171,7 +175,7 @@
     :confirm_text="lang.generic.delete[lg]"
     :confirm_color="'red'"
     @cancel="delete_dialog = false"
-    @confirm="delete_d27"
+    @confirm="remove"
   ></CustomDialog>
 
 
@@ -224,6 +228,8 @@ export default {
       delete_dialog: false,
       delete_mode: null,
       add_link_dialog: false,
+      is_updating: false,
+      update_timer: null,
     }
   },
 
@@ -323,7 +329,26 @@ Calculate time delta between start and end of the call in decimal
 
   methods: {
     update() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
 
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('element', {
+          'action': 'update',
+          'type': 'call',
+          'source_type': this.$source_type,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'day_cell_id': this.$current_day_cell_id,
+          'element_id': this.self.id,
+          'name': this.self.name,
+          'kind': this.self.kind,
+          'start': this.self.start,
+          'end': this.self.end,
+          'description': this.self.description,
+        })
+      }, 1000)
     },
 
     get_splitted_hour(time) {
@@ -368,7 +393,7 @@ Calculate time delta between start and end of the call in decimal
       this.add_link_dialog = false
     },
 
-    delete_d27() {
+    async remove() {
       if (this.delete_mode == 'link') {
         this.self.children = this.self.children.filter(c => c.type !== 'link')
       }
@@ -380,6 +405,17 @@ Calculate time delta between start and end of the call in decimal
       else if (this.delete_mode == 'call') {
         this.parent.children = this.parent.children.filter(
           c => c.id !== this.self.id || c.type !== this.self.type)
+
+        await this.$http.post('element', {
+          'action': 'delete',
+          'type': 'call',
+          'source_type': this.$source_type,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'day_cell_id': this.$current_day_cell_id,
+          'task_id': this.parent.id,
+          'element_id': this.self.id,
+        })
       }
 
       this.delete_dialog = false

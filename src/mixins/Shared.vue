@@ -27,6 +27,36 @@ export default {
       return false
     },
 
+    $source_type() {
+      let source_type = null
+
+      if (this.$current_view == 'calendar') {
+        source_type = this.$current_component.detail_object.type
+      }
+
+      else if (this.$current_view == 'project') {
+        source_type = 'project'
+      }
+
+      return source_type
+    },
+
+    $current_day_cell_id() {
+      if (this.$current_view == 'calendar') {
+        if (this.$current_component.detail_object) {
+          if (this.$current_component.detail_object.cell.id) {
+            return this.$current_component.detail_object.cell.id
+          }
+
+          else if (this.$current_component.detail_object.day.id) {
+            return this.$current_component.detail_object.day.id
+          }
+        }
+      }
+
+      return null
+    },
+
     $mobile_breakpoint() {
       return this.$vuetify.breakpoint.smAndUp
     },
@@ -69,6 +99,10 @@ export default {
 
   methods: {
     $get_sorted_teammates(teammates) {
+      if (!teammates) {
+        return Array()
+      }
+      
       let sorted_teammates = Array()
       let other_teams_profiles = Array()
 

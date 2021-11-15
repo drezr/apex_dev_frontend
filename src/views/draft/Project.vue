@@ -609,6 +609,7 @@ export default {
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
+        'source_type': this.$source_type,
       })
 
       let task = request.task

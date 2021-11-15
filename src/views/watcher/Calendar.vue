@@ -374,13 +374,13 @@ export default {
           'icon': 'mdi-file',
           'name': this.lang.views.watcher.calendar_add_file[this.lg],
           'color': 'pink',
-          'action': 'add_file',
+          'action': 'file',
         },
         {
           'icon': 'mdi-chat',
           'name': this.lang.views.watcher.calendar_add_note[this.lg],
           'color': 'text--darken-2 cyan',
-          'action': 'add_note',
+          'action': 'note',
         },
       ]
 
@@ -389,7 +389,7 @@ export default {
           'icon': 'mdi-hammer-screwdriver',
           'name': this.lang.views.watcher.calendar_add_call[this.lg],
           'color': 'indigo',
-          'action': 'add_call',
+          'action': 'call',
         })
       }
 
@@ -528,8 +528,21 @@ export default {
       this.detail_dialog_loading = false
     },
 
-    async detail_action(action) {
-      console.log(action)
+    async detail_action(type) {
+      let request = await this.$http.post('element', {
+        'action': 'create',
+        'type': type,
+        'source_type': this.$source_type,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'day_cell_id': this.$current_day_cell_id,
+      })
+
+      let child = request[type]
+      child.type = type
+      child.children = Array()
+
+      this.detail_full_object.children.push(child)
     },
 
     async update_detail_objects_position() {

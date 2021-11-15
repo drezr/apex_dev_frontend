@@ -240,9 +240,11 @@ export default {
         await this.$http.post('element', {
           'action': 'update',
           'type': 'input',
+          'source_type': this.$source_type,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'project_id': this.$current_project_id,
+          'day_cell_id': this.$current_day_cell_id,
           'task_id': this.parent.id,
           'element_id': this.self.id,
           'key': this.self.key,
@@ -261,9 +263,11 @@ export default {
       await this.$http.post('element', {
         'action': 'delete',
         'type': 'input',
+        'source_type': this.$source_type,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'project_id': this.$current_project_id,
+        'day_cell_id': this.$current_day_cell_id,
         'task_id': this.parent.id,
         'element_id': this.self.id,
       })
