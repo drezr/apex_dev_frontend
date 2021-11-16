@@ -575,7 +575,7 @@ export default {
     children = this.$tool.deepcopy(children)
     this.$set(this.app, 'children', children)
 
-    this.folders = this.request.app.children
+    this.folders = this.request.app.children.filter(c => c.type == 'folder')
 
     let month = new Date(this.$current_year, this.$current_month, 0)
     let day_count = month.getDate()

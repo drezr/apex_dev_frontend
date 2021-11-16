@@ -114,7 +114,7 @@
         :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
-        :placeholder="lang.generic.input_value[lg]"
+        :placeholder="value_placeholder"
         :style="!edit_mode ? 'position: relative; top: -10px;' : ''"
       ></v-textarea>
     </div>
@@ -231,6 +231,20 @@ export default {
 
     task_component() {
       return this.$parent.$parent.$parent.$parent
+    },
+
+    value_placeholder() {
+      if (this.self.kind == 'gps') {
+        return this.lang.generic.coordinates[this.lg]
+      }
+
+      else if (this.self.kind == 'link') {
+        return this.lang.generic.url[this.lg]
+      }
+
+      else {
+        return this.lang.generic.input_value[this.lg]
+      }
     },
   },
 

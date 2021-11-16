@@ -175,6 +175,16 @@ export default {
             'nl': '',
             'en': 'Field',
           },
+          'url': {
+            'fr': 'URL',
+            'nl': '',
+            'en': 'URL',
+          },
+          'coordinates': {
+            'fr': 'Coordonées',
+            'nl': '',
+            'en': 'Coordinates',
+          },
           'not_empty_field': {
             'fr': 'Ce champ ne peut pas être vide.',
             'nl': '',
