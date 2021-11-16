@@ -228,10 +228,16 @@ export default {
       
       return null
     },
+
+    task_component() {
+      return this.$parent.$parent.$parent.$parent
+    },
   },
 
   methods: {
     update() {
+      console.log()
+
       if (!this.is_updating) {
         clearInterval(this.update_timer)
       }
@@ -240,15 +246,14 @@ export default {
         await this.$http.post('element', {
           'action': 'update',
           'type': 'input',
-          'source_type': this.$source_type,
+          'view': this.$current_view,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'grandparent_type': this.task_component.parent.type,
+          'grandparent_id': this.task_component.parent.id,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'project_id': this.$current_project_id,
-          'day_cell_id': this.$current_day_cell_id,
-          'task_id': this.parent.id,
           'element_id': this.self.id,
-          'folder_id': this.$current_folder_id,
-          'view': this.$current_view,
           'key': this.self.key,
           'value': this.self.value,
           'heading': this.self.heading,

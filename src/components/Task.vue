@@ -516,17 +516,15 @@ export default {
       this.update_timer = setTimeout(async () => {
         await this.$http.post('element', {
           'action': 'update',
-          'type': 'task',
-          'source_type': this.$source_type,
+          'element_type': 'task',
+          'view': this.$current_view,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'day_cell_id': this.$current_day_cell_id,
-          'project_id': this.$current_project_id,
           'element_id': this.self.id,
           'name': this.self.name,
           'status': this.self.status,
-          'folder_id': this.$current_folder_id,
-          'view': this.$current_view,
         })
       }, 1000)
     },
@@ -546,7 +544,7 @@ export default {
 
         if (child_copy.link.position != child.link.position) {
           updates.push({
-            'type': child.type,
+            'element_type': child.type,
             'element_id': child.id,
             'position': child.link.position
           })
@@ -555,14 +553,13 @@ export default {
 
       await this.$http.post('element', {
         'action': 'position',
-        'source_type': this.$source_type,
+        'view': this.$current_view,
+        'grandparent_type': this.parent.type,
+        'grandparent_id': this.parent.id,
+        'parent_type': this.self.type,
+        'parent_id': this.self.id,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'day_cell_id': this.$current_day_cell_id,
-        'task_id': this.self.id,
-        'folder_id': this.$current_folder_id,
-        'view': this.$current_view,
         'position_updates': updates,
       })
     },
@@ -575,15 +572,13 @@ export default {
 
       await this.$http.post('element', {
         'action': 'delete',
-        'type': 'task',
-        'source_type': this.$source_type,
+        'element_type': 'task',
+        'view': this.$current_view,
+        'parent_type': this.parent.type,
+        'parent_id': this.parent.id,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'day_cell_id': this.$current_day_cell_id,
         'element_id': this.self.id,
-        'folder_id': this.$current_folder_id,
-        'view': this.$current_view,
       })
     },
 
@@ -617,20 +612,18 @@ export default {
     async create_child(type, kind) {
       let request = await this.$http.post('element', {
         'action': 'create',
-        'type': type,
+        'element_type': type,
         'kind': kind,
-        'source_type': this.$source_type,
+        'view': this.$current_view,
+        'grandparent_type': this.parent.type,
+        'grandparent_id': this.parent.id,
+        'parent_type': this.self.type,
+        'parent_id': this.self.id,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'day_cell_id': this.$current_day_cell_id,
-        'task_id': this.self.id,
-        'folder_id': this.$current_folder_id,
-        'view': this.$current_view,
       })
 
       let child = request[type]
-      child.type = type
       child.children = Array()
 
       this.self.children.push(child)

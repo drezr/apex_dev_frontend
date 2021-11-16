@@ -281,8 +281,6 @@ class Tools {
     for (let type of child_types) {
       if (obj[type + 's']) {
         for (let child of obj[type + 's']) {
-          child.type = type
-
           child.children = this.get_fused_children(child)
         }
 

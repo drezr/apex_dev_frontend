@@ -569,12 +569,13 @@ export default {
     this.team = this.request.team
     this.profiles = this.request.team.profiles
     this.app = this.request.app
-    this.folders = this.request.app.folders
     this.days = this.request.days
 
     let children = this.$tool.get_fused_children(this.app)
     children = this.$tool.deepcopy(children)
     this.$set(this.app, 'children', children)
+
+    this.folders = this.request.app.children
 
     let month = new Date(this.$current_year, this.$current_month, 0)
     let day_count = month.getDate()
@@ -738,14 +739,27 @@ export default {
       return count
     },
 
-    add_actions(action) {
-      console.log(action)
-
+    async add_actions(type) {
       this.add_loading = true
 
-      setTimeout(() => {
-        this.add_loading = false
-      }, 2000)
+      let folder = this.folders[this.selected_folder]
+
+      let request = await this.$http.post('element', {
+        'action': 'create',
+        'element_type': type,
+        'view': this.$current_view,
+        'parent_type': folder.type,
+        'parent_id': folder.id,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+      })
+
+      let child = request[type]
+      child.children = Array()
+
+      folder.children.push(child)
+
+      this.add_loading = false
     },
 
     set_disabled_profiles() {

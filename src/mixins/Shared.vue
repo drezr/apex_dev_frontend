@@ -31,7 +31,15 @@ export default {
       let source_type = null
 
       if (this.$current_view == 'calendar') {
-        source_type = this.$current_component.detail_object.type
+        let type = this.$current_component.detail_object.type
+
+        if (type == 'day' || type == 'cell') {
+          source_type = type
+        }
+
+        else {
+          source_type = 'task'
+        }
       }
 
       else if (this.$current_view == 'project') {

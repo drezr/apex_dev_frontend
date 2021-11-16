@@ -531,19 +531,20 @@ export default {
     async detail_action(type) {
       let request = await this.$http.post('element', {
         'action': 'create',
-        'type': type,
-        'source_type': this.$source_type,
+        'element_type': type,
+        'view': this.$current_view,
+        'parent_type': this.detail_full_object.type,
+        'parent_id': this.detail_full_object.id,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
-        'day_cell_id': this.$current_day_cell_id,
-        'view': this.$current_view,
       })
 
       let child = request[type]
-      child.type = type
       child.children = Array()
 
       this.detail_full_object.children.push(child)
+
+      this.detail_edit_mode = true
     },
 
     async update_detail_objects_position() {
