@@ -567,11 +567,10 @@ export default {
         await this.$http.post('element', {
           'action': 'position',
           'view': this.$current_view,
-          'parent_type': this.project.type,
-          'parent_id': this.project.id,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'project_id': this.$current_project_id,
+          'element_type': 'project',
+          'element_id': this.project.id,
           'position_updates': updates,
         })
       },

@@ -649,8 +649,39 @@ export default {
       this.is_grabbing = value
     },
 
-    update_children_position() {
-      this.rerender_count++
+    async update_children_position() {
+      let folder = this.folders[this.selected_folder]
+
+      let children_copy = this.$tool.deepcopy(folder.children)
+      let updates = Array()
+
+      for (let child of folder.children) {
+        child.link.position = folder.children.indexOf(child)
+      }
+
+      for (let child of folder.children) {
+        let child_copy = children_copy.find(c => {
+          return c.id == child.id && c.type == child.type
+        })
+
+        if (child_copy.link.position != child.link.position) {
+          updates.push({
+            'element_type': child.type,
+            'element_id': child.id,
+            'position': child.link.position
+          })
+        }
+      }
+
+      await this.$http.post('element', {
+        'action': 'position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': 'folder',
+        'element_id': folder.id,
+        'position_updates': updates,
+      })
     },
 
     get_day_color(day_name) {

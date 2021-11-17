@@ -141,6 +141,10 @@ export default {
         },
       }
     },
+
+    $child_task_component() {
+      return this.$parent.$parent.$parent.$parent
+    },
   },
 
   methods: {

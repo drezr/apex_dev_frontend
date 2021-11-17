@@ -228,20 +228,24 @@ export default {
       }
 
       this.update_timer = setTimeout(async () => {
-        await this.$http.post('element', {
+        let data = {
           'action': 'update',
-          'type': 'note',
-          'source_type': this.$source_type,
+          'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'project_id': this.$current_project_id,
-          'day_cell_id': this.$current_day_cell_id,
-          'task_id': this.parent.id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': 'note',
           'element_id': this.self.id,
-          'folder_id': this.$current_folder_id,
-          'view': this.$current_view,
           'value': this.self.value,
-        })
+        }
+
+        if (this.$is_in_task) {
+          data['source_type'] = this.$child_task_component.parent.type
+          data['source_id'] = this.$child_task_component.parent.id
+        }
+
+        await this.$http.post('element', data)
       }, 1000)
     },
 
@@ -251,19 +255,23 @@ export default {
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
 
-      await this.$http.post('element', {
-        'action': 'delete',
-        'type': 'note',
-        'source_type': this.$source_type,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'day_cell_id': this.$current_day_cell_id,
-        'task_id': this.parent.id,
-        'folder_id': this.$current_folder_id,
-        'view': this.$current_view,
-        'element_id': this.self.id,
-      })
+        let data = {
+          'action': 'delete',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': 'note',
+          'element_id': this.self.id,
+        }
+
+        if (this.$is_in_task) {
+          data['source_type'] = this.$child_task_component.parent.type
+          data['source_id'] = this.$child_task_component.parent.id
+        }
+
+        await this.$http.post('element', data)
     },
   },
 

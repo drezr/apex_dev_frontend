@@ -229,10 +229,6 @@ export default {
       return null
     },
 
-    task_component() {
-      return this.$parent.$parent.$parent.$parent
-    },
-
     value_placeholder() {
       if (this.self.kind == 'gps') {
         return this.lang.generic.coordinates[this.lg]
@@ -259,14 +255,14 @@ export default {
       this.update_timer = setTimeout(async () => {
         await this.$http.post('element', {
           'action': 'update',
-          'type': 'input',
           'view': this.$current_view,
-          'parent_type': this.parent.type,
-          'parent_id': this.parent.id,
-          'grandparent_type': this.task_component.parent.type,
-          'grandparent_id': this.task_component.parent.id,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
+          'source_type': this.$child_task_component.parent.type,
+          'source_id': this.$child_task_component.parent.id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': 'input',
           'element_id': this.self.id,
           'key': this.self.key,
           'value': this.self.value,
@@ -283,16 +279,15 @@ export default {
 
       await this.$http.post('element', {
         'action': 'delete',
-        'type': 'input',
-        'source_type': this.$source_type,
+        'view': this.$current_view,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
-        'project_id': this.$current_project_id,
-        'day_cell_id': this.$current_day_cell_id,
-        'task_id': this.parent.id,
+        'source_type': this.$child_task_component.parent.type,
+        'source_id': this.$child_task_component.parent.id,
+        'parent_type': this.parent.type,
+        'parent_id': this.parent.id,
+        'element_type': 'input',
         'element_id': this.self.id,
-        'folder_id': this.$current_folder_id,
-        'view': this.$current_view,
       })
     },
 

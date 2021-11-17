@@ -336,11 +336,12 @@ Calculate time delta between start and end of the call in decimal
       this.update_timer = setTimeout(async () => {
         await this.$http.post('element', {
           'action': 'update',
-          'type': 'call',
-          'source_type': this.$source_type,
+          'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'day_cell_id': this.$current_day_cell_id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': 'call',
           'element_id': this.self.id,
           'name': this.self.name,
           'kind': this.self.kind,
@@ -408,12 +409,14 @@ Calculate time delta between start and end of the call in decimal
 
         await this.$http.post('element', {
           'action': 'delete',
-          'type': 'call',
-          'source_type': this.$source_type,
+          'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'day_cell_id': this.$current_day_cell_id,
-          'task_id': this.parent.id,
+          'source_type': this.$child_task_component.parent.type,
+          'source_id': this.$child_task_component.parent.id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': 'call',
           'element_id': this.self.id,
         })
       }

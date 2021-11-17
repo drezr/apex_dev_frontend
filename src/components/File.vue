@@ -342,13 +342,30 @@ export default {
       }
     },
 
-    update_name() {
+    async update_name() {
       this.file_loading = true
 
-      setTimeout(() => {
-        this.file_loading = false
-        this.initial_name = this.self.name
-      }, 2000)
+      let data = {
+        'action': 'update',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.parent.type,
+        'parent_id': this.parent.id,
+        'element_type': 'file',
+        'element_id': this.self.id,
+        'name': this.self.name,
+      }
+
+      if (this.$is_in_task) {
+        data['source_type'] = this.$child_task_component.parent.type
+        data['source_id'] = this.$child_task_component.parent.id
+      }
+
+      await this.$http.post('element', data)
+
+      this.file_loading = false
+      this.initial_name = this.self.name
     },
 
     restore_name() {

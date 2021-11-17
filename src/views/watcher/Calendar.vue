@@ -548,7 +548,36 @@ export default {
     },
 
     async update_detail_objects_position() {
-      console.log('position updated')
+      let children_copy = this.$tool.deepcopy(this.detail_full_object.children)
+      let updates = Array()
+
+      for (let child of this.detail_full_object.children) {
+        child.link.position = this.detail_full_object.children.indexOf(child)
+      }
+
+      for (let child of this.detail_full_object.children) {
+        let child_copy = children_copy.find(c => {
+          return c.id == child.id && c.type == child.type
+        })
+
+        if (child_copy.link.position != child.link.position) {
+          updates.push({
+            'element_type': child.type,
+            'element_id': child.id,
+            'position': child.link.position
+          })
+        }
+      }
+
+      await this.$http.post('element', {
+        'action': 'position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': this.detail_full_object.type,
+        'element_id': this.detail_full_object.id,
+        'position_updates': updates,
+      })
     },
 
     set_today_frame() {
