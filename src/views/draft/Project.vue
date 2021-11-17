@@ -542,27 +542,8 @@ export default {
         return tasks
       },
 
-      async set(list) {
-        let list_copy = this.$tool.deepcopy(list)
-        let updates = Array()
-
-        for (let child of list) {
-          child.link.position = list.indexOf(child)
-        }
-
-        for (let child of list) {
-          let child_copy = list_copy.find(c => {
-            return c.id == child.id && c.type == child.type
-          })
-
-          if (child_copy.link.position != child.link.position) {
-            updates.push({
-              'element_type': child.type,
-              'element_id': child.id,
-              'position': child.link.position
-            })
-          }
-        }
+      async set(children) {
+        let position_updates = this.$set_position_updates(children)
 
         await this.$http.post('element', {
           'action': 'position',
@@ -571,7 +552,7 @@ export default {
           'app_id': this.$current_app_id,
           'element_type': 'project',
           'element_id': this.project.id,
-          'position_updates': updates,
+          'position_updates': position_updates,
         })
       },
     },

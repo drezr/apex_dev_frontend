@@ -85,6 +85,7 @@
                 class="board-tab-button-dropzone"
                 :style="is_grabbing ? '' : 'pointer-events: none;'"
                 v-if="selected_folder != folder.link.position"
+                @change="update_children_position($event, folder)"
               />
             </div>
           </div>
@@ -98,7 +99,7 @@
             >
               <VueDraggable
                 v-model="folders[selected_folder].children"
-                @change="update_children_position"
+                @change="update_children_position($event, folders[selected_folder])"
                 group="drag"
                 :animation="100"
                 easing="cubic-bezier(1, 0, 0, 1)"
@@ -649,39 +650,53 @@ export default {
       this.is_grabbing = value
     },
 
-    async update_children_position() {
-      let folder = this.folders[this.selected_folder]
+    async update_children_position(event, new_folder) {
+      let old_folder = this.folders[this.selected_folder]
 
-      let children_copy = this.$tool.deepcopy(folder.children)
-      let updates = Array()
-
-      for (let child of folder.children) {
-        child.link.position = folder.children.indexOf(child)
+      if ('added' in event) {
+        let position_updates = this.$set_position_updates(
+          old_folder, new_folder)
+        console.log('switch')
+        console.log(position_updates)
       }
 
-      for (let child of folder.children) {
-        let child_copy = children_copy.find(c => {
-          return c.id == child.id && c.type == child.type
+      else if ('moved' in event) {
+        let position_updates = this.$set_position_updates(old_folder)
+        console.log('move')
+        console.log(position_updates)
+      }
+
+
+
+/*      if ('removed' in event || 'moved' in event) {
+        let old_folder_updates = this.$set_position_updates(
+          old_folder.children)
+
+          await this.$http.post('element', {
+          'action': 'position',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_type': 'folder',
+          'element_id': old_folder.id,
+          'position_updates': old_folder_updates,
         })
-
-        if (child_copy.link.position != child.link.position) {
-          updates.push({
-            'element_type': child.type,
-            'element_id': child.id,
-            'position': child.link.position
-          })
-        }
       }
 
-      await this.$http.post('element', {
-        'action': 'position',
-        'view': this.$current_view,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'element_type': 'folder',
-        'element_id': folder.id,
-        'position_updates': updates,
-      })
+      else if ('added' in event) {
+        let new_folder_updates = this.$set_position_updates(
+          new_folder.children, old_folder, new_folder)
+
+          await this.$http.post('element', {
+          'action': 'position',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_type': 'folder',
+          'element_id': new_folder.id,
+          'position_updates': new_folder_updates,
+        })
+      }*/
     },
 
     get_day_color(day_name) {

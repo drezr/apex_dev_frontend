@@ -530,26 +530,7 @@ export default {
     },
 
     async update_children_position() {
-      let children_copy = this.$tool.deepcopy(this.self.children)
-      let updates = Array()
-
-      for (let child of this.self.children) {
-        child.link.position = this.self.children.indexOf(child)
-      }
-
-      for (let child of this.self.children) {
-        let child_copy = children_copy.find(c => {
-          return c.id == child.id && c.type == child.type
-        })
-
-        if (child_copy.link.position != child.link.position) {
-          updates.push({
-            'element_type': child.type,
-            'element_id': child.id,
-            'position': child.link.position
-          })
-        }
-      }
+      let position_updates = this.$set_position_updates(this.self.children)
 
       await this.$http.post('element', {
         'action': 'position',
@@ -560,7 +541,7 @@ export default {
         'parent_id': this.parent.id,
         'element_type': 'task',
         'element_id': this.self.id,
-        'position_updates': updates,
+        'position_updates': position_updates,
       })
     },
 

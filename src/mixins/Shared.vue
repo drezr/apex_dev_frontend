@@ -190,6 +190,40 @@ export default {
 
       this.$store.commit('set_is_grabbing', value)
     },
+
+    $set_position_updates(old_parent, new_parent) {
+      let position_updates = Array()
+
+      for (let parent of [old_parent, new_parent]) {
+        if (parent) {
+          for (let child of parent.children) {
+            child.link.position = parent.children.indexOf(child)
+
+            if (new_parent && new_parent != old_parent) {
+              child.link[old_parent.type] = new_parent.id
+            }
+          }
+        }
+      }
+
+      for (let parent of [old_parent, new_parent]) {
+        if (parent) {
+          for (let child of parent.children) {
+            position_updates.push({
+              'new_parent_id': new_parent ? new_parent.id : old_parent.id,
+              'new_parent_type': new_parent ? new_parent.type : old_parent.type,
+              'old_parent_id': old_parent.id,
+              'old_parent_type': old_parent.type,
+              'element_type': child.type,
+              'element_id': child.id,
+              'position': child.link.position
+            })
+          }
+        }
+      }
+
+      return position_updates
+    },
   },
 }
 

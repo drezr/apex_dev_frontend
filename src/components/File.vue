@@ -198,19 +198,32 @@ export default {
     },
 
     icon() {
-      let ext = this.self.extension.toLowerCase()
+      if (this.self.extension) {
+        let ext = this.self.extension.toLowerCase()
 
-      if (ext == 'pdf') return 'mdi-file-pdf'
-      else if (['doc', 'docx'].includes(ext)) return 'mdi-file-word'
-      else if (['xls', 'xlsx'].includes(ext)) return 'mdi-file-excel'
-      else if (['mp3', 'm4a', 'wav', 'wma', 'aac'].includes(ext)) {
-        return 'mdi-file-video'
-      }
-      else if (['mp4', 'avi', 'mov', 'flv', 'mkv'].includes(ext)) {
-        return 'mdi-file-music'
-      }
-      else if (['tiff', 'gif', 'png', 'jpg', 'jpeg'].includes(ext)) {
-        return 'mdi-image'
+        if (ext == 'pdf') {
+          return 'mdi-file-pdf'
+        }
+
+        else if (['doc', 'docx'].includes(ext)) {
+          return 'mdi-file-word'
+        }
+
+        else if (['xls', 'xlsx'].includes(ext)) {
+          return 'mdi-file-excel'
+        }
+
+        else if (['mp3', 'm4a', 'wav', 'wma', 'aac'].includes(ext)) {
+          return 'mdi-file-video'
+        }
+
+        else if (['mp4', 'avi', 'mov', 'flv', 'mkv'].includes(ext)) {
+          return 'mdi-file-music'
+        }
+
+        else if (['tiff', 'gif', 'png', 'jpg', 'jpeg'].includes(ext)) {
+          return 'mdi-image'
+        }
       }
 
       return 'mdi-file'

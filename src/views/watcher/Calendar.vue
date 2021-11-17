@@ -548,26 +548,8 @@ export default {
     },
 
     async update_detail_objects_position() {
-      let children_copy = this.$tool.deepcopy(this.detail_full_object.children)
-      let updates = Array()
-
-      for (let child of this.detail_full_object.children) {
-        child.link.position = this.detail_full_object.children.indexOf(child)
-      }
-
-      for (let child of this.detail_full_object.children) {
-        let child_copy = children_copy.find(c => {
-          return c.id == child.id && c.type == child.type
-        })
-
-        if (child_copy.link.position != child.link.position) {
-          updates.push({
-            'element_type': child.type,
-            'element_id': child.id,
-            'position': child.link.position
-          })
-        }
-      }
+      let position_updates = this.$set_position_updates(
+                               this.detail_full_object.children)
 
       await this.$http.post('element', {
         'action': 'position',
@@ -576,7 +558,7 @@ export default {
         'app_id': this.$current_app_id,
         'element_type': this.detail_full_object.type,
         'element_id': this.detail_full_object.id,
-        'position_updates': updates,
+        'position_updates': position_updates,
       })
     },
 
