@@ -47,7 +47,7 @@
               :key="i"
             >
               <v-tooltip
-                bottom
+                top
                 color="black"
                 :disabled="folder.name.length == 0"
               >
