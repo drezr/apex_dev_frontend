@@ -208,7 +208,13 @@
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
                 :empty-insert-threshold="10"
-                style="height: 100%"
+                style="
+                  height: 100%;
+                  position: relative;
+                  width: calc(100% + 61px);
+                  left: -61px;
+                  padding-left: 61px;
+                "
               >
                 <div
                   v-for="(child, i) in date.data.children"
