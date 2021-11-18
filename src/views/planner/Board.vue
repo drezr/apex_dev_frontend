@@ -654,9 +654,11 @@ export default {
       let old_folder = this.folders[this.selected_folder]
 
       if ('added' in event) {
-        let position_updates = this.$set_position_updates(new_folder)
-
         let element = event.added.element
+
+        // Push element to the end of array
+        new_folder.children.push(new_folder.children.splice(
+          new_folder.children.indexOf(element), 1)[0])
 
         await this.$http.post('element', {
           'action': 'move',
@@ -671,10 +673,20 @@ export default {
           'element_id': element.id,
         })
 
-        position_updates
+        let position_updates = this.$set_position_updates(new_folder)
+
+        await this.$http.post('element', {
+          'action': 'position',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_type': 'folder',
+          'element_id': new_folder.id,
+          'position_updates': position_updates,
+        })
       }
 
-      else if ('moved' in event) {
+      if ('moved' in event || 'added' in event) {
         let position_updates = this.$set_position_updates(old_folder)
 
         await this.$http.post('element', {
