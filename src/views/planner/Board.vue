@@ -654,49 +654,39 @@ export default {
       let old_folder = this.folders[this.selected_folder]
 
       if ('added' in event) {
-        let position_updates = this.$set_position_updates(
-          old_folder, new_folder)
-        console.log('switch')
-        console.log(position_updates)
+        let position_updates = this.$set_position_updates(new_folder)
+
+        let element = event.added.element
+
+        await this.$http.post('element', {
+          'action': 'move',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'parent_type': old_folder.type,
+          'parent_id': old_folder.id,
+          'new_parent_type': new_folder.type,
+          'new_parent_id': new_folder.id,
+          'element_type': element.type,
+          'element_id': element.id,
+        })
+
+        position_updates
       }
 
       else if ('moved' in event) {
         let position_updates = this.$set_position_updates(old_folder)
-        console.log('move')
-        console.log(position_updates)
-      }
 
-
-
-/*      if ('removed' in event || 'moved' in event) {
-        let old_folder_updates = this.$set_position_updates(
-          old_folder.children)
-
-          await this.$http.post('element', {
+        await this.$http.post('element', {
           'action': 'position',
           'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'element_type': 'folder',
           'element_id': old_folder.id,
-          'position_updates': old_folder_updates,
+          'position_updates': position_updates,
         })
       }
-
-      else if ('added' in event) {
-        let new_folder_updates = this.$set_position_updates(
-          new_folder.children, old_folder, new_folder)
-
-          await this.$http.post('element', {
-          'action': 'position',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'element_type': 'folder',
-          'element_id': new_folder.id,
-          'position_updates': new_folder_updates,
-        })
-      }*/
     },
 
     get_day_color(day_name) {

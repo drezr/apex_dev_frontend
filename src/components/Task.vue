@@ -530,7 +530,7 @@ export default {
     },
 
     async update_children_position() {
-      let position_updates = this.$set_position_updates(this.self.children)
+      let position_updates = this.$set_position_updates(this.self)
 
       await this.$http.post('element', {
         'action': 'position',

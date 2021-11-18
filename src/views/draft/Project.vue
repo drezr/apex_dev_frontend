@@ -543,7 +543,19 @@ export default {
       },
 
       async set(children) {
-        let position_updates = this.$set_position_updates(children)
+        let position_updates = Array()
+
+        for (let child of children) {
+          child.link.position = children.indexOf(child)
+        }
+
+        for (let child of children) {
+            position_updates.push({
+              'element_type': child.type,
+              'element_id': child.id,
+              'position': child.link.position
+            })
+        }
 
         await this.$http.post('element', {
           'action': 'position',

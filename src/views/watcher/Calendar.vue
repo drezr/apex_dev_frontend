@@ -548,8 +548,7 @@ export default {
     },
 
     async update_detail_objects_position() {
-      let position_updates = this.$set_position_updates(
-                               this.detail_full_object.children)
+      let position_updates = this.$set_position_updates(this.detail_full_object)
 
       await this.$http.post('element', {
         'action': 'position',
