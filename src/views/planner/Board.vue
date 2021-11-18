@@ -207,7 +207,6 @@
                 handle=".handle"
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
-                :empty-insert-threshold="10"
                 style="
                   height: 100%;
                   position: relative;
