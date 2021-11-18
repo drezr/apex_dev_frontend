@@ -200,13 +200,15 @@
 
               <VueDraggable
                 v-model="date.data.children"
-                @change="update_children_position"
+                @change="update_children_position($event, date.data)"
                 group="drag"
                 :animation="100"
                 easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
+                :empty-insert-threshold="10"
+                style="height: 100%"
               >
                 <div
                   v-for="(child, i) in date.data.children"
@@ -295,7 +297,7 @@
           class="my-0 pa-0"
           :label="profile.name"
           :input-value="teammates_object.teammates.find(t => t == profile.name)"
-          @move="toggle_teammate(profile)"
+          @change="toggle_teammate(profile)"
         ></v-checkbox>
 
         <div
@@ -538,6 +540,9 @@ export default {
       folders_dialog: false,
       delete_folder_dialog: false,
       deleting_folder: null,
+      move_old_parent: null,
+      move_new_parent: null,
+      update_positions_timer: null,
       folder_colors: [
         'red',
         'pink',
@@ -592,7 +597,11 @@ export default {
         'day': i = i > 9 ? i : '0' + i,
         'month': m = m > 9 ? m : '0' + m,
         'year': Number(this.$current_year),
-        'data': {children: Array()},
+        'data': {
+          children: Array(),
+          date: `${this.$current_year}-${m}-${i}`,
+          type: 'day',
+        },
       }
 
       let day = this.days.find(d => new Date(d.date).getDate() == i)
@@ -650,55 +659,63 @@ export default {
       this.is_grabbing = value
     },
 
-    async update_children_position(event, new_folder) {
-      let old_folder = this.folders[this.selected_folder]
+    async update_children_position(event, parent) {
+      if ('removed' in event) {
+        this.move_old_parent = parent
+      }
 
       if ('added' in event) {
-        let element = event.added.element
-
-        // Push element to the end of array
-        new_folder.children.push(new_folder.children.splice(
-          new_folder.children.indexOf(element), 1)[0])
-
-        await this.$http.post('element', {
-          'action': 'move',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'parent_type': old_folder.type,
-          'parent_id': old_folder.id,
-          'new_parent_type': new_folder.type,
-          'new_parent_id': new_folder.id,
-          'element_type': element.type,
-          'element_id': element.id,
-        })
-
-        let position_updates = this.$set_position_updates(new_folder)
-
-        await this.$http.post('element', {
-          'action': 'position',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'element_type': 'folder',
-          'element_id': new_folder.id,
-          'position_updates': position_updates,
-        })
+        this.move_new_parent = parent
       }
 
-      if ('moved' in event || 'added' in event) {
-        let position_updates = this.$set_position_updates(old_folder)
+      if ('removed' in event) {
+        setTimeout(async () => {
+          if (this.move_new_parent && this.move_old_parent) {
+            let element = event.removed.element
 
-        await this.$http.post('element', {
-          'action': 'position',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'element_type': 'folder',
-          'element_id': old_folder.id,
-          'position_updates': position_updates,
-        })
+            let result = await this.$http.post('element', {
+              'action': 'move',
+              'view': this.$current_view,
+              'team_id': this.$current_team_id,
+              'app_id': this.$current_app_id,
+              'parent_type': this.move_old_parent.type,
+              'parent_id': this.move_old_parent.id,
+              'new_parent_type': this.move_new_parent.type,
+              'new_parent_id': this.move_new_parent.id,
+              'new_parent_date': this.move_new_parent.date,
+              'element_type': element.type,
+              'element_id': element.id,
+            })
+
+            if (!this.move_new_parent.id && this.move_new_parent.type == 'day') {
+              for (let val in result.day) {
+                this.move_new_parent[val] = result.day[val]
+              }
+            }
+          }
+
+          this.move_old_parent = null
+          this.move_new_parent = null
+        }, 100)
       }
+
+      let update_positions_timer = setInterval(async () => {
+        if (!this.move_old_parent && !this.move_new_parent) {
+          clearInterval(update_positions_timer)
+
+          let position_updates = this.$set_position_updates(parent)
+
+          await this.$http.post('element', {
+            'action': 'position',
+            'view': this.$current_view,
+            'team_id': this.$current_team_id,
+            'app_id': this.$current_app_id,
+            'element_type': parent.type,
+            'element_id': parent.id,
+            'position_updates': position_updates,
+          })
+        }
+      }, 1)
     },
 
     get_day_color(day_name) {
