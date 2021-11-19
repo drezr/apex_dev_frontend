@@ -911,24 +911,24 @@ export default {
 <style scoped>
 
 .board-pending {
-  height: calc(100vh - 270px);
-  max-height: calc(100vh - 270px);
+  height: calc(100vh - 274px);
+  max-height: calc(100vh - 274px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
-  margin: 0 10px 10px 10px;
+  margin: 0 10px 0px 10px;
   overflow-y: scroll;
 }
 
 .board-planned {
   width: 65%;
-  min-width: 900px;
-  height: calc(100vh - 245px);
-  max-height: calc(100vh - 245px);
+  min-width: 941px;
+  height: calc(100vh - 249px);
+  max-height: calc(100vh - 249px);
   min-height: 300px;
   border: 1px black solid;
   border-radius: 5px;
-  margin: 10px;
+  margin: 10px 10px 0px 10px;
   overflow-y: scroll;
 }
 
