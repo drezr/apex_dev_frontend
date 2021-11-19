@@ -86,14 +86,15 @@
         :icon="go_icon"
         :text="go_text"
         :color="go_color"
-        :dark="self.value == '' ? false : true"
-        :badge="self.value == '' ? false : true"
+        :dark="!self.value ? false : true"
+        :badge="!self.value ? false : true"
         :badge_icon="'mdi-open-in-new'"
         :badge_color="'grey'"
         :badge_offset_x="16"
         :badge_offset_y="16"
         @click="go_link"
-        :disabled="self.value == ''"
+        :disabled="!self.value"
+        :tooltip="self.value ? self.value : ''"
       />
     </div>
 
@@ -303,6 +304,10 @@ export default {
       if (this.self.kind == 'gps') {
         let coord = this.self.value.replace(' ', '')
         url = `https://www.google.com/maps/place/${coord}`
+      }
+
+      else if (this.self.kind == 'link') {
+        url = url.match(/^http[s]?:\/\//) ? url : 'http://' + url
       }
 
       window.open(url)
