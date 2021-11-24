@@ -407,13 +407,22 @@ Calculate time delta between start and end of the call in decimal
         this.parent.children = this.parent.children.filter(
           c => c.id !== this.self.id || c.type !== this.self.type)
 
+        if (this.$current_view == 'calendar' && ['day', 'cell'].includes(this.parent.type)) {
+          let cell = this.$current_component.cells.find(
+            c => c.id == this.parent.id)
+
+          let calls = this.parent.children.filter(c => c.type == 'call')
+
+          if (calls.length == 0) {
+            cell.has_call = false
+          }
+        }
+
         await this.$http.post('element', {
           'action': 'delete',
           'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'source_type': this.$child_task_component.parent.type,
-          'source_id': this.$child_task_component.parent.id,
           'parent_type': this.parent.type,
           'parent_id': this.parent.id,
           'element_type': 'call',

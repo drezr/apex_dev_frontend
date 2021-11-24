@@ -255,23 +255,34 @@ export default {
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
 
-        let data = {
-          'action': 'delete',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'parent_type': this.parent.type,
-          'parent_id': this.parent.id,
-          'element_type': 'note',
-          'element_id': this.self.id,
-        }
+      if (this.$current_view == 'calendar' && ['day', 'cell'].includes(this.parent.type)) {
+        let parent = this.$current_component[this.parent.type + 's'].find(
+          c => c.id == this.parent.id)
+        let children_except_note = this.parent.children.filter(
+          c => c.type != 'call')
 
-        if (this.$is_in_task) {
-          data['source_type'] = this.$child_task_component.parent.type
-          data['source_id'] = this.$child_task_component.parent.id
+        if (children_except_note.length == 0) {
+          parent.has_content = false
         }
+      }
 
-        await this.$http.post('element', data)
+      let data = {
+        'action': 'delete',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.parent.type,
+        'parent_id': this.parent.id,
+        'element_type': 'note',
+        'element_id': this.self.id,
+      }
+
+      if (this.$is_in_task) {
+        data['source_type'] = this.$child_task_component.parent.type
+        data['source_id'] = this.$child_task_component.parent.id
+      }
+
+      await this.$http.post('element', data)
     },
   },
 

@@ -232,6 +232,9 @@ export default {
     get_call_from_to(call) {
       let txt = this.lang.views.watcher.call_from_to[this.lg]
 
+      call.start = call.start ? call.start : '?'
+      call.end = call.end ? call.end : '?'
+
       txt = txt.replace('@@@', call.start)
       txt = txt.replace('###', call.end)
 

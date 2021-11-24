@@ -542,8 +542,15 @@ export default {
       child.children = Array()
 
       this.detail_full_object.children.push(child)
-
       this.detail_edit_mode = true
+
+      if (type == 'call') {
+        this.detail_object.cell.has_call = true
+      }
+
+      else {
+        this.detail_object[this.detail_object.type].has_content = true
+      }
     },
 
     async update_detail_objects_position() {
