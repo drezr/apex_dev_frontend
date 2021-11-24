@@ -53,7 +53,8 @@
           select_text_color(date.cell.presence),
           select_text_size(date.cell.presence),
         ]"
-        @focus="get_object"
+        @focus="get_object($event)"
+        @keydown="update()"
         :disabled="!$is_editor"
       />
 
@@ -66,7 +67,8 @@
           select_text_color(date.cell.absence),
           select_text_size(date.cell.absence),
         ]"
-        @focus="get_object"
+        @focus="get_object($event)"
+        @keydown="update()"
         :disabled="!$is_editor"
       />
       
@@ -130,6 +132,8 @@ export default {
     return {
       is_requesting: false,
       hover: false,
+      is_updating: false,
+      update_timer: null,
       border_colors: {
         'white': '#FFFFFF',
         'red': '#D50000',
@@ -221,16 +225,24 @@ export default {
       return 'font-size-9'
     },
 
-    async get_object() {
+    async get_object(event) {
+      if (!this.parent_cpnt.palette) {
+        event.target.select()
+      }
+
       if (!this.is_requesting) {
         if (this.type == 'cell') {
           if (!this.date.cell.id) {
             this.is_requesting = true
 
-            await this.$http.get('cell', {
+            let request = await this.$http.get('cell', {
               'profile_id': this.date.cell.profile,
               'date': this.date.cell.date,
             })
+
+            for (let key in request.cell) {
+              this.date.cell[key] = request.cell[key]
+            }
 
             this.is_requesting = false
           }
@@ -238,12 +250,43 @@ export default {
       }
     },
 
-    try_set_color() {
+    async try_set_color() {
       if (this.$current_component.palette) {
+        if (!this.date.cell.id) {
+          await this.get_object()
+        }
+
         let color = this.$current_component.palette_color
 
         this.date.cell.color = color
+
+        this.update()
       }
+    },
+
+    async update() {
+      if (!this.date.cell.id) {
+        await this.get_object()
+      }
+
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
+
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('cell', {
+          'action': 'update',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_type': 'cell',
+          'element_id': this.date.cell.id,
+          'profile_id': this.date.cell.profile,
+          'presence': this.date.cell.presence,
+          'absence': this.date.cell.absence,
+          'color': this.date.cell.color,
+        })
+      }, 1000)
     },
   },
 

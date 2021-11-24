@@ -515,7 +515,6 @@ export default {
           'date': this.detail_object.cell.date,
         })
 
-
         date.cell.id = request.cell.id
         this.detail_full_object = request.cell
       }
