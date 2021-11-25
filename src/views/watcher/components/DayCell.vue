@@ -56,6 +56,8 @@
         @focus="get_object($event)"
         @keydown="update()"
         :disabled="!$is_editor"
+        :id="`${x}_${(y * 2)}`"
+        @click="set_current_position(0)"
       />
 
       <input
@@ -70,6 +72,8 @@
         @focus="get_object($event)"
         @keydown="update()"
         :disabled="!$is_editor"
+        :id="`${x}_${(y * 2) + 1}`"
+        @click="set_current_position(1)"
       />
       
       <div
@@ -124,6 +128,14 @@ export default {
     },
     parent_cpnt: {
       type: Object,
+      required: false,
+    },
+    x: {
+      type: Number,
+      required: false,
+    },
+    y: {
+      type: Number,
       required: false,
     },
   },
@@ -248,6 +260,10 @@ export default {
           }
         }
       }
+    },
+
+    set_current_position(increment) {
+      this.parent_cpnt.current_position = [this.x, (this.y * 2) + increment]
     },
 
     async try_set_color() {

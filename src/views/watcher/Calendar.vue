@@ -49,18 +49,20 @@
 
         <div
           class="calendar-profiles"
-          v-for="profile in profiles"
-          :key="profile.id"
+          v-for="(profile, y) in profiles"
+          :key="y"
         >
           <Profile :profile="profile" :start="true" />
 
           <DayCell
-            v-for="date in profile.dates"
-            :key="date.day_number + $tool.gen_uid()"
+            v-for="(date, x) in profile.dates"
+            :key="x + $tool.gen_uid()"
             :type="'cell'"
             :date="date"
             :parent_cpnt="$current_instance"
             @open_detail_dialog="open_detail_dialog"
+            :x="x"
+            :y="y"
           />
 
           <Profile :profile="profile" :start="false" />
@@ -267,6 +269,7 @@ export default {
       palette: false,
       palette_color: 'white',
       decimal_calculator: false,
+      current_position: [0, 0],
     }
   },
 
@@ -294,6 +297,16 @@ export default {
     this.loading = false
 
     setTimeout(() => this.set_today_frame(), 500)
+
+    this.handler = (e) => {
+      this.keyboard_event(e)
+    }
+
+    window.addEventListener('keyup', this.handler)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.handler)
   },
 
   computed: {
@@ -395,6 +408,14 @@ export default {
 
       return menu
     },
+
+    max_x() {
+      return this.dates.length - 1
+    },
+
+    max_y() {
+      return (this.profiles.length * 2) - 1
+    },
   },
 
   methods: {
@@ -491,6 +512,39 @@ export default {
       }
 
       return cvs
+    },
+
+    keyboard_event(e) {
+      // left
+      if (e.which === 37 && this.current_position[0] > 0) {
+        this.current_position = [
+          this.current_position[0] - 1,
+          this.current_position[1]
+        ]
+      }
+
+      // right
+      else if (e.which === 39 && this.current_position[0] < this.max_x) {
+        this.current_position = [
+          this.current_position[0] + 1,
+          this.current_position[1]
+        ]
+      }
+
+      // up
+      else if (e.which === 38 && this.current_position[1] > 0) {
+        this.current_position = [
+          this.current_position[0],
+          this.current_position[1] - 1
+        ]
+      }
+      // down
+      else if (e.which === 40 && this.current_position[1] < this.max_y) {
+        this.current_position = [
+          this.current_position[0],
+          this.current_position[1] + 1
+        ]
+      }
     },
 
     async open_detail_dialog(date) {
@@ -621,7 +675,12 @@ export default {
   },
 
   watch: {
+    current_position() {
+      let x = this.current_position[0]
+      let y = this.current_position[1]
 
+      document.getElementById(`${x}_${y}`).focus()
+    },
   },
 }
 
