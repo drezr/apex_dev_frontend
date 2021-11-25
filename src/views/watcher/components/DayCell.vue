@@ -54,7 +54,6 @@
           select_text_size(date.cell.presence),
         ]"
         @focus="get_object($event)"
-        @keydown="update()"
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2)}`"
         @click="set_current_position(0)"
@@ -70,7 +69,6 @@
           select_text_size(date.cell.absence),
         ]"
         @focus="get_object($event)"
-        @keydown="update()"
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2) + 1}`"
         @click="set_current_position(1)"
@@ -275,39 +273,41 @@ export default {
         let color = this.$current_component.palette_color
 
         this.date.cell.color = color
-
-        this.update()
       }
-    },
-
-    async update() {
-      if (!this.date.cell.id) {
-        await this.get_object()
-      }
-
-      if (!this.is_updating) {
-        clearInterval(this.update_timer)
-      }
-
-      this.update_timer = setTimeout(async () => {
-        await this.$http.post('cell', {
-          'action': 'update',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'element_type': 'cell',
-          'element_id': this.date.cell.id,
-          'profile_id': this.date.cell.profile,
-          'presence': this.date.cell.presence,
-          'absence': this.date.cell.absence,
-          'color': this.date.cell.color,
-        })
-      }, 1000)
     },
   },
 
   watch: {
+    date: {
+      deep: true,
 
+      async handler() {
+        if (this.date.type == 'cell') {
+          if (!this.date.cell.id) {
+            await this.get_object()
+          }
+
+          if (!this.is_updating) {
+            clearInterval(this.update_timer)
+          }
+
+          this.update_timer = setTimeout(async () => {
+            await this.$http.post('cell', {
+              'action': 'update',
+              'view': this.$current_view,
+              'team_id': this.$current_team_id,
+              'app_id': this.$current_app_id,
+              'element_type': 'cell',
+              'element_id': this.date.cell.id,
+              'profile_id': this.date.cell.profile,
+              'presence': this.date.cell.presence,
+              'absence': this.date.cell.absence,
+              'color': this.date.cell.color,
+            })
+          }, 1000)
+        }
+      }
+    },
   },
 }
 
