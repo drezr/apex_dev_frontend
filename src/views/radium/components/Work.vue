@@ -495,7 +495,7 @@
           :color="edit_mode ? 'blue' : 'teal'"
           :dark="true"
           :icon="edit_mode ? 'mdi-content-save' : 'mdi-pencil'"
-          @click="edit_mode = !edit_mode"
+          @click="toggle_edit_mode()"
           :tooltip="edit_mode ? lang.views.radium.lock_tooltip[lg] : lang.views.radium.edit_tooltip[lg]"
           class="mr-3"
         />
@@ -793,7 +793,7 @@ export default {
       grab_cursor: 'grab',
       link_radiums_dialog: false,
       link_selected_radiums: Array(),
-      log_entries: Array(),
+      log_entries: Object(),
       log_dialog: false,
       log_dialog_loading: true,
       message_dialog: false,
@@ -1076,11 +1076,13 @@ export default {
       if (cc.palette && cc.palette_mode == 'works') {
         this.self.color = cc.palette_color
 
-        console.log(cc.palette_color)
+        this.update()
       }
 
-      else if (cc.palette && cc.palette_mode == 'columns') {
+      else if (column && cc.palette && cc.palette_mode == 'columns') {
         this.self[column + '_bg_color'] = cc.palette_color
+
+        this.update()
       }
     },
 
@@ -1134,6 +1136,40 @@ export default {
 
     update_child_position(type) {
       console.log(type)
+    },
+
+    toggle_edit_mode() {
+      if (this.edit_mode) {
+        this.edit_mode = false
+
+        this.update()
+      }
+
+      else {
+        this.edit_mode = true
+      }
+    },
+
+    async update() {
+      for (let key in this.self) {
+        if ((typeof this.self[key] === 'string' || this.self[key] == null) && this.self[key] != this.original_self[key]) {
+          this.log_entries[key] = this.self[key]
+        }
+      }
+
+      this.original_self = this.$tool.deepcopy(this.self)
+      
+      await this.$http.post('works', {
+        'action': 'update',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': 'work',
+        'element_id': this.self.id,
+        'value': this.log_entries,
+      })
+
+      this.log_entries = Object()
     },
   },
 
