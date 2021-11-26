@@ -793,6 +793,7 @@ export default {
       grab_cursor: 'grab',
       link_radiums_dialog: false,
       link_selected_radiums: Array(),
+      log_entries: Array(),
       log_dialog: false,
       log_dialog_loading: true,
       message_dialog: false,
@@ -809,11 +810,17 @@ export default {
       remove_child_item: null,
       link_radiums_snackbar: false,
       link_radiums_timeout: 4000,
+      original_self: null,
     }
   },
 
   created() {
-    // console.log(this.self)
+    if (this.self.newly_created) {
+      this.edit_mode = true
+      this.self.newly_created = false
+    }
+
+    this.original_self = this.$tool.deepcopy(this.self)
   },
 
   computed: {
@@ -945,7 +952,7 @@ export default {
     is_clickable(column_name) {
       let clickables = ['colt', ]
 
-      if (clickables.includes(column_name) && this.self[column_name].length > 0 && !this.$current_component.palette) {
+      if (clickables.includes(column_name) && this.self[column_name] && this.self[column_name].length > 0 && !this.$current_component.palette) {
         return true
       }
 
@@ -1068,6 +1075,8 @@ export default {
 
       if (cc.palette && cc.palette_mode == 'works') {
         this.self.color = cc.palette_color
+
+        console.log(cc.palette_color)
       }
 
       else if (cc.palette && cc.palette_mode == 'columns') {

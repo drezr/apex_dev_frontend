@@ -317,12 +317,24 @@ export default {
   },
 
   methods: {
-    add_work() {
+    async add_work() {
       this.add_loading = true
 
-      setTimeout(() => {
-        this.add_loading = false
-      }, 2000)
+      let request = await this.$http.post('works', {
+        'action': 'create',
+        'element_type': 'work',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'date': `${this.$current_year}-${this.$current_month}-01`
+      })
+
+      let work = request.work
+      work.newly_created = true
+
+      this.works.push(work)
+
+      this.add_loading = false
     },
 
     update_work_position() {
