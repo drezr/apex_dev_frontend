@@ -53,7 +53,7 @@
 
     <div><b>{{ profile.name }}</b></div>
 
-    <table>
+    <table style="width: calc(100% + 10px);">
       <tr>
         <td
           class="leave text--darken-4"
@@ -233,23 +233,20 @@ export default {
 table {
   border-collapse: collapse;
   position: relative;
-  left: -5px;
   top: 1px;
+  left: -5px;
 }
 
 td {
   border: 1px rgb(190, 190, 190) solid;
   text-align: center;
-  min-width: 28px;
-  max-width: 28px;
   height: 26px;
+  min-width: 24px;
   background-color: rgba(255, 255, 255, 0.5);
   overflow: hidden;
 }
 
 td:last-child {
-  min-width: 36px;
-  max-width: 36px;
 }
 
 .leave {

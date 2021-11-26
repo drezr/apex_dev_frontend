@@ -208,6 +208,48 @@ export default {
 
       return position_updates
     },
+
+    $remove_tag_from_day_cell() {
+      if (this.$current_view == 'calendar' && ['day', 'cell'].includes(this.parent.type)) {
+        let day_cell = null
+
+        if (this.parent.type == 'day') {
+          let day = this.$current_component.calendar.find(d => d.day.id == this.parent.id)
+
+          if (day) {
+            day_cell = day.day
+          }
+        }
+
+        else if (this.parent.type == 'cell') {
+          for (let profile of this.$current_component.profiles) {
+            let date = profile.dates.find(
+              d => d.type == 'cell' && d.cell.id == this.parent.id)
+
+            if (date) {
+              day_cell = date.cell
+            }
+          }
+        }
+
+        if (this.self.type == 'call') {
+          let calls = this.parent.children.filter(c => c.type == 'call')
+
+          if (calls.length == 0) {
+            day_cell.has_call = false
+          }
+        }
+
+        else {
+          let children_except_call = this.parent.children.filter(
+            c => c.type != 'call')
+
+          if (children_except_call.length == 0) {
+            day_cell.has_content = false
+          }
+        }
+      }
+    }
   },
 }
 

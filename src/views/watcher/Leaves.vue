@@ -145,6 +145,7 @@
           hide-details
           style="position: relative; top: -10px;"
           :disabled="['counter', 'presence', 'recovery', 'ignore'].includes(config['leave_' + i + '_type'])"
+          @change="send_update"
         ></v-checkbox>
       </div>
     </div>
@@ -178,6 +179,8 @@ export default {
       app: Object(),
       quotas: Array(),
       config: Object(),
+      is_updating: false,
+      update_timer: null,
       leave_config_dialog: false,
       leave_colors: [
         'red',
@@ -278,10 +281,14 @@ export default {
           this.config.leave_count++
         }
       }
+
+      this.send_update()
     },
 
     set_leave_color(color, i) {
       this.config['leave_' + i + '_color'] = color
+
+      this.send_update()
     },
 
     update(field, i) {
@@ -290,6 +297,24 @@ export default {
       if (field == 'type' && ['counter', 'presence', 'recovery', 'ignore'].includes(this.config[value])) {
         this.config[`leave_${i}_visible`] = false
       }
+
+      this.send_update()
+    },
+
+    async send_update() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
+
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('leaves', {
+          'action': 'update_config',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'value': this.config,
+        })
+      }, 1000)
     },
   },
 

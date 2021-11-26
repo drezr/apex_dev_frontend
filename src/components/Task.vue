@@ -551,16 +551,7 @@ export default {
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
 
-      if (this.$current_view == 'calendar' && ['day', 'cell'].includes(this.parent.type)) {
-        let parent = this.$current_component[this.parent.type + 's'].find(
-          c => c.id == this.parent.id)
-        let children_except_note = this.parent.children.filter(
-          c => c.type != 'call')
-
-        if (children_except_note.length == 0) {
-          parent.has_content = false
-        }
-      }
+      this.$remove_tag_from_day_cell()
 
       await this.$http.post('element', {
         'action': 'delete',

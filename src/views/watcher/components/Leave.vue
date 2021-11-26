@@ -33,8 +33,8 @@
       <input
         type="number"
         class="leave-lower"
-        v-model="profile.quotas['type_' + i]"
-        @input="update_leave(i)"
+        v-model="profile.quotas['type_' + leave_type['generic_name'].split('_')[1]]"
+        @input="update_leave(leave_type['generic_name'].split('_')[1])"
         onkeydown="return ![69, 107, 109].includes(event.keyCode)"
       >  
     </div>
@@ -68,7 +68,8 @@ export default {
 
   data() {
     return {
-
+      is_updating: false,
+      update_timer: null,
     }
   },
 
@@ -81,11 +82,31 @@ export default {
   },
 
   methods: {
-    update_leave(i) {
-      if (this.profile.quotas['type_' + i] == '') return
+    async update_leave(i) {
+      if (this.profile.quotas['type_' + i] == '') {
+        this.profile.quotas['type_' + i] = 0
+      }
 
       this.profile.quotas['type_' + i] = Math.round((parseFloat(this.profile.quotas['type_' + i]) + Number.EPSILON) * 100) / 100
-    }
+
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
+
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('leaves', {
+          'action': 'update_leave',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'profile_id': this.profile.id,
+          'year': this.$current_year,
+          'element_type': 'type_' + i,
+          'value': this.profile.quotas['type_' + i],
+        })
+      }, 100)
+    },
+
   },
 
   watch: {
