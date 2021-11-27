@@ -113,6 +113,7 @@
           outlined
           hide-details
           style="min-width: 120px; max-width: 120px; width: 120px;"
+          @input="send_update"
         />
 
         <v-text-field
@@ -123,6 +124,7 @@
           outlined
           hide-details
           style="min-width: 310px; max-width: 310px; width: 310px;"
+          @input="send_update"
         />
 
         <v-select

@@ -27,6 +27,8 @@
       <span v-if="shift.date">{{ $tool.format_date(shift.date) }}</span>
       <span v-if="shift.date && shift.shift" class="mx-2">en</span>
       <span v-if="shift.shift">{{ shift.shift }}</span>
+
+      <span v-if="!shift.date && !shift.shift">-</span>
     </v-tab>
   </v-tabs>
 
@@ -103,6 +105,7 @@
         class="work-link-expension-panel"
         v-for="(circle, x) in $current_component.circles"
         :key="x"
+        :value="$current_component.circles.length == 1 ? 0 : null"
       >
         <v-expansion-panel>
           <v-expansion-panel-header>
@@ -160,7 +163,7 @@ export default {
     return {
       self: null,
       loading: true,
-      selected_shift: null,
+      selected_shift: 0,
       link_teams_dialog: false,
       link_selected_teams: Array(),
     }

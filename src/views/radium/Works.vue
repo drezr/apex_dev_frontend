@@ -91,6 +91,7 @@
           class="mx-3"
           outlined
           hide-details
+          @input="update_config()"
         />
 
         <v-text-field
@@ -100,6 +101,7 @@
           class="mx-3"
           outlined
           hide-details
+          @input="update_config()"
         />
 
         <v-checkbox
@@ -107,6 +109,7 @@
           :label="lang.generic.visible[lg]"
           class="mx-3"
           hide-details
+          @change="update_config()"
           style="position: relative; top: -10px;"
         ></v-checkbox>
       </div>
@@ -265,6 +268,8 @@ export default {
       ],
       filtered_works: Array(),
       rerender_count: 0,
+      config_is_updating: false,
+      config_update_timer: null,
     }
   },
 
@@ -321,7 +326,7 @@ export default {
       this.add_loading = true
 
       let request = await this.$http.post('works', {
-        'action': 'create',
+        'action': 'create_work',
         'element_type': 'work',
         'view': this.$current_view,
         'team_id': this.$current_team_id,
@@ -367,7 +372,15 @@ export default {
     },
 
     update_columns() {
+      let i = 0
 
+      for (let column of this.columns) {
+        column.position = i
+
+        i++
+      }
+
+      this.update_config()
     },
 
     get_filters(column) {
@@ -479,6 +492,23 @@ export default {
       this.messages = this.messages.filter(m => m.id !== message_id)
       this.acquit_dialog = false
     },
+
+    async update_config() {
+      if (!this.config_is_updating) {
+        clearInterval(this.config_update_timer)
+      }
+
+      this.config_update_timer = setTimeout(async () => {
+        await this.$http.post('works', {
+          'action': 'update_config',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_id': this.config.id,
+          'value': this.columns,
+        })
+      }, 1000)
+    }
   },
 
   watch: {

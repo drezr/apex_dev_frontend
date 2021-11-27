@@ -171,7 +171,7 @@
             v-if="edit_mode"
             class="work-add-button"
             :class="add_shift_loading ? 'work-add-button-disabled grey' : 'green'"
-            @click="add_shift"
+            @click="add_child('shift')"
           >
             <v-icon color="white" v-if="!add_shift_loading">mdi-plus</v-icon>
             <Loader :size="19" :width="3" :color="'white'" v-else />
@@ -281,7 +281,7 @@
             v-if="edit_mode"
             class="work-add-button"
             :class="add_limit_loading ? 'work-add-button-disabled grey' : 'green'"
-            @click="add_limit"
+            @click="add_child('limit')"
           >
             <v-icon color="white" v-if="!add_limit_loading">mdi-plus</v-icon>
             <Loader :size="19" :width="3" :color="'white'" v-else />
@@ -377,7 +377,7 @@
             v-if="edit_mode"
             class="work-add-button"
             :class="add_s460_loading ? 'work-add-button-disabled grey' : 'green'"
-            @click="add_s460"
+            @click="add_child('s460')"
           >
             <v-icon color="white" v-if="!add_s460_loading">mdi-plus</v-icon>
             <Loader :size="19" :width="3" :color="'white'" v-else />
@@ -1090,31 +1090,26 @@ export default {
       return this.self[column_name + '_bg_color'] ? this.self[column_name + '_bg_color'] : this.self.color
     },
 
-    add_shift() {
-      this.add_shift_loading = true
+    async add_child(type) {
+      this['add_' + type + '_loading'] = true
 
-      setTimeout(() => {
-        this.add_shift_loading = false
-      }, 1000)
+      let request = await this.$http.post('works', {
+        'action': 'create_child',
+        'element_type': type,
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_id': this.self.id,
+        'parent_type': 'work',
+      })
+
+      let element = request[type]
+      this.self[type + 's'].push(element)
+
+      this['add_' + type + '_loading'] = false
     },
 
-    add_limit() {
-      this.add_limit_loading = true
-
-      setTimeout(() => {
-        this.add_limit_loading = false
-      }, 1000)
-    },
-
-    add_s460() {
-      this.add_s460_loading = true
-
-      setTimeout(() => {
-        this.add_s460_loading = false
-      }, 1000)
-    },
-
-    add_file(kind) {
+    async add_file(kind) {
       this.add_file_loading = true
 
       setTimeout(() => {
@@ -1129,9 +1124,20 @@ export default {
       this.remove_child_dialog = true
     },
 
-    remove_child() {
+    async remove_child() {
       this.self[this.remove_child_type] = this.self[this.remove_child_type].filter(c => c.id !== this.remove_child_item.id)
       this.remove_child_dialog = false
+
+      await this.$http.post('works', {
+        'action': 'delete_child',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_id': this.self.id,
+        'parent_type': 'work',
+        'element_type': this.remove_child_item.type,
+        'element_id': this.remove_child_item.id,
+      })
     },
 
     update_child_position(type) {
@@ -1160,7 +1166,7 @@ export default {
       this.original_self = this.$tool.deepcopy(this.self)
       
       await this.$http.post('works', {
-        'action': 'update',
+        'action': 'update_work',
         'view': this.$current_view,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,

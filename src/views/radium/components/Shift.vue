@@ -6,6 +6,7 @@
       class="d-flex justify-center align-center lighten-3"
       :class="parent.shifts_bg_color ? parent.shifts_bg_color : parent.color"
       style="width: 100%; height: 100%;"
+      v-if="self.date"
     >
       {{ new Date(self.date).getWeek() }}
     </div>
@@ -24,8 +25,10 @@
       class="text-center"
       style="line-height: 16px;"
     >
-      <small><b>{{ lang.generic[day_data.day_name][lg].toUpperCase().substring(0,3) }}</b><br></small>
-      {{ day_data['day_number'] }}/{{ day_data['month'] }}
+      <div v-if="day_data.day_name">
+        <small><b>{{ lang.generic[day_data.day_name][lg].toUpperCase().substring(0,3) }}</b><br></small>
+        {{ day_data['day_number'] }}/{{ day_data['month'] }}
+      </div>
     </div>
   </div>
 
