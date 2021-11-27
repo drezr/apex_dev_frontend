@@ -55,6 +55,7 @@
       :append-icon="null"
       :disabled="!edit_mode"
       :background-color="edit_mode ? 'white' : ''"
+      @input="$emit('update')"
     ></v-combobox>
 
     <div class="d-flex" style="width: 100%;">
@@ -78,6 +79,7 @@
       :first-day-of-week="1"
       locale="fr-fr"
       no-title
+      @change="$emit('update')"
     ></v-date-picker>
   </v-dialog>
 </div>

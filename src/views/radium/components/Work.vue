@@ -154,6 +154,7 @@
                   :column="column"
                   :edit_mode="edit_mode"
                   class="flex-grow-1"
+                  @update="update_child(shift)"
                 />
 
                 <div
@@ -262,6 +263,7 @@
                       :style="`font-size: ${column.textsize}px;`"
                       :disabled="!edit_mode"
                       :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      @input="update_child(limit)"
                     />
                   </div>
 
@@ -358,6 +360,7 @@
                       :style="`font-size: ${column.textsize}px;`"
                       :disabled="!edit_mode"
                       :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
+                      @input="update_child(s460)"
                     />
                   </div>
 
@@ -821,6 +824,10 @@ export default {
     }
 
     this.original_self = this.$tool.deepcopy(this.self)
+
+    this.self.shifts.sort((a, b) => a.position - b.position)
+    this.self.limits.sort((a, b) => a.position - b.position)
+    this.self.s460s.sort((a, b) => a.position - b.position)
   },
 
   computed: {
@@ -1090,6 +1097,15 @@ export default {
       return this.self[column_name + '_bg_color'] ? this.self[column_name + '_bg_color'] : this.self.color
     },
 
+    async add_file(kind) {
+      this.add_file_loading = true
+
+      setTimeout(() => {
+        console.log(kind)
+        this.add_file_loading = false
+      }, 1000)
+    },
+
     async add_child(type) {
       this['add_' + type + '_loading'] = true
 
@@ -1107,15 +1123,6 @@ export default {
       this.self[type + 's'].push(element)
 
       this['add_' + type + '_loading'] = false
-    },
-
-    async add_file(kind) {
-      this.add_file_loading = true
-
-      setTimeout(() => {
-        console.log(kind)
-        this.add_file_loading = false
-      }, 1000)
     },
 
     open_remove_child_dialog(child, type) {
@@ -1140,8 +1147,44 @@ export default {
       })
     },
 
-    update_child_position(type) {
-      console.log(type)
+    async update_child_position(type) {
+      let position_updates = Array()
+      let i = 0
+
+      for (let child of this.self[type]) {
+        child.position = i
+        i++
+
+        position_updates.push({
+          'element_id': child.id,
+          'element_type': child.type,
+          'element_position': child.position,
+        })
+      }
+
+      await this.$http.post('works', {
+        'action': 'update_child_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': this.self.type,
+        'element_id': this.self.id,
+        'position_updates': position_updates,
+      })
+    },
+
+    async update_child(child) {
+      await this.$http.post('works', {
+        'action': 'update_child',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.self.type,
+        'parent_id': this.self.id,
+        'element_type': child.type,
+        'element_id': child.id,
+        'value': child,
+      })
     },
 
     toggle_edit_mode() {
