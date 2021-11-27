@@ -1015,12 +1015,23 @@ export default {
       }
     },
 
-    remove() {
+    async remove() {
       this.remove_dialog = false
 
       this.$current_component.filtered_works = this.$current_component.filtered_works.filter(w => w.id !== this.self.id)
       
       this.$current_component.rerender_count++
+
+      await this.$http.post('works', {
+        'action': 'delete_work',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': 'work',
+        'element_id': this.self.id,
+      })
+
+      // TODO update positions
     },
 
     link_radiums() {
