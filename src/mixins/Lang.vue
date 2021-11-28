@@ -1636,6 +1636,11 @@ export default {
               'nl': '',
               'en': 'No shift for this work yet.',
             },
+            'no_shift_date': {
+              'fr': 'Veuillez introduire une date à cette prestation pour ajouter une équipe.',
+              'nl': '',
+              'en': 'Please enter a date for this shift to add a team.',
+            },
             'remove_project': {
               'fr': 'Supprimer le lien vers le projet Draft',
               'nl': '',

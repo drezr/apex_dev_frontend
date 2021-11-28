@@ -60,6 +60,13 @@
       >
         {{ lang.views.radium.no_participating_teams[lg] }}
       </div>
+
+      <div
+        v-if="!shift.date"
+        class="my-9 mx-6 white--text"
+      >
+        {{ lang.views.radium.no_shift_date[lg] }}
+      </div>
     </v-tab-item>
 
     <div v-if="parent.shifts.length == 0" class="my-9 mx-6 white--text">
@@ -74,6 +81,7 @@
       :dark="true"
       :icon="'mdi-account-multiple-plus'"
       :tooltip="lang.views.radium.link_teams_tooltip[lg]"
+      :disabled="!parent.shifts[selected_shift].date"
       class="mx-3 mb-3"
       @click="link_teams_dialog = true"
     />
@@ -186,7 +194,9 @@ export default {
   },
 
   computed: {
-
+    shifts() {
+      return this.parent.shifts
+    }
   },
 
   methods: {
@@ -227,7 +237,11 @@ export default {
   },
 
   watch: {
-
+    shifts() {
+      if (this.shifts.length == 1) {
+        this.selected_shift = 0
+      }
+    },
   },
 }
 

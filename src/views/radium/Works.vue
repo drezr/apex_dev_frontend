@@ -103,6 +103,7 @@
           outlined
           hide-details
           @input="update_config()"
+          :style="column.name == 'files' ? 'visibility: hidden;' : ''"
         />
 
         <v-checkbox

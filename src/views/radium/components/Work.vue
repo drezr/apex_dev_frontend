@@ -110,15 +110,15 @@
             <div class="d-flex lighten-4" :class="get_column_color(column.name)">
               <div class="work-drag-spacer" v-if="edit_mode"></div>
 
-              <div class="work-column-subtitle" style="width: 30%;">
+              <div class="work-column-subtitle" style="width: 30%; max-width: 30%; overflow: hidden;">
                 {{ lang.generic.week[lg] }}
               </div>
 
-              <div class="work-column-subtitle" style="width: 30%;">
+              <div class="work-column-subtitle" style="width: 30%; max-width: 30%; overflow: hidden;">
                 {{ lang.generic.day[lg] }}
               </div>
 
-              <div class="work-column-subtitle" style="width: 40%;">
+              <div class="work-column-subtitle" style="width: 40%; max-width: 40%; overflow: hidden;">
                 {{ lang.generic.schedule[lg] }}
               </div>
 
@@ -213,7 +213,7 @@
               class="work-column-subtitle"
               v-for="(data, field) in limit_fields"
               :key="field"
-              :style="`width: ${data.width};`"
+              :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
             >
               {{ data.name }}
             </div>
@@ -310,7 +310,7 @@
               class="work-column-subtitle"
               v-for="(data, field) in s460_fields"
               :key="field"
-              :style="`width: ${data.width};`"
+              :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
             >
               {{ data.name }}
             </div>
@@ -404,7 +404,7 @@
             <div
               v-for="(data, field) in file_fields"
               :key="field"
-              :style="`width: ${data.width};`"
+              :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
               class="work-row-field"
             >
               <div :class="self.color" class="work-column-subtitle lighten-5">
