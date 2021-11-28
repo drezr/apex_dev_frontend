@@ -601,6 +601,7 @@
         class="work-link-expension-panel"
         v-for="(circle, x) in $current_component.circles"
         :key="x"
+        :value="$current_component.circles.length == 1 ? 0 : null"
       >
         <v-expansion-panel>
           <v-expansion-panel-header>
@@ -787,6 +788,7 @@ export default {
 
   props: {
     self: Object,
+    parent_cpnt: Object,
   },
 
   data() {
@@ -820,6 +822,7 @@ export default {
   created() {
     if (this.self.newly_created) {
       this.edit_mode = true
+      this.expanded = true
       this.self.newly_created = false
     }
 
@@ -1019,8 +1022,6 @@ export default {
       this.remove_dialog = false
 
       this.$current_component.filtered_works = this.$current_component.filtered_works.filter(w => w.id !== this.self.id)
-      
-      this.$current_component.rerender_count++
 
       await this.$http.post('works', {
         'action': 'delete_work',
@@ -1031,7 +1032,7 @@ export default {
         'element_id': this.self.id,
       })
 
-      // TODO update positions
+      this.parent_cpnt.update_work_position()
     },
 
     link_radiums() {

@@ -86,6 +86,7 @@
       :label="lang.generic.needs[lg]"
       v-model="self.needs"
       class="mx-3"
+      @input="update_part()"
     ></v-text-field>
 
     <div
@@ -261,6 +262,8 @@ export default {
       info_override_snackbar: false,
       info_override_timeout: 4000,
       team: Object(),
+      is_updating: false,
+      update_timer: null,
     }
   },
 
@@ -364,9 +367,44 @@ export default {
       return color
     },
 
-    remove_part() {
+    async remove_part() {
       this.remove_part_dialog = false
-      this.parent.parts = this.parent.parts.filter(p => p.id != this.self.id)    
+      this.parent.parts = this.parent.parts.filter(p => p.id != this.self.id)  
+
+      await this.$http.post('works', {
+        'action': 'delete_part',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'source_type': 'work',
+        'source_id': this.self.work.id,
+        'parent_type': 'shift',
+        'parent_id': this.self.shift.id,
+        'element_type': 'part',
+        'element_id': this.self.id,
+      })
+    },
+
+    async update_part() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
+
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('works', {
+          'action': 'update_part',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': 'work',
+          'source_id': this.self.work.id,
+          'parent_type': 'shift',
+          'parent_id': this.self.shift.id,
+          'element_type': 'part',
+          'element_id': this.self.id,
+          'value': this.self,
+        })
+      }, 1000)
     },
 
     go_to_project() {
@@ -380,6 +418,8 @@ export default {
 
     toggle_lock() {
       this.self.locked = !this.self.locked
+
+      this.update_part()
     },
 
     send_message() {

@@ -33,8 +33,9 @@
         >
           <Work
             v-for="(work, i) in filtered_works"
-            :key="i + rerender_count"
+            :key="i"
             :self="work"
+            :parent_cpnt="$current_instance"
             class="ma-3"
           />
         </VueDraggable>
@@ -336,14 +337,32 @@ export default {
 
       let work = request.work
       work.newly_created = true
-
-      this.works.push(work)
+      this.filtered_works.push(work)
 
       this.add_loading = false
     },
 
-    update_work_position() {
+    async update_work_position() {
+      let position_updates = Array()
+      let i = 0
 
+      for (let work of this.filtered_works) {
+        work.link.position = i
+        i++
+
+        position_updates.push({
+          'element_id': work.id,
+          'element_position': work.link.position,
+        })
+      }
+
+      await this.$http.post('works', {
+        'action': 'update_work_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'position_updates': position_updates,
+      })
     },
 
     get_columns() {

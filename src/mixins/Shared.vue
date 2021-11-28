@@ -244,7 +244,7 @@ export default {
           let children_except_call = this.parent.children.filter(
             c => c.type != 'call')
 
-          if (children_except_call.length == 0) {
+          if (children_except_call.length == 0 && this.parent.parts.length == 0) {
             day_cell.has_content = false
           }
         }

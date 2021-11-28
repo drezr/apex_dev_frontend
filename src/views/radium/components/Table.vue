@@ -210,6 +210,8 @@ export default {
       for (let part of request.parts) {
         selected_shift.parts.push(part)
       }
+
+      this.link_selected_teams = Array()
     },
 
     toggle_team(app_id) {
