@@ -190,8 +190,26 @@ export default {
   },
 
   methods: {
-    link_teams() {
+    async link_teams() {
       this.link_teams_dialog = false
+
+      let selected_shift = this.parent.shifts[this.selected_shift]
+
+      let request = await this.$http.post('works', {
+        'action': 'create_parts',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': 'work',
+        'parent_id': this.parent.id,
+        'element_type': 'shift',
+        'element_id': selected_shift.id,
+        'value': this.link_selected_teams,
+      })
+
+      for (let part of request.parts) {
+        selected_shift.parts.push(part)
+      }
     },
 
     toggle_team(app_id) {
