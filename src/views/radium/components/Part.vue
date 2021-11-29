@@ -97,14 +97,14 @@
       <div
         class="part-available-button"
         :class="is_available(profile.id) ? 'green' : 'red'"
-        @click="toggle_available(profile.id)"
+        @click="toggle_profile(profile.id, 'is_available')"
       ></div>
 
       <v-checkbox
         class="my-0 pa-0"
         :label="profile.name"
         :input-value="participants.find(p => p.id == profile.id)"
-        @change="toggle_participant(profile.id)"
+        @change="toggle_profile(profile.id, 'is_participant')"
       >
       </v-checkbox>
 
@@ -333,24 +333,45 @@ export default {
       return profile && profile.link.is_available ? true : false
     },
 
-    async toggle_available(profile_id) {
+    async toggle_profile(profile_id, attr) {
       let profile = this.self.profiles.find(p => p.id == profile_id)
 
       if (!profile) {
-        // Request new PartProfileLink
+        let request = await this.$http.post('works', {
+          'action': 'create_part_profile_link',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': 'work',
+          'source_id': this.self.work.id,
+          'parent_type': 'shift',
+          'parent_id': this.self.shift.id,
+          'element_type': 'part',
+          'element_id': this.self.id,
+          'profile_id': profile_id,
+        })
+
+        profile = request.profile
+
+        this.self.profiles.push(profile)
       }
 
-      profile.link.is_available = !profile.link.is_available
-    },
+      profile.link[attr] = !profile.link[attr]
 
-    async toggle_participant(profile_id) {
-      let profile = this.self.profiles.find(p => p.id == profile_id)
-
-      if (!profile) {
-        // Request new PartProfileLink
-      }
-
-      profile.link.is_participant = !profile.link.is_participant
+      await this.$http.post('works', {
+        'action': 'update_part_profile_link',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'source_type': 'work',
+        'source_id': this.self.work.id,
+        'parent_type': 'shift',
+        'parent_id': this.self.shift.id,
+        'element_type': 'part',
+        'element_id': this.self.id,
+        'profile_id': profile.id,
+        'value': profile.link,
+      })
     },
 
     select_presence_color(value) {
