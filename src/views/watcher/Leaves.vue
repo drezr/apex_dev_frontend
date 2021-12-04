@@ -217,8 +217,6 @@ export default {
     this.quotas = this.request.quotas
     this.config = this.request.config
 
-    console.log(this.config)
-
     this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
     for (let profile of this.team.profiles) {
