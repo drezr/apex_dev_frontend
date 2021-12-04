@@ -367,24 +367,8 @@ export default {
     },
 
     get_columns() {
-      let columns = Array()
-
-      for (let key in this.config) {
-        for (let value of ['visible', 'width', 'position', 'textsize']) {
-          if (key.includes(value) && !key.includes('printable_')) {
-            let name = key.replace('_' + value, '')
-            let item = columns.find(i => i.name == name)
-
-            if (!item) {
-              item = {'name': name}
-              columns.push(item)
-            }
-
-            item[value] = this.config[key]
-            break
-          }
-        }
-      }
+      let columns = this.config.columns.filter(
+        c => !c.name.includes('printable_'))
 
       columns.sort((a, b) => a.position - b.position)
 
@@ -401,6 +385,23 @@ export default {
       }
 
       this.update_config()
+    },
+
+    async update_config() {
+      if (!this.config_is_updating) {
+        clearInterval(this.config_update_timer)
+      }
+
+      this.config_update_timer = setTimeout(async () => {
+        await this.$http.post('works', {
+          'action': 'update_config',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_id': this.config.id,
+          'value': this.columns,
+        })
+      }, 1000)
     },
 
     get_filters(column) {
@@ -512,23 +513,6 @@ export default {
       this.messages = this.messages.filter(m => m.id !== message_id)
       this.acquit_dialog = false
     },
-
-    async update_config() {
-      if (!this.config_is_updating) {
-        clearInterval(this.config_update_timer)
-      }
-
-      this.config_update_timer = setTimeout(async () => {
-        await this.$http.post('works', {
-          'action': 'update_config',
-          'view': this.$current_view,
-          'team_id': this.$current_team_id,
-          'app_id': this.$current_app_id,
-          'element_id': this.config.id,
-          'value': this.columns,
-        })
-      }, 1000)
-    }
   },
 
   watch: {

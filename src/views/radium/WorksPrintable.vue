@@ -75,6 +75,7 @@
     :title_text="lang.views.radium.customize_tooltip[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="customize_dialog = false"
+    :move_window="true"
   >
     <VueDraggable
       v-model="columns"
@@ -84,7 +85,7 @@
       handle=".cursor-move"
     >
       <div
-        v-for="(column, i) in columns.filter(c => c.name != 'files')"
+        v-for="(column, i) in columns"
         :key="i"
         class="works-customize-row"
       >
@@ -103,6 +104,7 @@
           class="mx-3"
           outlined
           hide-details
+          @input="update_config()"
         />
 
         <v-text-field
@@ -112,6 +114,8 @@
           class="mx-3"
           outlined
           hide-details
+          @input="update_config()"
+          :style="column.name == 'files' ? 'visibility: hidden;' : ''"
         />
 
         <v-checkbox
@@ -119,6 +123,7 @@
           :label="lang.generic.visible[lg]"
           class="mx-3"
           hide-details
+          @change="update_config()"
           style="position: relative; top: -10px;"
         ></v-checkbox>
       </div>
@@ -226,33 +231,51 @@ export default {
 
   methods: {
     get_columns() {
-      let columns = Array()
-
-      for (let key in this.config) {
-        for (let value of ['visible', 'width', 'position', 'textsize']) {
-          if (key.includes(value) && key.includes('printable_')) {
-            key = key.replace('printable_', '')
-            let name = key.replace('_' + value, '')
-            let item = columns.find(i => i.name == name)
-
-            if (!item) {
-              item = {'name': name}
-              columns.push(item)
-            }
-
-            item[value] = this.config['printable_' + key]
-            break
-          }
-        }
-      }
-
+      let columns = this.config.columns.filter(
+        c => c.name.includes('printable_'))
+      
       columns.sort((a, b) => a.position - b.position)
+
+      for (let column of columns) {
+        column['name'] = column['name'].replace('printable_', '')
+      }
 
       return columns
     },
 
     update_columns() {
+      let i = 0
 
+      for (let column of this.columns) {
+        column.position = i
+
+        i++
+      }
+
+      this.update_config()
+    },
+
+    async update_config() {
+      if (!this.config_is_updating) {
+        clearInterval(this.config_update_timer)
+      }
+
+      let true_name_columns = this.$tool.deepcopy(this.columns)
+
+      for (let column of true_name_columns) {
+        column.name = 'printable_' + column.name
+      }
+
+      this.config_update_timer = setTimeout(async () => {
+        await this.$http.post('works', {
+          'action': 'update_config',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'element_id': this.config.id,
+          'value': true_name_columns,
+        })
+      }, 1000)
     },
 
     get_filters(column) {
