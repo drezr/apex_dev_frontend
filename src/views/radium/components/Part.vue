@@ -116,7 +116,7 @@
           class="part-presence-cell"
           :class="[
             select_presence_color(profile.presence),
-            profile.absence != '' ? 'part-presence-border-right' : ''
+            profile.absence && profile.absence != '' ? 'part-presence-border-right' : ''
           ]"
           v-if="profile.presence && profile.presence != ''"
         >
@@ -127,7 +127,7 @@
           class="part-presence-cell"
           :class="[
             select_presence_color(profile.absence),
-            profile.presence != '' ? 'part-presence-border-left' : ''
+            profile.presence && profile.presence != '' ? 'part-presence-border-left' : ''
           ]"
           v-if="profile.absence && profile.absence != ''"
         >

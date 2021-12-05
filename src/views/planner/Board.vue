@@ -313,7 +313,7 @@
             class="board-presence-cell"
             :class="[
               select_presence_color(profile.presence),
-              profile.absence != '' ? 'board-presence-border-right' : ''
+              profile.absence && profile.absence != '' ? 'board-presence-border-right' : ''
             ]"
             v-if="profile.presence && profile.presence != ''"
           >
@@ -324,7 +324,7 @@
             class="board-presence-cell"
             :class="[
               select_presence_color(profile.absence),
-              profile.presence != '' ? 'board-presence-border-left' : ''
+              profile.presence && profile.presence != '' ? 'board-presence-border-left' : ''
             ]"
             v-if="profile.absence && profile.absence != ''"
           >
@@ -363,7 +363,7 @@
 
     <div
       class="d-flex align-center mt-6"
-      v-if="!all_profiles_loading && teammates_object.type"
+      v-if="!all_profiles_loading && teammates_object.type != 'part'"
     >
       <v-autocomplete
         v-model="picked_profile"
@@ -777,6 +777,7 @@ export default {
 
     async toggle_teammate(profile) {
       let is_participant = false
+      let action = 'update_element_teammates'
 
       if (this.teammates_object.teammates.find(t => t == profile.name)) {
         this.teammates_object.teammates = this.teammates_object.teammates.filter(
@@ -788,8 +789,12 @@ export default {
         is_participant = true
       }
 
+      if (this.teammates_object.type == 'part') {
+        action = 'update_part_teammates'
+      }
+
       await this.$http.post('board', {
-        'action': 'update_teammate',
+        'action': action,
         'view': this.$current_view,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
