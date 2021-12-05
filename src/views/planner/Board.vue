@@ -93,6 +93,7 @@
 
           <div class="board-pending">
             <div
+              v-if="folders.length > 0"
               class="lighten-5"
               :class="folders[selected_folder].color"
               style="height: 100%; padding-top: 5px; position: relative; top: -5px;"
