@@ -697,6 +697,10 @@ export default {
                 this.move_new_parent[val] = result.day[val]
               }
             }
+
+            if (this.move_new_parent.type == 'folder') {
+              element.teammates = Array()
+            }
           }
 
           this.move_old_parent = null
@@ -771,7 +775,9 @@ export default {
       }
     },
 
-    toggle_teammate(profile) {
+    async toggle_teammate(profile) {
+      let is_participant = false
+
       if (this.teammates_object.teammates.find(t => t == profile.name)) {
         this.teammates_object.teammates = this.teammates_object.teammates.filter(
           t => t !== profile.name)
@@ -779,7 +785,21 @@ export default {
 
       else {
         this.teammates_object.teammates.push(profile.name)
+        is_participant = true
       }
+
+      await this.$http.post('board', {
+        'action': 'update_teammate',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.teammates_day.type,
+        'parent_id': this.teammates_day.id,
+        'element_type': this.teammates_object.type,
+        'element_id': this.teammates_object.id,
+        'profile_id': profile.id,
+        'value': is_participant,
+      })
     },
 
     select_presence_color(value) {
