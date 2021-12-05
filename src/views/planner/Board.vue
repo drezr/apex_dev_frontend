@@ -697,6 +697,8 @@ export default {
               for (let val in result.day) {
                 this.move_new_parent[val] = result.day[val]
               }
+
+              this.move_new_parent['parts'] = Array()
             }
 
             if (this.move_new_parent.type == 'folder') {
