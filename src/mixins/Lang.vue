@@ -1727,9 +1727,9 @@ export default {
               'en': 'The work\'s shift has been updated.',
             },
             'message_preset_desc_updated': {
-              'fr': 'The work\'s description has been updated.',
+              'fr': 'La description du chantier a été mise à jour.',
               'nl': '',
-              'en': '',
+              'en': 'The work\'s description has been updated.',
             },
             'message_preset_note_added': {
               'fr': 'Une remarque a été ajoutée.',
