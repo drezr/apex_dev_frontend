@@ -32,8 +32,8 @@
           handle=".work-drag-button"
         >
           <Work
-            v-for="(work, i) in filtered_works"
-            :key="i"
+            v-for="work in filtered_works"
+            :key="work.id"
             :self="work"
             :parent_cpnt="$current_instance"
             class="ma-3"

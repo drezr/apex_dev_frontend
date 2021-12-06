@@ -71,11 +71,11 @@
               >
                 {{ icon }}
               </v-icon>
-
-              <span v-if="text" :class="padding_x || padding_x == 0 ? '' : 'ml-2'">
-                {{ text }}
-              </span>
             </div>
+
+            <span v-if="text" :class="padding_x || padding_x == 0 ? '' : 'ml-2'">
+              {{ text }}
+            </span>
           </v-btn>
         </template>
 

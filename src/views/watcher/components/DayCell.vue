@@ -194,20 +194,19 @@ export default {
 
       if (value) {
         if (this.parent_cpnt && this.parent_cpnt.leave_config) {
-          let type_names = this.parent_cpnt.type_names
+          let config =this.parent_cpnt.leave_config
 
-          value = value.toUpperCase()
+          let presence_types = config.leave_types.filter(
+            l => l.kind == 'presence'
+          )
 
-          for (let name of type_names['presence']) {
-            name = name ? name.toUpperCase() : '#$@'
+          for (let presence_type of presence_types) {
+            let code = presence_type.code.toUpperCase()
+            value = value.toUpperCase()
 
-            if (value.includes(name)) color = 'green--text text--darken-2'
-          }
-
-          for (let name of type_names['absence']) {
-            name = name ? name.toUpperCase() : '#$@'
-
-            if (value.includes(name)) color = 'red--text text--darken-2'
+            if (value.includes(code)) {
+              color = `${presence_type.color}--text text--darken-2`
+            }
           }
         }
       }

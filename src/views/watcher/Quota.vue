@@ -19,12 +19,13 @@
           <v-tooltip
             :top="true"
             color="black"
+            :disabled="leave_type.desc ? false : true"
           >
             <template v-slot:activator="{ on: show_tooltip }">
               <div
                 class="leave-frame"
-                :class="selected_type == leave_type.generic_name ? 'leave-outlined' : ''"
-                @click="selected_type = leave_type.generic_name"
+                :class="selected_type == leave_type.code ? 'leave-outlined' : ''"
+                @click="selected_type = leave_type.code"
                 v-on="show_tooltip"
               >
                 <div class="leave-upper">
@@ -36,14 +37,14 @@
                       leave_type.color + '--text',
                     ]"
                   >
-                    <b>{{ leave_type.name }}</b>
+                    <b>{{ leave_type.code.toUpperCase() }}</b>
                   </div>
                 </div>
 
                 <div
                   class="leave-lower"
                 >
-                  {{ computed_quota[leave_type.generic_name] }}
+                  {{ computed_quotas[leave_type.code] }}
                 </div>
               </div>
             </template>
@@ -53,98 +54,98 @@
         </div>
       </div>
 
-    <div v-for="(months, type) in sorted_detail_quota" :key="type">
-      <div v-if="selected_type == type">
-        <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
-          <div class="quota-table-row">
-            <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
-            <div class="quota-table-value">{{ base_quota[type] }}</div>
-          </div>
-        </div>
-
-        <div v-for="(month, number) in months" :key="number">
-          <div v-if="month.length > 0">
-            <div
-              class="text-center mt-2 mb-2"
-              :class="number < 13 ? '' : 'mt-6'"
-            >
-              <b>{{ months_name[number] }}</b>
+      <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
+        <div v-if="selected_type == type">
+          <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
+            <div class="quota-table-row">
+              <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
+              <div class="quota-table-value">{{ base_quotas[type] }}</div>
             </div>
+          </div>
 
-            <div class="quota-table">
+          <div v-for="(month, number) in months" :key="number">
+            <div v-if="month.length > 0">
               <div
-                v-for="(cell, i) in month"
-                :key="i"
-                class="quota-table-parent"
+                class="text-center mt-2 mb-2"
+                :class="number < 13 ? '' : 'mt-6'"
               >
-                <div class="quota-table-row">
-                  <div
-                    class="d-flex flex-grow-1"
-                    v-if="number < 13"
-                  >
-                    <div class="quota-table-presence">
-                      {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
-                    </div>
+                <b>{{ months_name[number] }}</b>
+              </div>
 
-                    <div class="quota-table-presence">
-                      {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
-                    </div>
-
-                    <div class="quota-table-date">
-                      {{ $tool.format_date(cell['date']) }}
-                    </div>
-                  </div>
-
-
-                  <div
-                    class="d-flex flex-grow-1 justify-center align-center"
-                    v-else
-                  >
-                    <b>28 {{ lang.generic.absences[lg].toLowerCase() }}</b>
-                  </div>
-
-                  <div class="quota-table-value">
-                    <div 
-                      class="quota-table-value-color lighten-4 text--darken-4 m-1"
-                      :class="String(cell['count']).charAt(0) == '-' ? 'red red--text' : 'green green--text'"
+              <div class="quota-table">
+                <div
+                  v-for="(cell, i) in month"
+                  :key="i"
+                  class="quota-table-parent"
+                >
+                  <div class="quota-table-row">
+                    <div
+                      class="d-flex flex-grow-1"
+                      v-if="number < 13"
                     >
-                      {{ cell['count'] }}
+                      <div class="quota-table-presence">
+                        {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
+                      </div>
+
+                      <div class="quota-table-presence">
+                        {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
+                      </div>
+
+                      <div class="quota-table-date">
+                        {{ $tool.format_date(cell['date']) }}
+                      </div>
+                    </div>
+
+
+                    <div
+                      class="d-flex flex-grow-1 justify-center align-center"
+                      v-else
+                    >
+                      <b>28 {{ lang.generic.absences[lg].toLowerCase() }}</b>
+                    </div>
+
+                    <div class="quota-table-value">
+                      <div 
+                        class="quota-table-value-color lighten-4 text--darken-4 m-1"
+                        :class="String(cell['count']).charAt(0) == '-' ? 'red red--text' : 'green green--text'"
+                      >
+                        {{ cell['count'] }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div
-          class="quota-table mt-5 green lighten-3 green--text text--darken-4"
-          v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.generic_name == type).type)"
-        >
-          <div class="quota-table-row">
-            <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
-            <div class="quota-table-value">{{ obtained[type] }}</div>
+          <div
+            class="quota-table mt-5 green lighten-3 green--text text--darken-4"
+            v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code == type).type)"
+          >
+            <div class="quota-table-row">
+              <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
+              <div class="quota-table-value">{{ obtained[type] }}</div>
+            </div>
           </div>
-        </div>
 
-        <div
-          class="quota-table red lighten-3 red--text text--darken-4"
-          :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.generic_name == type).type) ? 'mt-2' : 'mt-5'"
-        >
-          <div class="quota-table-row">
-            <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>
-            <div class="quota-table-value">{{ Math.abs(took[type]) }}</div>
+          <div
+            class="quota-table red lighten-3 red--text text--darken-4"
+            :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code == type).type) ? 'mt-2' : 'mt-5'"
+          >
+            <div class="quota-table-row">
+              <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>
+              <div class="quota-table-value">{{ Math.abs(took[type]) }}</div>
+            </div>
           </div>
-        </div>
 
-        <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
-          <div class="quota-table-row">
-            <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
-            <div class="quota-table-value">{{ computed_quota[type] }}</div>
+          <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
+            <div class="quota-table-row">
+              <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
+              <div class="quota-table-value">{{ computed_quotas[type] }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   </transition>
 </div>
@@ -173,8 +174,8 @@ export default {
       team: Object(),
       app: Object(),
       profile: Object(),
-      base_quota: Array(),
-      computed_quota: Array(),
+      base_quotas: Array(),
+      computed_quotas: Array(),
       config: Object(),
       leave_config_dialog: false,
       leave_colors: [
@@ -196,7 +197,7 @@ export default {
         'blue-grey',
       ],
       selected_type: null,
-      sorted_detail_quota: Object(),
+      sorted_detailed_quotas: Object(),
       took: Object(),
       obtained: Object(),
       months_name: Object(),
@@ -213,36 +214,38 @@ export default {
 
     this.team = this.request.team
     this.app = this.request.app
-    this.base_quota = this.request.base_quota
-    this.computed_quota = this.request.computed_quota
-    this.detail_quota = this.request.detail_quota
+    this.base_quotas = this.request.base_quotas
+    this.computed_quotas = this.request.computed_quotas
+    this.detailed_quotas = this.request.detailed_quotas
     this.profile = this.request.profile
     this.config = this.request.config
-    
-    this.leaves_data = this.get_leaves_data()
-    this.selected_type = this.leaves_data[0]['generic_name']
 
-    for (let i = 0; i < 20; i++) {
-      this.base_quota['type_' + i] = Number(this.base_quota['type_' + i])
-      this.computed_quota['type_' + i] = Number(this.computed_quota['type_' + i])
+    this.leaves_data = this.config.leave_types
+    this.leaves_data = this.leaves_data.filter(l => !['recovery', 'presence'].includes(l.kind))
+    this.leaves_data.sort((a, b) => a.position - b.position)
+
+    this.selected_type = this.leaves_data[0]['code']
+
+    for (let code in this.base_quotas) {
+      this.base_quotas[code] = Number(this.base_quotas[code])
+      this.computed_quotas[code] = Number(this.computed_quotas[code])
     }
 
-
-    for (let type in this.detail_quota) {
-      this.sorted_detail_quota[type] = Object()
-      this.sorted_detail_quota[type]['13'] = Array()
+    for (let type in this.detailed_quotas) {
+      this.sorted_detailed_quotas[type] = Object()
+      this.sorted_detailed_quotas[type]['13'] = Array()
       this.obtained[type] = 0
       this.took[type] = 0
 
       for (let i = 1; i <= 13; i++) {
-        this.sorted_detail_quota[type][i] = Array()
+        this.sorted_detailed_quotas[type][i] = Array()
       }
 
-      this.detail_quota[type].sort((a, b) => {
+      this.detailed_quotas[type].sort((a, b) => {
         return new Date(b.date) + new Date(a.date)
       })
 
-      for (let cell of this.detail_quota[type]) {
+      for (let cell of this.detailed_quotas[type]) {
         let date = new Date(cell.date)
         let month = date.getMonth() + 1
 
@@ -255,11 +258,11 @@ export default {
         }
 
         if (date.getFullYear() > 1970) {
-          this.sorted_detail_quota[type][month].push(cell)
+          this.sorted_detailed_quotas[type][month].push(cell)
         }
 
         else {
-          this.sorted_detail_quota[type]['13'].push(cell)
+          this.sorted_detailed_quotas[type]['13'].push(cell)
         }
       }
 
@@ -291,24 +294,7 @@ export default {
   },
 
   methods: {
-    get_leaves_data() {
-      let leaves_data = Array()
 
-      for (let i = 0; i < this.config.leave_count; i++) {
-        if (!['presence', 'recovery', 'ignore'].includes(this.config['leave_' + i + '_type'])) {
-          leaves_data.push({
-            'generic_name': 'type_' + i,
-            'name': this.config['leave_' + i + '_name'],
-            'desc': this.config['leave_' + i + '_desc'],
-            'type': this.config['leave_' + i + '_type'],
-            'color': this.config['leave_' + i + '_color'],
-            'visible': this.config['leave_' + i + '_visible'],
-          })
-        }
-      }
-
-      return leaves_data
-    },
   },
 
   watch: {

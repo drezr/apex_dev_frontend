@@ -4,13 +4,14 @@
   <Profile :profile="profile" />
 
   <div
-    v-for="(leave_type, i) in parent.leaves_data.filter(l => l.visible && l.type != 'counter')"
+    v-for="(leave_type, i) in $current_component.config.leave_types.filter(l => l.visible && l.kind != 'counter')"
     :key="i"
   >
     <div class="leave-frame">
       <v-tooltip
         :top="true"
         color="black"
+        :disabled="!leave_type.desc"
       >
         <template v-slot:activator="{ on: show_tooltip }">
           <div class="leave-upper" v-on="show_tooltip">
@@ -22,7 +23,7 @@
                 leave_type.color + '--text'
               ]"
             >
-              <b>{{ leave_type.name }}</b>
+              <b>{{ !leave_type ? leave_type : leave_type.code.toUpperCase() }}</b>
             </div>
           </div>
         </template>
@@ -33,9 +34,10 @@
       <input
         type="number"
         class="leave-lower"
-        v-model="profile.quotas['type_' + leave_type['generic_name'].split('_')[1]]"
-        @input="update_leave(leave_type['generic_name'].split('_')[1])"
+        v-model="profile.quotas.find(q => q.code == leave_type['code']).value"
+        @input="update_leave(leave_type['code'])"
         onkeydown="return ![69, 107, 109].includes(event.keyCode)"
+        @focus="$event.target.select()"
       >  
     </div>
   </div>
@@ -60,10 +62,6 @@ export default {
       type: Object,
       required: true,
     },
-    parent: {
-      type: Object,
-      required: true,
-    },
   },
 
   data() {
@@ -82,12 +80,12 @@ export default {
   },
 
   methods: {
-    async update_leave(i) {
-      if (this.profile.quotas['type_' + i] == '') {
-        this.profile.quotas['type_' + i] = 0
-      }
+    async update_leave(code) {
+      let quota = this.profile.quotas.find(q => q.code == code)
 
-      this.profile.quotas['type_' + i] = Math.round((parseFloat(this.profile.quotas['type_' + i]) + Number.EPSILON) * 100) / 100
+      quota.value == '' ? quota.value = 0 : quota.value
+
+      quota.value = Math.round((parseFloat(quota.value) + Number.EPSILON) * 100) / 100
 
       if (!this.is_updating) {
         clearInterval(this.update_timer)
@@ -101,8 +99,8 @@ export default {
           'app_id': this.$current_app_id,
           'profile_id': this.profile.id,
           'year': this.$current_year,
-          'element_type': 'type_' + i,
-          'value': this.profile.quotas['type_' + i],
+          'element_type': code,
+          'value': quota.value,
         })
       }, 100)
     },

@@ -38,7 +38,7 @@
           <div class="mr-2">
             <div>
               <small>
-                {{ lang.generic.shift[lg] }} : {{ part.shift.shift }}
+                {{ lang.generic.shift[lg] }}: {{ part.shift.shift ? part.shift.shift : '---' }}
               </small>
             </div>
             <div class="white-space-pre">{{ part.work.description }}</div>

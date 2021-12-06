@@ -61,7 +61,7 @@
           v-for="(leave, i) in leaves"
           :key="i"
         >
-          <b>{{ leave.name.toUpperCase() }}</b>
+          <b>{{ leave.code.toUpperCase() }}</b>
         </td>
       </tr>
 
@@ -75,7 +75,7 @@
           ></v-progress-circular>
 
           <span v-if="!quota_loading">
-            {{quota[leave.generic_name]}}
+            {{quota[leave.code]}}
           </span>
         </td>
       </tr>
@@ -130,20 +130,10 @@ export default {
 
     leaves() {
       let config = this.$current_component.leave_config
-      let leaves = Array()
+      let leave_types = config.leave_types
+      let leaves = leave_types.filter(l => l.visible)
 
-      for (let i = 0; i < config.leave_count; i++) {
-        if (!['presence', 'recovery', 'ignore'].includes(config['leave_' + i + '_type']) && config['leave_' + i + '_visible']) {
-          leaves.push({
-            'generic_name': 'type_' + i,
-            'name': config['leave_' + i + '_name'],
-            'desc': config['leave_' + i + '_desc'],
-            'type': config['leave_' + i + '_type'],
-            'color': config['leave_' + i + '_color'],
-            'visible': config['leave_' + i + '_visible'],
-          })
-        }
-      }
+      leaves.sort((a, b) => a.position - b.position)
 
       return leaves.slice(0, 7)
     },

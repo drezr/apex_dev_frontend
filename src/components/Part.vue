@@ -21,7 +21,7 @@
     dark
   >
     <div class="ml-2">
-      <b>{{ lang.generic.shift[lg] }}: {{ self.shift.shift }}</b>
+      <b>{{ lang.generic.shift[lg] }}: {{ self.shift.shift ? self.shift.shift : '---' }}</b>
     </div>
 
     <div>

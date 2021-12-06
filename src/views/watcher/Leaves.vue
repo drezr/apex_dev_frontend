@@ -20,13 +20,12 @@
 
       <NavigationBar class="mb-6" />
 
-      <div v-if="config.leave_count > 0" class="d-flex justify-center mt-3">
+      <div v-if="config.leave_types.length > 0" class="d-flex justify-center mt-3">
         <div>
           <Leave
             v-for="(profile, i) in team.profiles"
             :key="i"
             :profile="profile"
-            :parent="$current_component"
             class="mb-1"
           ></Leave>
         </div>
@@ -43,114 +42,137 @@
 
   <CustomDialog
     :open="leave_config_dialog"
-    :width="900"
+    :width="950"
     :title_text="lang.views.watcher.leaves_config[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="leave_config_dialog = false"
   >
     <div class="mt-6">
-      <div class="text-center">
-        {{ lang.views.watcher.leaves_leave_count[lg] }}
-      </div>
-
-      <div class="d-flex justify-center mb-9">
-        <CustomButton
-          @click="update_leave_count('minus')"
-          :tooltip="lang.views.watcher.leaves_remove_leave_type[lg]"
-          :icon="'mdi-minus'"
-          :small_fab="true"
-          :disabled="config.leave_count == 0"
-        ></CustomButton>
-
-        <div class="text-h5 mx-3">{{ config.leave_count }}</div>
-
-        <CustomButton
-          @click="update_leave_count('plus')"
-          :tooltip="lang.views.watcher.leaves_add_leave_type[lg]"
-          :icon="'mdi-plus'"
-          :small_fab="true"
-          :disabled="config.leave_count == 20"
-        ></CustomButton>
-      </div>
-
-      <div
-        v-for="(index, i) in config.leave_count"
-        :key="i"
-        class="d-flex align-center mb-3"
+      <VueDraggable
+        v-model="config.leave_types"
+        @change="update_leave_types_position()"
+        :animation="100"
+        easing="cubic-bezier(1, 0, 0, 1)"
+        handle=".handle"
       >
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
+        <div
+          v-for="leave_type in config.leave_types"
+          :key="leave_type.id"
+          class="d-flex align-center mb-3"
+        >
+          <v-icon class="cursor-move handle mr-3 pink--text">
+            mdi-drag-horizontal-variant
+          </v-icon>
+
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <div
+                class="leave-color-circle"
+                :class="leave_type.color"
+                v-bind="attrs"
+                v-on="on"
+              ></div>
+            </template>
+
             <div
-              class="leave-color-circle"
-              :class="config['leave_' + i + '_color']"
-              v-bind="attrs"
-              v-on="on"
-            ></div>
-          </template>
+              class="d-flex flex-wrap white pa-1"
+              style="width: 154px; border: 1px rgba(0, 0, 0, 0.3) solid !important;"
+            >
+              <div
+                v-for="(color, x) in leave_colors"
+                :key="x"
+                class="leave-color-circle"
+                :class="[
+                  color,
+                  color == leave_type.color ? 'leave-color-circle-selected': '',
+                ]"
+                @click="set_leave_color(leave_type, color)"
+              ></div>
+            </div>
+          </v-menu>
 
-          <div
-            class="d-flex flex-wrap white pa-1"
-            style="width: 154px; border: 1px rgba(0, 0, 0, 0.3) solid !important;"
-          >
-            <div
-              v-for="(color, x) in leave_colors"
-              :key="x"
-              class="leave-color-circle"
-              :class="[
-                color,
-                color == config['leave_' + i + '_color'] ? 'leave-color-circle-selected': '',
-              ]"
-              @click="set_leave_color(color, i)"
-            ></div>
-          </div>
-        </v-menu>
+          <v-text-field
+            v-model="leave_type.code"
+            :label="lang.views.watcher.leaves_leave_name[lg]"
+            type="text"
+            class="mx-3"
+            outlined
+            hide-details
+            style="min-width: 120px; max-width: 120px; width: 120px;"
+            @input="send_update(leave_type), leave_type.code = leave_type.code.toUpperCase()"
+          />
 
-        <v-text-field
-          v-model="config['leave_' + i + '_name']"
-          :label="lang.views.watcher.leaves_leave_name[lg]"
-          type="text"
-          class="mx-3"
-          outlined
-          hide-details
-          style="min-width: 120px; max-width: 120px; width: 120px;"
-          @input="send_update"
+          <v-text-field
+            v-model="leave_type.desc"
+            :label="lang.views.watcher.leaves_leave_desc[lg]"
+            type="text"
+            class="mx-3"
+            outlined
+            hide-details
+            style="min-width: 290px; max-width: 290px; width: 310px;"
+            @input="send_update(leave_type)"
+          />
+
+          <v-select
+            v-model="leave_type.kind"
+            :items="leave_kinds"
+            item-text="name"
+            item-value="value"
+            :label="lang.views.watcher.leaves_leave_type[lg]"
+            outlined
+            hide-details
+            class="mx-3"
+            style="min-width: 190px; max-width: 190px; width: 190px;"
+            @change="update(leave_type)"
+          ></v-select>
+
+          <v-checkbox
+            v-model="leave_type.visible"
+            :label="lang.generic.visible[lg]"
+            class="mx-3"
+            hide-details
+            style="position: relative; top: -10px;"
+            :disabled="['presence', 'recovery', 'ignore'].includes(leave_type.kind) || leave_type.kind.includes('counter')"
+            @change="send_update(leave_type)"
+          ></v-checkbox>
+
+          <CustomButton
+            class="ml-3"
+            :icon="'mdi-delete'"
+            :small_fab="true"
+            :color="'red'"
+            :tooltip="lang.generic.delete[lg]"
+            @click="open_delete_leave_type_dialog(leave_type)"
+          />
+        </div>
+      </VueDraggable>
+
+      <div class="d-flex justify-center mt-9">
+        <CustomButton
+          :text="lang.views.watcher.leaves_add_leave_type[lg]"
+          :icon="'mdi-plus'"
+          :color="'green'"
+          :dark="!add_leave_type_loading"
+          :loading="add_leave_type_loading"
+          :disabled="add_leave_type_loading"
+          @click="add_leave_type"
         />
-
-        <v-text-field
-          v-model="config['leave_' + i + '_desc']"
-          :label="lang.views.watcher.leaves_leave_desc[lg]"
-          type="text"
-          class="mx-3"
-          outlined
-          hide-details
-          style="min-width: 310px; max-width: 310px; width: 310px;"
-          @input="send_update"
-        />
-
-        <v-select
-          v-model="config['leave_' + i + '_type']"
-          :items="leave_types"
-          item-text="name"
-          item-value="value"
-          :label="lang.views.watcher.leaves_leave_type[lg]"
-          outlined
-          hide-details
-          class="mx-3"
-          style="min-width: 190px; max-width: 190px; width: 190px;"
-          @change="update('type', i)"
-        ></v-select>
-
-        <v-checkbox
-          v-model="config['leave_' + i + '_visible']"
-          :label="lang.generic.visible[lg]"
-          class="mx-3"
-          hide-details
-          style="position: relative; top: -10px;"
-          :disabled="['counter', 'presence', 'recovery', 'ignore'].includes(config['leave_' + i + '_type'])"
-          @change="send_update"
-        ></v-checkbox>
       </div>
     </div>
+  </CustomDialog>
+
+  <CustomDialog
+    :open="delete_leave_type_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_leave_type_dialog = false"
+    @confirm="delete_leave_type()"
+  >
   </CustomDialog>
 </div>
 
@@ -183,6 +205,9 @@ export default {
       config: Object(),
       is_updating: false,
       update_timer: null,
+      add_leave_type_loading: false,
+      delete_leave_type_dialog: false,
+      selected_leave_type: null,
       leave_config_dialog: false,
       leave_colors: [
         'red',
@@ -217,13 +242,16 @@ export default {
     this.quotas = this.request.quotas
     this.config = this.request.config
 
+    this.config.leave_types.sort(
+      (a, b) => a.position - b.position)
+
     this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
     for (let profile of this.team.profiles) {
-      profile.quotas = this.quotas.find(l => l.profile == profile.id)
+      profile.quotas = this.quotas.filter(l => l.profile == profile.id)
 
-      for (let i = 0; i < 20; i++) {
-        profile.quotas['type_' + i] = Number(profile.quotas['type_' + i])
+      for (let quota of profile.quotas) {
+        quota.value = Number(quota.value)
       }
     }
 
@@ -231,24 +259,7 @@ export default {
   },
 
   computed: {
-    leaves_data() {
-      let leaves_data = Array()
-
-      for (let i = 0; i < this.config.leave_count; i++) {
-        leaves_data.push({
-          'generic_name': 'leave_' + i,
-          'name': this.config['leave_' + i + '_name'],
-          'desc': this.config['leave_' + i + '_desc'],
-          'type': this.config['leave_' + i + '_type'],
-          'color': this.config['leave_' + i + '_color'],
-          'visible': this.config['leave_' + i + '_visible'],
-        })
-      }
-
-      return leaves_data
-    },
-
-    leave_types() {
+    leave_kinds() {
       return [
         {'value': 'normal_leave', 'name': this.lang.generic.normal_leave[this.lg]},
         {'value': 'credit_day', 'name': this.lang.generic.credit_day[this.lg]},
@@ -271,39 +282,43 @@ export default {
   },
 
   methods: {
-    update_leave_count(action) {
-      if (action == 'minus') {
-        if (this.config.leave_count > 0) {
-          this.config.leave_count--
-        }
-      }
-
-      else if (action == 'plus') {
-        if (this.config.leave_count < 20) {
-          this.config.leave_count++
-        }
-      }
-
-      this.send_update()
+    open_delete_leave_type_dialog(leave_type) {
+      this.selected_leave_type = leave_type
+      this.delete_leave_type_dialog = true
     },
 
-    set_leave_color(color, i) {
-      this.config['leave_' + i + '_color'] = color
+    set_leave_color(leave_type, color) {
+      leave_type.color = color
 
-      this.send_update()
+      this.send_update(leave_type)
     },
 
-    update(field, i) {
-      let value = `leave_${i}_${field}`
-
-      if (field == 'type' && ['counter', 'presence', 'recovery', 'ignore'].includes(this.config[value])) {
-        this.config[`leave_${i}_visible`] = false
+    update(leave_type) {
+      if (leave_type.kind && (['presence', 'recovery', 'ignore'].includes(leave_type.kind) || leave_type.kind.includes('counter'))) {
+        leave_type.visible = false
       }
 
-      this.send_update()
+      this.send_update(leave_type)
     },
 
-    async send_update() {
+    async update_leave_types_position() {
+      let i = 0
+
+      for (let leave_type of this.config.leave_types) {
+        leave_type.position = i
+        i++
+      }
+
+      await this.$http.post('leaves', {
+        'action': 'update_leave_types_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': this.config.leave_types,
+      })
+    },
+
+    async send_update(leave_type) {
       if (!this.is_updating) {
         clearInterval(this.update_timer)
       }
@@ -314,9 +329,51 @@ export default {
           'view': this.$current_view,
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
-          'value': this.config,
+          'value': leave_type,
         })
-      }, 1000)
+      }, 100)
+    },
+
+    async add_leave_type() {
+      this.add_leave_type_loading = true
+
+      let request = await this.$http.post('leaves', {
+        'action': 'add_leave_type',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'year': this.$current_year,
+      })
+
+      let new_leave_type = request.new_leave_type
+      let new_quotas = request.new_quotas
+
+      this.config.leave_types.push(new_leave_type)
+
+      for (let profile of this.team.profiles) {
+        let new_quota = new_quotas.find(q => q.profile == profile.id)
+
+        profile.quotas.push(new_quota)
+      }
+
+      this.add_leave_type_loading = false
+    },
+
+    async delete_leave_type() {
+      this.config.leave_types = this.config.leave_types.filter(
+        l => l != this.selected_leave_type)
+
+      this.delete_leave_type_dialog = false
+
+      await this.$http.post('leaves', {
+        'action': 'delete_leave_type',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': this.selected_leave_type,
+      })
+
+      this.selected_leave_type = null
     },
   },
 
