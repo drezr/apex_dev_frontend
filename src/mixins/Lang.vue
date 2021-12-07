@@ -1319,6 +1319,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'leaves_remove_leave_type_warning': {
+              'fr': 'Attention, si vous supprimez ce type de congé, vous supprimerez églamenent les quotas associés des membres de l\'équipe.',
+              'nl': '',
+              'en': '',
+            },
             'leaves_add_leave_type': {
               'fr': 'Ajouter un type de congé',
               'nl': '',
