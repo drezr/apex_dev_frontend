@@ -26,7 +26,6 @@
             v-for="(profile, i) in team.profiles"
             :key="i"
             :profile="profile"
-            class="mb-1"
           ></Leave>
         </div>
       </div>
@@ -42,7 +41,7 @@
 
   <CustomDialog
     :open="leave_config_dialog"
-    :width="950"
+    :width="1040"
     :title_text="lang.views.watcher.leaves_config[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="leave_config_dialog = false"
@@ -67,9 +66,7 @@
           :text="lang.views.watcher.leaves_add_leave_type[lg]"
           :icon="'mdi-plus'"
           :color="'green'"
-          :dark="!add_leave_type_loading"
-          :loading="add_leave_type_loading"
-          :disabled="add_leave_type_loading"
+          :dark="true"
           @click="add_leave_type"
         />
       </div>
@@ -108,7 +105,6 @@ export default {
       config: Object(),
       is_updating: false,
       update_timer: null,
-      add_leave_type_loading: false,
       delete_leave_type_dialog: false,
       selected_leave_type: null,
       leave_config_dialog: false,
@@ -185,11 +181,6 @@ export default {
   },
 
   methods: {
-    open_delete_leave_type_dialog(leave_type) {
-      this.selected_leave_type = leave_type
-      this.delete_leave_type_dialog = true
-    },
-
     async update_leave_types_position() {
       let i = 0
 
@@ -208,28 +199,15 @@ export default {
     },
 
     async add_leave_type() {
-      this.add_leave_type_loading = true
-
-      let request = await this.$http.post('leaves', {
-        'action': 'add_leave_type',
-        'view': this.$current_view,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'year': this.$current_year,
+      this.config.leave_types.push({
+        'code': '',
+        'desc': '',
+        'kind': '',
+        'color': 'red',
+        'visible': false,
+        'config': this.config.id,
+        'position': this.config.leave_types.length,
       })
-
-      let new_leave_type = request.new_leave_type
-      let new_quotas = request.new_quotas
-
-      this.config.leave_types.push(new_leave_type)
-
-      for (let profile of this.team.profiles) {
-        let new_quota = new_quotas.find(q => q.profile == profile.id)
-
-        profile.quotas.push(new_quota)
-      }
-
-      this.add_leave_type_loading = false
     },
   },
 
