@@ -41,7 +41,7 @@
 
   <CustomDialog
     :open="leave_config_dialog"
-    :width="1040"
+    :width="1020"
     :title_text="lang.views.watcher.leaves_config[lg]"
     :title_icon="'mdi-tune-vertical'"
     @cancel="leave_config_dialog = false"
