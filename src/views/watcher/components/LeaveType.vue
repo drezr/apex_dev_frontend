@@ -46,8 +46,8 @@
       class="mx-3"
       outlined
       hide-details
-      style="min-width: 120px; max-width: 120px; width: 120px;"
-      @input="leave_type.code.toUpperCase()"
+      style="min-width: 120px; max-width: 120px; width: 120px; "
+      @input="leave_type.code = leave_type.code.toUpperCase()"
       :disabled="!edit_mode"
       :error="check_code"
       :autocomplete="Math.random()"
@@ -214,7 +214,7 @@ export default {
     },
 
     async create() {
-      await this.$http.post('leaves', {
+      let request = await this.$http.post('leaves', {
         'action': 'create_leave_type',
         'view': this.$current_view,
         'team_id': this.$current_team_id,
@@ -222,6 +222,13 @@ export default {
         'year': this.$current_year,
         'value': this.leave_type,
       })
+
+      this.leave_type.id = request.new_leave_type.id
+
+      for (let profile of this.$current_component.team.profiles) {
+        let quota = request.new_quotas.filter(q => q.profile == profile.id)
+        profile.quotas.push(quota)
+      }
     },
 
     async update() {

@@ -32,6 +32,7 @@
       </v-tooltip>
 
       <input
+        v-if="profile.quotas.find(q => q.code == leave_type['code'])"
         type="number"
         class="leave-lower"
         v-model="profile.quotas.find(q => q.code == leave_type['code']).value"

@@ -57,6 +57,7 @@
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2)}`"
         @click="set_current_position(0)"
+        autocomplete="off"
       />
 
       <input
@@ -72,6 +73,7 @@
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2) + 1}`"
         @click="set_current_position(1)"
+        autocomplete="off"
       />
       
       <div

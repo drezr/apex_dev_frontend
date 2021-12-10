@@ -187,7 +187,7 @@
     :move_window="true"
   >
     <div
-      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name)))"
+      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name) && c.visible))"
       :key="i"
       class="works-customize-row"
     >

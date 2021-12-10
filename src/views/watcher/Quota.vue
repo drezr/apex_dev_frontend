@@ -44,7 +44,7 @@
                 <div
                   class="leave-lower"
                 >
-                  {{ computed_quotas[leave_type.code] }}
+                  {{ computed_quotas[leave_type.code.toLowerCase()] }}
                 </div>
               </div>
             </template>
@@ -55,7 +55,7 @@
       </div>
 
       <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
-        <div v-if="selected_type == type">
+        <div v-if="selected_type.toLowerCase() == type">
           <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
             <div class="quota-table-row">
               <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
@@ -120,7 +120,7 @@
 
           <div
             class="quota-table mt-5 green lighten-3 green--text text--darken-4"
-            v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code == type).type)"
+            v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type)"
           >
             <div class="quota-table-row">
               <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
@@ -130,7 +130,7 @@
 
           <div
             class="quota-table red lighten-3 red--text text--darken-4"
-            :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code == type).type) ? 'mt-2' : 'mt-5'"
+            :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type) ? 'mt-2' : 'mt-5'"
           >
             <div class="quota-table-row">
               <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>

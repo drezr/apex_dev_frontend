@@ -75,7 +75,7 @@
           ></v-progress-circular>
 
           <span v-if="!quota_loading">
-            {{quota[leave.code]}}
+            {{ quota[leave.code.toLowerCase()] }}
           </span>
         </td>
       </tr>
