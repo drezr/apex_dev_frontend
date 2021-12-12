@@ -89,6 +89,7 @@
       :rules="email_rules"
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.username = profile.username"
+      @input="check_email_exist()"
     ></v-text-field>
 
     <div class="text-center" v-if="mode == 'edit'">
@@ -294,8 +295,20 @@
     <v-spacer></v-spacer>
 
     <CustomButton
-      v-if="mode == 'edit'"
+      v-if="mode == 'edit' && $logged_profile.is_staff"
       @click="delete_dialog = true"
+      :color="'red'"
+      :dark="true"
+      :icon="'mdi-delete'"
+      :text="lang.generic.delete[lg]"
+      :badge="true"
+      :badge_icon="'mdi-shield-account'"
+      class="mr-3"
+    ></CustomButton>
+
+    <CustomButton
+      v-if="mode == 'edit'"
+      @click="remove_dialog = true"
       :color="'purple'"
       :dark="true"
       :icon="'mdi-account-remove'"
@@ -343,7 +356,7 @@
 
 
   <CustomDialog
-    :open="delete_dialog"
+    :open="remove_dialog"
     :width="500"
     :title_text="lang.views.team.access_delete_dialog_title[lg]"
     :cancel_icon="'mdi-close'"
@@ -351,13 +364,27 @@
     :confirm_icon="'mdi-account-remove'"
     :confirm_text="lang.generic.confirm[lg]"
     :confirm_color="'purple darken-1'"
-    @cancel="delete_dialog = false"
+    @cancel="remove_dialog = false"
     @confirm="delete_link"
   >
     <v-alert type="info" class="mt-6" outlined>
       {{ lang.views.team.access_delete_dialog_warning[lg] }}
     </v-alert>
   </CustomDialog>
+
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-account-remove'"
+    :confirm_text="lang.generic.confirm[lg]"
+    :confirm_color="'red darken-1'"
+    @cancel="delete_dialog = false"
+    @confirm="delete_user"
+  ></CustomDialog>
 
 
   <CustomDialog
@@ -413,9 +440,12 @@ export default {
     return {
       copy: Object(),
       password_dialog: false,
+      remove_dialog: false,
       delete_dialog: false,
       create_dialog: false,
       send_password: false,
+      is_updating: false,
+      update_timer: null,
 
       not_empty_rule: [
         value => !!value || this.lang.generic.not_empty_field[this.lg],
@@ -446,10 +476,8 @@ export default {
   },
 
   computed: {
-/*
-For save button disabling
-*/
     can_save() {
+      // Save button disabling
       let is_name_empty = !this.copy.name || this.copy.name.length == 0
       let is_email_empty = !this.copy.username || this.copy.username.length == 0
       let is_email_not_valid = !this.$tool.is_valid_email(this.copy.username)
@@ -468,7 +496,18 @@ For save button disabling
     },
 
     delete_link() {
-      this.delete_dialog = false
+      this.remove_dialog = false
+      this.$emit('delete_link')
+      this.$emit('close')
+    },
+
+    async delete_user() {
+      await this.$http.post('team', {
+        'action': 'delete_user',
+        'team_id': this.$current_team_id,
+        'profile_id': this.profile.id,
+      })
+
       this.$emit('delete_link')
       this.$emit('close')
     },
@@ -480,6 +519,7 @@ For save button disabling
 
     create() {
       this.$emit('close')
+      this.copy.send_password = this.send_password
       this.$emit('create', this.copy)
     },
 
@@ -507,6 +547,23 @@ For save button disabling
       this.copy.link.watcher_is_printable = value
       this.copy.link.watcher_can_see_cells = value
       this.copy.link.watcher_can_see_quotas = value
+    },
+
+    async check_email_exist() {
+      if (!this.is_updating) {
+        clearInterval(this.update_timer)
+      }
+
+      this.update_timer = setTimeout(async () => {
+        let request = await this.$http.post('team', {
+          'action': 'check_email_exist',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'value': this.copy.username,
+        })
+
+        console.log(request)
+      }, 1000)
     },
   },
 

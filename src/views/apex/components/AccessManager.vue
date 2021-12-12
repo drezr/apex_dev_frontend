@@ -150,8 +150,15 @@ export default {
       console.log(profile)
     },
 
-    create_user(profile) {
-      console.log(profile)
+    async create_user(profile) {
+      let request = await this.$http.post('team', {
+        'action': 'create_user',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'value': profile,
+      })
+
+      this.profiles.push(request.profile)
     },
 
     open_profile_editor_dialog(profile) {
@@ -191,28 +198,27 @@ export default {
     get_dummy_profile() {
       return {
         'username': '',
-        'is_staff': false,
         'name': '',
         'phone': '',
         'ident': '',
         'grade': '',
         'field': '',
-        'user': null,
         'link':  {
           'is_manager': false,
+          'planner_is_editor': false,
+          'planner_is_user': false,
           'draft_is_editor': false,
           'draft_is_user': false,
           'draft_can_see_private': false,
           'radium_is_editor': false,
+          'watcher_is_user': false,
           'watcher_is_editor': false,
           'watcher_is_visible': false,
           'watcher_is_printable': false,
           'watcher_can_see_cells': false,
           'watcher_can_see_quotas': false,
           'watcher_color': 'blue',
-          'position': null,
-          'profile': null,
-          'team': null,
+          'team': this.$current_team_id,
         },
       }
     },
