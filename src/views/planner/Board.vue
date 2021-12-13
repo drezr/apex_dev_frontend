@@ -49,7 +49,7 @@
               <v-tooltip
                 top
                 color="black"
-                :disabled="folder.name.length == 0"
+                :disabled="folder.name && folder.name.length == 0"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-badge
@@ -453,11 +453,12 @@
         </v-menu>
 
         <v-text-field
-          v-model="folder.name"
           hide-details
           outlined
           class="mx-3"
           :label="lang.views.planner.folder_name[lg]"
+          :value="folder.name"
+          @input="update_folder(folder, $event)"
         />
 
         <CustomButton
@@ -549,6 +550,7 @@ export default {
       move_old_parent: null,
       move_new_parent: null,
       update_positions_timer: null,
+      update_folders_timer: null,
       folder_colors: [
         'red',
         'pink',
@@ -893,18 +895,53 @@ export default {
       profile.disabled = false
     },
 
-    add_folder() {
+    async add_folder() {
+      let request = await this.$http.post('board', {
+        'action': 'add_folder',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+      })
 
+      request.folder.children = Array()
+
+      this.folders.push(request.folder)
     },
 
-    update_folders_position() {
+    async update_folders_position() {
       for (let folder of this.folders) {
         folder.link.position = this.folders.indexOf(folder)
       }
+
+      await this.$http.post('board', {
+        'action': 'update_folders_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': this.folders,
+      })
     },
 
     set_folder_color(color, folder) {
       folder.color = color
+
+      this.update_folder(folder)
+    },
+
+    async update_folder(folder, event) {
+      clearInterval(this.update_folders_timer)
+
+      this.update_folders_timer = setTimeout(async () => {
+        folder.name = event ? event : folder.name
+
+        await this.$http.post('board', {
+          'action': 'update_folder',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'value': folder,
+        })
+      }, 200)
     },
 
     open_delete_folder_dialog(folder) {
@@ -912,14 +949,19 @@ export default {
       this.delete_folder_dialog = true
     },
 
-    delete_folder() {
+    async delete_folder() {
+      this.delete_folder_dialog = false
       this.folders = this.folders.filter(f => f.id !== this.deleting_folder.id)
 
-      for (let folder of this.folders) {
-        folder.link.position = this.folders.indexOf(folder)
-      }
+      await this.$http.post('board', {
+        'action': 'delete_foler',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_id': this.deleting_folder.id,
+      })
 
-      this.delete_folder_dialog = false
+      this.update_folders_position()
     },
   },
 
