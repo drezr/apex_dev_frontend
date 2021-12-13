@@ -25,6 +25,29 @@
       <small>{{ lang.views.team.access_warning_user_exists[lg] }}</small>
     </v-alert>
 
+    <v-alert
+      type="info"
+      prominent
+      class="mx-3"
+      outlined
+      dense
+      v-if="mode == 'create' && profiles_exist.length > 0"
+    >
+      <small>
+        {{ lang.views.team.access_info_profile_exists[lg] }}
+
+        <ul class="pt-3">
+          <li v-for="(pe, x) in profiles_exist" :key="x">
+            <b>{{ pe.name }}</b>
+            <span v-if="pe.ident"> ({{ pe.ident }})</span>
+            <span v-if="pe.teams.length > 0">
+              (<span v-for="(t, y) in pe.teams" :key="y">{{ t }}{{ pe.teams.length > 1 && pe.teams.length != y + 1 ? ', ' : '' }}</span>)
+            </span>
+          </li>
+        </ul>
+      </small>
+    </v-alert>
+
     <v-text-field
       outlined
       clearable
@@ -34,6 +57,7 @@
       :rules="not_empty_rule"
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.name = profile.name"
+      @input="check_profiles_exist()"
     ></v-text-field>
 
     <v-text-field
@@ -238,6 +262,22 @@
           </div>
 
           <v-checkbox
+            v-model="copy.link.watcher_is_visible"
+            :label="lang.views.team.access_watcher_is_visible[lg]"
+            :hint="lang.views.team.access_watcher_is_visible_hint[lg]"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-checkbox
+            v-model="copy.link.watcher_is_printable"
+            :label="lang.views.team.access_watcher_is_printable[lg]"
+            :hint="lang.views.team.access_watcher_is_printable_hint[lg]"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-divider class="mt-4"></v-divider>
+
+          <v-checkbox
             v-model="copy.link.watcher_is_editor"
             :label="lang.views.team.access_watcher_is_editor[lg]"
             :hint="lang.views.team.access_watcher_is_editor_hint[lg]"
@@ -272,20 +312,6 @@
             :disabled="copy.link.watcher_is_editor"
             persistent-hint
           ></v-checkbox>
-
-          <v-checkbox
-            v-model="copy.link.watcher_is_visible"
-            :label="lang.views.team.access_watcher_is_visible[lg]"
-            :hint="lang.views.team.access_watcher_is_visible_hint[lg]"
-            persistent-hint
-          ></v-checkbox>
-
-          <v-checkbox
-            v-model="copy.link.watcher_is_printable"
-            :label="lang.views.team.access_watcher_is_printable[lg]"
-            :hint="lang.views.team.access_watcher_is_printable_hint[lg]"
-            persistent-hint
-          ></v-checkbox>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -318,7 +344,7 @@
 
     <CustomButton
       v-if="mode == 'edit'"
-      @click="save"
+      @click="update"
       :color="'teal'"
       :dark="can_save"
       :icon="'mdi-content-save'"
@@ -444,16 +470,15 @@ export default {
       delete_dialog: false,
       create_dialog: false,
       send_password: false,
-      is_updating: false,
-      update_timer: null,
+      is_checking_email: false,
+      checking_email_timer: null,
+      email_exist: false,
+      is_checking_profiles: false,
+      checking_profiles_timer: null,
+      profiles_exist: Array(),
 
       not_empty_rule: [
         value => !!value || this.lang.generic.not_empty_field[this.lg],
-      ],
-
-      email_rules: [
-        value => !!value || this.lang.views.login.error_insert_email[this.lg],
-        value => this.$tool.is_valid_email(value) || this.lang.views.login.error_format_email[this.lg],
       ],
 
       watcher_colors: [
@@ -482,7 +507,15 @@ export default {
       let is_email_empty = !this.copy.username || this.copy.username.length == 0
       let is_email_not_valid = !this.$tool.is_valid_email(this.copy.username)
 
-      return !(is_name_empty || is_email_empty || is_email_not_valid)
+      return !(is_name_empty || is_email_empty || is_email_not_valid || (this.email_exist && this.profile.username != this.copy.username) || this.is_checking_email)
+    },
+
+    email_rules() {
+      return [
+        value => !!value || this.lang.views.login.error_insert_email[this.lg],
+        value => this.$tool.is_valid_email(value) || this.lang.views.login.error_format_email[this.lg],
+        !(this.email_exist && this.profile.username != this.copy.username) || this.lang.views.login.error_email_exist[this.lg],
+      ]
     },
   },
 
@@ -495,13 +528,22 @@ export default {
       this.password_dialog = false
     },
 
-    delete_link() {
+    async delete_link() {
       this.remove_dialog = false
+
+      await this.$http.post('team', {
+        'action': 'delete_link',
+        'team_id': this.$current_team_id,
+        'profile_id': this.profile.id,
+      })
+
       this.$emit('delete_link')
       this.$emit('close')
     },
 
     async delete_user() {
+      this.delete_dialog = false
+
       await this.$http.post('team', {
         'action': 'delete_user',
         'team_id': this.$current_team_id,
@@ -512,9 +554,9 @@ export default {
       this.$emit('close')
     },
 
-    save() {
+    update() {
       this.$emit('close')
-      this.$emit('save', this.copy)
+      this.$emit('update', this.copy)
     },
 
     create() {
@@ -550,11 +592,14 @@ export default {
     },
 
     async check_email_exist() {
-      if (!this.is_updating) {
-        clearInterval(this.update_timer)
+      clearInterval(this.checking_email_timer)
+      this.email_exist = false
+
+      if (!this.is_checking_email) {
+        this.is_checking_email = true
       }
 
-      this.update_timer = setTimeout(async () => {
+      this.checking_email_timer = setTimeout(async () => {
         let request = await this.$http.post('team', {
           'action': 'check_email_exist',
           'view': this.$current_view,
@@ -562,8 +607,33 @@ export default {
           'value': this.copy.username,
         })
 
-        console.log(request)
+        this.is_checking_email = false
+        this.email_exist = request.result
       }, 1000)
+    },
+
+    async check_profiles_exist() {
+      if (this.mode == 'create') {
+        clearInterval(this.checking_profiles_timer)
+
+        this.profiles_exist = Array()
+
+        if (!this.is_checking_profiles) {
+          this.is_checking_profiles = true
+        }
+
+        this.checking_profiles_timer = setTimeout(async () => {
+          let request = await this.$http.post('team', {
+            'action': 'check_profiles_exist',
+            'view': this.$current_view,
+            'team_id': this.$current_team_id,
+            'value': this.copy.name,
+          })
+
+          this.is_checking_profiles = false
+          this.profiles_exist = request.profiles
+        }, 1000)
+      }
     },
   },
 

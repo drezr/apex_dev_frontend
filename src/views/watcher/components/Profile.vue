@@ -9,7 +9,7 @@
     (!$has_xs(['watcher_can_see_quotas']) && profile.id != $logged_profile.id) ? 'pointer-events-none' : '',
   ]"
 >
-  <div v-if="!quota_toggled">
+  <div v-if="!quota_toggled" style="position: relative;">
     <div><b>{{ profile.name }}</b></div>
 
     <div class="profile-grade">
@@ -208,15 +208,13 @@ export default {
 }
 
 .profile-toggle {
-  max-width: 30px !important;
-  max-height: 30px !important;
-  min-width: 30px !important;
-  min-height: 30px !important;
-  margin-top: -85px;
-  margin-right: -30px;
-  position: relative;
-  top: 21px;
-  left: 167px;
+  position: absolute;
+  top: 43px;
+  left: 168px;
+  max-width: 29px !important;
+  max-height: 29px !important;
+  min-width: 29px !important;
+  min-height: 29px !important;
   border-color: rgba(255, 255, 255, 0);
 }
 

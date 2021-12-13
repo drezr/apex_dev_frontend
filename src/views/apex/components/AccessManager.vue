@@ -19,7 +19,7 @@
 
     <div class="d-flex align-center">
       <v-autocomplete
-        v-model="picked_profile"
+        v-model="picked_profiles"
         :items="all_profiles"
         item-text="name"
         item-value="id"
@@ -28,6 +28,7 @@
         small-chips
         hide-details
         deletable-chips
+        multiple
         :allow-overflow="false"
         :label="lang.views.team.access_add_existing_user[lg]"
         :no-data-text="lang.generic.no_result[lg]"
@@ -36,7 +37,8 @@
       <v-btn
         color="green"
         class="ml-3 white--text"
-        :disabled="!picked_profile"
+        :disabled="!picked_profiles"
+        @click="add_links"
       >
         <v-icon class="mr-3">mdi-account-arrow-left</v-icon>
         {{ lang.generic.add[lg] }}
@@ -88,7 +90,7 @@
       :mode="profile_editor_mode"
       @close="profile_editor_dialog = false"
       @delete_link="delete_link"
-      @save="save_user"
+      @update="update_user"
       @create="create_user"
     />
   </v-dialog>
@@ -121,7 +123,7 @@ export default {
       selected_profile: Object(),
       profile_editor_dialog: false,
       all_profiles: Array(),
-      picked_profile: null,
+      picked_profiles: Array(),
       profile_editor_mode: null,
     }
   },
@@ -142,12 +144,50 @@ export default {
   },
 
   methods: {
-    update_position() {
+    async update_position() {
+      for (let i in this.profiles) {
+        this.profiles[i].link.position = i
+      }
 
+      await this.$http.post('team', {
+        'action': 'update_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'value': this.profiles,
+      })
     },
 
-    save_user(profile) {
-      console.log(profile)
+    async update_user(copy) {
+      await this.$http.post('team', {
+        'action': 'update_user',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'value': copy,
+      })
+
+      let profile = this.profiles.find(p => p.id == copy.id)
+
+      for (let key in profile) {
+        profile[key] = copy[key]
+      }
+    },
+
+    async add_links() {
+      let request = await this.$http.post('team', {
+        'action': 'add_links',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'value': this.picked_profiles,
+      })
+
+      this.picked_profiles = Array()
+
+      for (let profile of request.profiles) {
+        this.profiles.push(profile)
+      }
+
+      this.set_disabled_profiles()
+      this.update_position()
     },
 
     async create_user(profile) {
@@ -159,6 +199,7 @@ export default {
       })
 
       this.profiles.push(request.profile)
+      this.set_disabled_profiles()
     },
 
     open_profile_editor_dialog(profile) {
@@ -181,6 +222,7 @@ export default {
       )
 
       this.set_disabled_profiles()
+      this.update_position()
     },
 
     set_disabled_profiles() {

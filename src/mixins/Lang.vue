@@ -743,6 +743,11 @@ export default {
               'nl': '',
               'en': '',
             },
+            'error_email_exist': {
+              'fr': 'Un profil utilise déjà cette adresse email.',
+              'nl': '',
+              'en': '',
+            },
             'error_insert_password': {
               'fr': 'Veuillez introduire un mot de passe.',
               'nl': '',
@@ -818,7 +823,7 @@ export default {
               'en': '',
             },
             'planner_desc': {
-              'fr': 'Planificateur de journées',
+              'fr': 'Planificateur de travail',
               'nl': '',
               'en': '',
             },
@@ -1080,6 +1085,11 @@ export default {
             },
             'access_confirm_create_user_send_password_hint': {
               'fr': 'L\'utilisateur recevera un mot de passe par email et pourra se connecter à Apex.',
+              'nl': '',
+              'en': '',
+            },
+            'access_info_profile_exists': {
+              'fr': 'Un ou plusieurs profil avec le même nom ont été trouvés. Êtes-vous sûr(e) qu\'il ne s\'agit pas d\'un des ces utilisateurs:',
               'nl': '',
               'en': '',
             },
