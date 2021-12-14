@@ -209,7 +209,7 @@
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
                 style="
-                  height: 100%;
+                  min-height: 82px;
                   position: relative;
                   width: calc(100% + 61px);
                   left: -61px;
