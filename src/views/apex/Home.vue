@@ -34,7 +34,11 @@
         </v-list>
       </v-card>
 
-      <v-card class="mx-auto my-6" max-width="600">
+      <v-card
+        class="mx-auto my-6"
+        max-width="600"
+        v-if="circles.length > 0"
+      >
         <v-toolbar color="teal" dark>
           <v-toolbar-title>
             {{ circles.length > 1 ? lang.views.home.my_circles[lg] : lang.views.home.my_circle[lg] }}
