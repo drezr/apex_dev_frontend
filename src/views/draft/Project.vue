@@ -10,7 +10,11 @@
       </div>
 
       <div class="project-title-chips">
-        <v-chip class="white--text grey darken-1" small>
+        <v-chip
+          v-if="project.date"
+          class="white--text grey darken-1"
+          small
+        >
           {{ $tool.format_date(project.date) }}
         </v-chip>
 
@@ -207,11 +211,13 @@
     :confirm_icon="'mdi-content-save'"
     :confirm_text="lang.generic.save[lg]"
     :confirm_color="'teal'"
+    :confirm_disabled="!edit_project_name || edit_project_name == ''"
     @confirm="edit_project"
   >
     <v-text-field
       v-model="edit_project_name"
       :label="lang.views.draft.project_name[lg]"
+      :error="!edit_project_name || edit_project_name == ''"
       outlined
       class="mt-6"
     ></v-text-field>

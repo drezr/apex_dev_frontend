@@ -71,7 +71,11 @@
                 {{ project.name }}
               </div>
 
-              <v-chip class="ml-1 white--text grey darken-3" small>
+              <v-chip
+                v-if="project.date"
+                class="ml-1 white--text grey darken-3"
+                small
+              >
                 {{ $tool.format_date(`${project.date}`) }}
               </v-chip>
             </router-link>
@@ -153,11 +157,13 @@
     :confirm_icon="'mdi-plus'"
     :confirm_text="lang.generic.create[lg]"
     :confirm_color="'green'"
+    :confirm_disabled="!new_project_name || new_project_name == ''"
     @confirm="create_project"
   >
     <v-text-field
       v-model="new_project_name"
       :label="lang.views.draft.project_name[lg]"
+      :error="!new_project_name || new_project_name == ''"
       outlined
       class="mt-6"
     ></v-text-field>
