@@ -158,6 +158,7 @@
                 :parent="self"
                 class="mx-3 mb-3"
                 :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+                :is_template="is_template"
               />
 
               <Note
@@ -166,6 +167,7 @@
                 :parent="self"
                 class="mx-3 mb-3"
                 :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+                :is_template="is_template"
               />
 
               <File

@@ -50,7 +50,7 @@
               class="projects-ongoing-project"
             >
               <CustomButton
-                :icon="'mdi-drag'"
+                :icon="'mdi-drag-horizontal-variant'"
                 :small_fab="true"
                 :text_color="'pink'"
                 :tooltip="lang.generic.move[lg]"
@@ -327,10 +327,25 @@ export default {
       return projects
     },
 
-    update_position() {
+    async update_position() {
+      let position_updates = Array()
+
       for (let project of this.ongoing) {
         project.link.position = this.ongoing.indexOf(project)
+
+        position_updates.push({
+          'project_id': project.id,
+          'position': project.link.position,
+        })
       }
+
+      await this.$http.post('projects', {
+        'action': 'update_project_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'position_updates': position_updates,
+      })
     },
 
     async create_project() {
@@ -344,7 +359,7 @@ export default {
         'value': {
           'name': this.new_project_name,
           'date': this.new_project_date,
-          'private': this.new_project_private,
+          'private': this.new_project_private ? this.new_project_private : false,
         },
       })
 

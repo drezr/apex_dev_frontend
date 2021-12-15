@@ -140,6 +140,11 @@ export default {
       type: Object,
       required: true,
     },
+    is_template: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
@@ -157,6 +162,10 @@ export default {
 
   computed: {
     edit_mode() {
+      if (this.is_template) {
+        return true
+      }
+      
       return this.$current_component.detail_edit_mode
     },
 

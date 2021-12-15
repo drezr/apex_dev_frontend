@@ -133,7 +133,6 @@
 
         <VueDraggable
           v-model="computed_tasks"
-          @change="update_position"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".handle"
@@ -353,6 +352,7 @@
       <v-alert
         outlined
         type="warning"
+        class="mt-6"
       >
         {{ lang.views.draft.delete_project_warning[lg] }}
       </v-alert>
@@ -425,7 +425,7 @@ export default {
     this.team = this.request.team
     this.app = this.request.app
     this.project = this.request.project
-    this.selected_template = this.request.app.selected_template
+    this.selected_template = this.request.app.template
 
     this.edit_project_name = this.$tool.deepcopy(this.project.name)
     this.edit_project_date = this.$tool.deepcopy(this.project.date)
@@ -627,12 +627,25 @@ export default {
   },
 
   methods: {
-    update_position() {
+    async update_templates_position() {
+      let position_updates = Array()
 
-    },
+      for (let template of this.app.children) {
+        template.link.position = this.ongoing.indexOf(template)
 
-    update_templates_position() {
+        position_updates.push({
+          'template_id': template.id,
+          'position': template.link.position,
+        })
+      }
 
+      await this.$http.post('templates', {
+        'action': 'update_templates_position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'position_updates': position_updates,
+      })
     },
 
     go_printable() {
@@ -653,7 +666,10 @@ export default {
       })
 
       let task = request.task
-      task.children = Array()
+
+      let children = this.$tool.get_fused_children(task)
+      children = this.$tool.deepcopy(children)
+      this.$set(task, 'children', children)
 
       this.project.children.push(task)
 
@@ -665,12 +681,23 @@ export default {
       this.add_loading = false
     },
 
-    add_template() {
+    async add_template() {
       this.add_template_loading = true
 
-      setTimeout(() => {
-        this.add_template_loading = false
-      }, 2000)
+      let request = await this.$http.post('element', {
+        'action': 'create',
+        'element_type': 'task',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.app.type,
+        'parent_id': this.app.id,
+      })
+
+      request.task.children = Array()
+      this.app.children.push(request.task)
+
+      this.add_template_loading = false
     },
 
     status_description(status) {
@@ -725,11 +752,11 @@ export default {
       if (!this.templates_loaded) {
         this.templates_loading = true
 
-        this.request = await this.$http.get('templates', {
+        let request = await this.$http.get('templates', {
           'app_id': this.$current_app_id,
         })
 
-        let children = this.$tool.get_fused_children(this.request.app)
+        let children = this.$tool.get_fused_children(request.app)
         children = this.$tool.deepcopy(children)
         this.$set(this.app, 'children', children)
 
@@ -738,7 +765,7 @@ export default {
       }
     },
 
-    toggle_template(template) {
+    async toggle_template(template) {
       if (this.selected_template == template.id) {
         this.selected_template = null
       }
@@ -746,6 +773,14 @@ export default {
       else {
         this.selected_template = template.id
       }
+
+      await this.$http.post('templates', {
+        'action': 'select_template',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': this.selected_template,
+      })
     },
   },
 
