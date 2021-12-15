@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading" class="project-printable-area">
-      <div class="d-flex flex-start align-center my-1 mx-3 text-h5">
+      <div class="d-flex justify-center my-1 mx-3 text-h5">
         {{ project.name }} -
         {{ $tool.format_date(project.date) }}
 
