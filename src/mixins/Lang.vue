@@ -1960,6 +1960,21 @@ export default {
               'nl': '',
               'en': 'public',
             },
+            'delete_project': {
+              'fr': 'Supprimer le projet',
+              'nl': '',
+              'en': 'Delete project',
+            },
+            'delete_project_warning': {
+              'fr': 'Attention, tous les éléments de ce projet seront supprimés de façon permanente.',
+              'nl': 'Warning, every elements in this project will be permanently deleted.',
+              'en': 'Delete project',
+            },
+            'delete_project_info': {
+              'fr': 'Si un projet est terminé, vous pouvez aussi l\'archiver. Vous concerverez ainsi le projet, mais il n\'apparaîtra plus dans la liste des projets en cours.',
+              'nl': 'If you no longer need this project, you can also archive it. This will keep the project, but it will no longer appear in the list of on going projects.',
+              'en': 'Delete project',
+            },
             'private_hint': {
               'fr': 'Seules les personnes autorisées peuvent consulter ce projet.',
               'nl': '',

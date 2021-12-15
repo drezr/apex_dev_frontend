@@ -246,7 +246,7 @@
       ></v-date-picker>
     </v-dialog>
 
-    <div class="mx-3 mt-6 mb-3">
+    <div class="mx-3 mt-6">
       <v-checkbox
         v-model="edit_project_private"
         :label="lang.views.draft.private[lg]"
@@ -261,6 +261,15 @@
         persistent-hint
       ></v-checkbox>
     </div>
+
+    <CustomButton
+      :color="'red'"
+      :icon="'mdi-delete'"
+      :dark="true"
+      :tooltip="lang.views.draft.delete_project[lg]"
+      style="position: relative; top: 64px;"
+      @click="delete_project_dialog = true"
+    />
   </CustomDialog>
 
 
@@ -325,6 +334,39 @@
       />
     </div>
   </CustomDialog>
+
+  <CustomDialog
+    :open="delete_project_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    :confirm_disabled="delete_loading"
+    :hide_action="delete_loading"
+    @cancel="delete_project_dialog = false"
+    @confirm="delete_project"
+  >
+    <div v-if="!delete_loading">
+      <v-alert
+        outlined
+        type="warning"
+      >
+        {{ lang.views.draft.delete_project_warning[lg] }}
+      </v-alert>
+
+      <v-alert
+        outlined
+        type="info"
+      >
+        {{ lang.views.draft.delete_project_info[lg] }}
+      </v-alert>
+    </div>
+
+    <Loader :size="100" :width="10" class="my-16" v-if="delete_loading" />
+  </CustomDialog>
 </div>
 
 </template>
@@ -363,6 +405,8 @@ export default {
       edit_project_date: null,
       edit_project_private: null,
       edit_project_archived: null,
+      delete_project_dialog: false,
+      delete_loading: false,
       templates_dialog: false,
       templates_loading: true,
       templates_loaded: false,
@@ -636,13 +680,43 @@ export default {
       else if (status == 'canceled') return this.lang.generic.canceled[this.lg]
     },
 
-    edit_project() {
+    async edit_project() {
       this.edit_dialog = false
+
+      await this.$http.post('projects', {
+        'action': 'update_project',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_id': this.project.id,
+        'value': {
+          'name': this.edit_project_name,
+          'date': this.edit_project_date,
+          'private': this.edit_project_private,
+          'archived': this.edit_project_archived,
+        },
+      })
 
       this.project.name = this.edit_project_name
       this.project.date = this.edit_project_date
       this.project.private = this.edit_project_private
       this.project.archived = this.edit_project_archived
+    },
+
+    async delete_project() {
+      this.delete_loading = true
+
+      await this.$http.post('projects', {
+        'action': 'delete_project',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_id': this.project.id,
+      })
+
+      setTimeout(() => {
+        this.$router.push({'path': `/team/${this.$current_team_id}/draft/${this.$current_app_id}/projects`})
+      }, 1000)
     },
 
     async open_templates_dialog() {

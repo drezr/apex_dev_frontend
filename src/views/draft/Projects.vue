@@ -333,14 +333,23 @@ export default {
       }
     },
 
-    create_project() {
+    async create_project() {
       this.create_dialog = false
 
-      console.log(this.new_project_name)
-      console.log(this.new_project_date)
+      let request = await this.$http.post('projects', {
+        'action': 'create_project',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': {
+          'name': this.new_project_name,
+          'date': this.new_project_date,
+          'private': this.new_project_private,
+        },
+      })
 
-      this.new_project_name = ''
-      this.new_project_date = ''
+      this.app.projects.push(request.project)
+      this.ongoing = this.get_ongoing()
     },
 
     get_route(project_id) {

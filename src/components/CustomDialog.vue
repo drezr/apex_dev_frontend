@@ -44,6 +44,7 @@
       <v-btn
         :color="cancel_color ? cancel_color : 'white'"
         @click="$emit('cancel')"
+        :disabled="cancel_disabled"
         text
       >
         <v-icon
@@ -152,6 +153,10 @@ export default {
       type: String,
       required: false,
     },
+    cancel_disabled: {
+      type: Boolean,
+      required: false,
+    }, 
     confirm_icon: {
       type: String,
       required: false,
