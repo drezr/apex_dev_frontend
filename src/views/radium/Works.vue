@@ -30,6 +30,9 @@
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-drag-button"
+          @start="is_moving = true"
+          @end="is_moving = false"
+          class="d-flex flex-column"
         >
           <Work
             v-for="work in filtered_works"
@@ -102,7 +105,7 @@
           class="mx-3"
           outlined
           hide-details
-          @input="update_config()"
+          @input="update_config();"
           :style="column.name == 'files' ? 'visibility: hidden;' : ''"
         />
 
@@ -272,6 +275,7 @@ export default {
       rerender_count: 0,
       config_is_updating: false,
       config_update_timer: null,
+      is_moving: false,
     }
   },
 

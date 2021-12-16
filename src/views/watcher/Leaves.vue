@@ -55,8 +55,8 @@
         handle=".handle"
       >
         <LeaveType
-          v-for="leave_type in config.leave_types"
-          :key="leave_type.id"
+          v-for="(leave_type, i) in config.leave_types"
+          :key="i"
           :leave_type="leave_type"
         />
       </VueDraggable>
@@ -147,7 +147,8 @@ export default {
     this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
     for (let profile of this.team.profiles) {
-      profile.quotas = this.quotas.filter(l => l.profile == profile.id)
+      let quotas = this.quotas.filter(l => l.profile == profile.id)
+      this.$set(profile, 'quotas', quotas)
 
       for (let quota of profile.quotas) {
         quota.value = Number(quota.value)

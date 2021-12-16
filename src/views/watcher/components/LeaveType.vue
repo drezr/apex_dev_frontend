@@ -226,7 +226,10 @@ export default {
       this.leave_type.id = request.new_leave_type.id
 
       for (let profile of this.$current_component.team.profiles) {
-        let quota = request.new_quotas.filter(q => q.profile == profile.id)
+        let quota = request.new_quotas.find(q => q.profile == profile.id)
+
+        quota.value = 0
+
         profile.quotas.push(quota)
       }
     },
@@ -256,6 +259,10 @@ export default {
           'app_id': this.$current_app_id,
           'value': this.leave_type,
         })
+
+        for (let profile of this.$current_component.team.profiles) {
+          profile.quotas = profile.quotas.filter(q => q.code != this.leave_type.code)
+        }
       }
     },
   },

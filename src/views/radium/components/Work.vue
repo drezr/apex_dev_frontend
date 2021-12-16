@@ -32,7 +32,11 @@
       class="work-column"
       :style="`min-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px; max-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px;`"
     >
-      <div class="work-column-title">
+      <div
+        class="work-column-title"
+        :class="!Array.isArray(self[column.name]) && column.name in self ? 'cursor-pointer' : ''"
+        @click="open_log_dialog(column.name)"
+      >
         <div
           v-if="i == 0 && $is_editor"
           class="work-drag-button pink"
@@ -70,7 +74,7 @@
 
 
 
-        <v-textarea
+<!--          <v-textarea
           v-if="!Array.isArray(self[column.name]) && column.name in self"
           v-model="self[column.name]"
           :rows="1"
@@ -81,9 +85,22 @@
           :style="`font-size: ${column.textsize}px;`"
           :disabled="!edit_mode"
           :background-color="edit_mode ? 'white' : 'transparent'"
-        />
+        /> -->
 
-        <CustomButton
+        <textarea
+          v-model="self[column.name]"
+          v-if="!Array.isArray(self[column.name]) && column.name in self"
+          @input="$event.target.style.height = `${Number(column.textsize) + 2}px`; $event.target.style.height = `${$event.target.scrollHeight}px`;"
+          style="resize: none; text-align: center; width: 100%; outline: none; margin: 15px 0;"
+          :style="`font-size: ${column.textsize}px; height: ${Number(column.textsize) + 2}px;`"
+          :disabled="!edit_mode"
+        ></textarea>
+
+
+
+
+
+<!--         <CustomButton
           v-if="!Array.isArray(self[column.name]) && column.name in self"
           class="work-log-button"
           :icon="'mdi-clock-time-four-outline'"
@@ -91,7 +108,7 @@
           :tooltip="lang.generic.log[lg]"
           :style="`left: ${column.width - 32}px;`"
           @click.native.stop.prevent="open_log_dialog(column.name)"
-        />
+        />  -->
 
 
 
@@ -634,56 +651,58 @@
     </div>
   </CustomDialog>
 
-  <CustomDialog
-    :open="log_dialog"
-    :width="1300"
-    :title_text="lang.views.radium.log_title[lg]"
-    :title_icon="'mdi-clock-time-four-outline'"
-    @cancel="log_dialog = false"
-  >
-    <Loader
-      :size="100"
-      :width="10"
-      :mt="120"
-      :mb="100"
-      v-if="log_dialog_loading"
-    />
+  <div v-if="log_dialog">
+    <CustomDialog
+      :open="log_dialog"
+      :width="1300"
+      :title_text="lang.views.radium.log_title[lg]"
+      :title_icon="'mdi-clock-time-four-outline'"
+      @cancel="log_dialog = false"
+    >
+      <Loader
+        :size="100"
+        :width="10"
+        :mt="120"
+        :mb="100"
+        v-if="log_dialog_loading"
+      />
 
-    <div class="mt-3" v-else>
-      <v-simple-table v-if="logs.length > 0">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">
-                {{ lang.generic.log_edited_by[lg] }}
-              </th>
-              <th class="text-left">
-                {{ lang.generic.log_new_value[lg] }}
-              </th>
-              <th class="text-left">
-                {{ lang.generic.log_old_value[lg] }}
-              </th>
-              <th class="text-left">
-                {{ lang.generic.log_datetime[lg] }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(log, i) in logs" :key="i">
-              <td><b>{{ log.author }}</b></td>
-              <td class="work-log-cell">{{ log.new_value }}</td>
-              <td class="work-log-cell">{{ log.old_value }}</td>
-              <td>{{ $tool.format_datetime(log.date) }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
+      <div class="mt-3" v-else>
+        <v-simple-table v-if="logs.length > 0">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  {{ lang.generic.log_edited_by[lg] }}
+                </th>
+                <th class="text-left">
+                  {{ lang.generic.log_new_value[lg] }}
+                </th>
+                <th class="text-left">
+                  {{ lang.generic.log_old_value[lg] }}
+                </th>
+                <th class="text-left">
+                  {{ lang.generic.log_datetime[lg] }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(log, i) in logs" :key="i">
+                <td><b>{{ log.author }}</b></td>
+                <td class="work-log-cell">{{ log.new_value }}</td>
+                <td class="work-log-cell">{{ log.old_value }}</td>
+                <td>{{ $tool.format_datetime(log.date) }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
 
-      <div class="pa-16 d-flex justify-center" v-else>
-        {{ lang.views.radium.log_no_log[lg] }}
+        <div class="pa-16 d-flex justify-center" v-else>
+          {{ lang.views.radium.log_no_log[lg] }}
+        </div>
       </div>
-    </div>
-  </CustomDialog>
+    </CustomDialog>
+  </div>
 
   <CustomDialog
     :open="message_dialog"
@@ -1063,16 +1082,18 @@ export default {
     },
 
     async open_log_dialog(field) {
-      this.log_dialog = true
-      this.log_dialog_loading = true
+      if (!Array.isArray(this.self[field]) && field in this.self) {
+        this.log_dialog = true
+        this.log_dialog_loading = true
 
-      this.request = await this.$http.get('logs', {
-        'work_id': this.self.id,
-        'field': field,
-      })
+        this.request = await this.$http.get('logs', {
+          'work_id': this.self.id,
+          'field': field,
+        })
 
-      this.logs = this.request.logs
-      this.log_dialog_loading = false
+        this.logs = this.request.logs
+        this.log_dialog_loading = false
+      }
     },
 
     add_to_message(event) {

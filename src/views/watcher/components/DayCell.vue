@@ -237,7 +237,7 @@ export default {
     },
 
     async get_object(event) {
-      if (!this.parent_cpnt.palette) {
+      if (!this.parent_cpnt.palette && this.date.cell.id) {
         event.target.select()
       }
 
@@ -252,7 +252,9 @@ export default {
             })
 
             for (let key in request.cell) {
-              this.date.cell[key] = request.cell[key]
+              if (!this.date.cell[key]) {
+                this.date.cell[key] = request.cell[key]
+              }
             }
 
             this.is_requesting = false
@@ -271,9 +273,11 @@ export default {
           await this.get_object()
         }
 
-        let color = this.$current_component.palette_color
+        setTimeout(() => {
+          let color = this.$current_component.palette_color
 
-        this.date.cell.color = color
+          this.date.cell.color = color
+        }, 100)
       }
     },
   },
