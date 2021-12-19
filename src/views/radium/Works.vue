@@ -27,8 +27,6 @@
         <VueDraggable
           v-model="filtered_works"
           @change="update_work_position"
-          :animation="100"
-          easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-drag-button"
           @start="is_moving = true"
           @end="is_moving = false"
