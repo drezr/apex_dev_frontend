@@ -5,12 +5,12 @@
     v-for="(field, column_name) in field_config"
     :key="column_name"
     v-model="self.extend[column_name]"
-    @input="parent_cpnt.set_textarea_height($event, column, 10)"
+    @input="parent_cpnt.set_textarea_height($event, column, 2)"
     :style="
-      parent_cpnt.get_textarea_style(column, 10) +
+      parent_cpnt.get_textarea_style(column, 2) +
       `width: ${field_config[column_name]['width']};`
     "
-    class="work-textarea"
+    class="work-textarea no-focus my-1"
   ></textarea>
 </div>
 
