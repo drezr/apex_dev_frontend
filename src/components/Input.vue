@@ -247,8 +247,6 @@ export default {
 
   methods: {
     update() {
-      console.log()
-
       if (!this.is_updating) {
         clearInterval(this.update_timer)
       }

@@ -53,7 +53,7 @@
     <img :src="$tool.get_logo('radium_50x50')" class="mr-6" />
 
     <div class="work-simple-description">
-      {{ self.work.description }}
+      {{ description }}
     </div>
   </v-card>
 
@@ -124,6 +124,12 @@ export default {
 
       return list
     },
+
+    description() {
+      let desc = this.self.work.work_fields.find(f => f.name == 'description')
+
+      return !desc ? '' : desc.value
+    }
   },
 
   methods: {

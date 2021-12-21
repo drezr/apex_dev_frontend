@@ -156,7 +156,7 @@
 import Part from '@/views/radium/components/Part.vue'
 
 export default {
-  name: 'WorkTable',
+  name: 'ShiftDetail',
 
   components: {
     Part,

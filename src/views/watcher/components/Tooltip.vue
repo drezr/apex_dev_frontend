@@ -41,7 +41,7 @@
                 {{ lang.generic.shift[lg] }}: {{ part.shift.shift ? part.shift.shift : '---' }}
               </small>
             </div>
-            <div class="white-space-pre">{{ part.work.description }}</div>
+            <div class="white-space-pre">{{ part.work.work_fields.find(f => f.name == 'description') ? part.work.work_fields.find(f => f.name == 'description').value : '' }}</div>
           </div>
         </div>
         

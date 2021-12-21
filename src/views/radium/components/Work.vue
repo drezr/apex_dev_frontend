@@ -50,13 +50,43 @@
         {{ lang.views.radium['column_title_' + column.name][lg] }}
       </div>
 
+
+
+      <!-- ############## Column Subtitles ############## -->
+
+      <div>
+        <div
+          v-if="['shifts', 'limits', 's460s'].includes(column.name)"
+          class="d-flex lighten-4"
+        >
+          <div class="work-drag-spacer" v-if="edit_mode"></div>
+
+          <div
+            class="work-column-subtitle"
+            v-for="(data, field) in table_configs[column.name]"
+            :key="field"
+            :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
+          >
+            {{ data.name }}
+          </div>
+
+          <div class="work-delete-spacer" v-if="edit_mode"></div>
+        </div>
+      </div>
+
+
+
+
+
+
+
       <div
         class="work-column-value"
         @click="value_click($event, column, self.columns[column.name])"
         @blur.capture="value_blur($event)"
         :class="[
           edit_mode ? 'white' : self.columns[column.name].bg_color,
-          !edit_mode && self.columns[column.name].fields.length > 0 && self.columns[column.name].fields[0].value ? 'lighten-4' : 'lighten-2 accent-1',
+          !edit_mode && self.columns[column.name].fields.length > 0 && (self.columns[column.name].fields[0].value || column.multiple) ? 'lighten-4' : 'lighten-2 accent-1',
           self.columns[column.name].clickable && !edit_mode ? 'work-column-value-clickable' : '',
           $current_component.palette && !edit_mode ? 'work-column-value-painter' : '',
         ]"
@@ -66,37 +96,37 @@
 
 
 
+        <!-- ############## Textarea ############## -->
+
+        <div v-if="!column.multiple" style="width: 100%;">
+          <div
+            v-for="(field, i) in self.columns[column.name].fields"
+            :key="i"
+            class="d-flex"
+          >
+            <textarea
+              v-model="field.value"
+              @input="set_textarea_height($event, column, 2)"
+              :style="get_textarea_style(column, 2)"
+              style="width: 100%;"
+              class="work-textarea my-2"
+              :class="field.text_color ? field.text_color + '--text text--darken-3' : ''"
+              :disabled="!edit_mode"
+            ></textarea>
+          </div>
+        </div>
+
+
+
+
+
         <!-- ############## Shifts ############## -->
 
-
-
-
-
         <div
-          v-if="column.name == 'shifts'"
+          v-else-if="column.name == 'shifts'"
           class="align-self-start"
+          style="width: 100%;"
         >
-          <div
-            class="d-flex lighten-4 align-self-start"
-            :class="get_column_color(column.name)"
-          >
-            <div class="work-drag-spacer" v-if="edit_mode"></div>
-
-            <div class="work-column-subtitle" style="width: 30%; max-width: 30%; overflow: hidden;">
-              {{ lang.generic.week[lg] }}
-            </div>
-
-            <div class="work-column-subtitle" style="width: 30%; max-width: 30%; overflow: hidden;">
-              {{ lang.generic.day[lg] }}
-            </div>
-
-            <div class="work-column-subtitle" style="width: 40%; max-width: 40%; overflow: hidden;">
-              {{ lang.generic.schedule[lg] }}
-            </div>
-
-            <div class="work-delete-spacer" v-if="edit_mode"></div>
-          </div>
-
           <VueDraggable
             v-model="self.shifts"
             @change="update_child_position('shifts')"
@@ -141,6 +171,8 @@
 
 
 
+        <!-- ############## Multiple ############## -->
+
         <VueDraggable
           v-else
           v-model="self.columns[column.name].fields"
@@ -149,9 +181,8 @@
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-row-drag"
           style="width: 100%;"
+          class="align-self-start"
         >
-
-
           <div
             v-for="(field, i) in self.columns[column.name].fields"
             :key="i"
@@ -171,18 +202,16 @@
 
 
 
+
             <!-- ############## Limits ############## -->
 
-
-
-
-            <Limit
+            <FieldTable
               v-if="column.name == 'limits'"
               :self="field"
               :column="column"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
-              class="work-row-field"
+              :config="limits_table_config"
             />
 
 
@@ -190,53 +219,48 @@
 
             <!-- ############## S460s ############## -->
 
-
-
-
-            <S460
+            <FieldTable
               v-if="column.name == 's460s'"
               :self="field"
               :column="column"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
-              class="work-row-field"
+              :config="s460s_table_config"
             />
 
 
-
-
-            <!-- ############## Textarea ############## -->
-
-
-
-
-            <textarea
-              v-if="!column.multiple"
-              v-model="field.value"
-              @input="set_textarea_height($event, column, 2)"
-              :style="get_textarea_style(column, 2)"
-              style="width: 100%;"
-              class="work-textarea my-2"
-              :class="field.text_color ? field.text_color + '--text text--darken-3' : ''"
-              :disabled="!edit_mode"
-            ></textarea>
 
 
 
             <div
               v-if="edit_mode && column.multiple"
               class="work-row-delete red"
-              @click="open_remove_child_dialog(field, 'limits')"
+              @click="open_remove_child_dialog(field, column.name)"
             >
               <v-icon color="white">mdi-delete</v-icon>
             </div>
 
 
-
-
           </div>
         </VueDraggable>
       </div>
+
+
+
+
+
+      <div
+        v-if="edit_mode && column.multiple"
+        class="work-add-button"
+        :class="add_loading ? 'work-add-button-disabled grey' : 'green'"
+        @click="add_child(column.name)"
+      >
+        <v-icon color="white" v-if="!add_loading">mdi-plus</v-icon>
+        <Loader :size="19" :width="3" :color="'white'" v-else />
+      </div>
+
+
+
     </div>
   </div>
 
@@ -244,10 +268,6 @@
 
 
   <!-- ############## Expand ############## -->
-
-
-
-
 
   <div class="work-expand" v-if="expanded">
     <div class="lighten-5 pb-3" :class="self.color">
@@ -318,7 +338,7 @@
         />
       </div>
 
-      <Table
+      <ShiftDetail
         :parent="self"
         :parent_cpnt="$current_instance"
       />
@@ -331,11 +351,7 @@
 
 
 
-<!-- ############## Dialogs ############## -->
-
-
-
-
+  <!-- ############## Dialogs ############## -->
 
   <CustomDialog
     :open="link_radiums_dialog"
@@ -538,18 +554,16 @@
 <script>
 
 import Shift from '@/views/radium/components/Shift.vue'
-import Limit from '@/views/radium/components/Limit.vue'
-import S460 from '@/views/radium/components/S460.vue'
-import Table from '@/views/radium/components/Table.vue'
+import ShiftDetail from '@/views/radium/components/ShiftDetail.vue'
+import FieldTable from '@/views/radium/components/FieldTable.vue'
 
 export default {
   name: 'Work',
 
   components: {
     Shift,
-    Limit,
-    S460,
-    Table,
+    ShiftDetail,
+    FieldTable,
   },
 
   props: {
@@ -564,7 +578,6 @@ export default {
       grab_cursor: 'grab',
       link_radiums_dialog: false,
       link_selected_radiums: Array(),
-      log_entries: Object(),
       log_dialog: false,
       log_dialog_loading: true,
       message_dialog: false,
@@ -572,10 +585,7 @@ export default {
       message_selected_radiums: Array(),
       message_preset: 0,
       remove_dialog: false,
-      add_shift_loading: false,
-      add_limit_loading: false,
-      add_s460_loading: false,
-      add_file_loading: false,
+      add_loading: false,
       remove_child_dialog: false,
       remove_child_type: null,
       remove_child_item: null,
@@ -593,10 +603,11 @@ export default {
     }
 
     this.self.work_fields.sort((a, b) => a.position - b.position)
-    this.original_self = this.$tool.deepcopy(this.self)
 
     let columns = this.get_columns()
     this.$set(this.self, 'columns', columns)
+
+    this.original_self = this.$tool.deepcopy(this.self)
   },
 
   computed: {
@@ -639,6 +650,97 @@ export default {
 
       return radiums
     },
+
+    table_configs() {
+      return {
+        'shifts': this.shifts_table_config,
+        'limits': this.limits_table_config,
+        's460s': this.s460s_table_config,
+      }
+    },
+
+    shifts_table_config() {
+      return {
+        'week': {
+          'name' : this.lang.generic.week[this.lg],
+          'width': '30%',
+        },
+        'day': {
+          'name' : this.lang.generic.day[this.lg],
+          'width': '30%',
+        },
+        'schedule': {
+          'name' : this.lang.generic.schedule[this.lg],
+          'width': '40%',
+        },
+      }
+    },
+
+    limits_table_config() {
+      return {
+        'from_line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '6%',
+        },
+        'from_station': {
+          'name' : this.lang.views.radium.station[this.lg],
+          'width': '18%',
+        },
+        'from_lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '5%',
+        },
+        'from_signal': {
+          'name' : this.lang.views.radium.signal[this.lg],
+          'width': '13%',
+        },
+        'from_pk': {
+          'name' : this.lang.views.radium.pk[this.lg],
+          'width': '8%',
+        },
+        'to_line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '6%',
+        },
+        'to_station': {
+          'name' : this.lang.views.radium.station[this.lg],
+          'width': '18%',
+        },
+        'to_lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '5%',
+        },
+        'to_signal': {
+          'name' : this.lang.views.radium.signal[this.lg],
+          'width': '13%',
+        },
+        'to_pk': {
+          'name' : this.lang.views.radium.pk[this.lg],
+          'width': '8%',
+        },
+      }
+    },
+
+    s460s_table_config() {
+      return {
+        'from_line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '21%',
+        },
+        'from_lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '15%',
+        },
+        'from_pk': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '32%',
+        },
+        'to_pk': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '32%',
+        },
+      }
+    },
   },
 
   methods: {
@@ -657,11 +759,25 @@ export default {
         let fields = this.self.work_fields.filter(
           f => f.name == column.name)
 
-        for (let field of fields) {
-          columns[column.name].bg_color = field.bg_color
-          columns[column.name].text_color = field.text_color
-          columns[column.name].is_edited = field.is_edited
-          columns[column.name].fields.push(field)
+        if (fields.length == 0 && !column.multiple) {
+          columns[column.name].fields.push({
+            'name': column.name,
+            'value': '',
+            'bg_color': '',
+            'text_color': '',
+            'is_edited': false,
+            'position': 0,
+            'work': this.self.id,
+          })
+        }
+
+        else {
+          for (let field of fields) {
+            columns[column.name].bg_color = field.bg_color
+            columns[column.name].text_color = field.text_color
+            columns[column.name].is_edited = field.is_edited
+            columns[column.name].fields.push(field)
+          }
         }
       }
 
@@ -669,13 +785,15 @@ export default {
     },
 
     set_textarea_height(event, column, extra_height) {
-      event.target.style.height = `${Number(column.textsize) + extra_height}px `
-      event.target.style.height = `${event.target.scrollHeight + 2}px `
+      event.target.style.height = `${Number(column.textsize) + ((extra_height * 2))}px `
+      event.target.style.height = `${event.target.scrollHeight}px `
     },
 
     get_textarea_style(column, extra_height) {
       return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize) + extra_height}px; `
+              height: ${Number(column.textsize) + (extra_height * 2)}px;
+              padding-top: ${extra_height}px;
+              padding-bottom: ${extra_height}px; `
     },
 
     get_column_color(field) {
@@ -749,6 +867,27 @@ export default {
       this.link_radiums_snackbar = true
     },
 
+    open_remove_child_dialog(child, type) {
+      this.remove_child_type = type
+      this.remove_child_item = child
+      this.remove_child_dialog = true
+    },
+
+    async open_log_dialog(column_name) {
+      if (!this.self.columns[column_name].multiple) {
+        this.log_dialog = true
+        this.log_dialog_loading = true
+
+        this.request = await this.$http.get('logs', {
+          'work_id': this.self.id,
+          'field': column_name,
+        })
+
+        this.logs = this.request.logs
+        this.log_dialog_loading = false
+      }
+    },
+
 
 
     // CRUD Methods
@@ -757,25 +896,89 @@ export default {
 
 
     async update() {
-/*      for (let key in this.self) {
-        if ((typeof this.self[key] === 'string' || this.self[key] == null) && this.self[key] != this.original_self[key]) {
-          this.log_entries[key] = this.self[key]
+      let updates = Array()
+      let logs = Array()
+      let osc = this.original_self.columns
+
+      for (let column_name in this.self.columns) {
+        let column = this.self.columns[column_name]
+
+        if (column.fields.length > 0) {
+          if (!column.multiple) {
+            let first_field = column.fields[0]
+            let new_value = first_field.value
+            let old_value = osc[column_name].fields[0].value
+
+            if (new_value != old_value) {
+              logs.push({
+                'field_id': first_field.id ? first_field.id : null,
+                'column_name': column_name,
+                'new_value': new_value,
+                'old_value': old_value,
+              })
+
+              updates.push({
+                'field_id': first_field.id ? first_field.id : null,
+                'column_name': column_name,
+                'new_value': new_value,
+              })
+            }
+          }
+
+          else {
+            for (let i in column.fields) {
+              let field = column.fields[i]
+              let old_field = osc[column_name].fields[i]
+              let is_updated = false
+
+              if (!old_field || field.value != old_field.value) {
+                is_updated = true
+              }
+
+              if (!is_updated) {
+                for (let key in field.extend) {
+                  if (field.extend[key] != old_field.extend[key]) {
+                    is_updated = true
+                    break
+                  }
+                }
+              }
+
+              if (is_updated) {
+                updates.push({
+                  'field_id': field.id ? field.id : null,
+                  'column_name': column_name,
+                  'new_value': field.value,
+                  'extend': field.extend,
+                })
+              }
+            }
+          }
         }
       }
-
-      this.original_self = this.$tool.deepcopy(this.self)
       
-      await this.$http.post('works', {
+      let request = await this.$http.post('works', {
         'action': 'update_work',
         'view': this.$current_view,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'element_type': 'work',
         'element_id': this.self.id,
-        'value': this.log_entries,
+        'value': {
+          'updates': updates,
+          'logs': logs,
+        },
       })
 
-      this.log_entries = Object()*/
+      for (let field of request.fields) {
+        for (let key in field) {
+          this.self.columns[field.name][key] = field[key]
+        }
+
+        // field.extend might not be reactive anymore
+      }
+
+      this.original_self = this.$tool.deepcopy(this.self)
     },
 
     async remove() {
@@ -805,7 +1008,7 @@ export default {
     },
 
     async add_child(type) {
-      this['add_' + type + '_loading'] = true
+      this.add_loading = true
 
       let request = await this.$http.post('works', {
         'action': 'create_child',
@@ -817,24 +1020,15 @@ export default {
         'parent_type': 'work',
       })
 
-      let element = request[type]
-      this.self[type + 's'].push(element)
+      if (type == 'shifts') {
+        this.self.shifts.push(request.child)
+      }
 
-      this['add_' + type + '_loading'] = false
-    },
+      else {
+        this.self.columns[type].fields.push(request.child)
+      }
 
-    async update_child(child) {
-      await this.$http.post('works', {
-        'action': 'update_child',
-        'view': this.$current_view,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'parent_type': this.self.type,
-        'parent_id': this.self.id,
-        'element_type': child.type,
-        'element_id': child.id,
-        'value': child,
-      })
+      this.add_loading = false
     },
 
     async update_child_position(type) {
@@ -864,7 +1058,16 @@ export default {
     },
 
     async remove_child() {
-      this.self[this.remove_child_type] = this.self[this.remove_child_type].filter(c => c.id !== this.remove_child_item.id)
+      if (this.remove_child_type == 'shifts') {
+        this.self.shifts = this.self.shifts.filter(s => this.remove_child_item.id != s.id)
+      }
+
+      else {
+        let fields = this.self.columns[this.remove_child_type].fields.filter(
+          f => f.id != this.remove_child_item.id)
+        this.self.columns[this.remove_child_type].fields = fields
+      }
+
       this.remove_child_dialog = false
 
       await this.$http.post('works', {
@@ -877,6 +1080,8 @@ export default {
         'element_type': this.remove_child_item.type,
         'element_id': this.remove_child_item.id,
       })
+
+      // this.update_child_position(this.remove_child_item.type)
     },
 
     send_message() {

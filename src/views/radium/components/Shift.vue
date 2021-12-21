@@ -1,6 +1,6 @@
 <template>
 
-<div class="shift-frame">
+<div class="shift-frame" style="width: 100%;">
   <div class="shift-cell" style="width: calc(30% - 1px);">
     <div
       class="d-flex justify-center align-center lighten-3"
@@ -55,7 +55,7 @@
       :append-icon="null"
       :disabled="!edit_mode"
       :background-color="edit_mode ? 'white' : ''"
-      @input="$emit('update')"
+      @input.native="set_shift($event.srcElement.value)"
     ></v-combobox>
 
     <div class="d-flex" style="width: 100%;">
@@ -79,7 +79,6 @@
       :first-day-of-week="1"
       locale="fr-fr"
       no-title
-      @change="$emit('update')"
     ></v-date-picker>
   </v-dialog>
 </div>
@@ -114,6 +113,7 @@ export default {
         '00-08',
       ],
       date_dialog: false,
+      update_timer: null,
     }
   },
 
@@ -183,7 +183,11 @@ export default {
 
     date() {
       return this.self.date
-    }
+    },
+
+    shift() {
+      return this.self.shift
+    },
   },
 
   methods: {
@@ -192,11 +196,38 @@ export default {
         this.date_dialog = true
       }
     },
+
+    async update() {
+      clearInterval(this.update_timer)
+
+      this.update_timer = setTimeout(async () => {
+        await this.$http.post('works', {
+          'action': 'update_shift',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'parent_type': this.parent.type,
+          'parent_id': this.parent.id,
+          'element_type': this.self.type,
+          'element_id': this.self.id,
+          'value': this.self,
+        })
+      }, 1000)
+    },
+
+    set_shift(shift) {
+      this.self.shift = shift
+    }
   },
 
   watch: {
     date() {
       this.date_dialog = false
+      this.update()
+    },
+
+    shift() {
+      this.update()
     },
   }
 }
