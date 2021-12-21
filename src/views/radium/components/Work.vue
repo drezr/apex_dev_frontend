@@ -602,6 +602,7 @@ export default {
       this.self.newly_created = false
     }
 
+    this.self.shifts.sort((a, b) => a.position - b.position)
     this.self.work_fields.sort((a, b) => a.position - b.position)
 
     let columns = this.get_columns()
@@ -800,9 +801,9 @@ export default {
       return !field ? '' : field.color
     },
 
-    value_click(event, column, field) {
-      if (!this.edit_mode && column.clickable && field.value) {
-          window.open(column.path + field.value)
+    value_click(event, column_config, column) {
+      if (!this.edit_mode && column_config.clickable && column.value) {
+          window.open(column_config.path + column.value)
       }
 
       if (this.edit_mode) {
@@ -820,7 +821,7 @@ export default {
       }
 
       if (this.$current_component.palette_mode == 'columns') {
-        this.set_color(field)
+        this.set_color(column)
       }
     },
 
@@ -829,7 +830,7 @@ export default {
       content.classList.remove('work-column-value-focused')
     },
 
-    set_color(field) {
+    async set_color(column) {
       let cc = this.$current_component
 
       if (cc.palette && cc.palette_mode == 'works') {
@@ -838,11 +839,17 @@ export default {
         this.update()
       }
 
-      else if (field && cc.palette && cc.palette_mode == 'columns') {
-        field.bg_color = cc.palette_color
+      else if (column && cc.palette && cc.palette_mode == 'columns') {
+        column.bg_color = cc.palette_color
 
         this.update()
       }
+
+/*      else if (column && cc.palette && cc.palette_mode == 'text') {
+        column.bg_color = cc.palette_color
+
+        this.update()
+      }*/
     },
 
     toggle_edit_mode() {
@@ -905,39 +912,38 @@ export default {
 
         if (column.fields.length > 0) {
           if (!column.multiple) {
-            let first_field = column.fields[0]
-            let new_value = first_field.value
-            let old_value = osc[column_name].fields[0].value
+            let old_field = osc[column_name].fields[0]
+            let new_field = column.fields[0]
 
-            if (new_value != old_value) {
-              logs.push({
-                'field_id': first_field.id ? first_field.id : null,
+            if (old_field.value != new_field.value) {
+              updates.push({
+                'field_id': new_field.id ? new_field.id : null,
                 'column_name': column_name,
-                'new_value': new_value,
-                'old_value': old_value,
+                'new_value': new_field.value,
               })
 
-              updates.push({
-                'field_id': first_field.id ? first_field.id : null,
+              logs.push({
+                'field_id': new_field.id ? new_field.id : null,
                 'column_name': column_name,
-                'new_value': new_value,
+                'new_value': new_field.value,
+                'old_value': old_field.value,
               })
             }
           }
 
           else {
             for (let i in column.fields) {
-              let field = column.fields[i]
+              let new_field = column.fields[i]
               let old_field = osc[column_name].fields[i]
               let is_updated = false
 
-              if (!old_field || field.value != old_field.value) {
+              if (!old_field || old_field.value != new_field.value) {
                 is_updated = true
               }
 
               if (!is_updated) {
-                for (let key in field.extend) {
-                  if (field.extend[key] != old_field.extend[key]) {
+                for (let key in new_field.extend) {
+                  if (new_field.extend[key] != old_field.extend[key]) {
                     is_updated = true
                     break
                   }
@@ -946,10 +952,10 @@ export default {
 
               if (is_updated) {
                 updates.push({
-                  'field_id': field.id ? field.id : null,
+                  'field_id': new_field.id ? new_field.id : null,
                   'column_name': column_name,
-                  'new_value': field.value,
-                  'extend': field.extend,
+                  'new_value': new_field.value,
+                  'extend': new_field.extend,
                 })
               }
             }
@@ -965,6 +971,7 @@ export default {
         'element_type': 'work',
         'element_id': this.self.id,
         'value': {
+          'color': this.self.color,
           'updates': updates,
           'logs': logs,
         },
@@ -1031,11 +1038,15 @@ export default {
       this.add_loading = false
     },
 
-    async update_child_position(type) {
+    async update_child_position(column_name) {
       let position_updates = Array()
       let i = 0
+      let list
 
-      for (let child of this.self[type]) {
+      if (column_name == 'shifts') list = this.self.shifts
+      else  list = this.self.columns[column_name].fields
+
+      for (let child of list) {
         child.position = i
         i++
 

@@ -1791,6 +1791,11 @@ export default {
               'nl': '',
               'en': 'Color columns',
             },
+            'paint_text': {
+              'fr': 'Colorer le texte',
+              'nl': '',
+              'en': 'Color text',
+            },
             'line': {
               'fr': 'Ligne',
               'nl': '',

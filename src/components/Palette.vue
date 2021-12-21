@@ -90,6 +90,10 @@ export default {
           'name': this.lang.views.radium.paint_columns[this.lg],
           'value': 'columns',
         },
+        {
+          'name': this.lang.views.radium.paint_text[this.lg],
+          'value': 'text',
+        },
       ]
     },
   },
