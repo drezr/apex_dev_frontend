@@ -1786,15 +1786,25 @@ export default {
               'nl': '',
               'en': 'Color works',
             },
-            'paint_columns': {
-              'fr': 'Colorer les colonnes',
+            'paint_columns_bg': {
+              'fr': 'Colorer la couleur de fond des colonnes',
               'nl': '',
-              'en': 'Color columns',
+              'en': 'Color columns background',
             },
-            'paint_text': {
-              'fr': 'Colorer le texte',
+            'paint_columns_text': {
+              'fr': 'Colorer le texte des colonnes',
               'nl': '',
-              'en': 'Color text',
+              'en': 'Color columns text',
+            },
+            'paint_rows_bg': {
+              'fr': 'Colorer la couleur de fond des lignes',
+              'nl': '',
+              'en': 'Color row background',
+            },
+            'paint_rows_text': {
+              'fr': 'Colorer le texte des lignes',
+              'nl': '',
+              'en': 'Color row text',
             },
             'line': {
               'fr': 'Ligne',

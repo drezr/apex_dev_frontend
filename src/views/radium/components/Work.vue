@@ -207,6 +207,7 @@
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="limits_table_config"
+              @update="update()"
             />
 
 
@@ -221,6 +222,7 @@
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="s460s_table_config"
+              @update="update()"
             />
 
 
@@ -800,7 +802,7 @@ export default {
         }
       }
 
-      if (['columns', 'text'].includes(this.$current_component.palette_mode)) {
+      if (['columns_bg', 'columns_text'].includes(this.$current_component.palette_mode)) {
         this.set_color(column)
       }
     },
@@ -815,19 +817,16 @@ export default {
 
       if (cc.palette && cc.palette_mode == 'works') {
         this.self.color = cc.palette_color
-
         this.update()
       }
 
-      else if (column && cc.palette && cc.palette_mode == 'columns') {
+      else if (column && cc.palette && cc.palette_mode == 'columns_bg') {
         column.bg_color = cc.palette_color
-
         this.update()
       }
 
-      else if (column && cc.palette && cc.palette_mode == 'text') {
+      else if (column && cc.palette && cc.palette_mode == 'columns_text') {
         column.text_color = cc.palette_color
-
         this.update()
       }
     },
@@ -1337,6 +1336,7 @@ export default {
 
 .work-textarea:disabled {
   color: black;
+  cursor: text;
 }
 
 </style>

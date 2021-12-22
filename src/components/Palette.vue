@@ -87,12 +87,20 @@ export default {
           'value': 'works',
         },
         {
-          'name': this.lang.views.radium.paint_columns[this.lg],
-          'value': 'columns',
+          'name': this.lang.views.radium.paint_columns_bg[this.lg],
+          'value': 'columns_bg',
         },
         {
-          'name': this.lang.views.radium.paint_text[this.lg],
-          'value': 'text',
+          'name': this.lang.views.radium.paint_columns_text[this.lg],
+          'value': 'columns_text',
+        },
+        {
+          'name': this.lang.views.radium.paint_rows_bg[this.lg],
+          'value': 'rows_bg',
+        },
+        {
+          'name': this.lang.views.radium.paint_rows_text[this.lg],
+          'value': 'rows_text',
         },
       ]
     },
