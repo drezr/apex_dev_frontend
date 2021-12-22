@@ -67,14 +67,14 @@
     :move_window="true"
   >
     <VueDraggable
-      v-model="columns"
+      v-model="column_configs"
       @change="update_columns"
       :animation="100"
       easing="cubic-bezier(1, 0, 0, 1)"
       handle=".cursor-move"
     >
       <div
-        v-for="(column, i) in columns"
+        v-for="(column, i) in column_configs"
         :key="i"
         class="works-customize-row"
       >
@@ -188,7 +188,7 @@
     :move_window="true"
   >
     <div
-      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name) && c.visible))"
+      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(column_configs.filter(c => !excluded_filters.includes(c.name) && c.visible))"
       :key="i"
       class="works-customize-row"
     >
@@ -254,7 +254,7 @@ export default {
       app: Object(),
       config: Object(),
       works: Array(),
-      columns: Array(),
+      column_configs: Array(),
       messages: Array(),
       messages_loading: true,
       messages_dialog: false,
@@ -289,7 +289,7 @@ export default {
     this.app = this.request.app
     this.config = this.request.config
     this.works = this.request.works
-    this.columns = this.get_columns()
+    this.column_configs = this.get_column_configs()
 
     this.filtered_works = this.get_filtered_works()
 
@@ -368,7 +368,7 @@ export default {
       })
     },
 
-    get_columns() {
+    get_column_configs() {
       let columns = this.config.columns.filter(
         c => !c.name.includes('printable_'))
 
@@ -380,7 +380,7 @@ export default {
     update_columns() {
       let i = 0
 
-      for (let column of this.columns) {
+      for (let column of this.column_configs) {
         column.position = i
 
         i++
@@ -401,7 +401,7 @@ export default {
           'team_id': this.$current_team_id,
           'app_id': this.$current_app_id,
           'element_id': this.config.id,
-          'value': this.columns,
+          'value': this.column_configs,
         })
       }, 1000)
     },

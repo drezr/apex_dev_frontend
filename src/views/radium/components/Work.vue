@@ -25,15 +25,15 @@
     </div>
 
     <div
-      v-for="(column, i) in columns"
+      v-for="(column_config, i) in column_configs"
       :key="i"
       class="work-column"
-      :style="`min-width: ${Number(column.width) + (edit_mode && column.multiple && column.name != 'files' ? 70 : 0)}px; max-width: ${Number(column.width) + (edit_mode && column.multiple && column.name != 'files' ? 70 : 0)}px;`"
+      :style="`min-width: ${Number(column_config.width) + (edit_mode && column_config.multiple && column_config.name != 'files' ? 70 : 0)}px; max-width: ${Number(column_config.width) + (edit_mode && column_config.multiple && column_config.name != 'files' ? 70 : 0)}px;`"
     >
       <div
         class="work-column-title"
-        :class="!column.multiple ? 'cursor-pointer' : ''"
-        @click="open_log_dialog(column.name)"
+        :class="!column_config.multiple ? 'cursor-pointer' : ''"
+        @click="open_log_dialog(column_config.name)"
       >
         <div
           v-if="i == 0 && $is_editor"
@@ -47,7 +47,7 @@
           <v-icon size="16" color="white">mdi-arrow-split-horizontal</v-icon>
         </div>
 
-        {{ lang.views.radium['column_title_' + column.name][lg] }}
+        {{ lang.views.radium['column_title_' + column_config.name][lg] }}
       </div>
 
 
@@ -56,14 +56,14 @@
 
       <div>
         <div
-          v-if="['shifts', 'limits', 's460s'].includes(column.name)"
+          v-if="['shifts', 'limits', 's460s'].includes(column_config.name)"
           class="d-flex lighten-4"
         >
           <div class="work-drag-spacer" v-if="edit_mode"></div>
 
           <div
             class="work-column-subtitle"
-            v-for="(data, field) in table_configs[column.name]"
+            v-for="(data, field) in table_configs[column_config.name]"
             :key="field"
             :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
           >
@@ -82,12 +82,12 @@
 
       <div
         class="work-column-value"
-        @click="value_click($event, column, self.columns[column.name])"
+        @click="value_click($event, column_config, self.columns[column_config.name])"
         @blur.capture="value_blur($event)"
         :class="[
-          edit_mode ? 'white' : self.columns[column.name].bg_color,
-          !edit_mode && self.columns[column.name].fields.length > 0 && (self.columns[column.name].fields[0].value || column.multiple) ? 'lighten-4' : 'lighten-2 accent-1',
-          self.columns[column.name].clickable && !edit_mode ? 'work-column-value-clickable' : '',
+          edit_mode ? 'white' : self.columns[column_config.name].bg_color,
+          !edit_mode && self.columns[column_config.name].value || self.columns[column_config.name].rows.length > 0 ? 'lighten-4' : 'lighten-2 accent-1',
+          self.columns[column_config.name].clickable && !edit_mode ? 'work-column-value-clickable' : '',
           $current_component.palette && !edit_mode ? 'work-column-value-painter' : '',
         ]"
       >
@@ -98,22 +98,16 @@
 
         <!-- ############## Textarea ############## -->
 
-        <div v-if="!column.multiple" style="width: 100%;">
-          <div
-            v-for="(field, i) in self.columns[column.name].fields"
-            :key="i"
-            class="d-flex"
-          >
-            <textarea
-              v-model="field.value"
-              @input="set_textarea_height($event, column, 2)"
-              :style="get_textarea_style(column, 2)"
-              style="width: 100%;"
-              class="work-textarea my-2"
-              :class="field.text_color ? field.text_color + '--text text--darken-3' : ''"
-              :disabled="!edit_mode"
-            ></textarea>
-          </div>
+        <div v-if="!column_config.multiple" style="width: 100%;">
+          <textarea
+            v-model="self.columns[column_config.name].value"
+            @input="set_textarea_height($event, column_config, 2)"
+            :style="get_textarea_style(column_config, 2)"
+            style="width: 100%;"
+            class="work-textarea my-2 text--accent-4"
+            :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
+            :disabled="!edit_mode"
+          ></textarea>
         </div>
 
 
@@ -123,7 +117,7 @@
         <!-- ############## Shifts ############## -->
 
         <div
-          v-else-if="column.name == 'shifts'"
+          v-else-if="column_config.name == 'shifts'"
           class="align-self-start"
           style="width: 100%;"
         >
@@ -153,7 +147,7 @@
               <Shift
                 :self="shift"
                 :parent="self"
-                :column="column"
+                :column="column_config"
                 :edit_mode="edit_mode"
               />
 
@@ -175,8 +169,8 @@
 
         <VueDraggable
           v-else
-          v-model="self.columns[column.name].fields"
-          @change="update_child_position(column.name)"
+          v-model="self.columns[column_config.name].rows"
+          @change="update_child_position(column_config.name)"
           :animation="100"
           easing="cubic-bezier(1, 0, 0, 1)"
           handle=".work-row-drag"
@@ -184,13 +178,13 @@
           class="align-self-start"
         >
           <div
-            v-for="(field, i) in self.columns[column.name].fields"
+            v-for="(row, i) in self.columns[column_config.name].rows"
             :key="i"
             class="d-flex"
           >
             <div
               class="work-row-drag pink"
-              v-if="edit_mode && column.multiple"
+              v-if="edit_mode && column_config.multiple"
               :style="`cursor: ${grab_cursor};`"
               @mousedown="grab_cursor = 'grabbing'"
               @mouseup="grab_cursor = 'grab'"
@@ -205,10 +199,11 @@
 
             <!-- ############## Limits ############## -->
 
-            <FieldTable
-              v-if="column.name == 'limits'"
-              :self="field"
-              :column="column"
+            <WorkRow
+              v-if="column_config.name == 'limits'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="limits_table_config"
@@ -219,10 +214,10 @@
 
             <!-- ############## S460s ############## -->
 
-            <FieldTable
-              v-if="column.name == 's460s'"
-              :self="field"
-              :column="column"
+            <WorkRow
+              v-if="column_config.name == 's460s'"
+              :self="row"
+              :column="column_config"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="s460s_table_config"
@@ -233,9 +228,9 @@
 
 
             <div
-              v-if="edit_mode && column.multiple"
+              v-if="edit_mode && column_config.multiple"
               class="work-row-delete red"
-              @click="open_remove_child_dialog(field, column.name)"
+              @click="open_remove_child_dialog(row, column_config.name)"
             >
               <v-icon color="white">mdi-delete</v-icon>
             </div>
@@ -250,10 +245,10 @@
 
 
       <div
-        v-if="edit_mode && column.multiple"
+        v-if="edit_mode && column_config.multiple"
         class="work-add-button"
         :class="add_loading ? 'work-add-button-disabled grey' : 'green'"
-        @click="add_child(column.name)"
+        @click="add_child(column_config.name)"
       >
         <v-icon color="white" v-if="!add_loading">mdi-plus</v-icon>
         <Loader :size="19" :width="3" :color="'white'" v-else />
@@ -555,7 +550,7 @@
 
 import Shift from '@/views/radium/components/Shift.vue'
 import ShiftDetail from '@/views/radium/components/ShiftDetail.vue'
-import FieldTable from '@/views/radium/components/FieldTable.vue'
+import WorkRow from '@/views/radium/components/WorkRow.vue'
 
 export default {
   name: 'Work',
@@ -563,7 +558,7 @@ export default {
   components: {
     Shift,
     ShiftDetail,
-    FieldTable,
+    WorkRow,
   },
 
   props: {
@@ -587,7 +582,7 @@ export default {
       remove_dialog: false,
       add_loading: false,
       remove_child_dialog: false,
-      remove_child_type: null,
+      remove_child_column_name: null,
       remove_child_item: null,
       link_radiums_snackbar: false,
       link_radiums_timeout: 4000,
@@ -603,7 +598,11 @@ export default {
     }
 
     this.self.shifts.sort((a, b) => a.position - b.position)
-    this.self.work_fields.sort((a, b) => a.position - b.position)
+    this.self.work_columns.sort((a, b) => a.position - b.position)
+
+    for (let column of this.self.work_columns) {
+      column.rows.sort((a, b) => a.position - b.position)
+    }
 
     let columns = this.get_columns()
     this.$set(this.self, 'columns', columns)
@@ -612,8 +611,8 @@ export default {
   },
 
   computed: {
-    columns() {
-      return this.$current_component.columns.filter(c => c.visible)
+    column_configs() {
+      return this.$current_component.column_configs.filter(c => c.visible)
     },
 
     message_presets() {
@@ -748,36 +747,21 @@ export default {
     get_columns() {
       let columns = Object()
 
-      for (let column of this.$current_component.columns) {
-        columns[column.name] = {
-          'multiple': column.multiple,
-          'bg_color': null,
-          'text_color': null,
-          'is_edited': false,
-          'fields' : Array(),
-        }
+      for (let column_config of this.$current_component.column_configs) {
+        let column = this.self.work_columns.find(
+          c => c.name == column_config.name)
 
-        let fields = this.self.work_fields.filter(
-          f => f.name == column.name)
-
-        if (fields.length == 0 && !column.multiple) {
-          columns[column.name].fields.push({
-            'name': column.name,
-            'value': '',
-            'bg_color': '',
-            'text_color': '',
-            'is_edited': false,
-            'position': 0,
-            'work': this.self.id,
-          })
+        if (column) {
+          columns[column_config.name] = column
         }
 
         else {
-          for (let field of fields) {
-            columns[column.name].bg_color = field.bg_color
-            columns[column.name].text_color = field.text_color
-            columns[column.name].is_edited = field.is_edited
-            columns[column.name].fields.push(field)
+          columns[column_config.name] = {
+            'name': column_config.name,
+            'bg_color': null,
+            'text_color': null,
+            'is_edited': false,
+            'rows' : Array(),
           }
         }
       }
@@ -795,10 +779,6 @@ export default {
               height: ${Number(column.textsize) + (extra_height * 2)}px;
               padding-top: ${extra_height}px;
               padding-bottom: ${extra_height}px; `
-    },
-
-    get_column_color(field) {
-      return !field ? '' : field.color
     },
 
     value_click(event, column_config, column) {
@@ -820,7 +800,7 @@ export default {
         }
       }
 
-      if (this.$current_component.palette_mode == 'columns') {
+      if (['columns', 'text'].includes(this.$current_component.palette_mode)) {
         this.set_color(column)
       }
     },
@@ -845,11 +825,11 @@ export default {
         this.update()
       }
 
-/*      else if (column && cc.palette && cc.palette_mode == 'text') {
-        column.bg_color = cc.palette_color
+      else if (column && cc.palette && cc.palette_mode == 'text') {
+        column.text_color = cc.palette_color
 
         this.update()
-      }*/
+      }
     },
 
     toggle_edit_mode() {
@@ -875,13 +855,13 @@ export default {
     },
 
     open_remove_child_dialog(child, type) {
-      this.remove_child_type = type
+      this.remove_child_column_name = type
       this.remove_child_item = child
       this.remove_child_dialog = true
     },
 
     async open_log_dialog(column_name) {
-      if (!this.self.columns[column_name].multiple) {
+      if (this.self.columns[column_name].rows.length == 0) {
         this.log_dialog = true
         this.log_dialog_loading = true
 
@@ -903,60 +883,48 @@ export default {
 
 
     async update() {
-      let updates = Array()
+      let columns = Array()
       let logs = Array()
-      let osc = this.original_self.columns
 
       for (let column_name in this.self.columns) {
-        let column = this.self.columns[column_name]
+        let original_column = this.original_self.columns[column_name]
+        let new_column = this.self.columns[column_name]
 
-        if (column.fields.length > 0) {
-          if (!column.multiple) {
-            let old_field = osc[column_name].fields[0]
-            let new_field = column.fields[0]
+        let column_is_updated = false
+        let row_is_updated = false
 
-            if (old_field.value != new_field.value) {
-              updates.push({
-                'field_id': new_field.id ? new_field.id : null,
-                'column_name': column_name,
-                'new_value': new_field.value,
-              })
+        let is_same_value = original_column.value == new_column.value
+        let is_same_bg_color = original_column.bg_color == new_column.bg_color
+        let is_same_text_color = original_column.text_color == new_column.text_color
 
-              logs.push({
-                'field_id': new_field.id ? new_field.id : null,
-                'column_name': column_name,
-                'new_value': new_field.value,
-                'old_value': old_field.value,
-              })
-            }
-          }
+        if (!is_same_value) {
+          logs.push({
+            'column_name': column_name,
+            'new_value': new_column.value,
+            'old_value': original_column.value,
+          })
+        }
 
-          else {
-            for (let i in column.fields) {
-              let new_field = column.fields[i]
-              let old_field = osc[column_name].fields[i]
-              let is_updated = false
+        if (!is_same_value || !is_same_bg_color || !is_same_text_color) {
+          columns.push(new_column)
+          column_is_updated = true
+        }
 
-              if (!old_field || old_field.value != new_field.value) {
-                is_updated = true
-              }
 
-              if (!is_updated) {
-                for (let key in new_field.extend) {
-                  if (new_field.extend[key] != old_field.extend[key]) {
-                    is_updated = true
-                    break
-                  }
-                }
-              }
+        if (!column_is_updated && new_column.rows.length > 0) {
+          for (let index in new_column.rows) {
+            if (row_is_updated) break
 
-              if (is_updated) {
-                updates.push({
-                  'field_id': new_field.id ? new_field.id : null,
-                  'column_name': column_name,
-                  'new_value': new_field.value,
-                  'extend': new_field.extend,
-                })
+            let orignal_row = original_column.rows[index]
+            let new_row = new_column.rows[index]
+
+            for (let field in new_row) {
+              let is_same_field = new_row[field] == orignal_row[field]
+
+              if (!is_same_field) {
+                columns.push(new_column)
+                row_is_updated = true
+                break
               }
             }
           }
@@ -972,17 +940,19 @@ export default {
         'element_id': this.self.id,
         'value': {
           'color': this.self.color,
-          'updates': updates,
+          'columns': columns,
           'logs': logs,
         },
       })
 
-      for (let field of request.fields) {
-        for (let key in field) {
-          this.self.columns[field.name][key] = field[key]
+      for (let column of request.columns) {
+        for (let attr in column) {
+          if (attr != 'rows') {
+            this.self.columns[column.name][attr] = column[attr]
+          }
         }
 
-        // field.extend might not be reactive anymore
+        // column.rows might not be reactive anymore
       }
 
       this.original_self = this.$tool.deepcopy(this.self)
@@ -1014,12 +984,12 @@ export default {
       }, 1000)
     },
 
-    async add_child(type) {
+    async add_child(column_name) {
       this.add_loading = true
 
       let request = await this.$http.post('works', {
         'action': 'create_child',
-        'element_type': type,
+        'element_type': column_name,
         'view': this.$current_view,
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
@@ -1027,13 +997,23 @@ export default {
         'parent_type': 'work',
       })
 
-      if (type == 'shifts') {
+      if (!this.self.columns[column_name].id) {
+        for (let attr in request.column) {
+          if (attr != 'rows') {
+            this.self.columns[column_name][attr] = request.column[attr]
+          }
+        }
+      }
+
+      if (column_name == 'shifts') {
         this.self.shifts.push(request.child)
       }
 
       else {
-        this.self.columns[type].fields.push(request.child)
+        this.self.columns[column_name].rows.push(request.child)
       }
+
+      this.original_self = this.$tool.deepcopy(this.self)
 
       this.add_loading = false
     },
@@ -1044,7 +1024,7 @@ export default {
       let list
 
       if (column_name == 'shifts') list = this.self.shifts
-      else  list = this.self.columns[column_name].fields
+      else list = this.self.columns[column_name].rows
 
       for (let child of list) {
         child.position = i
@@ -1066,17 +1046,21 @@ export default {
         'element_id': this.self.id,
         'position_updates': position_updates,
       })
+
+      this.original_self = this.$tool.deepcopy(this.self)
     },
 
     async remove_child() {
-      if (this.remove_child_type == 'shifts') {
+      let column_name = this.remove_child_column_name
+
+      if (column_name == 'shifts') {
         this.self.shifts = this.self.shifts.filter(s => this.remove_child_item.id != s.id)
       }
 
       else {
-        let fields = this.self.columns[this.remove_child_type].fields.filter(
+        let rows = this.self.columns[column_name].rows.filter(
           f => f.id != this.remove_child_item.id)
-        this.self.columns[this.remove_child_type].fields = fields
+        this.self.columns[column_name].rows = rows
       }
 
       this.remove_child_dialog = false
@@ -1090,9 +1074,10 @@ export default {
         'parent_type': 'work',
         'element_type': this.remove_child_item.type,
         'element_id': this.remove_child_item.id,
+        'value': {'column_name': column_name},
       })
 
-      // this.update_child_position(this.remove_child_item.type)
+      this.update_child_position(column_name)
     },
 
     send_message() {

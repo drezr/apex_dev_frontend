@@ -8,10 +8,11 @@
     :style="`width: ${config[column_name]['width']};`"
   >
     <textarea
-      v-model="self.extend[column_name]"
-      @input="parent_cpnt.set_textarea_height($event, column, 5)"
-      :style="parent_cpnt.get_textarea_style(column, 5)"
+      v-model="self[column_name]"
+      @input="parent_cpnt.set_textarea_height($event, column_config, 5)"
+      :style="parent_cpnt.get_textarea_style(column_config, 5)"
       class="work-textarea no-focus"
+      :class="parent.text_color ? parent.text_color + '--text' : ''"
       style="width: 100%; margin-top: 2px;"
     ></textarea>
   </div>
@@ -31,7 +32,8 @@ export default {
 
   props: {
     self: Object,
-    column: Object,
+    column_config: Object,
+    parent: Object,
     parent_cpnt: Object,
     edit_mode: Boolean,
     config: Object(),
