@@ -1033,6 +1033,7 @@ export default {
           'element_id': child.id,
           'element_type': child.type,
           'element_position': child.position,
+          'column_name': column_name,
         })
       }
 
