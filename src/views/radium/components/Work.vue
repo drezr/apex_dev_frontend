@@ -35,18 +35,6 @@
         :class="!column_config.multiple ? 'cursor-pointer' : ''"
         @click="open_log_dialog(column_config.name)"
       >
-        <div
-          v-if="i == 0 && $is_editor"
-          class="work-drag-button pink"
-          :class="$current_component.active_filters.length > 0 ? 'work-drag-button-disabled' : ''"
-          :style="`cursor: ${grab_cursor};`"
-          @mousedown="grab_cursor = 'grabbing'"
-          @mouseup="grab_cursor = 'grab'"
-          @mouseleave="grab_cursor = 'grab'"
-        >
-          <v-icon size="16" color="white">mdi-arrow-split-horizontal</v-icon>
-        </div>
-
         {{ lang.views.radium['column_title_' + column_config.name][lg] }}
       </div>
 

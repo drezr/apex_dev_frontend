@@ -13,6 +13,7 @@
       <NavigationBar
         @open-customize-dialog="customize_dialog = true"
         @open-filter-dialog="filter_dialog = true"
+        @open-sort-dialog="sort_dialog = true"
         @open-messages-dialog="messages_dialog = true"
         @toggle-palette="palette = !palette"
         @add-work="add_work"
@@ -24,22 +25,13 @@
       />
 
       <div class="works-frame" v-if="filtered_works.length > 0">
-        <VueDraggable
-          v-model="filtered_works"
-          @change="update_work_position"
-          handle=".work-drag-button"
-          @start="is_moving = true"
-          @end="is_moving = false"
-          class="d-flex flex-column"
-        >
-          <Work
-            v-for="work in filtered_works"
-            :key="work.id"
-            :self="work"
-            :parent_cpnt="$current_instance"
-            class="ma-3"
-          />
-        </VueDraggable>
+        <Work
+          v-for="work in filtered_works"
+          :key="work.id"
+          :self="work"
+          :parent_cpnt="$current_instance"
+          class="ma-3"
+        />
       </div>
 
       <div
@@ -215,6 +207,50 @@
       ></v-autocomplete>
     </div>
   </CustomDialog>
+
+  <CustomDialog
+    :open="sort_dialog"
+    :width="800"
+    :title_text="lang.views.radium.sort_works_tooltip[lg]"
+    :title_icon="'mdi-sort'"
+    @cancel="sort_dialog = false"
+  >
+    <VueDraggable
+      v-model="filtered_works"
+      @change="update_work_position"
+      handle=".handle"
+      :animation="100"
+      easing="cubic-bezier(1, 0, 0, 1)"
+      @start="is_moving = true"
+      @end="is_moving = false"
+      class="d-flex flex-column"
+    >
+      <div
+        v-for="work in filtered_works"
+        :key="work.id"
+        class="d-flex pa-3 my-1 lighten-4 rounded"
+        :class="work.color"
+        style="color: black;"
+      >
+        <v-icon class="cursor-move handle mr-3 pink--text">
+          mdi-drag-horizontal-variant
+        </v-icon>
+
+        <div class="mx-6 d-flex flex-column align-center" style="width: 80px;">
+          <div v-for="shift in work.shifts" :key="shift.id">
+            {{ $tool.format_date(shift.date) }}
+          </div>
+        </div>
+
+        <div
+          v-if="work.work_columns.find(c => c.name == 'description')"
+          class="mx-6 d-flex justify-center flex-grow-1 align-self-center"
+        >
+          {{ work.work_columns.find(c => c.name == 'description').value }}
+        </div>
+      </div>
+    </VueDraggable>
+  </CustomDialog>
 </div>
 
 </template>
@@ -250,6 +286,7 @@ export default {
       circles: Array(),
       customize_dialog: false,
       filter_dialog: false,
+      sort_dialog: false,
       team: Object(),
       app: Object(),
       config: Object(),

@@ -1402,6 +1402,11 @@ export default {
               'en': 'Filter works',
             },
             'sort_works_tooltip': {
+              'fr': 'Trier les chantiers',
+              'nl': '',
+              'en': 'Sort works',
+            },
+            'sort_works_by_increasing_day_tooltip': {
               'fr': 'Trier les chantiers par jour croissant',
               'nl': '',
               'en': 'Sort works by increasing day',

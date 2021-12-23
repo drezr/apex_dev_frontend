@@ -89,13 +89,14 @@
       @click="$emit('open-filter-dialog')"
     />
 
-<!--     <CustomButton
+    <CustomButton
       :icon="'mdi-sort'"
       :height="40"
       :outlined="true"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.sort_works_tooltip[lg]"
-    /> -->
+      @click="$emit('open-sort-dialog')"
+    />
 
     <CustomButton
       v-if="$is_editor"
