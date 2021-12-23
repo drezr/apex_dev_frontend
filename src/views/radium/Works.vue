@@ -215,24 +215,50 @@
     :title_icon="'mdi-sort'"
     @cancel="sort_dialog = false"
   >
+    <div class="d-flex justify-center align-center mb-3">
+      <v-select
+        v-model="selected_sort"
+        :items="column_titles"
+        item-text="title"
+        item-value="name"
+        hide-details
+        outlined
+        :placeholder="lang.views.radium.sort_works_by_placeholder[lg]"
+        @change="sort_works()"
+      />
+
+      <CustomButton
+        :text="lang.generic.save[lg]"
+        :icon="'mdi-content-save'"
+        :dark="selected_sort ? true : false"
+        :color="'blue'"
+        class="ml-3"
+        :disabled="!selected_sort"
+        @click="send_work_sort()"
+      />
+    </div>
+
     <VueDraggable
       v-model="filtered_works"
-      @change="update_work_position"
       handle=".handle"
       :animation="100"
       easing="cubic-bezier(1, 0, 0, 1)"
       @start="is_moving = true"
       @end="is_moving = false"
       class="d-flex flex-column"
+      :force-fallback="true"
+      :scroll-sensitivity="100"
+      :scroll-speed="30"
+      :bubble-scroll="true"
     >
       <div
         v-for="work in filtered_works"
         :key="work.id"
-        class="d-flex pa-3 my-1 lighten-4 rounded"
+        class="d-flex pa-1 my-1 lighten-4 rounded"
         :class="work.color"
         style="color: black;"
       >
-        <v-icon class="cursor-move handle mr-3 pink--text">
+        <v-icon class="cursor-move handle mx-3 pink--text">
           mdi-drag-horizontal-variant
         </v-icon>
 
@@ -300,6 +326,7 @@ export default {
       palette_color: 'white',
       palette_mode: 'works',
       active_filters: Array(),
+      selected_sort: null,
       excluded_filters: [
         'shifts',
         'files',
@@ -359,7 +386,23 @@ export default {
   },
 
   computed: {
+    column_titles() {
+      let column_titles = Array()
 
+        column_titles.push({
+          'title': this.lang.views.radium.original_order[this.lg],
+          'name': 'original',
+        })
+
+      for (let column_config of this.column_configs.filter(c => c.visible)) {
+        column_titles.push({
+          'title': this.lang.views.radium['column_title_' + column_config.name][this.lg],
+          'name': column_config.name,
+        })
+      }
+
+      return column_titles
+    },
   },
 
   methods: {
@@ -464,8 +507,12 @@ export default {
           }
         }
 
-        else if (!filters.includes(work[key]) && work[key]) {
-          filters.push(work[key])
+        else {
+          let column = work.work_columns.find(c => c.name == key)
+
+          if (column && column.value) {
+            filters.push(column.value)
+          }
         }
       }
 
@@ -528,7 +575,9 @@ export default {
 
           else {
             works = works.filter(w => {
-              return filter.filters.includes(w[filter.column])
+              return w.work_columns.find(c => {
+                return filter.filters.find(f => f == c.value)
+              })
             })
           }
         }
@@ -537,6 +586,65 @@ export default {
       works.sort((a, b) => a.link.position - b.link.position)
 
       return works
+    },
+
+    sort_works() {
+      if (this.selected_sort == 'original') {
+        this.filtered_works.sort((a, b) => {
+          return a.link.position - b.link.position
+        })
+      }
+
+      else if (this.selected_sort == 'shifts') {
+        this.filtered_works.sort((a, b) => {
+          let child_a = a.shifts[0]
+          let child_b = b.shifts[0]
+
+          if (child_a && child_b) {
+            let date_a = new Date(child_a.date)
+            let date_b = new Date(child_b.date)
+
+            return date_a > date_b ? 1 : -1
+          }
+
+          else if (!child_a) {
+            return 1
+          }
+
+          else if (!child_b) {
+            return -1
+          }
+        })
+      }
+      
+      else {
+        this.filtered_works.sort((a, b) => {
+          let child_a = a.work_columns.find(c => c.name == this.selected_sort)
+          let child_b = b.work_columns.find(c => c.name == this.selected_sort)
+
+          if (!child_a || !child_a.value) {
+            return 1
+          }
+
+          else if (!child_b || !child_b.value) {
+            return -1
+          }
+
+          else if (isNaN(child_a.value + child_b.value)) {
+            return (child_a.value).localeCompare(child_b.value)
+          }
+
+          else {
+            return child_a.value - child_b.value
+          }
+        })
+      }
+    },
+
+    send_work_sort() {
+      this.update_work_position()
+
+      this.selected_sort = null
     },
 
     by_author_on_date(date, author) {

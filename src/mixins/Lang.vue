@@ -25,6 +25,11 @@ export default {
             'nl': '',
             'en': 'Save',
           },
+          'apply': {
+            'fr': 'Appliquer',
+            'nl': '',
+            'en': 'Apply',
+          },
           'add': {
             'fr': 'Ajouter',
             'nl': '',
@@ -1405,6 +1410,16 @@ export default {
               'fr': 'Trier les chantiers',
               'nl': '',
               'en': 'Sort works',
+            },
+            'sort_works_by_placeholder': {
+              'fr': 'Trier les chantiers par',
+              'nl': '',
+              'en': 'Sort works by',
+            },
+            'original_order': {
+              'fr': 'Ordre original',
+              'nl': '',
+              'en': 'Original order',
             },
             'sort_works_by_increasing_day_tooltip': {
               'fr': 'Trier les chantiers par jour croissant',

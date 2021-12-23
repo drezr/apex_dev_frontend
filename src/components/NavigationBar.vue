@@ -96,6 +96,7 @@
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.sort_works_tooltip[lg]"
       @click="$emit('open-sort-dialog')"
+      :disabled="$current_component.active_filters.length > 0"
     />
 
     <CustomButton
