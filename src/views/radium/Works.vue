@@ -601,10 +601,13 @@ export default {
           let child_b = b.shifts[0]
 
           if (child_a && child_b) {
-            let date_a = new Date(child_a.date)
-            let date_b = new Date(child_b.date)
+            let aSize = new Date(child_a.date).getTime()
+            let bSize = new Date(child_b.date).getTime()
+            let aLow = child_a.shift
+            let bLow = child_b.shift
 
-            return date_a > date_b ? 1 : -1
+            if (aSize == bSize) return (aLow < bLow) ? -1 : (aLow > bLow) ? 1 : 0
+            else return (aSize < bSize) ? -1 : 1
           }
 
           else if (!child_a) {
