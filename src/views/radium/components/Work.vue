@@ -860,7 +860,7 @@ export default {
     },
 
     async open_log_dialog(column_name) {
-      if (this.self.columns[column_name].rows.length == 0) {
+      if (this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts') {
         this.log_dialog = true
         this.log_dialog_loading = true
 
