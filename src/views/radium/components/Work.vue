@@ -90,7 +90,7 @@
           <textarea
             v-model="self.columns[column_config.name].value"
             @input="set_textarea_height($event, column_config, 2)"
-            :style="get_textarea_style(column_config, 2)"
+            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value)"
             style="width: 100%;"
             class="work-textarea my-2 text--accent-4"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
@@ -748,6 +748,7 @@ export default {
         else {
           columns[column_config.name] = {
             'name': column_config.name,
+            'value': null,
             'bg_color': null,
             'text_color': null,
             'is_edited': false,
@@ -764,9 +765,11 @@ export default {
       event.target.style.height = `${event.target.scrollHeight}px `
     },
 
-    get_textarea_style(column, extra_height) {
+    get_textarea_style(column, extra_height, value) {
+      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+
       return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize) + (extra_height * 2)}px;
+              height: ${Number(column.textsize * line_count) + (extra_height * 2)}px;
               padding-top: ${extra_height}px;
               padding-bottom: ${extra_height}px; `
     },

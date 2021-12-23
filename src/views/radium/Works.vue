@@ -243,6 +243,7 @@
       handle=".handle"
       :animation="100"
       easing="cubic-bezier(1, 0, 0, 1)"
+      @change="selected_sort = 'custom_sort'"
       @start="is_moving = true"
       @end="is_moving = false"
       class="d-flex flex-column"
@@ -270,7 +271,8 @@
 
         <div
           v-if="work.work_columns.find(c => c.name == 'description')"
-          class="mx-6 d-flex justify-center flex-grow-1 align-self-center"
+          class="d-flex justify-center flex-grow-1 align-self-center text-center"
+          style="white-space: pre-line;"
         >
           {{ work.work_columns.find(c => c.name == 'description').value }}
         </div>
