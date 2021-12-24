@@ -1,28 +1,36 @@
 <template>
 
-<div>
+<div style="width: 100%;">
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
-  <transition name="fade">
+  <transition name="fade" style="width: 100%;">
     <div v-if="!loading">
-      <div class="team-title">
+      <div class="team-title" style="height: 40px; margin-top: 20px;">
         {{ team.name }}
         {{ app.name ? `(${app.name})` : '' }}
       </div>
 
-      <NavigationBar
-        @open-customize-dialog="customize_dialog = true"
-        @open-filter-dialog="filter_dialog = true"
-        @open-sort-dialog="sort_dialog = true"
-        @open-messages-dialog="messages_dialog = true"
-        @toggle-palette="palette = !palette"
-        @add-work="add_work"
-      />
+      <div
+        class="works-navigation"
+        :class="navigation_is_scrolled ? 'works-navigation-scrolled' : ''"
+        :style="'width:' + doc_width + 'px;'"
+      >
+        <div class="works-navigation-inner">
+          <NavigationBar
+            @open-customize-dialog="customize_dialog = true"
+            @open-filter-dialog="filter_dialog = true"
+            @open-sort-dialog="sort_dialog = true"
+            @open-messages-dialog="messages_dialog = true"
+            @toggle-palette="palette = !palette"
+            @add-work="add_work"
+          />
 
-      <Palette
-        v-if="palette"
-        class="mt-2"
-      />
+          <Palette
+            v-if="palette"
+            class="mt-2"
+          />
+        </div>
+      </div>
 
       <div class="works-frame" v-if="filtered_works.length > 0">
         <Work
@@ -340,10 +348,13 @@ export default {
       config_is_updating: false,
       config_update_timer: null,
       is_moving: false,
+      doc_width: 0,
     }
   },
 
   async created() {
+    this.doc_width = document.getElementById('main-frame').scrollWidth
+
     this.request = await this.$http.get('works', {
       'team_id': this.$current_team_id,
       'app_id': this.$current_app_id,
@@ -405,6 +416,11 @@ export default {
 
       return column_titles
     },
+
+    navigation_is_scrolled() {
+      // TODO check #main-frame scroll to add .works-navigation-scrolled class
+      return false
+    },
   },
 
   methods: {
@@ -423,6 +439,10 @@ export default {
       let work = request.work
       work.newly_created = true
       this.filtered_works.push(work)
+
+      setTimeout(() => {
+        document.getElementById('main-frame').scrollTop = 999999999
+      }, 100)
 
       this.add_loading = false
     },
@@ -668,7 +688,9 @@ export default {
   },
 
   watch: {
-
+    navigation_is_scrolled(val) {
+      return val
+    } 
   },
 }
 
@@ -700,7 +722,30 @@ export default {
   padding: 9px;
   border: 1px orange solid;
   border-radius: 5px;
+}
 
+.works-navigation {
+  display: flex;
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  background-color: white;
+}
+
+.works-navigation-inner {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  position: sticky;
+  left: 0;
+}
+
+.works-navigation-scrolled {
+  border-bottom: 1px black solid;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 </style>

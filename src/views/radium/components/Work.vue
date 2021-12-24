@@ -255,8 +255,8 @@
   <!-- ############## Expand ############## -->
 
   <div class="work-expand" v-if="expanded">
-    <div class="lighten-5 pb-3" :class="self.color">
-      <div class="pa-1" v-if="$is_editor">
+    <div class="lighten-5 d-flex" :class="self.color">
+      <div class="pa-1" v-if="$is_editor" style="position: sticky; left: 15px;">
         <CustomButton
           :text="edit_mode ? lang.generic.save[lg] : lang.generic.edit[lg]"
           :rounded="true"
@@ -322,7 +322,9 @@
           @click="link_radiums_dialog = true"
         />
       </div>
+    </div>
 
+    <div class="lighten-5 py-3" :class="self.color">
       <ShiftDetail
         :parent="self"
         :parent_cpnt="$current_instance"
@@ -1094,9 +1096,8 @@ export default {
 .work-overframe {
   border: 1px black solid;
   width: min-content;
-  border-radius: 10px;
-  overflow: hidden;
   position: relative;
+  border-radius: 4px;
 }
 
 .work-frame {

@@ -158,6 +158,27 @@
     </div>
   </div>
 
+  <div
+    class="d-flex mb-3"
+    :class="edit_mode ? '' : 'mt-3'"
+  >
+    <v-textarea
+      v-if="self.description || edit_mode"
+      outlined
+      clearable
+      dense
+      :label="lang.views.radium.part_description[lg]"
+      persistent-placeholder
+      v-model="self.description"
+      class="mx-3 part-textarea"
+      hide-details
+      auto-grow
+      rows="1"
+      @input="update_part()"
+      :disabled="!edit_mode"
+    ></v-textarea>
+  </div>
+
   <div class="part-project-frame-outer" v-if="self.project">
     <v-badge
       overlap
@@ -462,6 +483,15 @@ export default {
 
 
 <style>
+
+.part-textarea textarea:disabled {
+  color: black !important;
+}
+
+.part-textarea textarea {
+  padding-top: 3px !important;
+  margin-bottom: 3px !important;
+}
 
 </style>
 

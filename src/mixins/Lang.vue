@@ -1370,7 +1370,7 @@ export default {
               'en': '',
             },
             'calls_no_call': {
-              'fr': 'Pas d\'interventions',
+              'fr': 'Pas d\'intervention',
               'nl': '',
               'en': '',
             },
@@ -1707,9 +1707,14 @@ export default {
               'en': 'This participation is locked.',
             },
             'info_override': {
-              'fr': 'Écraser la troisième case des cellules',
+              'fr': 'Écraser la troisième case des cellules Watcher',
               'nl': '',
               'en': 'Overwrite the third cells box',
+            },
+            'part_description': {
+              'fr': 'Description du travail pour cette équipe',
+              'nl': '',
+              'en': 'Work description for this team',
             },
             'info_override_confirm': {
               'fr': 'La troisième case des cellules des participants ont bien été écrasées dans le calendrier Watcher.',

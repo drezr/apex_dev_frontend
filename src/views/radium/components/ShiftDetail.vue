@@ -1,6 +1,6 @@
 <template>
 
-<v-card class="mx-3 mt-3">
+<v-card class="mx-3">
   <v-toolbar
     :color="parent.color + ' darken-4'"
     :dark="parent.color != 'white'"
