@@ -5,9 +5,15 @@
 
   <transition name="fade" style="width: 100%;">
     <div v-if="!loading">
-      <div class="team-title" style="height: 40px; margin-top: 20px;">
-        {{ team.name }}
-        {{ app.name ? `(${app.name})` : '' }}
+      <div
+        class="team-title"
+        style="height: 40px; margin-top: 20px; justify-content: start;"
+        :style="'width:' + doc_width + 'px;'"
+      >
+        <div class="works-navigation-inner">
+          {{ team.name }}
+          {{ app.name ? `(${app.name})` : '' }}
+        </div>
       </div>
 
       <div
@@ -353,8 +359,6 @@ export default {
   },
 
   async created() {
-    this.doc_width = document.getElementById('main-frame').scrollWidth
-
     this.request = await this.$http.get('works', {
       'team_id': this.$current_team_id,
       'app_id': this.$current_app_id,
@@ -375,12 +379,16 @@ export default {
     this.request = await this.$http.get('messages', {
       'app_id': this.$current_app_id,
     })
+    
+    // Has to be here to avoid glitch on loading page
+    this.doc_width = document.getElementById('main-frame').scrollWidth
 
     this.messages = this.request.messages
     this.messages_loading = false
 
     this.request = await this.$http.get('apps')
     this.circles = this.request.circles
+    
 
     for (let circle of this.circles) {
       circle.teams.sort((a, b) => a.name.localeCompare(b.name))
