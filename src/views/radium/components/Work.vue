@@ -206,7 +206,8 @@
             <WorkRow
               v-if="column_config.name == 's460s'"
               :self="row"
-              :column="column_config"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="s460s_table_config"
