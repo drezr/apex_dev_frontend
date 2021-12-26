@@ -1004,9 +1004,8 @@ export default {
 
       else {
         this.self.columns[column_name].rows.push(request.child)
+        this.original_self.columns[column_name].rows.push(request.child)
       }
-
-      this.original_self = this.$tool.deepcopy(this.self)
 
       this.add_loading = false
     },
