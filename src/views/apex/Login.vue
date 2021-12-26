@@ -17,6 +17,7 @@
         :label="lang.generic.email[lg]"
         v-model="login_email"
         :rules="email_rules"
+        tabindex="1"
       ></v-text-field>
 
 
@@ -27,6 +28,7 @@
         type="password"
         v-model="password"
         :rules="password_rules"
+        tabindex="2"
       ></v-text-field>
 
 
@@ -37,6 +39,7 @@
         :dark="can_login"
         :disabled="!can_login"
         ref="connection"
+        tabindex="3"
       >
         <v-icon class="mr-3">mdi-exit-to-app</v-icon>
         {{ lang.generic.connection[lg] }}
@@ -70,6 +73,7 @@
         :label="lang.generic.email[lg]"
         v-model="reset_email"
         :rules="email_rules"
+        tabindex="1"
       ></v-text-field>
 
 
@@ -80,6 +84,7 @@
         :dark="can_reset"
         :disabled="!can_reset"
         ref="reset"
+        tabindex="2"
       >
         <v-icon class="mr-3">mdi-email</v-icon>
         {{ lang.generic.send[lg] }}
@@ -89,6 +94,7 @@
       <div
         class="text-center mt-3 blue--text cursor-pointer hover-brightness"
         @click="switch_mode"
+        tabindex="3"
       >
         {{ lang.views.login.back_to_login[lg] }}
       </div>
