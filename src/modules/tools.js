@@ -100,9 +100,9 @@ class Tools {
     }, 100)
   }
 
-  add_file(e, callback) {
+  get_file_data(e, callback) {
     let file = e.target.files[0]
-    let ext = file.name.split('.')[file.name.split('.').length - 1]
+    let ext = file.name.split('.')[file.name.split('.').length - 1].toLowerCase()
     let name = file.name.slice(0, file.name.lastIndexOf('.'))
     name = name.trim()
     let mini = null
@@ -136,12 +136,12 @@ class Tools {
 
           data.append('file', file)
           data.append('mini', mini)
+          data.append('width', width)
+          data.append('height', height)
 
-          this.vm.$http.post('file/', data, (status, directory) => {
-            callback(name, ext, directory, width, height)
+          callback(data)
 
-            e.target.value = ''
-          })
+          e.target.value = ''
         }
       }
 
@@ -151,11 +151,9 @@ class Tools {
     else {
       data.append('file', file)
 
-      this.vm.$http.post('file/', data, (status, directory) => {
-        callback(name, ext, directory, null, null)
-
-        e.target.value = ''
-      })
+      callback(data)
+      
+      e.target.value = ''
     }
   }
 

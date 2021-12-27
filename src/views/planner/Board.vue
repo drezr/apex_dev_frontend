@@ -496,6 +496,12 @@
       {{ lang.views.planner.delete_folder_warning[lg] }}
     </v-alert>
   </CustomDialog>
+
+  <input type="file"
+    class="d-none"
+    ref="file-input"
+    v-on:change="add_file($event)"
+  />
 </div>
 
 </template>
@@ -840,26 +846,58 @@ export default {
     },
 
     async add_actions(type) {
+      if (type == 'file') {
+        this.$refs['file-input'].click()
+      }
+
+      else {
+        this.add_loading = true
+
+        let folder = this.folders[this.selected_folder]
+
+        let request = await this.$http.post('element', {
+          'action': 'create',
+          'element_type': type,
+          'view': this.$current_view,
+          'parent_type': folder.type,
+          'parent_id': folder.id,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+        })
+
+        this.add_loading = false
+
+        let child = request[type]
+        child.children = Array()
+
+        folder.children.push(child)
+      }
+    },
+
+    add_file(e) {
       this.add_loading = true
 
       let folder = this.folders[this.selected_folder]
 
-      let request = await this.$http.post('element', {
-        'action': 'create',
-        'element_type': type,
-        'view': this.$current_view,
-        'parent_type': folder.type,
-        'parent_id': folder.id,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
+      this.$tool.get_file_data(e, async (data) => {
+          data.append('action', 'create')
+          data.append('element_type', 'file')
+          data.append('kind', 'board_file')
+          data.append('view', this.$current_view)
+          data.append('parent_type', folder.type)
+          data.append('parent_id', folder.id)
+          data.append('team_id', this.$current_team_id)
+          data.append('app_id', this.$current_app_id)
+
+        let request = await this.$http.post('element', data)
+
+        this.add_loading = false
+
+        let child = request['file']
+        child.children = Array()
+
+        folder.children.push(child)
       })
-
-      let child = request[type]
-      child.children = Array()
-
-      folder.children.push(child)
-
-      this.add_loading = false
     },
 
     set_disabled_profiles() {

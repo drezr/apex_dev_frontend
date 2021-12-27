@@ -182,11 +182,13 @@
           </VueDraggable>
 
           <div
-            v-if="self.children.length == 0"
+            v-if="self.children.length == 0 && !add_child_loading"
             class="pt-6 pb-9 text-center black--text"
           >
             {{ lang.generic.task_no_element[lg] }}
           </div>
+
+          <Loader :size="50" :width="10" class="my-3" v-if="add_child_loading" />
 
           <div v-if="edit_mode && $is_editor" class="d-flex justify-space-around mb-2">
             <CustomButton
@@ -198,6 +200,7 @@
               :tooltip="lang.generic.add_input_tooltip[lg]"
               :menus="input_menus"
               v-on:menu_action="create_child('input', $event)"
+              :disabled="add_child_loading"
             />
 
             <CustomButton
@@ -208,6 +211,7 @@
               :text="$mobile_breakpoint ? lang.generic.subtask[lg] : ''"
               :tooltip="lang.generic.add_subtask_tooltip[lg]"
               @click="create_child('subtask')"
+              :disabled="add_child_loading"
             />
 
             <CustomButton
@@ -218,6 +222,7 @@
               :text="$mobile_breakpoint ? lang.generic.note[lg] : ''"
               :tooltip="lang.generic.add_note_tooltip[lg]"
               @click="create_child('note')"
+              :disabled="add_child_loading"
             />
 
             <CustomButton
@@ -228,7 +233,8 @@
               :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
               :tooltip="lang.generic.add_file_tooltip[lg]"
               v-if="!is_template"
-              @click="add_file()"
+              @click="$refs['file-input'].click()"
+              :disabled="add_child_loading"
             />
           </div>
         </div>
@@ -260,6 +266,12 @@
     :options="options"
     @close="is_photoswipe_open = false"
   ></PhotoSwipeWrapper>
+
+  <input type="file"
+    class="d-none"
+    ref="file-input"
+    v-on:change="add_file($event)"
+  />
 </div>
 
 </template>
@@ -317,6 +329,7 @@ export default {
       expanded: false,
       is_updating: false,
       update_timer: null,
+      add_child_loading: false,
 
       is_photoswipe_open: false,
       options: {
@@ -595,6 +608,8 @@ export default {
     },
 
     async create_child(type, kind) {
+      this.add_child_loading = true
+
       let request = await this.$http.post('element', {
         'action': 'create',
         'element_type': type,
@@ -608,14 +623,38 @@ export default {
         'app_id': this.$current_app_id,
       })
 
+      this.add_child_loading = false
+
       let child = request[type]
       child.children = Array()
 
       this.self.children.push(child)
     },
 
-    add_file() {
+    add_file(e) {
+      this.add_child_loading = true
 
+      this.$tool.get_file_data(e, async (data) => {
+        data.append('action', 'create')
+        data.append('element_type', 'file')
+        data.append('kind', 'task_file')
+        data.append('view', this.$current_view)
+        data.append('source_type', this.parent.type)
+        data.append('source_id', this.parent.id)
+        data.append('parent_type', this.self.type)
+        data.append('parent_id', this.self.id)
+        data.append('team_id', this.$current_team_id)
+        data.append('app_id', this.$current_app_id)
+
+        let request = await this.$http.post('element', data)
+
+        this.add_child_loading = false
+
+        let child = request['file']
+        child.children = Array()
+
+        this.self.children.push(child)
+      })
     },
   },
 

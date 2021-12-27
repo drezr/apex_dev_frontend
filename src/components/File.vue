@@ -323,13 +323,31 @@ export default {
       }
     },
 
-    remove() {
+    async remove() {
       this.delete_dialog = false
-
+      
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)
 
       this.$remove_tag_from_day_cell()
+
+      let data = {
+        'action': 'delete',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': this.parent.type,
+        'parent_id': this.parent.id,
+        'element_type': 'file',
+        'element_id': this.self.id,
+      }
+
+      if (this.$is_in_task) {
+        data['source_type'] = this.$child_task_component.parent.type
+        data['source_id'] = this.$child_task_component.parent.id
+      }
+
+      await this.$http.post('element', data)
     },
 
     get_file(force) {

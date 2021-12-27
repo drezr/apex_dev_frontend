@@ -184,6 +184,8 @@
         </div>
       </VueDraggable>
 
+      <Loader :size="50" :width="10" class="my-3" v-if="add_child_loading" />
+
       <div class="d-flex justify-end" v-if="$has_xs(['watcher_is_editor'])">
         <div class="command-buttons-bg detail-command-buttons-position">
           <CustomButton
@@ -205,17 +207,24 @@
             :icon="'mdi-plus'"
             :fab="true"
             :color="'green'"
-            :dark="true"
+            :dark="!add_child_loading"
             :elevation="1"
             :small="true"
             :tooltip="lang.views.watcher.calendar_add_element_tooltip[lg]"
             :menus="detail_add_element_menu"
             @menu_action="detail_action($event)"
+            :disabled="add_child_loading"
           />
         </div>
       </div>
     </div>
   </CustomDialog>
+
+  <input type="file"
+    class="d-none"
+    ref="file-input"
+    v-on:change="add_file($event)"
+  />
 </div>
 
 </template>
@@ -270,6 +279,7 @@ export default {
       palette_color: 'white',
       decimal_calculator: false,
       current_position: [0, 0],
+      add_child_loading: false,
     }
   },
 
@@ -588,29 +598,65 @@ export default {
     },
 
     async detail_action(type) {
-      let request = await this.$http.post('element', {
-        'action': 'create',
-        'element_type': type,
-        'view': this.$current_view,
-        'parent_type': this.detail_full_object.type,
-        'parent_id': this.detail_full_object.id,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-      })
-
-      let child = request[type]
-      child.children = Array()
-
-      this.detail_full_object.children.push(child)
-      this.detail_edit_mode = true
-
-      if (type == 'call') {
-        this.detail_object.cell.has_call = true
+      if (type == 'file') {
+        this.$refs['file-input'].click()
       }
 
       else {
-        this.detail_object[this.detail_object.type].has_content = true
+        this.add_child_loading = true
+
+        let request = await this.$http.post('element', {
+          'action': 'create',
+          'element_type': type,
+          'view': this.$current_view,
+          'parent_type': this.detail_full_object.type,
+          'parent_id': this.detail_full_object.id,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+        })
+
+        this.add_child_loading = false
+
+        let child = request[type]
+        child.children = Array()
+
+        this.detail_full_object.children.push(child)
+        this.detail_edit_mode = true
+
+        if (type == 'call') {
+          this.detail_object.cell.has_call = true
+        }
+
+        else {
+          this.detail_object[this.detail_object.type].has_content = true
+        }
       }
+    },
+
+    add_file(e) {
+      this.add_child_loading = true
+
+      this.$tool.get_file_data(e, async (data) => {
+          data.append('action', 'create')
+          data.append('element_type', 'file')
+          data.append('kind', 'day_cell_file')
+          data.append('view', this.$current_view)
+          data.append('parent_type', this.detail_full_object.type)
+          data.append('parent_id', this.detail_full_object.id)
+          data.append('team_id', this.$current_team_id)
+          data.append('app_id', this.$current_app_id)
+
+        let request = await this.$http.post('element', data)
+
+        this.add_child_loading = false
+
+        let child = request['file']
+        child.children = Array()
+
+        this.detail_full_object.children.push(child)
+        this.detail_edit_mode = true
+        this.detail_object[this.detail_object.type].has_content = true
+      })
     },
 
     async update_detail_objects_position() {
