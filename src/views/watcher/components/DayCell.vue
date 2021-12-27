@@ -35,52 +35,58 @@
       v-if="type == 'cell'"
       class="cell-frame"
       :style="date.cell.color ? 
-      `border-color: ${border_colors[date.cell.color]}; border-width: 1px;
-       box-shadow: 0 0 0 1px ${border_colors[date.cell.color]};` : '' +
+      `border-color: ${hex_colors[date.cell.color]}; border-width: 1px;
+       box-shadow: 0 0 0 1px ${hex_colors[date.cell.color]};` : '' +
        $current_view != 'myapexcontacts' ? '' : 'max-height: 56px !important; min-height: 56px !important; pointer-events: none;'
       "
       :class="[
         $current_component.palette ? 'cursor-fill' : '',
       ]"
-      @click="try_set_color"
+      @click="try_set_color('border')"
     >
       <input
         type="text"
-        class="cell-presence"
         v-model="date.cell.presence"
         :class="[
-          'cell-presence-' + cell_backgroud,
           select_text_color(date.cell.presence),
           select_text_size(date.cell.presence),
+          date.cell.presence_color,
+          date.cell.presence_color ? 'cell-text-stroke' : '',
+          'cell-presence-' + cell_backgroud,
         ]"
+        class="lighten-3 cell-presence"
         @focus="get_object($event)"
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2)}`"
-        @click="set_current_position(0)"
+        @click="try_set_color('presence'); set_current_position(0);"
         autocomplete="off"
+        style="border-bottom: 1px #B0BEC5 solid !important;"
       />
 
       <input
         type="text"
-        class="cell-absence"
         v-model="date.cell.absence"
         :class="[
-          'cell-absence-' + cell_backgroud,
           select_text_color(date.cell.absence),
           select_text_size(date.cell.absence),
+          date.cell.absence_color,
+          date.cell.absence_color ? 'cell-text-stroke' : '',
+          'cell-absence-' + cell_backgroud,
         ]"
+        class="cell-absence lighten-3"
         @focus="get_object($event)"
         :disabled="!$is_editor"
         :id="`${x}_${(y * 2) + 1}`"
-        @click="set_current_position(1)"
+        @click="try_set_color('absence'); set_current_position(1);"
         autocomplete="off"
+        style="border-top: 1px white solid !important; border-bottom: 1px #B0BEC5 solid !important;"
       />
       
       <div
         v-if="$current_view != 'myapexcontacts'"
         class="cell-short"
         :class="[
-          date.cell.has_content ? 'cell-short-has_content' : 'cell-absence-' + cell_backgroud,
+          date.cell.has_content ? 'cell-short-has_content' : 'cell-short-' + cell_backgroud,
           select_short_size(date.cell.short),
         ]"
         @click="$emit('open_detail_dialog', date)"
@@ -146,7 +152,7 @@ export default {
       hover: false,
       is_updating: false,
       update_timer: null,
-      border_colors: {
+      hex_colors: {
         'white': '#FFFFFF',
         'red': '#D50000',
         'pink': '#E91E63',
@@ -267,7 +273,7 @@ export default {
       this.parent_cpnt.current_position = [this.x, (this.y * 2) + increment]
     },
 
-    async try_set_color() {
+    async try_set_color(target) {
       if (this.$current_component.palette) {
         if (!this.date.cell.id) {
           await this.get_object()
@@ -276,7 +282,19 @@ export default {
         setTimeout(() => {
           let color = this.$current_component.palette_color
 
-          this.date.cell.color = color
+          if (this.$current_component.palette_mode == 'border') {
+            this.date.cell.color = color
+          }
+
+          if (this.$current_component.palette_mode == 'cell') {
+            if (target == 'presence') {
+              this.date.cell.presence_color = color
+            }
+
+            else if (target == 'absence') {
+              this.date.cell.absence_color = color
+            }
+          }
         }, 100)
       }
     },
@@ -308,6 +326,8 @@ export default {
               'presence': this.date.cell.presence,
               'absence': this.date.cell.absence,
               'color': this.date.cell.color,
+              'presence_color': this.date.cell.presence_color,
+              'absence_color': this.date.cell.absence_color,
             })
           }, 1000)
         }
@@ -452,6 +472,7 @@ export default {
   font-weight: bold;
   white-space: nowrap;
   padding-right: 2px;
+  border-top: 1px #ECEFF1 solid;
 }
 
 .cell-short:hover {
@@ -463,66 +484,50 @@ export default {
 }
 
 .cell-presence-week {
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #F3F3F3;
 }
 
 .cell-absence-week {
-  border-top: 1px white solid;
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #E9E9E9;
 }
 
 .cell-short-week {
-  border-top: 1px #ECEFF1 solid;
   background-color: #dcdcdc;
 }
 
 .cell-presence-sat {
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #CEDFEF;
 }
 
 .cell-absence-sat {
-  border-top: 1px white solid;
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #B3D1EB;
 }
 
 .cell-short-sat {
-  border-top: 1px #ECEFF1 solid;
   background-color: #a2bfd8;
 }
 
 .cell-presence-sun {
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #EFD9CE;
 }
 
 .cell-absence-sun {
-  border-top: 1px white solid;
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #E2BDAB;
 }
 
 .cell-short-sun {
-  border-top: 1px #ECEFF1 solid;
   background-color: #cea693;
 }
 
 .cell-presence-holi {
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #ebca8f;
 }
 
 .cell-absence-holi {
-  border-top: 1px white solid;
-  border-bottom: 1px #B0BEC5 solid;
   background-color: #edbd66;
 }
 
 .cell-short-holi {
-  border-top: 1px #ECEFF1 solid;
   background-color: #edb44e;
 }
 
@@ -534,6 +539,10 @@ export default {
   height: 20px;
   background-color: red;
   transform: rotate(45deg);
+}
+
+.cell-text-stroke {
+  text-shadow: 0px 0px 3px white;
 }
 
 </style>

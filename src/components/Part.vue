@@ -54,6 +54,11 @@
 
     <div class="work-simple-description">
       {{ description }}
+
+      <div v-if="self.description">
+        <v-divider class="my-3"></v-divider>
+        {{ self.description }}
+      </div>
     </div>
   </v-card>
 
@@ -65,7 +70,7 @@
 <script>
 
 export default {
-  name: '',
+  name: 'PartSimple',
 
   components: {
     
@@ -157,6 +162,7 @@ export default {
   font-size: 16px;
   white-space: pre-line;
   padding: 2px;
+  flex-grow: 1;
 }
 
 </style>

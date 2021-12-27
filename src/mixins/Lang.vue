@@ -1204,6 +1204,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'paint_border': {
+              'fr': 'Colorer les bordures de cellules',
+              'nl': '',
+              'en': '',
+            },
+            'paint_cell': {
+              'fr': 'Colorer l\'intérieur des cellules',
+              'nl': '',
+              'en': '',
+            },
             'call_name': {
               'fr': 'Description du dérangement',
               'nl': '',

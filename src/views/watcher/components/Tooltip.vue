@@ -35,13 +35,19 @@
             <img :src="$tool.get_logo('radium_30x30')" />
           </div>
 
-          <div class="mr-2">
+          <div class="mr-2 flex-grow-1">
             <div>
               <small>
                 {{ lang.generic.shift[lg] }}: {{ part.shift.shift ? part.shift.shift : '---' }}
               </small>
             </div>
-            <div class="white-space-pre">{{ part.work.work_columns.find(f => f.name == 'description') ? part.work.work_columns.find(f => f.name == 'description').value : '' }}</div>
+            <div class="white-space-pre">
+              {{ part.work.work_columns.find(f => f.name == 'description') ? part.work.work_columns.find(f => f.name == 'description').value : '' }}
+              <div v-if="part.description">
+                <v-divider class="my-3"></v-divider>
+                {{ part.description }}
+              </div>
+            </div>
           </div>
         </div>
         

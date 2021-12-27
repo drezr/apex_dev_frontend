@@ -277,7 +277,10 @@
           mdi-drag-horizontal-variant
         </v-icon>
 
-        <div class="mx-6 d-flex flex-column align-center" style="width: 80px;">
+        <div
+          class="mx-6 d-flex flex-column align-self-center"
+          style="width: 80px;"
+        >
           <div v-for="shift in work.shifts" :key="shift.id">
             {{ $tool.format_date(shift.date) }}
           </div>
@@ -745,7 +748,9 @@ export default {
 
 .works-navigation-inner {
   display: flex;
+  align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100vw;
   position: sticky;
   left: 0;

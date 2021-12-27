@@ -280,6 +280,7 @@ export default {
       decimal_calculator: false,
       current_position: [0, 0],
       add_child_loading: false,
+      palette_mode: 'border',
     }
   },
 
@@ -355,6 +356,8 @@ export default {
             'absence': '',
             'short': '',
             'color': '',
+            'presence_color': '',
+            'absence_color': '',
             'has_content': false,
             'has_call': false,
             'profile': false,

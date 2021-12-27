@@ -82,13 +82,15 @@
 
     <v-row>
       <v-col cols="7">
-        <v-select
+        <v-text-field
           outlined
+          clearable
           dense
-          v-model="copy.grade"
-          :items="lang.views.team.access_grades[lg]"
           :label="lang.generic.grade[lg]"
-        ></v-select>
+          v-model="copy.grade"
+          append-outer-icon="mdi-restore"
+          @click:append-outer="copy.grade = profile.grade"
+        ></v-text-field>
       </v-col>
 
       <v-col cols="5">
@@ -127,7 +129,7 @@
       ></CustomButton>
     </div>
 
-    <div class="d-flex justify-space-between">
+    <div class="d-flex justify-space-between" style="height: 65px;">
       <v-checkbox
         v-model="copy.link.is_manager"
         :label="lang.views.team.access_is_manager[lg]"
@@ -158,7 +160,10 @@
     </div>
 
 
-    <v-expansion-panels class="access">
+    <v-expansion-panels
+      class="access mt-3"
+      v-if="team.apps.find(a => a.app == 'draft')"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header>
           <img :src="$tool.get_logo('draft_30x30')" class="logo" />
@@ -193,7 +198,10 @@
     </v-expansion-panels>
 
 
-    <v-expansion-panels class="access mt-3">
+    <v-expansion-panels
+      class="access mt-3"
+      v-if="team.apps.find(a => a.app == 'planner')"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header>
           <img :src="$tool.get_logo('planner_30x30')" class="logo" />
@@ -220,8 +228,10 @@
       </v-expansion-panel>
     </v-expansion-panels>
 
-
-    <v-expansion-panels class="access mt-3">
+    <v-expansion-panels
+      class="access mt-3"
+      v-if="team.apps.find(a => a.app == 'radium')"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header>
           <img :src="$tool.get_logo('radium_30x30')" class="logo" />
@@ -240,7 +250,10 @@
     </v-expansion-panels>
 
 
-    <v-expansion-panels class="access mt-3">
+    <v-expansion-panels
+      class="access mt-3"
+      v-if="team.apps.find(a => a.app == 'watcher')"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header>
           <img :src="$tool.get_logo('watcher_30x30')" class="logo" />
@@ -453,6 +466,10 @@ export default {
 
   props: {
     profile: {
+      type: Object,
+      required: true,
+    },
+    team: {
       type: Object,
       required: true,
     },

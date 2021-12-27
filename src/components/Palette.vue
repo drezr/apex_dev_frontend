@@ -21,7 +21,19 @@
   <v-select
     v-if="$current_view == 'works'"
     v-model="$current_component.palette_mode"
-    :items="palette_modes"
+    :items="radium_palette_modes"
+    item-text="name"
+    item-value="value"
+    style="width: 400px;"
+    class="mx-auto mt-3"
+    hide-details
+    outlined
+  />
+
+  <v-select
+    v-if="$current_view == 'calendar'"
+    v-model="$current_component.palette_mode"
+    :items="watcher_palette_modes"
     item-text="name"
     item-value="value"
     style="width: 400px;"
@@ -80,7 +92,7 @@ export default {
   },
 
   computed: {
-    palette_modes() {
+    radium_palette_modes() {
       return [
         {
           'name': this.lang.views.radium.paint_works[this.lg],
@@ -101,6 +113,19 @@ export default {
         {
           'name': this.lang.views.radium.paint_rows_text[this.lg],
           'value': 'rows_text',
+        },
+      ]
+    },
+
+    watcher_palette_modes() {
+      return [
+        {
+          'name': this.lang.views.watcher.paint_border[this.lg],
+          'value': 'border',
+        },
+        {
+          'name': this.lang.views.watcher.paint_cell[this.lg],
+          'value': 'cell',
         },
       ]
     },

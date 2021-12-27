@@ -126,7 +126,7 @@ html {
 }
 
 .white-space-pre {
-  white-space: pre !important;
+  white-space: pre-line !important;
 }
 
 @media print {    

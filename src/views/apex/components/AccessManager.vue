@@ -88,6 +88,7 @@
     <ProfileEditor
       :profile="selected_profile"
       :mode="profile_editor_mode"
+      :team="team"
       @close="profile_editor_dialog = false"
       @delete_link="delete_link"
       @update="update_user"
