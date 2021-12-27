@@ -141,8 +141,8 @@
         outlined
         clearable
         dense
-        :label="lang.views.radium.info_override[lg]"
-        v-model="info_override"
+        :label="lang.views.radium.short_override[lg]"
+        v-model="short_override"
         class="ml-3"
       ></v-text-field>
 
@@ -152,7 +152,7 @@
         :text_color="'blue'"
         :small_fab="true"
         :tooltip="lang.generic.override[lg]"
-        @click="override_info"
+        @click="override_short"
         class="mx-1"
       />
     </div>
@@ -249,10 +249,10 @@
   ></CustomDialog>
 
   <v-snackbar
-    v-model="info_override_snackbar"
-    :timeout="info_override_timeout"
+    v-model="short_override_snackbar"
+    :timeout="short_override_timeout"
   >
-    {{ lang.views.radium.info_override_confirm[lg] }}
+    {{ lang.views.radium.short_override_confirm[lg] }}
   </v-snackbar>
 </v-card>
 
@@ -279,9 +279,9 @@ export default {
       remove_part_dialog: false,
       remove_project_dialog: false,
       send_message_dialog: false,
-      info_override: '',
-      info_override_snackbar: false,
-      info_override_timeout: 4000,
+      short_override: '',
+      short_override_snackbar: false,
+      short_override_timeout: 4000,
       team: Object(),
       is_updating: false,
       update_timer: null,
@@ -468,9 +468,23 @@ export default {
       this.send_message_dialog = false
     },
 
-    override_info() {
-      this.info_override = ''
-      this.info_override_snackbar = true
+    async override_short() {
+      await this.$http.post('works', {
+        'action': 'part_override_short',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'source_type': 'work',
+        'source_id': this.self.work.id,
+        'parent_type': 'shift',
+        'parent_id': this.self.shift.id,
+        'element_type': 'part',
+        'element_id': this.self.id,
+        'value': this.short_override,
+      })
+
+      this.short_override = ''
+      this.short_override_snackbar = true
     },
   },
 

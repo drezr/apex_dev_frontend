@@ -126,7 +126,7 @@ export default {
     },
 
     description() {
-      let desc = this.self.work.work_fields.find(f => f.name == 'description')
+      let desc = this.self.work.work_columns.find(f => f.name == 'description')
 
       return !desc ? '' : desc.value
     }

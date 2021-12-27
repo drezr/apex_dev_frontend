@@ -141,7 +141,7 @@
 
           <div
             v-else
-            class="d-flex justify-center pt-16"
+            class="d-flex justify-center py-16"
             style="width: 540px;"
           >
             {{ lang.views.watcher.calls_no_call[lg] }}

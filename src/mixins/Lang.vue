@@ -1706,7 +1706,7 @@ export default {
               'nl': '',
               'en': 'This participation is locked.',
             },
-            'info_override': {
+            'short_override': {
               'fr': 'Écraser la troisième case des cellules Watcher',
               'nl': '',
               'en': 'Overwrite the third cells box',
@@ -1716,7 +1716,7 @@ export default {
               'nl': '',
               'en': 'Work description for this team',
             },
-            'info_override_confirm': {
+            'short_override_confirm': {
               'fr': 'La troisième case des cellules des participants ont bien été écrasées dans le calendrier Watcher.',
               'nl': '',
               'en': 'The third box of the participants\' cells has been overwritten in the Watcher calendar.',
