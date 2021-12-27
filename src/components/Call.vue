@@ -66,7 +66,7 @@
   <v-divider class="mb-1" v-if="d27_file || d27_link.id"></v-divider>
 
   <div class="call-commands">
-    <div>
+    <div v-if="!add_child_loading">
       <!-- D27 file -->
 
       <CustomButton
@@ -77,6 +77,7 @@
         :dark="true"
         :tooltip="lang.views.watcher.call_download_d27[lg]"
         class="mx-1 mb-1"
+        @click="get_file()"
       />
 
       <CustomButton
@@ -87,6 +88,7 @@
         :dark="true"
         :tooltip="d27_file ? lang.views.watcher.call_replace_d27[lg] : lang.views.watcher.call_send_d27[lg]"
         class="mx-1 mb-1"
+        @click="$refs['file-input'].click()"
       />
 
       <CustomButton
@@ -96,7 +98,7 @@
         :dark="true"
         :small="true"
         :tooltip="lang.views.watcher.call_delete_existing_d27[lg]"
-        class="mx-1 mb-1"
+        class="mr-3 mb-1"
         @click="open_delete_dialog('file')"
       />
 
@@ -105,7 +107,7 @@
       <CustomButton
         v-if="d27_link.id && !edit_mode"
         :text="'D27'"
-        :icon="d27_link.url.includes('drive') ? 'mdi-google-drive' : 'mdi-file-pdf'"
+        :icon="d27_link.url && d27_link.url.includes('drive') ? 'mdi-google-drive' : 'mdi-file-pdf'"
         :color="'black'"
         :dark="true"
         :tooltip="lang.views.watcher.call_download_d27[lg]"
@@ -133,6 +135,15 @@
         :tooltip="lang.views.watcher.call_delete_link_d27[lg]"
         class="mx-1 mb-1"
         @click="open_delete_dialog('link')"
+      />
+    </div>
+
+    <div v-else>
+      <Loader
+        v-if="add_child_loading"
+        :size="20"
+        :width="5"
+        class="mx-3 my-3"
       />
     </div>
 
@@ -194,7 +205,7 @@
     @confirm="add_link"
   >
     <v-text-field
-      v-model="d27_link.url"
+      v-model="d27_new_link_url"
       outlined
       clearable
       autofocus
@@ -203,6 +214,12 @@
       class="mt-6"
     ></v-text-field>
   </CustomDialog>
+
+  <input type="file"
+    class="d-none"
+    ref="file-input"
+    v-on:change="add_file($event)"
+  />
 </div>
 
 </template>
@@ -230,6 +247,8 @@ export default {
       add_link_dialog: false,
       is_updating: false,
       update_timer: null,
+      d27_new_link_url: '',
+      add_child_loading: false,
     }
   },
 
@@ -389,17 +408,38 @@ Calculate time delta between start and end of the call in decimal
       this.delete_dialog = true
     },
 
-    add_link() {
-      console.log('add link')
-      this.add_link_dialog = false
-    },
-
     async remove() {
       if (this.delete_mode == 'link') {
+        await this.$http.post('element', {
+          'action': 'delete',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': this.parent.type,
+          'source_id': this.parent.id,
+          'parent_type': this.self.type,
+          'parent_id': this.self.id,
+          'element_type': 'link',
+          'element_id': this.d27_link.id,
+        })
+
         this.self.children = this.self.children.filter(c => c.type !== 'link')
       }
 
       else if (this.delete_mode == 'file') {
+        await this.$http.post('element', {
+          'action': 'delete',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': this.parent.type,
+          'source_id': this.parent.id,
+          'parent_type': this.self.type,
+          'parent_id': this.self.id,
+          'element_type': 'file',
+          'element_id': this.d27_file.id,
+        })
+
         this.self.children = this.self.children.filter(c => c.kind !== 'd27')
       }
 
@@ -432,6 +472,103 @@ Calculate time delta between start and end of the call in decimal
 
         window.open(url)
       }
+    },
+
+    get_file() {
+      window.open(`${this.$http.media}${this.d27_file.uid}/${this.d27_file.name}${this.d27_file.extension ? '.' + this.d27_file.extension : ''}`)
+    },
+
+    async add_file(e) {
+      this.add_child_loading = true
+
+      if (this.d27_file) {
+        await this.$http.post('element', {
+          'action': 'delete',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': this.parent.type,
+          'source_id': this.parent.id,
+          'parent_type': this.self.type,
+          'parent_id': this.self.id,
+          'element_type': 'file',
+          'element_id': this.d27_file.id,
+        })
+
+        this.self.children = this.self.children.filter(
+          c => c.id != this.d27_file.id)
+      }
+
+      this.$tool.get_file_data(e, async (data) => {
+        data.append('action', 'create')
+        data.append('element_type', 'file')
+        data.append('kind', 'd27')
+        data.append('view', this.$current_view)
+        data.append('source_type', this.parent.type)
+        data.append('source_id', this.parent.id)
+        data.append('parent_type', this.self.type)
+        data.append('parent_id', this.self.id)
+        data.append('team_id', this.$current_team_id)
+        data.append('app_id', this.$current_app_id)
+
+        let request = await this.$http.post('element', data)
+
+        this.add_child_loading = false
+
+        let child = request['file']
+        child.children = Array()
+
+        this.self.children.push(child)
+      })
+    },
+
+    async add_link() {
+      this.add_link_dialog = false
+      this.add_child_loading = true
+
+      let link = this.self.children.find(c => c.type == 'link')
+
+      if (link) {
+        link.url = this.d27_new_link_url
+
+        await this.$http.post('element', {
+          'action': 'update',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'source_type': this.parent.type,
+          'source_id': this.parent.id,
+          'parent_type': this.self.type,
+          'parent_id': this.self.id,
+          'element_type': 'link',
+          'element_id': this.d27_link.id,
+          'url': this.d27_new_link_url,
+        })
+      }
+
+      else {
+        let request = await this.$http.post('element', {
+          'action': 'create',
+          'element_type': 'link',
+          'view': this.$current_view,
+          'source_type': this.parent.type,
+          'source_id': this.parent.id,
+          'parent_type': this.self.type,
+          'parent_id': this.self.id,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'name': '',
+          'url': this.d27_new_link_url,
+        })
+
+        let child = request['link']
+        child.children = Array()
+
+        this.self.children.push(child)
+      }
+
+      this.d27_new_link_url = ''
+      this.add_child_loading = false
     },
   },
 
