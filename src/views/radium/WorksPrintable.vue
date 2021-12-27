@@ -39,18 +39,12 @@
       </div>
 
       <div class="works-frame" v-if="filtered_works.length > 0">
-        <VueDraggable
-          v-model="filtered_works"
-          :animation="100"
-          easing="cubic-bezier(1, 0, 0, 1)"
-          handle=".work-drag-button"
-        >
-          <WorkPrintable
-            v-for="(work, i) in filtered_works"
-            :key="i"
-            :self="work"
-          />
-        </VueDraggable>
+        <WorkPrintable
+          v-for="work in filtered_works"
+          :key="work.id"
+          :self="work"
+          :parent_cpnt="$current_instance"
+        />
       </div>
 
       <div
@@ -78,14 +72,14 @@
     :move_window="true"
   >
     <VueDraggable
-      v-model="columns"
+      v-model="column_configs"
       @change="update_columns"
       :animation="100"
       easing="cubic-bezier(1, 0, 0, 1)"
       handle=".cursor-move"
     >
       <div
-        v-for="(column, i) in columns"
+        v-for="(column, i) in column_configs"
         :key="i"
         class="works-customize-row"
       >
@@ -114,7 +108,7 @@
           class="mx-3"
           outlined
           hide-details
-          @input="update_config()"
+          @input="update_config();"
           :style="column.name == 'files' ? 'visibility: hidden;' : ''"
         />
 
@@ -136,9 +130,10 @@
     :title_text="lang.views.radium.filter_works_tooltip[lg]"
     :title_icon="'mdi-filter'"
     @cancel="filter_dialog = false"
+    :move_window="true"
   >
     <div
-      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(columns.filter(c => !excluded_filters.includes(c.name)))"
+      v-for="(column, i) in [{'name': 'dates'}, {'name': 'schedules'}].concat(column_configs.filter(c => !excluded_filters.includes(c.name) && c.visible))"
       :key="i"
       class="works-customize-row"
     >
@@ -192,7 +187,7 @@ export default {
       app: Object(),
       config: Object(),
       works: Array(),
-      columns: Array(),
+      column_configs: Array(),
       customize_dialog: false,
       filter_dialog: false,
       active_filters: Array(),
@@ -218,7 +213,7 @@ export default {
     this.app = this.request.app
     this.config = this.request.config
     this.works = this.request.works
-    this.columns = this.get_columns()
+    this.column_configs = this.get_column_configs()
 
     this.filtered_works = this.get_filtered_works()
 
@@ -230,7 +225,7 @@ export default {
   },
 
   methods: {
-    get_columns() {
+    get_column_configs() {
       let columns = this.config.columns.filter(
         c => c.name.includes('printable_'))
       
@@ -260,7 +255,7 @@ export default {
         clearInterval(this.config_update_timer)
       }
 
-      let true_name_columns = this.$tool.deepcopy(this.columns)
+      let true_name_columns = this.$tool.deepcopy(this.column_configs)
 
       for (let column of true_name_columns) {
         column.name = 'printable_' + column.name
@@ -299,8 +294,12 @@ export default {
           }
         }
 
-        else if (!filters.includes(work[key]) && work[key]) {
-          filters.push(work[key])
+        else {
+          let column = work.work_columns.find(c => c.name == key)
+
+          if (column && column.value) {
+            filters.push(column.value)
+          }
         }
       }
 
@@ -363,7 +362,9 @@ export default {
 
           else {
             works = works.filter(w => {
-              return filter.filters.includes(w[filter.column])
+              return w.work_columns.find(c => {
+                return filter.filters.find(f => f == c.value)
+              })
             })
           }
         }

@@ -8,7 +8,7 @@
   <div
     v-for="(field, column_name) in config"
     :key="column_name"
-    class="work-row-field"
+    class="work-row-field d-flex align-center"
     :style="`width: ${config[column_name]['width']};`"
   >
     <textarea
@@ -17,7 +17,7 @@
       :style="parent_cpnt.get_textarea_style(column_config, 5, self[column_name])"
       class="work-textarea no-focus text--accent-4"
       :class="text_color"
-      style="width: 100%; margin-top: 2px;"
+      style="width: 100%;"
       :disabled="!parent_cpnt.edit_mode"
     ></textarea>
   </div>

@@ -1,95 +1,117 @@
 <template>
 
-<div style="min-width: min-content;">
+
 <div
-  class="work-overframe"
+  class="work-overframe-printable"
 >
   <div class="work-frame lighten-5" :class="self.color">
     <div
-      v-for="(column, i) in $parent.$parent.columns.filter(c => c.visible && c.name != 'files')"
+      v-for="(column_config, i) in column_configs"
       :key="i"
       class="work-column"
-      :style="`min-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px; max-width: ${Number(column.width) + (edit_mode && ['shifts', 'limits', 's460s'].includes(column.name) ? 70 : 0)}px;`"
+      :style="`min-width: ${Number(column_config.width) + (edit_mode && column_config.multiple && column_config.name != 'files' ? 70 : 0)}px; max-width: ${Number(column_config.width) + (edit_mode && column_config.multiple && column_config.name != 'files' ? 70 : 0)}px;`"
     >
       <div class="work-column-title">
-        <div
-          v-if="i == 0"
-          class="work-drag-button pink no-print"
-          :style="`cursor: ${grab_cursor};`"
-          @mousedown="grab_cursor = 'grabbing'"
-          @mouseup="grab_cursor = 'grab'"
-          @mouseleave="grab_cursor = 'grab'"
-        >
-          <v-icon size="16" color="white">mdi-arrow-split-horizontal</v-icon>
-        </div>
-
-        {{ lang.views.radium['column_title_' + column.name][lg] }}
+        {{ lang.views.radium['column_title_' + column_config.name][lg] }}
       </div>
+
+
+
+      <!-- ############## Column Subtitles ############## -->
+
+      <div>
+        <div
+          v-if="['shifts', 'limits', 's460s'].includes(column_config.name)"
+          class="d-flex lighten-4"
+        >
+          <div class="work-drag-spacer" v-if="edit_mode"></div>
+
+          <div
+            class="work-column-subtitle"
+            v-for="(data, field) in table_configs[column_config.name]"
+            :key="field"
+            :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
+          >
+            {{ data.name }}
+          </div>
+
+          <div class="work-delete-spacer" v-if="edit_mode"></div>
+        </div>
+      </div>
+
+
+
+
+
+
 
       <div
         class="work-column-value"
         :class="[
-          edit_mode ? 'white' : (get_column_color(column.name)),
-          edit_mode ? '' : (self[column.name + '_bg_color'] ? 'lighten-2 accent-1' : (self[column.name] && self[column.name].length > 0 ? 'lighten-4' : 'lighten-3')),
+          edit_mode ? 'white' : self.columns[column_config.name].bg_color,
+          !edit_mode && self.columns[column_config.name].value || self.columns[column_config.name].rows.length > 0 ? 'lighten-4' : 'lighten-2 accent-1',
+          self.columns[column_config.name].clickable && !edit_mode ? 'work-column-value-clickable' : '',
+          $current_component.palette && !edit_mode ? 'work-column-value-painter' : '',
         ]"
       >
 
 
 
+
+
         <!-- ############## Textarea ############## -->
 
-
-
-
-        <div
-          v-if="!Array.isArray(self[column.name]) && column.name in self"
-          class="work-field"
-          :style="`font-size: ${column.textsize}px;`"
-        >
-          {{ self[column.name] }}
+        <div v-if="!column_config.multiple" style="width: 100%;">
+          <textarea
+            v-model="self.columns[column_config.name].value"
+            @input="set_textarea_height($event, column_config, 2)"
+            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value)"
+            style="width: 100%;"
+            class="work-textarea my-2 text--accent-4"
+            :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
+            :disabled="!edit_mode"
+          ></textarea>
         </div>
+
 
 
 
 
         <!-- ############## Shifts ############## -->
 
-
-
-
         <div
-          v-if="column.name == 'shifts'"
-          class="work-shifts lighten-3"
-          :class="get_column_color(column.name)"
+          v-else-if="column_config.name == 'shifts'"
+          class="align-self-start"
+          style="width: 100%;"
         >
-          <div v-if="self.shifts.length > 0">
-            <div class="d-flex lighten-4" :class="get_column_color(column.name)">
-              <div class="work-column-subtitle" style="width: 30%;">
-                {{ lang.generic.week[lg] }}
-              </div>
-
-              <div class="work-column-subtitle" style="width: 30%;">
-                {{ lang.generic.day[lg] }}
-              </div>
-
-              <div class="work-column-subtitle" style="width: 40%;">
-                {{ lang.generic.schedule[lg] }}
-              </div>
+          <div
+            v-for="(shift, i) in self.shifts"
+            :key="i"
+            class="d-flex"
+          >
+            <div
+              class="work-row-drag pink"
+              v-if="edit_mode"
+              :style="`cursor: ${grab_cursor};`"
+              @mousedown="grab_cursor = 'grabbing'"
+              @mouseup="grab_cursor = 'grab'"
+              @mouseleave="grab_cursor = 'grab'"
+            >
+              <v-icon color="white" small>mdi-arrow-split-horizontal</v-icon>
             </div>
 
+            <Shift
+              :self="shift"
+              :parent="self"
+              :column="column_config"
+              :edit_mode="edit_mode"
+            />
 
             <div
-              v-for="(shift, i) in self.shifts"
-              :key="i"
-              class="d-flex"
+              class="work-row-delete red"
+              v-if="edit_mode"
             >
-              <Shift
-                :self="shift"
-                :parent="self"
-                :column="column"
-                :edit_mode="edit_mode"
-                class="flex-grow-1"
-              />
+              <v-icon color="white">mdi-delete</v-icon>
             </div>
           </div>
         </div>
@@ -97,119 +119,102 @@
 
 
 
-        <!-- ############## Limits ############## -->
+        <!-- ############## Multiple ############## -->
 
-
-
-
-        <div
-          v-if="column.name == 'limits'"
-          class="work-rows lighten-3"
-          :class="get_column_color(column.name)"
+        <VueDraggable
+          v-else
+          v-model="self.columns[column_config.name].rows"
+          @change="update_child_position(column_config.name)"
+          :animation="100"
+          easing="cubic-bezier(1, 0, 0, 1)"
+          handle=".work-row-drag"
+          style="width: 100%;"
+          class="align-self-start"
         >
-          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
-            <div class="work-column-subtitle" style="width: calc(50% - 1px);">
-              {{ lang.views.radium.from[lg] }}
-            </div>
-
-            <div class="work-column-subtitle" style="width: calc(50% + 1px);">
-              {{ lang.views.radium.to[lg] }}
-            </div>
-
-         </div>
-
-          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
+          <div
+            v-for="(row, i) in self.columns[column_config.name].rows"
+            :key="i"
+            class="d-flex"
+          >
             <div
-              class="work-column-subtitle"
-              v-for="(data, field) in limit_fields"
-              :key="field"
-              :style="`width: ${data.width};`"
+              class="work-row-drag pink"
+              v-if="edit_mode && column_config.multiple"
+              :style="`cursor: ${grab_cursor};`"
+              @mousedown="grab_cursor = 'grabbing'"
+              @mouseup="grab_cursor = 'grab'"
+              @mouseleave="grab_cursor = 'grab'"
             >
-              {{ data.name }}
+              <v-icon color="white" small>mdi-arrow-split-horizontal</v-icon>
             </div>
-          </div>
-
-          <div v-if="self.limits.length > 0">
-            <div
-              v-for="(limit, i) in self.limits"
-              :key="i"
-            >
-              <div class="work-row">
-                <div
-                  v-for="(data, field) in limit_fields"
-                  :key="field"
-                  :style="`width: ${data.width};`"
-                  class="work-row-field"
-                >                  
-                  <v-text-field
-                    v-model="limit[field]"
-                    :disabled="!edit_mode"
-                    hide-details
-                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
-                    :style="`font-size: ${column.textsize}px;`"
-                    class="pa-0 ma-0"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
 
 
 
-        <!-- ############## S460s ############## -->
+
+            <!-- ############## Limits ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'limits'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="limits_table_config"
+              @update="update()"
+            />
 
 
 
 
-        <div
-          v-if="column.name == 's460s'"
-          class="work-rows lighten-3"
-          :class="get_column_color(column.name)"
-        >
-          <div class="d-flex lighten-4" :class="get_column_color(column.name)">
-            <div
-              class="work-column-subtitle"
-              v-for="(data, field) in s460_fields"
-              :key="field"
-              :style="`width: ${data.width};`"
-            >
-              {{ data.name }}
-            </div>
-          </div>
+            <!-- ############## S460s ############## -->
 
-          <div v-if="self.s460s.length > 0">
+            <WorkRow
+              v-if="column_config.name == 's460s'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="s460s_table_config"
+              @update="update()"
+            />
+
+
+
+
 
             <div
-              v-for="(s460, i) in self.s460s"
-              :key="i"
+              v-if="edit_mode && column_config.multiple"
+              class="work-row-delete red"
+              @click="open_remove_child_dialog(row, column_config.name)"
             >
-              <div class="work-row">
-                <div
-                  v-for="(data, field) in s460_fields"
-                  :key="field"
-                  :style="`width: ${data.width};`"
-                  class="work-row-field"
-                >
-                  <v-text-field
-                    v-model="s460[field]"
-                    :disabled="!edit_mode"
-                    hide-details
-                    :background-color="edit_mode ? 'white' : (get_column_color(column.name)) + ' lighten-4'"
-                    :style="`font-size: ${column.textsize}px;`"
-                    class="pa-0 ma-0"
-                  />
-                </div>
-              </div>
+              <v-icon color="white">mdi-delete</v-icon>
             </div>
+
+
           </div>
-        </div>
+        </VueDraggable>
       </div>
+
+
+
+
+
+      <div
+        v-if="edit_mode && column_config.multiple"
+        class="work-add-button"
+        :class="add_loading ? 'work-add-button-disabled grey' : 'green'"
+      >
+        <v-icon color="white" v-if="!add_loading">mdi-plus</v-icon>
+        <Loader :size="19" :width="3" :color="'white'" v-else />
+      </div>
+
+
+
     </div>
   </div>
 
-</div>
 </div>
 
 </template>
@@ -218,48 +223,94 @@
 <script>
 
 import Shift from '@/views/radium/components/Shift.vue'
+import WorkRow from '@/views/radium/components/WorkRow.vue'
 
 export default {
-  name: 'Work',
+  name: 'WorkPrintable',
 
   components: {
     Shift,
+    WorkRow,
   },
 
   props: {
     self: Object,
+    parent_cpnt: Object,
   },
 
   data() {
     return {
       edit_mode: false,
+      expanded: false,
       grab_cursor: 'grab',
+      link_radiums_dialog: false,
+      link_selected_radiums: Array(),
+      log_dialog: false,
+      log_dialog_loading: true,
+      message_dialog: false,
+      message: '',
+      message_selected_radiums: Array(),
+      message_preset: 0,
+      remove_dialog: false,
+      add_loading: false,
+      remove_child_dialog: false,
+      remove_child_column_name: null,
+      remove_child_item: null,
+      link_radiums_snackbar: false,
+      link_radiums_timeout: 4000,
+      original_self: null,
     }
   },
 
   created() {
+    if (this.self.newly_created) {
+      this.edit_mode = true
+      this.expanded = true
+      this.self.newly_created = false
+    }
 
+    this.self.shifts.sort((a, b) => a.position - b.position)
+    this.self.work_columns.sort((a, b) => a.position - b.position)
+
+    for (let column of this.self.work_columns) {
+      column.rows.sort((a, b) => a.position - b.position)
+    }
+
+    let columns = this.get_columns()
+    this.$set(this.self, 'columns', columns)
   },
 
   computed: {
-    file_fields() {
+    column_configs() {
+      return this.$current_component.column_configs.filter(c => c.visible)
+    },
+
+    table_configs() {
       return {
-        'ilt': {
-          'name' : this.lang.views.radium.column_title_ilts[this.lg],
-          'width': '33%',
+        'shifts': this.shifts_table_config,
+        'limits': this.limits_table_config,
+        's460s': this.s460s_table_config,
+      }
+    },
+
+    shifts_table_config() {
+      return {
+        'week': {
+          'name' : this.lang.generic.week[this.lg],
+          'width': '30%',
         },
-        'bnx': {
-          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
-          'width': '33%',
+        'day': {
+          'name' : this.lang.generic.day[this.lg],
+          'width': '30%',
         },
-        'fmht': {
-          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
-          'width': '34%',
+        'schedule': {
+          'name' : this.lang.generic.schedule[this.lg],
+          'width': '40%',
         },
       }
     },
 
-    limit_fields() {
+    limits_table_config() {
       return {
         'from_line': {
           'name' : this.lang.views.radium.line[this.lg],
@@ -267,7 +318,7 @@ export default {
         },
         'from_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '20%',
+          'width': '18%',
         },
         'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
@@ -275,11 +326,11 @@ export default {
         },
         'from_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '10%',
+          'width': '13%',
         },
         'from_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
-          'width': '9%',
+          'width': '8%',
         },
         'to_line': {
           'name' : this.lang.views.radium.line[this.lg],
@@ -287,7 +338,7 @@ export default {
         },
         'to_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '20%',
+          'width': '18%',
         },
         'to_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
@@ -295,30 +346,30 @@ export default {
         },
         'to_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '10%',
+          'width': '13%',
         },
         'to_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
-          'width': '9%',
+          'width': '8%',
         },
       }
     },
 
-    s460_fields() {
+    s460s_table_config() {
       return {
-        'line': {
+        'from_line': {
           'name' : this.lang.views.radium.line[this.lg],
           'width': '21%',
         },
-        'lane': {
+        'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
           'width': '15%',
         },
-        'start': {
+        'from_pk': {
           'name' : this.lang.views.radium.from[this.lg],
           'width': '32%',
         },
-        'end': {
+        'to_pk': {
           'name' : this.lang.views.radium.to[this.lg],
           'width': '32%',
         },
@@ -327,8 +378,40 @@ export default {
   },
 
   methods: {
-    get_column_color(column_name) {
-      return this.self[column_name + '_bg_color'] ? this.self[column_name + '_bg_color'] : this.self.color
+    get_columns() {
+      let columns = Object()
+
+      for (let column_config of this.$current_component.column_configs) {
+        let column = this.self.work_columns.find(
+          c => c.name == column_config.name)
+
+        if (column) {
+          columns[column_config.name] = column
+        }
+
+        else {
+          columns[column_config.name] = {
+            'name': column_config.name,
+            'value': null,
+            'bg_color': null,
+            'text_color': null,
+            'is_edited': false,
+            'rows' : Array(),
+          }
+        }
+      }
+
+      return columns
+    },
+
+    get_textarea_style(column, extra_height, value) {
+      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+
+      return `font-size: ${column.textsize}px;
+              height: ${Number(column.textsize * line_count) + (extra_height * 2)}px;
+              padding-top: ${extra_height}px;
+              padding-bottom: ${extra_height}px;
+              line-height: ${column.textsize}px; `
     },
   },
 
@@ -342,36 +425,10 @@ export default {
 
 <style>
 
-.work-field {
-  margin: 2px !important;
-  width: 100%;
-  text-align: center;
-}
-
-.work-row .v-input__slot:before {
-  border: 0px black solid !important;
-  border-width: 0px !important;
-}
-
-.work-row input:disabled {
-  color: black !important;
-}
-
-.work-row input {
-  text-align: center;
-}
-
-</style>
-
-
-<style scoped>
-
-.work-overframe {
+.work-overframe-printable {
   border: 1px black solid;
   width: min-content;
-  overflow: hidden;
   position: relative;
-  break-inside: avoid;
 }
 
 .work-frame {
@@ -430,6 +487,24 @@ export default {
   cursor: pointer;
 }
 
+.work-drag-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0px;
+  left: 1px;
+  width: 19px;
+  height: 19px;
+  border-radius: 10px;
+}
+
+.work-drag-button-disabled {
+  pointer-events: none !important;
+  filter: saturate(0%);
+  opacity: 0.5;
+}
+
 .work-border-right {
   border-right: 1px grey solid;
 }
@@ -446,6 +521,42 @@ export default {
 .work-shifts {
   width: 100%;
   height: 100%;
+}
+
+.work-expand {
+  border-top: 1px black solid;
+}
+
+.work-expand-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50px;
+  width: 50px;
+  cursor: pointer;
+}
+
+.work-expand-button:hover {
+  filter: brightness(1.3);
+}
+
+.work-link-expension-panel {
+  border: 1px rgba(0, 0, 0, 0.3) solid;
+  margin-top: 10px;
+}
+
+.work-log-button {
+  cursor:  pointer;
+  position: absolute;
+  top: -4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.work-log-cell {
+  white-space: pre;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
 .work-rows {
@@ -467,20 +578,89 @@ export default {
   border-right: 1px grey solid;
 }
 
+.work-add-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  cursor: pointer;
+  transition: filter .2s;
+}
+
+.work-add-button:hover {
+  filter: brightness(1.1);
+}
+
+.work-add-button-disabled {
+  cursor: default !important;
+}
+
+.work-add-button-disabled:hover {
+  filter: brightness(1) !important;
+}
+
 .work-subcolumn:not(:last-child) {
   border-right: 1px grey solid;
 }
 
-.work-drag-button {
+.work-row-delete {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 0px;
-  left: 1px;
-  width: 19px;
-  height: 19px;
-  border-radius: 10px;
+  cursor: pointer;
+  max-width: 50px;
+  min-width: 50px;
+  width: 50px;
+  margin-bottom: 1px;
+  transition: filter .3s;
+}
+
+.work-row-delete:hover {
+  filter: brightness(1.8);
+}
+
+.work-delete-spacer {
+  max-width: 50px;
+  min-width: 50px;
+  width: 50px;
+  height: 16px;
+  border-bottom: 1px grey solid;
+}
+
+.work-row-drag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 25px;
+  min-width: 25px;
+  width: 25px;
+  margin-bottom: 1px;
+  transition: filter .3s;
+}
+
+.work-row-drag:hover {
+  filter: brightness(1.8);
+}
+
+.work-drag-spacer {
+  max-width: 25px;
+  min-width: 25px;
+  width: 25px;
+  height: 16px;
+  border-bottom: 1px grey solid;
+  border-right: 1px grey solid;
+}
+
+.work-textarea {
+  resize: none;
+  text-align: center;
+  outline: none;
+}
+
+.work-textarea:disabled {
+  color: black;
+  cursor: text;
 }
 
 </style>
