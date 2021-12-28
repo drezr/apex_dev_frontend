@@ -881,7 +881,7 @@ export default {
       let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
 
       return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize * line_count) + (extra_height * 2)}px;
+              height: ${Number(column.textsize * (line_count)) + (extra_height * 2) + 1}px;
               padding-top: ${extra_height}px;
               padding-bottom: ${extra_height}px; `
     },

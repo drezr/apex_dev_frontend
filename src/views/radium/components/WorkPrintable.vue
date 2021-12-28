@@ -429,6 +429,7 @@ export default {
   border: 1px black solid;
   width: min-content;
   position: relative;
+  break-inside: avoid;
 }
 
 .work-frame {
