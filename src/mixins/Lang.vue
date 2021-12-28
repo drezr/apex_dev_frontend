@@ -763,27 +763,27 @@ export default {
             'my_team': {
               'fr': 'Mon équipe',
               'nl': '',
-              'en': '',
+              'en': 'My team',
             },
             'my_teams': {
               'fr': 'Mes équipes',
               'nl': '',
-              'en': '',
+              'en': 'My teams',
             },
             'circles': {
-              'fr': 'Arrondissements',
+              'fr': 'Cercles',
               'nl': '',
-              'en': '',
+              'en': 'Circles',
             },
             'my_circle': {
-              'fr': 'Mon arrondissement',
+              'fr': 'Mon cercle',
               'nl': '',
-              'en': '',
+              'en': 'My circle',
             },
             'my_circles': {
-              'fr': 'Mes arrondissements',
+              'fr': 'Mes cercles',
               'nl': '',
-              'en': '',
+              'en': 'My circles',
             },
             'change_password': {
               'fr': 'Changement de mot de passe',
@@ -815,37 +815,57 @@ export default {
               'nl': '',
               'en': 'Your password has been successfully updated.',
             },
+            'select_language': {
+              'fr': 'Sélectionner votre langue',
+              'nl': 'Selecteer je taal',
+              'en': 'Select your language',
+            },
+            'language_french': {
+              'fr': 'Français',
+              'nl': '',
+              'en': 'French',
+            },
+            'language_english': {
+              'fr': 'Anglais',
+              'nl': '',
+              'en': 'English',
+            },
+            'language_dutch': {
+              'fr': 'Néérlandais',
+              'nl': '',
+              'en': 'Dutch',
+            },
           },
           'team': {
             'draft_desc': {
               'fr': 'Gestion de projets',
               'nl': '',
-              'en': '',
+              'en': 'Project management',
             },
             'fleet_desc': {
               'fr': 'Gestion des véhicules',
               'nl': '',
-              'en': '',
+              'en': 'Vehicles management',
             },
             'planner_desc': {
               'fr': 'Planificateur de travail',
               'nl': '',
-              'en': '',
+              'en': 'Work planner',
             },
             'radium_desc': {
               'fr': 'Agenda de chantiers',
               'nl': '',
-              'en': '',
+              'en': 'Work agenda',
             },
             'watcher_desc': {
               'fr': 'Calendrier d\'équipe',
               'nl': '',
-              'en': '',
+              'en': 'Team calendar',
             },
             'nexus_desc': {
               'fr': 'Personnes disponibles',
               'nl': '',
-              'en': '',
+              'en': 'Available people',
             },
             'access_manager_tooltip': {
               'fr': 'Gestion de l\'équipe',
@@ -2098,13 +2118,21 @@ export default {
           },
         },
       },
+
+      language_cookie: null,
     }
   },
 
+  created() {
+
+  },
+
   computed: {
-    lg() {
-      return navigator.language.split('-')[0]
-    }
+
+  },
+
+  methods: {
+
   },
 }
 

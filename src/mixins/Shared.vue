@@ -145,6 +145,10 @@ export default {
     $child_task_component() {
       return this.$parent.$parent.$parent.$parent
     },
+
+    lg() {
+      return this.$store.state.language
+    },
   },
 
   methods: {

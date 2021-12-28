@@ -33,6 +33,7 @@ export default {
   },
 
   async created() {
+    this.set_language()
     this.log_user()
   },
 
@@ -76,6 +77,22 @@ export default {
         this.$store.commit('set_logged_profile', null)
         this.$router.push({'path': '/login'})
       }, 1000)
+    },
+
+    set_language() {
+      let language_cookie = this.$tool.get_cookie('language')
+
+      if (language_cookie) {
+        this.$store.commit('set_language', language_cookie)
+      }
+
+      else {
+        let language = navigator.language.split('-')[0]
+
+        document.cookie = `language=${language}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
+
+        this.$store.commit('set_language', language)
+      }
     },
   },
 

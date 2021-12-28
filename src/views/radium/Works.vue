@@ -18,7 +18,6 @@
 
       <div
         class="works-navigation"
-        :class="navigation_is_scrolled ? 'works-navigation-scrolled' : ''"
         :style="'width:' + doc_width + 'px;'"
       >
         <div class="works-navigation-inner">
@@ -427,11 +426,6 @@ export default {
 
       return column_titles
     },
-
-    navigation_is_scrolled() {
-      // TODO check #main-frame scroll to add .works-navigation-scrolled class
-      return false
-    },
   },
 
   methods: {
@@ -699,9 +693,7 @@ export default {
   },
 
   watch: {
-    navigation_is_scrolled(val) {
-      return val
-    } 
+    
   },
 }
 

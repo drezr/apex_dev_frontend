@@ -13,6 +13,7 @@ export default new Vuex.Store({
     palette_toggled: false,
     palette_color: 'red accent-4',
     is_grabbing: false,
+    language: null,
   },
 
   mutations: {
@@ -46,6 +47,10 @@ export default new Vuex.Store({
 
     set_is_grabbing(state, is_grabbing) {
       state.is_grabbing = is_grabbing
+    },
+
+    set_language(state, language) {
+      state.language = language
     },
   },
 

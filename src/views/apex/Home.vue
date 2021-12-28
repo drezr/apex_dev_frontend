@@ -78,7 +78,7 @@
     </div>
   </transition>
 
-  <div class="d-flex justify-end">
+<!--   <div class="d-flex justify-end">
     <v-tooltip
       :top="true"
       color="black"
@@ -93,7 +93,7 @@
 
       <span>My Apex</span>
     </v-tooltip>
-  </div>
+  </div> -->
 </div>
 
 </template>

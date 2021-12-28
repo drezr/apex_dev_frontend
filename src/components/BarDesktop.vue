@@ -38,7 +38,7 @@
   </div>
 
 
-  <v-menu offset-y open-on-hover>
+  <v-menu offset-y open-on-hover min-width="300">
     <template v-slot:activator="{ on, attrs }">
       <span
         class="grey--text text--darken-2 subtitle-2"
@@ -66,6 +66,36 @@
           {{ lang.generic.disconnect[lg] }}
         </v-list-item-title>
       </v-list-item>
+
+      <v-divider class="my-6"></v-divider>
+
+      <v-list-item>
+        <v-icon class="mr-3 mb-1">mdi-translate</v-icon>
+        {{ lang.views.home.select_language[lg] }}
+      </v-list-item>
+
+      <v-list-item-group
+        v-model="selected_language"
+        color="primary"
+      >
+        <v-list-item
+          v-for="(language, i) in languages"
+          :key="i"
+          class="mx-3"
+          link
+          @click="change_language(i)"
+        >
+          <v-list-item-content class="ml-3">
+            <v-list-item-title>
+                <v-icon small v-if="selected_language == i" class="mr-1">
+                  mdi-check
+                </v-icon>
+
+                {{ language.name }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
   </v-menu>
 
@@ -208,11 +238,12 @@ export default {
       are_passwords_same: null,
       password_snackbar: false,
       password_timeout: 4000,
+      selected_language: null,
     }
   },
 
   created() {
-
+    this.selected_language = this.languages.indexOf(this.languages.find(l => l.value == this.lg))
   },
 
   computed: {
@@ -255,6 +286,23 @@ export default {
     bar_is_visible() {
       return !this.$current_view.includes('printable')
     },
+
+    languages() {
+      return [
+        {
+          'name': this.lang.views.home.language_french[this.lg],
+          'value': 'fr',
+        },
+        {
+          'name': this.lang.views.home.language_dutch[this.lg],
+          'value': 'nl',
+        },
+        {
+          'name': this.lang.views.home.language_english[this.lg],
+          'value': 'en',
+        },
+      ]
+    },
   },
 
   methods: {
@@ -274,6 +322,14 @@ export default {
       this.password_dialog = false
 
       this.password_snackbar = true
+    },
+
+    change_language(lg_index) {
+      let lg = this.languages[lg_index].value
+      this.selected_language = lg_index
+
+      document.cookie = `language=${lg}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
+      this.$store.commit('set_language', lg)
     },
   },
 
