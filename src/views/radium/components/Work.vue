@@ -102,6 +102,87 @@
 
 
 
+        <!-- ############## Files ############## -->
+
+        <div
+          v-else-if="column_config.name == 'files'"
+          style="width: 100%; height: 100%;"
+          class="align-self-start d-flex flex-column"
+        >
+          <div class="d-flex">
+            <div
+              class="work-column-subtitle"
+              v-for="(data, subcolumn) in table_configs[column_config.name]"
+              :key="subcolumn"
+              :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
+            >
+              {{ data.name }}
+            </div>
+          </div>
+
+          <div class="d-flex flex-grow-1">
+            <div
+              class="work-subcolumn-content"
+              v-for="(data, subcolumn) in table_configs[column_config.name]"
+              :key="subcolumn"
+              :style="`width: ${data.width}; max-width: ${data.width}%;`"
+            >
+              <div class="flex-grow-1 d-flex flex-column justify-center align-center">
+                <div
+                  v-for="(file, i) in self.files.filter(f => f.kind == subcolumn)"
+                  :key="i"
+                  class="pa-1 ma-1 rounded text-center"
+                  style="background-color: rgba(0, 0, 0, 0.1);"
+                >
+                  <CustomButton
+                    :icon="$tool.get_file_icon(file.extension)"
+                    :tooltip="file.name + (file.extension ? '.' + file.extension: '')"
+                    :small_padding="true"
+                    @click="get_file(file)"
+                  />
+
+                  <div
+                    v-if="edit_mode"
+                    class="d-flex mt-2 justify-space-beetween"
+                  >
+                    <CustomButton
+                      :icon="'mdi-refresh'"
+                      :tooltip="lang.generic.replace[lg]"
+                      :small_fab="true"
+                      :color="'teal'"
+                      :no_padding="true"
+                      @click="file_replace = file; file_kind = subcolumn; $refs['file-input'].click();"
+                    />
+
+                    <CustomButton
+                      :icon="'mdi-delete'"
+                      :tooltip="lang.generic.delete[lg]"
+                      :small_fab="true"
+                      :color="'red'"
+                      @click="open_remove_child_dialog(file, 'files')"
+                      :no_padding="true"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div
+                v-if="edit_mode"
+                class="work-add-button align-self-end"
+                :class="add_loading ? 'work-add-button-disabled grey' : 'green'"
+                @click="file_kind = subcolumn; $refs['file-input'].click();"
+              >
+                <v-icon color="white" v-if="!add_loading">mdi-plus</v-icon>
+                <Loader :size="19" :width="3" :color="'white'" v-else />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
         <!-- ############## Shifts ############## -->
 
         <div
@@ -236,7 +317,7 @@
 
 
       <div
-        v-if="edit_mode && column_config.multiple"
+        v-if="edit_mode && column_config.multiple && column_config.name != 'files'"
         class="work-add-button"
         :class="add_loading ? 'work-add-button-disabled grey' : 'green'"
         @click="add_child(column_config.name)"
@@ -244,8 +325,6 @@
         <v-icon color="white" v-if="!add_loading">mdi-plus</v-icon>
         <Loader :size="19" :width="3" :color="'white'" v-else />
       </div>
-
-
 
     </div>
   </div>
@@ -534,6 +613,12 @@
   >
     {{ lang.views.radium.link_radiums_snackbar[lg] }}
   </v-snackbar>
+
+  <input type="file"
+    class="d-none"
+    ref="file-input"
+    v-on:change="add_file($event)"
+  />
 </v-badge>
 
 </template>
@@ -580,6 +665,8 @@ export default {
       link_radiums_snackbar: false,
       link_radiums_timeout: 4000,
       original_self: null,
+      file_kind: null,
+      file_replace: null,
     }
   },
 
@@ -649,6 +736,7 @@ export default {
         'shifts': this.shifts_table_config,
         'limits': this.limits_table_config,
         's460s': this.s460s_table_config,
+        'files': this.files_table_config,
       }
     },
 
@@ -731,6 +819,27 @@ export default {
         'to_pk': {
           'name' : this.lang.views.radium.to[this.lg],
           'width': '32%',
+        },
+      }
+    },
+
+    files_table_config() {
+      return {
+        'ilt': {
+          'name' : this.lang.views.radium.column_title_ilts[this.lg],
+          'width': '25%',
+        },
+        'bnx': {
+          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
+          'width': '25%',
+        },
+        'fmht': {
+          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
+          'width': '25%',
+        },
+        'other': {
+          'name' : this.lang.views.radium.column_title_others[this.lg],
+          'width': '25%',
         },
       }
     },
@@ -868,6 +977,10 @@ export default {
       }
     },
 
+    get_file(file) {
+      window.open(`${this.$http.media}${file.uid}/${file.name}${file.extension ? '.' + file.extension : ''}`)
+    },
+
 
 
 
@@ -969,15 +1082,6 @@ export default {
       this.parent_cpnt.update_work_position()
     },
 
-    async add_file(kind) {
-      this.add_file_loading = true
-
-      setTimeout(() => {
-        console.log(kind)
-        this.add_file_loading = false
-      }, 1000)
-    },
-
     async add_child(column_name) {
       this.add_loading = true
 
@@ -1009,6 +1113,36 @@ export default {
       }
 
       this.add_loading = false
+    },
+
+    async add_file(e) {
+      this.add_loading = true
+
+      if (this.file_replace) {
+        this.remove_child_column_name = 'files'
+        this.remove_child_item = this.file_replace
+
+        await this.remove_child()
+        this.file_replace = null
+      }
+
+      this.$tool.get_file_data(e, async (data) => {
+        data.append('action', 'add_file')
+        data.append('element_type', 'file')
+        data.append('kind', this.file_kind)
+        data.append('view', this.$current_view)
+        data.append('team_id', this.$current_team_id)
+        data.append('app_id', this.$current_app_id)
+        data.append('parent_type', 'work')
+        data.append('parent_id', this.self.id)
+
+        let request = await this.$http.post('works', data)
+
+        this.add_loading = false
+        this.file_kind = null
+
+        this.self.files.push(request['file'])
+      })
     },
 
     async update_child_position(column_name) {
@@ -1049,6 +1183,10 @@ export default {
 
       if (column_name == 'shifts') {
         this.self.shifts = this.self.shifts.filter(s => this.remove_child_item.id != s.id)
+      }
+
+      else if (column_name == 'files') {
+        this.self.files = this.self.files.filter(s => this.remove_child_item.id != s.id)
       }
 
       else {
@@ -1140,6 +1278,23 @@ export default {
 }
 
 .work-column-subtitle:not(:last-child) {
+  border-right: 1px grey solid;
+}
+
+.work-subcolumn-content {
+  font-size: 12px;
+  font-weight: bold;
+  position: relative;
+  height: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.work-subcolumn-content:not(:last-child) {
   border-right: 1px grey solid;
 }
 

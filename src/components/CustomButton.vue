@@ -33,7 +33,11 @@
             @mouseenter="$emit('mouseenter')"
             @mouseleave="$emit('mouseleave')"
             :color="color"
-            :class="[text_color ? text_color + '--text' : '']"
+            :class="[
+              text_color ? text_color + '--text' : '',
+              small_padding ? 'custom-button-small-padding' : '',
+              no_padding ? 'custom-button-no-padding' : '',
+            ]"
             :style="
               (width ? `width: ${width}px; min-width: 0px; ` : ' ') +
               (cursor ? `cursor: ${cursor}; ` : ' ') +
@@ -73,7 +77,10 @@
               </v-icon>
             </div>
 
-            <span v-if="text" :class="padding_x || padding_x == 0 ? '' : 'ml-2'">
+            <span
+              v-if="text"
+              :class="padding_x || padding_x == 0 ? '' : 'ml-2'"
+            >
               {{ text }}
             </span>
           </v-btn>
@@ -121,6 +128,8 @@ export default {
 
     padding_x: Number,
     padding_y: Number,
+    small_padding: Boolean,
+    no_padding: Boolean,
 
     badge: Boolean,
     badge_color: String,
@@ -218,6 +227,17 @@ export default {
 
 
 <style>
+
+.custom-button-small-padding.v-btn {
+  min-width: 0 !important;
+  padding: 8px !important;
+}
+
+.custom-button-no-padding.v-btn {
+  width: fit-content !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
 
 </style>
 

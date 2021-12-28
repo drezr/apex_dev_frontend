@@ -72,7 +72,7 @@
       <CustomButton
         v-if="d27_file && !edit_mode"
         :text="'D27'"
-        :icon="'mdi-file-pdf'"
+        :icon="$tool.get_file_icon(d27_file.extension)"
         :color="'black'"
         :dark="true"
         :tooltip="lang.views.watcher.call_download_d27[lg]"

@@ -101,10 +101,10 @@ export default {
 
       for (let ilt of this.ilts) {
         list.push({
-          'icon': 'mdi-file-pdf',
+          'icon': this.$tool.get_file_icon(ilt.extension),
           'name': ilt.name,
           'color': 'black',
-          'action': ilt.id,
+          'action': ilt,
         })
       }
 
@@ -120,10 +120,10 @@ export default {
 
       for (let bnx of this.bnxs) {
         list.push({
-          'icon': 'mdi-file-pdf',
+          'icon': this.$tool.get_file_icon(bnx.extension),
           'name': bnx.name,
           'color': 'black',
-          'action': bnx.id,
+          'action': bnx,
         })
       }
 
@@ -138,8 +138,8 @@ export default {
   },
 
   methods: {
-    get_file(event) {
-      console.log(event)
+    get_file(file) {
+      window.open(`${this.$http.media}${file.uid}/${file.name}${file.extension ? '.' + file.extension : ''}`)
     },
   },
 

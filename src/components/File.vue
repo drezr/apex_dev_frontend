@@ -57,7 +57,7 @@
         :class="$is_in_task || $current_view != 'board' ? 'mx-2' : 'mr-2'"
         @click="get_file"
       >
-        {{ icon }}
+        {{ $tool.get_file_icon(self.extension) }}
       </v-icon>
 
       <v-text-field
@@ -195,38 +195,6 @@ export default {
   computed: {
     edit_mode() {
       return this.$current_component.detail_edit_mode
-    },
-
-    icon() {
-      if (this.self.extension) {
-        let ext = this.self.extension.toLowerCase()
-
-        if (ext == 'pdf') {
-          return 'mdi-file-pdf'
-        }
-
-        else if (['doc', 'docx'].includes(ext)) {
-          return 'mdi-file-word'
-        }
-
-        else if (['xls', 'xlsx'].includes(ext)) {
-          return 'mdi-file-excel'
-        }
-
-        else if (['mp3', 'm4a', 'wav', 'wma', 'aac'].includes(ext)) {
-          return 'mdi-file-video'
-        }
-
-        else if (['mp4', 'avi', 'mov', 'flv', 'mkv'].includes(ext)) {
-          return 'mdi-file-music'
-        }
-
-        else if (['tiff', 'gif', 'png', 'jpg', 'jpeg'].includes(ext)) {
-          return 'mdi-image'
-        }
-      }
-
-      return 'mdi-file'
     },
 
     edit_menus() {

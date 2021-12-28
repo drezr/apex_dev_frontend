@@ -176,6 +176,7 @@
       rows="1"
       @input="update_part()"
       :disabled="!edit_mode"
+      style="font-size: 14px;"
     ></v-textarea>
   </div>
 

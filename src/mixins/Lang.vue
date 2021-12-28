@@ -1506,6 +1506,11 @@ export default {
               'nl': '',
               'en': '???',
             },
+            'column_title_others': {
+              'fr': 'Divers',
+              'nl': '',
+              'en': 'Others',
+            },
             'column_title_upm': {
               'fr': 'UPM',
               'nl': '',
