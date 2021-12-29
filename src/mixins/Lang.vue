@@ -815,6 +815,21 @@ export default {
               'nl': '',
               'en': 'Your password has been successfully updated.',
             },
+            'error_password_length': {
+              'fr': 'Votre mot de passe est trop court (minimum 8 caractères).',
+              'nl': '',
+              'en': '',
+            },
+            'error_password_not_same': {
+              'fr': 'La confirmation de votre mot de passe est différente.',
+              'nl': '',
+              'en': '',
+            },
+            'error_password_wrong': {
+              'fr': 'Une erreur s\'est produite lors du changement de votre mot de passe.',
+              'nl': '',
+              'en': '',
+            },
             'select_language': {
               'fr': 'Sélectionner votre langue',
               'nl': 'Selecteer je taal',

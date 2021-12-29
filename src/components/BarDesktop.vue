@@ -109,6 +109,14 @@
     @cancel="password_dialog = false"
     @confirm="change_password"
   >
+    <v-alert
+      class="mt-3"
+      type="error"
+      v-if="error_message"
+    >
+      {{ error_message }}
+    </v-alert>
+
     <v-card-text class="mt-8 px-8 pb-0">
       <v-text-field
         v-model="current_password"
@@ -239,6 +247,7 @@ export default {
       password_snackbar: false,
       password_timeout: 4000,
       selected_language: null,
+      error_message: null,
     }
   },
 
@@ -318,10 +327,38 @@ export default {
       this.are_passwords_same = this.new_password == this.new_password2
     },
 
-    change_password() {
-      this.password_dialog = false
+    async change_password() {
+      this.error_message = null
 
-      this.password_snackbar = true
+      let request = await this.$http.post('home', {
+        'action': 'change_password',
+        'user_id': this.$logged_profile.user,
+        'current_password': this.current_password,
+        'new_password': this.new_password,
+        'new_password2': this.new_password2,
+      })
+
+      if (request.result == 'success') {
+        this.current_password = ''
+        this.new_password = ''
+        this.new_password2 = ''
+
+        this.password_dialog = false
+
+        this.password_snackbar = true
+      }
+
+      else if (request.result == 'length') {
+        this.error_message = this.lang.views.home.error_password_length[this.lg]
+      }
+
+      else if (request.result == 'not_same') {
+        this.error_message = this.lang.views.home.error_password_not_same[this.lg]
+      }
+
+      else if (request.result == 'wrong') {
+        this.error_message = this.lang.views.home.error_password_wrong[this.lg]
+      }
     },
 
     change_language(lg_index) {
