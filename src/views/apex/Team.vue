@@ -9,7 +9,7 @@
         {{ team.name }}
 
         <CustomButton
-          v-if="$has_xs(['is_manager'])"
+          v-if="$has_xs(['is_manager']) || $is_staff"
           @click="access_manager_dialog = true"
           :tooltip="lang.views.team.access_manager_tooltip[lg]"
           :icon="'mdi-account-group-outline'"
