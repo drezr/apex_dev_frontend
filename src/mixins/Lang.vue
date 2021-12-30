@@ -825,8 +825,8 @@ export default {
               'nl': '',
               'en': '',
             },
-            'error_password_wrong': {
-              'fr': 'Une erreur s\'est produite lors du changement de votre mot de passe.',
+            'error_password_bad': {
+              'fr': 'Votre mot de passe actuel est incorrect.',
               'nl': '',
               'en': '',
             },

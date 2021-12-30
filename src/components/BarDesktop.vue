@@ -106,6 +106,7 @@
     :confirm_icon="'mdi-send'"
     :confirm_text="lang.generic.send[lg]"
     :confirm_color="'green'"
+    :confirm_disabled="!are_passwords_same || current_password.length == 0 || new_password.length < 8"
     @cancel="password_dialog = false"
     @confirm="change_password"
   >
@@ -356,8 +357,8 @@ export default {
         this.error_message = this.lang.views.home.error_password_not_same[this.lg]
       }
 
-      else if (request.result == 'wrong') {
-        this.error_message = this.lang.views.home.error_password_wrong[this.lg]
+      else if (request.result == 'bad') {
+        this.error_message = this.lang.views.home.error_password_bad[this.lg]
       }
     },
 
