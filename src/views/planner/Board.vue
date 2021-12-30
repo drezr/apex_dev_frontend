@@ -920,17 +920,17 @@ export default {
       this.foreign_profiles.push(profile)
       this.picked_profile = null
 
-      this.teammates_object.teammates.push(profile.name)
+      this.toggle_teammate(profile)
     },
 
     delete_foreign_profile(profile) {
-      this.teammates_object.teammates = this.teammates_object.teammates.filter(
-        t => t != profile.name)
       this.foreign_profiles = this.foreign_profiles.filter(
         p => p.id != profile.id)
 
       profile = this.all_profiles.find(p => p.id == profile.id)
       profile.disabled = false
+
+      this.toggle_teammate(profile)
     },
 
     async add_folder() {
