@@ -131,9 +131,9 @@
               >
                 <v-checkbox
                   v-if="loading == false"
-                  :label="team.name + (app.name ? ' (' + app.name + ')': '')"
+                  :label="team.name + (app.name ? ' (' + app.name + ')' : '')"
                   hide-details
-                  @change="toggle_team(app.id)"
+                  @change="toggle_team(team.id)"
                   :input-value="parent.shifts.length > 0 && parent.shifts[selected_shift].parts.find(p => p.team.id == team.id)"
                   :disabled="parent.shifts.length > 0 && parent.shifts[selected_shift].parts.find(p => p.team.id == team.id) ? true : false"
                 ></v-checkbox>
@@ -224,14 +224,14 @@ export default {
       this.link_selected_teams = Array()
     },
 
-    toggle_team(app_id) {
-      if (this.link_selected_teams.includes(app_id)) {
+    toggle_team(team_id) {
+      if (this.link_selected_teams.includes(team_id)) {
         this.link_selected_teams = this.link_selected_teams.filter(
-          id => id !== app_id)
+          id => id !== team_id)
       }
 
       else {
-        this.link_selected_teams.push(app_id)
+        this.link_selected_teams.push(team_id)
       }
     },
   },
