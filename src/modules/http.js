@@ -3,7 +3,7 @@ import axios from 'axios'
 let local_backend = true
 
 // Force local_backend to be false if host is 'apex.wf'
-if (window.location.host == 'apex.wf' || window.location.host == 'mobile.apex.wf') {
+if (window.location.host == 'beta.apex.wf') {
   local_backend = false
 }
 
@@ -11,9 +11,9 @@ class Http {
   constructor() {
     this.header = null
     this.local = local_backend
-    this.site = this.local ? 'http://127.0.0.1:8080/' : 'https://apex.wf/'
-    this.api = this.local ? 'http://127.0.0.1:8000/' : 'https://api.apex.wf/'
-    this.ws = this.local ? 'ws://127.0.0.1:8000/ws/' : 'wss://api.apex.wf/ws/'
+    this.site = this.local ? 'http://127.0.0.1:8080/' : 'https://beta.apex.wf/'
+    this.api = this.local ? 'http://127.0.0.1:8000/' : 'https://dev.apex.wf/'
+    this.ws = this.local ? 'ws://127.0.0.1:8000/ws/' : 'wss://ws.apex.wf/'
     this.media = this.local ? 'http://127.0.0.1:8888/' : 'https://media.apex.wf/'
   }
 
