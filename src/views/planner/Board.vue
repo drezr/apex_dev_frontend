@@ -393,6 +393,25 @@
     </div>
 
     <Loader :size="50" :width="5" class="my-6" v-if="all_profiles_loading" />
+
+    <div class="d-flex mt-6">
+      <v-text-field
+        outlined
+        clearable
+        dense
+        :label="lang.views.radium.short_override[lg]"
+        v-model="short_override"
+      ></v-text-field>
+
+      <CustomButton
+        :icon="'mdi-send'"
+        :text_color="'blue'"
+        :small_fab="true"
+        :tooltip="lang.generic.override[lg]"
+        @click="override_short"
+        class="mx-1"
+      />
+    </div>
   </CustomDialog>
 
   <CustomDialog
@@ -502,6 +521,13 @@
     ref="file-input"
     v-on:change="add_file($event)"
   />
+
+  <v-snackbar
+    v-model="short_override_snackbar"
+    :timeout="short_override_timeout"
+  >
+    {{ lang.views.radium.short_override_confirm[lg] }}
+  </v-snackbar>
 </div>
 
 </template>
@@ -550,6 +576,9 @@ export default {
       foreign_profiles: Array(),
       selected_folder: 0,
       is_grabbing: false,
+      short_override: '',
+      short_override_snackbar: false,
+      short_override_timeout: 4000,
       folders_dialog: false,
       delete_folder_dialog: false,
       deleting_folder: null,
@@ -989,6 +1018,9 @@ export default {
 
     async delete_folder() {
       this.delete_folder_dialog = false
+
+      this.selected_folder = 0
+
       this.folders = this.folders.filter(f => f.id !== this.deleting_folder.id)
 
       await this.$http.post('board', {
@@ -1000,6 +1032,30 @@ export default {
       })
 
       this.update_folders_position()
+    },
+
+    async override_short() {
+      let profile_ids = Array()
+
+      let profile_names = this.teammates_object.teammates.map(p => p)
+
+      for (let profile_name of profile_names) {
+        let profile = this.all_profiles.find(p => p.name == profile_name)
+        profile_ids.push(profile.id)
+      }
+
+      await this.$http.post('board', {
+        'action': 'override_short',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'value': this.short_override,
+        'profile_id': profile_ids,
+        'date': this.teammates_day.date,
+      })
+
+      this.short_override = ''
+      this.short_override_snackbar = true
     },
   },
 
