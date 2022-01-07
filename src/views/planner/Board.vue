@@ -203,8 +203,6 @@
                 v-model="date.data.children"
                 @change="update_children_position($event, date.data)"
                 group="drag"
-                :animation="100"
-                easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
