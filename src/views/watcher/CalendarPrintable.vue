@@ -6,6 +6,14 @@
   <transition name="fade">
     <div v-if="!loading" class="board-printable-area">
       <div class="d-flex flex-start align-center my-1 mx-3 text-h5">
+        <CustomButton
+          :icon="'mdi-chevron-left'"
+          :height="40"
+          :outlined="true"
+          class="mr-3 no-print"
+          @click="$router.push(`/team/${$current_team_id}/watcher/${$current_app_id}/calendar/month/${$current_month}/year/${$current_year}`)"
+        />
+
         {{ team.name }}
         {{ app.name ? `(${app.name})` : '' }} -
         {{ lang.generic.calendar[lg] }}
@@ -53,11 +61,35 @@
             </div>
           </div>
 
-          <div v-for="(date, y) in profile.dates" :key="y" class="cell" :class="'presence-' + color(date)">
-            <div class="presence" :class="select_color(date.cell.presence)">
+          <div
+            v-for="(date, y) in profile.dates"
+            :key="y"
+            class="cell"
+            :class="'presence-' + color(date)"
+            :style="date.cell.color ? 
+            `border-color: ${hex_colors[date.cell.color]}; border-width: 1px;
+             box-shadow: 0 0 0 1px ${hex_colors[date.cell.color]};` : ''
+            "
+          >
+            <div
+              class="presence lighten-3"
+              :class="[
+                select_color(date.cell.presence),
+                date.cell.presence_color,
+                date.cell.presence_color ? 'cell-text-stroke' : '',
+              ]"
+            >
               {{ date.cell.presence ? date.cell.presence.toUpperCase() : '' }}
             </div>
-            <div class="absence" :class="select_color(date.cell.absence)">
+
+            <div
+              class="absence lighten-3"
+              :class="[
+                select_color(date.cell.absence),
+                date.cell.absence_color,
+                date.cell.absence_color ? 'cell-text-stroke' : '',
+              ]"
+            >
               {{ date.cell.absence ? date.cell.absence.toUpperCase() : '' }}
             </div>
             <div class="_info">
@@ -112,6 +144,27 @@ export default {
       detail_object: null,
       detail_full_object: null,
       detail_edit_mode: false,
+
+      hex_colors: {
+        'white': '#FFFFFF',
+        'red': '#D50000',
+        'pink': '#E91E63',
+        'purple': '#9C27B0',
+        'deep-purple': '#673AB7',
+        'indigo': '#3F51B5',
+        'light-blue': '#03A9F4',
+        'cyan': '#00BCD4',
+        'teal': '#009688',
+        'green': '#4CAF50',
+        'light-green': '#8BC34A',
+        'lime': '#CDDC39',
+        'yellow': '#FFEB3B',
+        'amber': '#FFC107',
+        'orange': '#FF9800',
+        'deep-orange': '#FF5722',
+        'brown': '#795548',
+        'blue-grey': '#607D8B',
+      },
     }
   },
 
@@ -344,8 +397,8 @@ export default {
 }
 
 .spacer {
-  min-width: 172px;
-  max-width: 172px;
+  min-width: 171px;
+  max-width: 171px;
   height: 40px;
 }
 
@@ -393,7 +446,8 @@ export default {
 }
 
 .cell {
-  border-left: 2px black solid;
+  border-left: 1px black solid;
+  border-right: 1px black solid;
   width: 45px;
   min-width: 45px;
   height: 60px;
@@ -455,5 +509,10 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+.cell-text-stroke {
+  text-shadow: 0px 0px 3px white;
+}
+
 
 </style>

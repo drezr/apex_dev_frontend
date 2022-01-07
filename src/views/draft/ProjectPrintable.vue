@@ -6,6 +6,14 @@
   <transition name="fade">
     <div v-if="!loading" class="project-printable-area">
       <div class="d-flex justify-center my-1 mx-3 text-h5">
+        <CustomButton
+          :icon="'mdi-chevron-left'"
+          :height="40"
+          :outlined="true"
+          class="mr-3 no-print"
+          @click="$router.push(`/team/${$current_team_id}/draft/${$current_app_id}/projects/`)"
+        />
+
         {{ project.name }} -
         {{ $tool.format_date(project.date) }}
 

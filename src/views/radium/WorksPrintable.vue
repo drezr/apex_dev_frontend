@@ -6,6 +6,14 @@
   <transition name="fade">
     <div v-if="!loading" class="works-printable-area">
       <div class="d-flex justify-start align-center my-1 mx-3 text-h5">
+        <CustomButton
+          :icon="'mdi-chevron-left'"
+          :height="40"
+          :outlined="true"
+          class="mr-3 no-print"
+          @click="$router.push(`/team/${$current_team_id}/radium/${$current_app_id}/works/month/${$current_month}/year/${$current_year}`)"
+        />
+
         {{ team.name }}
         {{ app.name ? `(${app.name})` : '' }} -
         {{ lang.views.radium.printable_works[lg] }}

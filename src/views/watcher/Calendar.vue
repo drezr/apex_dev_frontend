@@ -100,7 +100,8 @@
   >
     <v-text-field
       v-if="detail_object.type == 'cell' && $has_xs(['watcher_is_editor'])"
-      v-model="detail_object.cell.short"
+      :value="detail_object_short"
+      @input="detail_object.cell.short = $event"
       outlined
       clearable
       autofocus
@@ -281,6 +282,8 @@ export default {
       current_position: [0, 0],
       add_child_loading: false,
       palette_mode: 'border',
+      detail_object_short: '',
+      update_timer: null,
     }
   },
 
@@ -567,6 +570,7 @@ export default {
     },
 
     async open_detail_dialog(date) {
+      this.detail_object_short = ''
       this.detail_dialog_loading = true
       this.detail_object = date
       this.detail_dialog = true
@@ -590,6 +594,7 @@ export default {
 
         date.cell.id = request.cell.id
         this.detail_full_object = request.cell
+        this.detail_object_short = this.detail_full_object.short
       }
 
       let children = this.$tool.get_fused_children(this.detail_full_object)

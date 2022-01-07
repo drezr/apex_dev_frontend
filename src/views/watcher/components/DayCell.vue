@@ -328,6 +328,7 @@ export default {
               'color': this.date.cell.color,
               'presence_color': this.date.cell.presence_color,
               'absence_color': this.date.cell.absence_color,
+              'short': this.date.cell.short,
             })
           }, 1000)
         }
