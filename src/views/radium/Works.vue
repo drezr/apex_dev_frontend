@@ -77,6 +77,7 @@
       :animation="100"
       easing="cubic-bezier(1, 0, 0, 1)"
       handle=".cursor-move"
+      class="works-customize-scrollbar"
     >
       <div
         v-for="(column, i) in column_configs"
@@ -87,7 +88,7 @@
           mdi-drag-horizontal-variant
         </v-icon>
 
-        <div style="width: 200px; text-align: center;" class="black--text">
+        <div style="min-width: 145px; text-align: center;" class="black--text">
           <b>{{ lang.views.radium['column_title_' + column.name][lg] }}</b>
         </div>
 
@@ -99,6 +100,7 @@
           outlined
           hide-details
           @input="update_config()"
+          style="min-width: 200px;"
         />
 
         <v-text-field
@@ -110,6 +112,7 @@
           hide-details
           @input="update_config();"
           :style="column.name == 'files' ? 'visibility: hidden;' : ''"
+          style="min-width: 200px;"
         />
 
         <v-checkbox
@@ -737,8 +740,11 @@ export default {
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px grey solid;
   padding-bottom: 10px;
+}
+
+.works-customize-row:not(:last-child) {
+  border-bottom: 1px grey solid;
 }
 
 .message-frame {
@@ -772,6 +778,15 @@ export default {
 .works-navigation-scrolled {
   border-bottom: 1px black solid;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.works-customize-scrollbar {
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.works-customize-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 </style>

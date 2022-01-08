@@ -1,13 +1,13 @@
 <template>
 
 <div class="navigation-bar-frame">
-  <TimeTravel class="mr-2" />
+  <TimeTravel />
 
-  <div class="d-flex flex-wrap" v-if="$current_view == 'calendar'">
+  <div class="d-flex flex-wrap justify-center" v-if="$current_view == 'calendar'">
     <CustomButton
       :icon="'mdi-palette'"
       :height="40"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="$emit('toggle-palette')"
       :tooltip="palette_tooltip"
       :outlined="$current_component.palette ? false : true"
@@ -19,7 +19,7 @@
     <CustomButton
       :icon="'mdi-calculator'"
       :height="40"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.watcher.hour_calculator[lg]"
       @click="$emit('toggle-decimal-calculator')"
       :outlined="$current_component.decimal_calculator ? false : true"
@@ -32,7 +32,7 @@
       :icon="'mdi-calendar-account'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="go_leaves"
       :tooltip="lang.views.watcher.leaves_management[lg]"
       v-if="$is_editor"
@@ -42,7 +42,7 @@
       :icon="'mdi-printer'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="go_printable_calendar"
       :tooltip="lang.views.watcher.printable_calendar[lg]"
       :badge="true"
@@ -56,7 +56,7 @@
       :icon="'mdi-hammer-screwdriver'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="go_calls"
       :tooltip="lang.views.watcher.calls_summary[lg]"
       :badge="true"
@@ -67,12 +67,12 @@
     />
   </div>
 
-  <div class="d-flex flex-wrap" v-if="$current_view == 'works'">
+  <div class="d-flex flex-wrap justify-center" v-if="$current_view == 'works'">
     <CustomButton
       v-if="$is_editor"
       :icon="'mdi-palette'"
       :height="40"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="palette_tooltip"
       @click="$emit('toggle-palette')"
       :outlined="$current_component.palette ? false : true"
@@ -84,7 +84,7 @@
       :icon="'mdi-filter'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.filter_works_tooltip[lg]"
       @click="$emit('open-filter-dialog')"
     />
@@ -93,7 +93,7 @@
       :icon="'mdi-sort'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.sort_works_tooltip[lg]"
       @click="$emit('open-sort-dialog')"
       :disabled="$current_component.active_filters.length > 0"
@@ -104,7 +104,7 @@
       :icon="'mdi-tune-vertical'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.customize_tooltip[lg]"
       @click="$emit('open-customize-dialog')"
     />
@@ -113,7 +113,7 @@
       :icon="'mdi-printer'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.printable_tooltip[lg]"
       @click="go_printable_works"
       :badge="true"
@@ -129,7 +129,7 @@
       :height="40"
       :color="'green'"
       :dark="!add_loading"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.add_work_tooltip[lg]"
       :disabled="add_loading"
       :loading="add_loading"
@@ -142,7 +142,7 @@
       :height="40"
       :color="'deep-orange'"
       :dark="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       :tooltip="lang.views.radium.show_messages_tooltip[lg]"
       :badge="true"
       :badge_content="String($current_component.message_count)"
@@ -151,13 +151,13 @@
     />
   </div>
 
-  <div class="d-flex flex-wrap" v-if="$current_view == 'board'">
+  <div class="d-flex flex-wrap justify-center" v-if="$current_view == 'board'">
     <CustomButton
       v-if="$is_editor"
       :icon="'mdi-folder-cog'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="$emit('open-folders-dialog')"
       :tooltip="lang.views.planner.folders_setting[lg]"
     />
@@ -166,7 +166,7 @@
       :icon="'mdi-printer'"
       :height="40"
       :outlined="true"
-      class="mr-1 mb-1"
+      class="ml-1 mb-1"
       @click="go_printable_board"
       :tooltip="lang.views.planner.printable_board[lg]"
       :badge="true"

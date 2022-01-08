@@ -4,7 +4,7 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading">
+    <div v-if="!loading" class="pb-6">
       <div class="team-title my-9">
         {{ team.name }}
 

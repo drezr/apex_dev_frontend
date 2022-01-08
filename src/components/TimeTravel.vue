@@ -1,6 +1,6 @@
 <template>
 
-<div class="d-flex flex-wrap">
+<div class="d-flex flex-wrap justify-center">
   <CustomButton
     :icon="'mdi-chevron-left'"
     :height="40"
@@ -90,7 +90,7 @@
     :icon="'mdi-chevron-right'"
     :height="40"
     :outlined="true"
-    class="mr-1 mb-1"
+    class="mb-1"
     @click="step_travel('next')"
     :disabled="next_disabled"
     :tooltip="next_tooltip"

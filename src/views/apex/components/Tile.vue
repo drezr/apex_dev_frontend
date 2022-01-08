@@ -1,5 +1,17 @@
 <template>
 
+<v-badge
+  class="team-tile-badge"
+  :value="self.app == 'radium'"
+  :color="self.message_coun == 0 ? 'blue' : 'red'"
+  :content="self.message_count"
+  overlap
+  top
+  right
+  bordered
+  offset-x="25"
+  offset-y="25"
+>
 <v-card 
   class="block hover"
   :class="$app_descriptions[self.app].color"
@@ -20,6 +32,7 @@
 
   <v-img :src="logo" class="logo" />
 </v-card>
+</v-badge>
 
 </template>
 
@@ -106,6 +119,15 @@ export default {
 </script>
 
 <style>
+
+.team-tile-badge .v-badge__badge {
+  height: 30px;
+  min-width: 30px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 </style>
 
