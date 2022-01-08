@@ -3,8 +3,8 @@
 <v-badge
   class="team-tile-badge"
   :value="self.app == 'radium'"
-  :color="self.message_coun == 0 ? 'blue' : 'red'"
-  :content="self.message_count"
+  :color="self.message_count == 0 ? 'blue' : 'red'"
+  :content="String(self.message_count)"
   overlap
   top
   right
