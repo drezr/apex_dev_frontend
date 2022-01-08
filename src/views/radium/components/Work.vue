@@ -547,6 +547,19 @@
     @confirm="send_message"
   >
     <v-select
+      :items="message_priorities"
+      v-model="message_priority"
+      item-text="name"
+      item-value="value"
+      :label="lang.views.radium.message_presets[lg]"
+      outlined
+      class="mb-3 mt-3"
+      dense
+      hide-details
+    ></v-select>
+
+
+    <v-select
       :items="message_presets"
       v-model="message_preset"
       @input="add_to_message($event)"
@@ -657,6 +670,7 @@ export default {
       message: '',
       message_selected_radiums: Array(),
       message_preset: 0,
+      message_priority: 'important',
       remove_dialog: false,
       add_loading: false,
       remove_child_dialog: false,
@@ -705,6 +719,13 @@ export default {
         this.lang.views.radium.message_preset_bnx_added[this.lg],
         this.lang.views.radium.message_preset_ilt_added[this.lg],
         this.lang.views.radium.message_preset_work_canceled[this.lg],
+      ]
+    },
+
+    message_priorities() {
+      return [
+        {'value': 'important', 'name': this.lang.generic.important[this.lg]},
+        {'value': 'notice', 'name': this.lang.generic.notice[this.lg]},
       ]
     },
 
@@ -951,11 +972,6 @@ export default {
       this.$nextTick(() => this.message_preset = 0)
     },
 
-    link_radiums() {
-      this.link_radiums_dialog = false
-      this.link_radiums_snackbar = true
-    },
-
     open_remove_child_dialog(child, type) {
       this.remove_child_column_name = type
       this.remove_child_item = child
@@ -980,6 +996,34 @@ export default {
     get_file(file) {
       window.open(`${this.$http.media}${file.uid}/${file.name}${file.extension ? '.' + file.extension : ''}`)
     },
+
+    toggle_link_radium(app_id) {
+      if (this.link_selected_radiums.includes(app_id)) {
+        this.link_selected_radiums = this.link_selected_radiums.filter(
+          id => id !== app_id)
+      }
+
+      else {
+        this.link_selected_radiums.push(app_id)
+      }
+    },
+
+    toggle_message_radium(app_id) {
+      if (this.message_selected_radiums.includes(app_id)) {
+        this.message_selected_radiums = this.message_selected_radiums.filter(
+          id => id !== app_id)
+      }
+
+      else {
+        this.message_selected_radiums.push(app_id)
+      }
+    },
+
+
+
+
+
+
 
 
 
@@ -1212,13 +1256,49 @@ export default {
       this.update_child_position(column_name)
     },
 
-    send_message() {
+    async send_message() {
       this.message_dialog = false
 
-      // message request
+      await this.$http.post('works', {
+        'action': 'send_message',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': this.self.type,
+        'element_id': this.self.id,
+        'value': this.message,
+        'app_ids': this.message_selected_radiums,
+        'priority': this.message_priority,
+      })
+
+      if (this.message_selected_radiums.find(m => m == this.$current_app_id)) {
+        this.$current_component.message_count++
+      }
+
+      // check if this app in message_selected_radiums to update message count
 
       this.message = ''
       this.message_selected_radiums = Array()
+    },
+
+    async link_radiums() {
+      await this.$http.post('works', {
+        'action': 'link_radiums',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': this.self.type,
+        'element_id': this.self.id,
+        'value': this.link_selected_radiums,
+      })
+
+      for (let app_id of this.link_selected_radiums) {
+        this.self.apps.push(app_id)
+      }
+
+      this.link_selected_radiums = Array()
+      this.link_radiums_dialog = false
+      this.link_radiums_snackbar = true
     },
   },
 

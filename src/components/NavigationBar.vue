@@ -144,9 +144,9 @@
       :dark="true"
       class="mr-1 mb-1"
       :tooltip="lang.views.radium.show_messages_tooltip[lg]"
-      :badge="!$current_component.messages_loading"
-      :badge_content="String($current_component.messages.length)"
-      :badge_color="$current_component.messages.length == 0 ? 'blue' : 'red'"
+      :badge="true"
+      :badge_content="String($current_component.message_count)"
+      :badge_color="$current_component.message_count == 0 ? 'blue' : 'red'"
       @click="$emit('open-messages-dialog')"
     />
   </div>

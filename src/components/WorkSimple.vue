@@ -6,8 +6,15 @@
     {{ $tool.format_date(self.date) }}
   </v-card>
 
-  <v-card :color="self.color + ' lighten-4'" class="pa-4">
-    <big>{{ self.description }}</big>
+  <v-card
+    :color="self.color + ' lighten-4'"
+    class="d-flex pa-2 align-center"
+  >
+    <img :src="$tool.get_logo('radium_50x50')" class="mr-6" />
+
+    <div class="work-simple-description">
+      {{ description }}
+    </div>
   </v-card>
 </div>
 
@@ -38,7 +45,11 @@ export default {
   },
 
   computed: {
+    description() {
+      let desc = this.self.work_columns.find(f => f.name == 'description')
 
+      return !desc ? '' : desc.value
+    }
   },
 
   methods: {
@@ -60,5 +71,11 @@ export default {
 
 <style scoped>
 
+.work-simple-description {
+  font-size: 16px;
+  white-space: pre-line;
+  padding: 2px;
+  flex-grow: 1;
+}
 
 </style>

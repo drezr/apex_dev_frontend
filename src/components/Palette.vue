@@ -64,7 +64,6 @@ export default {
   data() {
     return {
       colors: [
-        'white',
         'red',
         'pink',
         'purple',
@@ -82,6 +81,7 @@ export default {
         'deep-orange',
         'brown',
         'blue-grey',
+        'white',
         null,
       ],
     }

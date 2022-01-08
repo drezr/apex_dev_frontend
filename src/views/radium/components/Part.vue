@@ -12,14 +12,14 @@
     </div>
 
     <div class="ma-1 d-flex flex-nowrap pb-3">
-      <CustomButton
+<!--       <CustomButton
         v-if="edit_mode"
         :icon="'mdi-email-plus'"
         :text_color="'teal'"
         :small_fab="true"
         :tooltip="lang.views.radium.send_team_message[lg]"
         @click="send_message_dialog = true"
-      />
+      /> -->
 
       <CustomButton
         v-if="edit_mode"

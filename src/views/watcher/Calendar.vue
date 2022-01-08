@@ -277,7 +277,7 @@ export default {
       leave_config: Object(),
       trigger_all_quotas: false,
       palette: false,
-      palette_color: 'white',
+      palette_color: 'red',
       decimal_calculator: false,
       current_position: [0, 0],
       add_child_loading: false,

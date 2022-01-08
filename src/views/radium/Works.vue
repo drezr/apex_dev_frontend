@@ -25,7 +25,7 @@
             @open-customize-dialog="customize_dialog = true"
             @open-filter-dialog="filter_dialog = true"
             @open-sort-dialog="sort_dialog = true"
-            @open-messages-dialog="messages_dialog = true"
+            @open-messages-dialog="open_message_dialog()"
             @toggle-palette="palette = !palette"
             @add-work="add_work"
           />
@@ -122,66 +122,6 @@
         ></v-checkbox>
       </div>
     </VueDraggable>
-  </CustomDialog>
-
-  <CustomDialog
-    :open="messages_dialog"
-    :width="600"
-    :title_text="lang.views.radium.messages_dialog_title[lg]"
-    :title_icon="'mdi-android-messages'"
-    @cancel="messages_dialog = false"
-  >
-    <div v-if="messages.length == 0" class="d-flex justify-center pa-16">
-      {{ lang.views.radium.messages_no_message[lg] }}
-    </div>
-
-    <div
-      v-for="(message, i) in messages"
-      :key="i"
-      class="message-frame"
-    >
-      <WorkSimple :self="message.work" />
-
-      <v-alert
-        border="right"
-        :color="message.priority == 'important' ? 'red' : 'blue'"
-        :icon="message.priority == 'important' ? 'mdi-alert' : 'mdi-information'"
-        class="mt-3 mb-3 darken-2"
-        dark
-        prominent
-      >
-        <div class="px-3" style="white-space: pre;">
-          <big>{{ message.message }}</big>
-        </div>
-
-        <div class="text-right" style="position: relative; top: 10px;">
-          <small>{{ by_author_on_date(message.date, message.author) }}</small>
-        </div>
-      </v-alert>
-
-      <div class="text-right">
-        <CustomButton
-          :text="lang.generic.acquit[lg]"
-          :icon="'mdi-check'"
-          :color="'green'"
-          :dark="true"
-          @click="acquit_dialog = true"
-        />
-
-        <CustomDialog
-          :open="acquit_dialog"
-          :width="500"
-          :title_text="lang.generic.are_you_sure[lg]"
-          :cancel_icon="'mdi-close'"
-          :cancel_text="lang.generic.cancel[lg]"
-          :confirm_icon="'mdi-check'"
-          :confirm_text="lang.generic.acquit[lg]"
-          :confirm_color="'green'"
-          @cancel="acquit_dialog = false"
-          @confirm="acquit_message(message.id)"
-        ></CustomDialog>
-      </div>
-    </div>
   </CustomDialog>
 
   <CustomDialog
@@ -295,6 +235,70 @@
       </div>
     </VueDraggable>
   </CustomDialog>
+
+  <CustomDialog
+    :open="messages_dialog"
+    :width="600"
+    :title_text="lang.views.radium.messages_dialog_title[lg]"
+    :title_icon="'mdi-android-messages'"
+    @cancel="messages_dialog = false"
+  >
+    <Loader :size="100" :width="10" class="my-16" v-if="messages_loading" />
+
+    <div v-else>
+      <div v-if="messages.length == 0" class="d-flex justify-center pa-16">
+        {{ lang.views.radium.messages_no_message[lg] }}
+      </div>
+
+      <div
+        v-for="(message, i) in messages"
+        :key="i"
+        class="message-frame"
+      >
+        <WorkSimple :self="message.work" />
+
+        <v-alert
+          border="right"
+          :color="message.priority == 'important' ? 'red' : 'blue'"
+          :icon="message.priority == 'important' ? 'mdi-alert' : 'mdi-information'"
+          class="mt-3 mb-3 darken-2"
+          dark
+          prominent
+        >
+          <div class="px-3" style="white-space: pre;">
+            <big>{{ message.message }}</big>
+          </div>
+
+          <div class="text-right" style="position: relative; top: 10px;">
+            <small>{{ by_author_on_date(message.date, message.author) }}</small>
+          </div>
+        </v-alert>
+
+        <div class="text-right">
+          <CustomButton
+            :text="lang.generic.acquit[lg]"
+            :icon="'mdi-check'"
+            :color="'green'"
+            :dark="true"
+            @click="acquit_dialog = true"
+          />
+
+          <CustomDialog
+            :open="acquit_dialog"
+            :width="500"
+            :title_text="lang.generic.are_you_sure[lg]"
+            :cancel_icon="'mdi-close'"
+            :cancel_text="lang.generic.cancel[lg]"
+            :confirm_icon="'mdi-check'"
+            :confirm_text="lang.generic.acquit[lg]"
+            :confirm_color="'green'"
+            @cancel="acquit_dialog = false"
+            @confirm="acquit_message(message.id)"
+          ></CustomDialog>
+        </div>
+      </div>
+    </div>
+  </CustomDialog>
 </div>
 
 </template>
@@ -339,9 +343,10 @@ export default {
       messages: Array(),
       messages_loading: true,
       messages_dialog: false,
+      message_count: 0,
       acquit_dialog: false,
       palette: false,
-      palette_color: 'white',
+      palette_color: 'red',
       palette_mode: 'works',
       active_filters: Array(),
       selected_sort: null,
@@ -373,23 +378,17 @@ export default {
     this.config = this.request.config
     this.works = this.request.works
     this.column_configs = this.get_column_configs()
+    this.message_count = this.request.message_count
 
     this.filtered_works = this.get_filtered_works()
 
     this.loading = false
 
-    this.request = await this.$http.get('messages', {
-      'app_id': this.$current_app_id,
-    })
-    
-    // Has to be here to avoid glitch on loading page
-    this.doc_width = document.getElementById('main-frame').scrollWidth
-
-    this.messages = this.request.messages
-    this.messages_loading = false
-
     this.request = await this.$http.get('apps')
     this.circles = this.request.circles
+      
+    // Has to be here to avoid glitch on loading page
+    this.doc_width = document.getElementById('main-frame').scrollWidth
     
 
     for (let circle of this.circles) {
@@ -686,10 +685,32 @@ export default {
       return txt
     },
 
-    acquit_message(message_id) {
+    async acquit_message(message_id) {
       this.messages = this.messages.filter(m => m.id !== message_id)
+      this.message_count--
       this.acquit_dialog = false
+
+      await this.$http.post('works', {
+        'action': 'acquit_message',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': 'message',
+        'element_id': message_id,
+      })
     },
+
+    async open_message_dialog() {
+      this.messages_loading = true
+      this.messages_dialog = true
+
+      let request = await this.$http.get('messages', {
+        'app_id': this.$current_app_id,
+      })
+
+      this.messages = request.messages
+      this.messages_loading = false
+    }
   },
 
   watch: {

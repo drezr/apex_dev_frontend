@@ -710,6 +710,16 @@ export default {
             'nl': '',
             'en': 'Every',
           },
+          'important': {
+            'fr': 'Important',
+            'nl': '',
+            'en': 'Important',
+          },
+          'notice': {
+            'fr': 'Remarque',
+            'nl': '',
+            'en': 'Notice',
+          },
         },
         'views': {
           'login': {
@@ -1490,6 +1500,11 @@ export default {
               'fr': 'Afficher les messages',
               'nl': '',
               'en': 'Show messages',
+            },
+            'message_priority': {
+              'fr': 'Priorité du message',
+              'nl': '',
+              'en': 'Message priority',
             },
             'column_title_shifts': {
               'fr': 'Prestations',
