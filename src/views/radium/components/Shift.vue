@@ -75,7 +75,7 @@
   >
     <v-date-picker
       class="work-date-picker pt-5"
-      v-model="self.date"
+      v-model="selected_date"
       :first-day-of-week="1"
       locale="fr-fr"
       no-title
@@ -114,11 +114,21 @@ export default {
       ],
       date_dialog: false,
       update_timer: null,
+      selected_date: null,
     }
   },
 
   created() {
+    if (this.self.date) {
+      this.selected_date = this.self.date
+    }
 
+    else {
+      let cm = this.$current_month
+      cm = parseInt(cm) < 10 ? '0' + cm : cm
+
+      this.selected_date = `${this.$current_year}-${cm}-00`
+    }
   },
 
   computed: {
@@ -228,6 +238,12 @@ export default {
 
     shift() {
       this.update()
+    },
+
+    selected_date() {
+      if (this.selected_date.split('-')[2] != '00') {
+        this.self.date = this.selected_date
+      }
     },
   }
 }
