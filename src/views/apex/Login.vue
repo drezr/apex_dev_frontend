@@ -9,6 +9,10 @@
         {{ lang.views.login.error_message[lg] }}
       </v-alert>
 
+      <v-alert type="success" v-if="reset_success">
+        {{ lang.views.login.success_message_reset[lg] }}
+      </v-alert>
+
 
       <v-text-field
         outlined
@@ -29,6 +33,7 @@
         v-model="password"
         :rules="password_rules"
         tabindex="2"
+        ref="password"
       ></v-text-field>
 
 
@@ -58,6 +63,12 @@
 
 
     <div v-if="mode == 'reset'">
+      <Loader :size="50" :width="6" v-if="reset_loading" />
+
+      <v-alert type="error" v-if="reset_error" class="mb-0">
+        {{ lang.views.login.error_message_reset[lg] }}
+      </v-alert>
+
       <div class="filler">
         <b>{{ lang.views.login.reset_password_title[lg] }}</b>
         <small class="grey--text">
@@ -125,6 +136,9 @@ export default {
       reset_email: '',
       password: '',
       login_error: false,
+      reset_success: false,
+      reset_error: false,
+      reset_loading: false,
 
       email_rules: [
         value => !!value || this.lang.views.login.error_insert_email[this.lg],
@@ -149,7 +163,7 @@ export default {
       }
     }
 
-    window.addEventListener('keyup', this.handler)
+    window.addEventListener('keyup', this.handler)    
   },
 
   beforeDestroy() {
@@ -223,8 +237,31 @@ For reset password button disabling
       }
     },
 
-    reset() {
+    async reset() {
+      this.reset_loading = true
+      this.reset_success = false
+      this.reset_error = false
 
+      let request = await this.$http.post(`reset_password`, {
+        'username': this.reset_email,
+        'lang': this.lg,
+      })
+
+      if (request.result == 'success') {
+        this.reset_success = true
+        this.login_email = this.reset_email
+        this.mode = 'login'
+
+        setTimeout(() => {
+          this.$refs.password.$el.getElementsByTagName('input')[0].focus()
+        }, 100)
+      }
+
+      else if (request.result == 'error') {
+        this.reset_error = true
+      }
+
+      this.reset_loading = false
     },
   },
 

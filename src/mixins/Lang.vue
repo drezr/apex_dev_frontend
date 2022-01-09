@@ -738,6 +738,16 @@ export default {
               'nl': '',
               'en': '',
             },
+            'error_message_reset': {
+              'fr': 'L\'adresse email n\'existe pas.',
+              'nl': '',
+              'en': '',
+            },
+            'success_message_reset': {
+              'fr': 'Votre nouveau mot de passe a été envoyé par email.',
+              'nl': '',
+              'en': '',
+            },
             'reset_password_title': {
               'fr': 'Réinitialiser votre mot de passe',
               'nl': '',

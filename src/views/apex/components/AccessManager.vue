@@ -37,7 +37,7 @@
       <v-btn
         color="green"
         class="ml-3 white--text"
-        :disabled="!picked_profiles"
+        :disabled="!picked_profiles || picked_profiles.length == 0"
         @click="add_links"
       >
         <v-icon class="mr-3">mdi-account-arrow-left</v-icon>
@@ -78,6 +78,11 @@
         </v-list-item-action>
       </v-list-item>
     </VueDraggable>
+
+
+    <div style="height: 100px;" v-if="profile_create_loading">
+      <Loader :size="50" :width="8" class="py-6" />
+    </div>
   </v-list>
 
   <v-dialog
@@ -126,6 +131,7 @@ export default {
       all_profiles: Array(),
       picked_profiles: Array(),
       profile_editor_mode: null,
+      profile_create_loading: false,
     }
   },
 
@@ -192,6 +198,9 @@ export default {
     },
 
     async create_user(profile) {
+      this.profile_create_loading = true
+      profile.lang = this.lg
+
       let request = await this.$http.post('team', {
         'action': 'create_user',
         'view': this.$current_view,
@@ -199,8 +208,14 @@ export default {
         'value': profile,
       })
 
+      this.profile_create_loading = false
+
       this.profiles.push(request.profile)
       this.set_disabled_profiles()
+
+      setTimeout(() => {
+        document.getElementsByClassName('v-dialog--active')[0].scrollTop = 100000
+      }, 100)
     },
 
     open_profile_editor_dialog(profile) {
