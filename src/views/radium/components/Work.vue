@@ -983,7 +983,7 @@ export default {
     },
 
     async open_log_dialog(column_name) {
-      if (this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts') {
+      if (this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
         this.log_dialog = true
         this.log_dialog_loading = true
 
