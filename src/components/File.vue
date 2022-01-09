@@ -113,22 +113,11 @@
         />
 
         <CustomButton
-          v-if="$is_in_task || $current_view == 'board'"
           :icon="'mdi-delete'"
           :small_fab="true"
           :text_color="'red'"
           :tooltip="lang.generic.delete[lg]"
           @click="delete_dialog = true"
-        />
-
-        <CustomButton
-          v-else
-          :icon="'mdi-cog'"
-          :small_fab="true"
-          :text_color="'teal'"
-          :tooltip="lang.generic.edit_options[lg]"
-          :menus="edit_menus"
-          @menu_action="menu_action($event)"
         />
       </div>
     </div>

@@ -107,7 +107,7 @@
                 />
 
                 <CustomButton
-                  v-if="$current_view != 'board'"
+                  v-if="$current_view == 'project'"
                   :icon="'mdi-cog'"
                   :small_fab="true"
                   :text_color="'teal'"
