@@ -58,6 +58,7 @@
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.name = profile.name"
       @input="check_profiles_exist()"
+      tabindex="1"
     ></v-text-field>
 
     <v-text-field
@@ -68,6 +69,7 @@
       v-model="copy.ident"
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.ident = profile.ident"
+      tabindex="2"
     ></v-text-field>
 
     <v-text-field
@@ -78,6 +80,7 @@
       v-model="copy.phone"
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.phone = profile.phone"
+      tabindex="3"
     ></v-text-field>
 
     <v-row>
@@ -90,6 +93,7 @@
           v-model="copy.grade"
           append-outer-icon="mdi-restore"
           @click:append-outer="copy.grade = profile.grade"
+          tabindex="4"
         ></v-text-field>
       </v-col>
 
@@ -102,6 +106,7 @@
           v-model="copy.field"
           append-outer-icon="mdi-restore"
           @click:append-outer="copy.field = profile.field"
+          tabindex="5"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -116,6 +121,7 @@
       append-outer-icon="mdi-restore"
       @click:append-outer="copy.username = profile.username"
       @input="check_email_exist()"
+      tabindex="6"
     ></v-text-field>
 
     <div class="text-center" v-if="mode == 'edit'">
@@ -136,6 +142,7 @@
         :hint="lang.views.team.access_is_manager_hint[lg]"
         persistent-hint
         class="mt-0 mb-6 mx-3"
+        tabindex="7"
       ></v-checkbox>
 
       <div>

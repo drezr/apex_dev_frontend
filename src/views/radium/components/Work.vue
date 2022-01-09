@@ -375,10 +375,12 @@
           :text="lang.generic.to_copy[lg]"
           :rounded="true"
           :color="'indigo'"
-          :dark="true"
+          :dark="!($store.state.copying_work && $store.state.copying_work.id == self.id)"
+          :disabled="$store.state.copying_work && $store.state.copying_work.id == self.id"
           :icon="'mdi-content-copy'"
           :tooltip="lang.views.radium.copy_tooltip[lg]"
           class="mr-3"
+          @click="set_copying_work()"
         />
 
         <CustomButton
@@ -1023,6 +1025,10 @@ export default {
 
     set_moving_work() {
       this.$store.commit('set_moving_work', this.self)
+    },
+
+    set_copying_work() {
+      this.$store.commit('set_copying_work', this.self)
     },
 
 

@@ -61,18 +61,33 @@
         {{ lang.views.radium.no_filters_result[lg] }}
       </div>
 
-      <div class="d-flex justify-end" v-if="$is_editor && show_commands">
+      <div class="d-flex justify-end" v-if="$is_editor && (show_move_command || show_copy_command)">
         <div class="works-command-buttons-position command-buttons-bg">
           <CustomButton
+            v-if="show_move_command"
             :icon="'mdi-flip-to-front'"
             :fab="true"
             :color="'light-blue'"
             :dark="!moving_disabled"
             :disabled="moving_disabled"
-            :loading="false"
+            :loading="moving_work_loading"
             :elevation="1"
             :tooltip="lang.generic.move[lg]"
             @click="move_work"
+            :tooltip_top="true"
+            :class="show_copy_command ? 'mr-1' : ''"
+          />
+
+          <CustomButton
+            v-if="show_copy_command"
+            :icon="'mdi-content-copy'"
+            :fab="true"
+            :color="'indigo'"
+            :dark="true"
+            :loading="copying_work_loading"
+            :elevation="1"
+            :tooltip="lang.generic.to_copy[lg]"
+            @click="copy_work"
             :tooltip_top="true"
           />
         </div>
@@ -383,6 +398,7 @@ export default {
       is_moving: false,
       doc_width: 0,
       moving_work_loading: false,
+      copying_work_loading: false,
     }
   },
 
@@ -448,7 +464,15 @@ export default {
     },
 
     show_commands() {
+      return (this.$store.state.moving_work && this.$store.state.moving_work.apps.includes(Number(this.$current_app_id))) || this.$store.state.copying_work
+    },
+
+    show_move_command() {
       return this.$store.state.moving_work && this.$store.state.moving_work.apps.includes(Number(this.$current_app_id))
+    },
+
+    show_copy_command() {
+      return this.$store.state.copying_work
     },
 
     moving_disabled() {
@@ -744,7 +768,7 @@ export default {
     async move_work() {
       this.moving_work_loading = true
       let moving_work = this.$store.state.moving_work
-      let new_date = `${this.$current_year}-${Number(this.$current_month) < 10 ? '0' + this.$current_month : this.$current_month}-01`
+      let new_date = this.$get_first_from_current_date()
 
       let request = await this.$http.post('works', {
         'action': 'move_work',
@@ -756,11 +780,40 @@ export default {
         'date': new_date,
       })
 
+      let work = request.work
+      this.filtered_works.push(work)
+
       this.$store.commit('set_moving_work', null)
       this.moving_work_loading = false
 
+      setTimeout(() => {
+        document.getElementById('main-frame').scrollTop = 999999999
+      }, 100)
+
+      this.update_work_position()
+    },
+
+    async copy_work() {
+      this.copying_work_loading = true
+      let copying_work = this.$store.state.copying_work
+      let new_date = this.$get_first_from_current_date()
+
+      let request = await this.$http.post('works', {
+        'action': 'copy_work',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': copying_work.type,
+        'element_id': copying_work.id,
+        'work': copying_work,
+        'date': new_date,
+      })
+
       let work = request.work
       this.filtered_works.push(work)
+
+      this.$store.commit('set_copying_work', null)
+      this.copying_work_loading = false
 
       setTimeout(() => {
         document.getElementById('main-frame').scrollTop = 999999999

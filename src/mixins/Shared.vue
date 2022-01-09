@@ -253,7 +253,11 @@ export default {
           }
         }
       }
-    }
+    },
+
+    $get_first_from_current_date() {
+      return `${this.$current_year}-${Number(this.$current_month) < 10 ? '0' + this.$current_month : this.$current_month}-01`
+    },
   },
 }
 
