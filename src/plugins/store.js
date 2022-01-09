@@ -14,6 +14,7 @@ export default new Vuex.Store({
     palette_color: 'red accent-4',
     is_grabbing: false,
     language: null,
+    moving_work: null,
   },
 
   mutations: {
@@ -31,6 +32,10 @@ export default new Vuex.Store({
 
     set_moved_unit(state, unit) {
       state.moved_unit = unit
+    },
+
+    set_moving_work(state, work) {
+      state.moving_work = work
     },
 
     toggle_palette(state, toggled) {

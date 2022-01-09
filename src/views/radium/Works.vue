@@ -60,6 +60,23 @@
       >
         {{ lang.views.radium.no_filters_result[lg] }}
       </div>
+
+      <div class="d-flex justify-end" v-if="$is_editor && show_commands">
+        <div class="works-command-buttons-position command-buttons-bg">
+          <CustomButton
+            :icon="'mdi-flip-to-front'"
+            :fab="true"
+            :color="'light-blue'"
+            :dark="!moving_disabled"
+            :disabled="moving_disabled"
+            :loading="false"
+            :elevation="1"
+            :tooltip="lang.generic.move[lg]"
+            @click="move_work"
+            :tooltip_top="true"
+          />
+        </div>
+      </div>
     </div>
   </transition>
 
@@ -365,6 +382,7 @@ export default {
       config_update_timer: null,
       is_moving: false,
       doc_width: 0,
+      moving_work_loading: false,
     }
   },
 
@@ -427,6 +445,14 @@ export default {
       }
 
       return column_titles
+    },
+
+    show_commands() {
+      return this.$store.state.moving_work && this.$store.state.moving_work.apps.includes(Number(this.$current_app_id))
+    },
+
+    moving_disabled() {
+      return !this.$store.state.moving_work || Number(this.$store.state.moving_work.date.split('-')[1]) == Number(this.$current_month)
     },
   },
 
@@ -713,7 +739,35 @@ export default {
 
       this.messages = request.messages
       this.messages_loading = false
-    }
+    },
+
+    async move_work() {
+      this.moving_work_loading = true
+      let moving_work = this.$store.state.moving_work
+      let new_date = `${this.$current_year}-${Number(this.$current_month) < 10 ? '0' + this.$current_month : this.$current_month}-01`
+
+      let request = await this.$http.post('works', {
+        'action': 'move_work',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': moving_work.type,
+        'element_id': moving_work.id,
+        'date': new_date,
+      })
+
+      this.$store.commit('set_moving_work', null)
+      this.moving_work_loading = false
+
+      let work = request.work
+      this.filtered_works.push(work)
+
+      setTimeout(() => {
+        document.getElementById('main-frame').scrollTop = 999999999
+      }, 100)
+
+      this.update_work_position()
+    },
   },
 
   watch: {
@@ -787,6 +841,12 @@ export default {
 
 .works-customize-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.works-command-buttons-position {
+  position: absolute;
+  bottom: 20px;
+  right: 5px;
 }
 
 </style>

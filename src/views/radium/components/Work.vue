@@ -385,10 +385,12 @@
           :text="lang.generic.move[lg]"
           :rounded="true"
           :color="'light-blue'"
-          :dark="true"
+          :dark="!($store.state.moving_work && $store.state.moving_work.id == self.id)"
+          :disabled="$store.state.moving_work && $store.state.moving_work.id == self.id"
           :icon="'mdi-flip-to-front'"
           :tooltip="lang.views.radium.move_tooltip[lg]"
           class="mr-3"
+          @click="set_moving_work()"
         />
 
         <CustomButton
@@ -1017,6 +1019,10 @@ export default {
       else {
         this.message_selected_radiums.push(app_id)
       }
+    },
+
+    set_moving_work() {
+      this.$store.commit('set_moving_work', this.self)
     },
 
 
