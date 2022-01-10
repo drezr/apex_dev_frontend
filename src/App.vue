@@ -130,6 +130,14 @@ html {
   cursor: text !important;
 }
 
+.cursor-copy {
+  cursor: copy !important;
+}
+
+.cursor-cell {
+  cursor: cell !important;
+}
+
 .opacity-0 {
   opacity: 0 !important;
 }

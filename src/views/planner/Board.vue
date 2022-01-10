@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div :class="control_key_pressed ? 'cursor-cell' : ''">
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
@@ -101,13 +101,14 @@
               <VueDraggable
                 v-model="folders[selected_folder].children"
                 @change="update_children_position($event, folders[selected_folder])"
-                group="drag"
+                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
                 :animation="100"
                 easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 style="height: 100%;"
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
+                :class="control_key_pressed ? 'board-dropzone-highlight' : ''"
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
@@ -202,10 +203,11 @@
               <VueDraggable
                 v-model="date.data.children"
                 @change="update_children_position($event, date.data)"
-                group="drag"
+                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
                 handle=".handle"
                 @start="set_is_grabbing(true)"
                 @end="set_is_grabbing(false)"
+                :class="control_key_pressed ? 'board-dropzone-highlight' : ''"
                 style="
                   min-height: 72px;
                   position: relative;
@@ -584,6 +586,8 @@ export default {
       move_new_parent: null,
       update_positions_timer: null,
       update_folders_timer: null,
+      control_key_pressed: false,
+      mouse_pressed: false,
       folder_colors: [
         'red',
         'pink',
@@ -668,6 +672,31 @@ export default {
     this.set_disabled_profiles()
 
     this.all_profiles_loading = false
+
+    this.key_handler = (e) => {
+      this.control_key_pressed = e.ctrlKey
+    }
+
+    this.mouse_handler = (e) => {
+      if (e.type == 'mousedown') this.mouse_pressed = true
+      else if (e.type == 'mouseup') this.mouse_pressed = false
+
+      if (this.control_key_pressed) {
+        this
+      }
+    }
+
+    window.addEventListener('keydown', this.key_handler)
+    window.addEventListener('keyup', this.key_handler)
+    window.addEventListener('mousedown', this.mouse_handler)
+    window.addEventListener('mouseup', this.mouse_handler)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.key_handler)
+    window.removeEventListener('keyup', this.key_handler)
+    window.removeEventListener('mousedown', this.mouse_handler)
+    window.removeEventListener('mouseup', this.mouse_handler)
   },
 
   computed: {
@@ -738,6 +767,10 @@ export default {
 
             if (this.move_new_parent.type == 'folder') {
               element.teammates = Array()
+            }
+
+            if (this.control_key_pressed) {
+              console.log('ok')
             }
           }
 
@@ -1281,6 +1314,11 @@ export default {
 .board-folder-color-circle-selected {
   filter: brightness(1.3);
   box-shadow: 0 0 0 4px rgba(0, 0, 0, .8);
+}
+
+.board-dropzone-highlight {
+  background-color: rgba(0, 255, 0, 0.2);
+  min-height: 82px !important;
 }
 
 </style>
