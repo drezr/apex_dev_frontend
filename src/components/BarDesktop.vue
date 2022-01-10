@@ -84,6 +84,7 @@
           class="mx-3"
           link
           @click="change_language(i)"
+          :disabled="selected_language == i"
         >
           <v-list-item-content class="ml-3">
             <v-list-item-title>

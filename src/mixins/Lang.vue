@@ -1964,7 +1964,7 @@ export default {
             },
             "planned":{
               "fr": "Planifié",
-              "nl": "Gepland.",
+              "nl": "Gepland",
               "en": "Planned"
             },
             "printable_board":{
