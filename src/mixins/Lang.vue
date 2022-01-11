@@ -1994,7 +1994,7 @@ export default {
             },
             "folder_name":{
               "fr": "Nom du dossier",
-              "nl": "Naam van de map",
+              "nl": "Naam van de dossier",
               "en": "Folder name"
             },
             "add_folder":{
@@ -2004,14 +2004,19 @@ export default {
             },
             "delete_folder":{
               "fr": "Supprimer ce dossier",
-              "nl": "Verwijder dit dossier.",
+              "nl": "Verwijder dit dossier",
               "en": "Delete folder"
             },
             "delete_folder_warning":{
               "fr": "Attention, il existe des éléments dans ce dossier. Si vous le supprimez, tous les éléments de ce dossier seront également supprimés.",
               "nl": "Attentie, er zijn elementen in dit dossier. Als je het verwijdert, worden alle elementen van deze map ook verwijderd.",
               "en": "Please note that there are elements in this folder. If you delete it, all elements in that folder will also be deleted."
-            }
+            },
+            "board_copy_tip":{
+              "fr": "Maintenez la touche Ctrl avant de déplacer les élements pour les copier",
+              "nl": "Houd de Ctrl-toets ingedrukt voordat u elementen verplaatst om ze te kopiëren",
+              "en": "Hold the Ctrl key before moving elements to copy them"
+            },
           },
 
 

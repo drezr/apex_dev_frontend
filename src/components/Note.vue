@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div :class="self.disabled ? 'note-disabled' : ''">
   <div v-if="!['board', 'project'].includes($current_view)">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
@@ -294,6 +294,12 @@ export default {
   border-radius: 5px;
   border: 1px grey solid;
   background-color: white;
+}
+
+.note-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  transition: opacity 0.2s;
 }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div :class="self.disabled ? 'task-disabled' : ''">
   <div v-if="!['board', 'project', 'myapexproject'].includes($current_view)">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
@@ -339,7 +339,7 @@ export default {
   },
 
   created() {
-
+    // this.self.disabled = false
   },
 
   computed: {
@@ -375,12 +375,12 @@ export default {
           'action': 'move',
         })
 
-        menus.push({
+/*        menus.push({
           'icon': 'mdi-link-variant-plus',
           'name': this.lang.generic.to_link[this.lg],
           'color': 'purple',
           'action': 'link',
-        })
+        })*/
       }
 
       menus.push({
@@ -703,6 +703,12 @@ export default {
   height: 3px;
   margin-top: -3px;
   border-radius: 0px 0px 3px 3px;
+}
+
+.task-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  transition: opacity 0.2s;
 }
 
 </style>

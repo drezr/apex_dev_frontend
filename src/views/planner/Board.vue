@@ -1,6 +1,6 @@
 <template>
 
-<div :class="control_key_pressed ? 'cursor-cell' : ''">
+<div>
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
@@ -35,6 +35,11 @@
         </div>
 
         <div class="board-planned-title">
+        <div class="board-copy-tip">
+          {{ lang.views.planner.board_copy_tip[lg] }}
+        </div>
+
+
           {{ lang.views.planner.planned[lg] }}
         </div>
       </div>
@@ -106,13 +111,19 @@
                 easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 style="height: 100%;"
-                @start="set_is_grabbing(true)"
-                @end="set_is_grabbing(false)"
-                :class="control_key_pressed ? 'board-dropzone-highlight' : ''"
+                @start="set_is_grabbing(true); check_is_file($event);"
+                @end="set_is_grabbing(false); move_is_file = false;"
+                @clone="move_old_parent = folders[selected_folder]"
+                :class="[
+                  control_key_pressed ? 'board-dropzone-highlight' : '',
+                  control_key_pressed && move_is_file ? 'board-dropzone-highlight-error' : '',
+                ]"
+                :disabled="control_key_pressed && move_is_file"
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
                   :key="i"
+                  :data-type="child.type"
                 >
                   <Task
                     v-if="child.type == 'task'"
@@ -205,21 +216,27 @@
                 @change="update_children_position($event, date.data)"
                 :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
                 handle=".handle"
-                @start="set_is_grabbing(true)"
-                @end="set_is_grabbing(false)"
-                :class="control_key_pressed ? 'board-dropzone-highlight' : ''"
+                @start="set_is_grabbing(true); check_is_file($event);"
+                @end="set_is_grabbing(false); move_is_file = false;"
+                @clone="move_old_parent = date.data"
+                :class="[
+                  control_key_pressed ? 'board-dropzone-highlight' : '',
+                  control_key_pressed && move_is_file ? 'board-dropzone-highlight-error' : '',
+                ]"
                 style="
-                  min-height: 72px;
+                  min-height: 60px;
                   position: relative;
                   width: calc(100% + 61px);
                   left: -61px;
                   padding-left: 61px;
                 "
+                :disabled="control_key_pressed && move_is_file"
               >
                 <div
                   v-for="(child, i) in date.data.children"
                   :key="i"
                   class="board-date-children-frame"
+                  :data-type="child.type"
                 >
                   <div class="board-date-children-child">
                     <Task
@@ -588,6 +605,7 @@ export default {
       update_folders_timer: null,
       control_key_pressed: false,
       mouse_pressed: false,
+      move_is_file: false,
       folder_colors: [
         'red',
         'pink',
@@ -677,26 +695,13 @@ export default {
       this.control_key_pressed = e.ctrlKey
     }
 
-    this.mouse_handler = (e) => {
-      if (e.type == 'mousedown') this.mouse_pressed = true
-      else if (e.type == 'mouseup') this.mouse_pressed = false
-
-      if (this.control_key_pressed) {
-        this
-      }
-    }
-
     window.addEventListener('keydown', this.key_handler)
     window.addEventListener('keyup', this.key_handler)
-    window.addEventListener('mousedown', this.mouse_handler)
-    window.addEventListener('mouseup', this.mouse_handler)
   },
 
   beforeDestroy() {
     window.removeEventListener('keydown', this.key_handler)
     window.removeEventListener('keyup', this.key_handler)
-    window.removeEventListener('mousedown', this.mouse_handler)
-    window.removeEventListener('mouseup', this.mouse_handler)
   },
 
   computed: {
@@ -730,20 +735,34 @@ export default {
     },
 
     async update_children_position(event, parent) {
-      if ('removed' in event) {
-        this.move_old_parent = parent
-      }
-
       if ('added' in event) {
+        let request
+        let is_cloning = false
+        let element = event.added.element
         this.move_new_parent = parent
-      }
 
-      if ('removed' in event) {
-        setTimeout(async () => {
+        this.$set(element, 'disabled', true)
+        
+        if (this.control_key_pressed) {
+          this.control_key_pressed = false
+          is_cloning = true
+
+          request = await this.$http.post('element', {
+            'action': 'copy',
+            'view': this.$current_view,
+            'team_id': this.$current_team_id,
+            'app_id': this.$current_app_id,
+            'new_parent_type': this.move_new_parent.type,
+            'new_parent_id': this.move_new_parent.id,
+            'new_parent_date': this.move_new_parent.date,
+            'element_type': element.type,
+            'element_id': element.id,
+          })
+        }
+
+        else {
           if (this.move_new_parent && this.move_old_parent) {
-            let element = event.removed.element
-
-            let result = await this.$http.post('element', {
+            request = await this.$http.post('element', {
               'action': 'move',
               'view': this.$current_view,
               'team_id': this.$current_team_id,
@@ -756,46 +775,34 @@ export default {
               'element_type': element.type,
               'element_id': element.id,
             })
+          }
+        }
 
-            if (!this.move_new_parent.id && this.move_new_parent.type == 'day') {
-              for (let val in result.day) {
-                this.move_new_parent[val] = result.day[val]
-              }
-
-              this.move_new_parent['parts'] = Array()
-            }
-
-            if (this.move_new_parent.type == 'folder') {
-              element.teammates = Array()
-            }
-
-            if (this.control_key_pressed) {
-              console.log('ok')
-            }
+        if (!this.move_new_parent.id && this.move_new_parent.type == 'day') {
+          for (let val in request.day) {
+            this.move_new_parent[val] = request.day[val]
           }
 
-          this.move_old_parent = null
-          this.move_new_parent = null
-        }, 100)
+          this.move_new_parent['parts'] = Array()
+        }
+
+        if (this.move_new_parent.type == 'folder') {
+          element.teammates = Array()
+        }
+
+        if (is_cloning) {
+          this.move_new_parent.children = this.move_new_parent.children.filter(e => e.id != element.id)
+
+          let children = this.$tool.get_fused_children(request[element.type])
+          this.$set(request[element.type], 'children', children)
+
+          this.move_new_parent.children.push(request[element.type])
+        }
+
+        element.disabled = false
       }
 
-      let update_positions_timer = setInterval(async () => {
-        if (!this.move_old_parent && !this.move_new_parent) {
-          clearInterval(update_positions_timer)
-
-          let position_updates = this.$set_position_updates(parent)
-
-          await this.$http.post('element', {
-            'action': 'position',
-            'view': this.$current_view,
-            'team_id': this.$current_team_id,
-            'app_id': this.$current_app_id,
-            'element_type': parent.type,
-            'element_id': parent.id,
-            'position_updates': position_updates,
-          })
-        }
-      }, 1)
+      this.control_key_pressed = false
     },
 
     get_day_color(day_name) {
@@ -1088,6 +1095,14 @@ export default {
       this.short_override = ''
       this.short_override_snackbar = true
     },
+
+    check_is_file(event) {
+      this.move_is_file = false
+
+      if (event.clone.dataset.type == 'file') {
+        this.move_is_file = true
+      }
+    },
   },
 
   watch: {
@@ -1192,7 +1207,7 @@ export default {
 
 .board-date {
   display: flex;
-  min-height: 87px;
+  min-height: 75px;
 }
 
 .board-date:not(:last-child) {
@@ -1211,7 +1226,6 @@ export default {
 .board-date-children {
   flex-grow: 1;
   border-left: 1px black solid;
-
 }
 
 .board-date-children-frame {
@@ -1226,7 +1240,7 @@ export default {
   flex-grow: 1;
   width: 70%;
   min-width: 450px;
-  padding: 12px;
+  padding: 6px;
 }
 
 .board-date-children-teammates {
@@ -1318,7 +1332,31 @@ export default {
 
 .board-dropzone-highlight {
   background-color: rgba(0, 255, 0, 0.2);
-  min-height: 82px !important;
+  min-height: 70px !important;
+}
+
+.board-dropzone-highlight-error {
+  background-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.board-copy-tip {
+  margin-left: 6px;
+  border: 1px black solid;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 2px 4px;
+  width: fit-content;
+  height: fit-content;
+  margin-top: -24px;
+  position: relative;
+  top: 33px;
+  left: -26px;
+  opacity: 0.3;
+  cursor: default;
+}
+
+.board-copy-tip:hover {
+  opacity: 1;
 }
 
 </style>

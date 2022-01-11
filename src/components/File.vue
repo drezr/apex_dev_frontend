@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div :class="self.disabled ? 'file-disabled' : ''">
   <div v-if="!['board', 'project'].includes($current_view)">
     <v-chip
       v-for="(teammate, i) in $get_sorted_teammates(self.teammates)"
@@ -405,6 +405,12 @@ export default {
   overflow: hidden;
   min-width: 75px;
   cursor: pointer;
+}
+
+.file-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  transition: opacity 0.2s;
 }
 
 </style>

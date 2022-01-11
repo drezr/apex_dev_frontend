@@ -60,8 +60,20 @@
                     </small>
                   </div>
 
-                  <div>
-                    {{ part.work.description }}
+                  <div
+                    style="width: 100%; white-space: pre-line;"
+                    class="text-center"
+                  >
+                    {{ get_description(part) }}
+                  </div>
+
+                  <div
+                    v-if="part.description"
+                    style="width: 100%; white-space: pre-line;"
+                    class="text-center"
+                  >
+                    <v-divider class="my-3"></v-divider>
+                    {{ part.description }}
                   </div>
                 </div>
 
@@ -102,7 +114,7 @@
                     </small>
                   </div>
 
-                  <div>
+                  <div style="text-align: center; white-space: pre-line;">
                     {{ child.name }}
                   </div>
                 </div>
@@ -230,6 +242,12 @@ export default {
       }
 
       return 'grey'
+    },
+
+    get_description(part) {
+      let desc = part.work.work_columns.find(f => f.name == 'description')
+
+      return !desc ? '' : desc.value
     },
 
     print_document() {
