@@ -36,6 +36,7 @@
     v-model="selected_shift"
     class="lighten-2"
     :class="parent.color"
+    touchless
   >
     <v-tab-item
       v-for="(shift, i) in parent.shifts"
