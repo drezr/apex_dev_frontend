@@ -208,6 +208,7 @@ html {
 
 .v-dialog {
   margin: 3px !important;
+  max-height: calc(100% - 120px) !important;
 }
 
 </style>

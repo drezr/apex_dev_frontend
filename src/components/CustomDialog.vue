@@ -9,15 +9,15 @@
       ]"
       style="word-break: keep-all;"
     >
-      <v-icon
-        class="mr-3"
-        :class="title_text_color ? title_text_color + '--text' : ''"
-        v-if="title_icon"
-      >
-        {{ title_icon }}
-      </v-icon>
-
       <span :class="title_text_color + '--text'">
+        <v-icon
+          class="mr-3"
+          :class="title_text_color ? title_text_color + '--text' : ''"
+          v-if="title_icon"
+        >
+          {{ title_icon }}
+        </v-icon>
+        
         {{ title_text }}
       </span>
 

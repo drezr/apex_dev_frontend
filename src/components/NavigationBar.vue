@@ -115,25 +115,12 @@
       :outlined="true"
       class="ml-1 mb-1"
       :tooltip="lang.views.radium.printable_tooltip[lg]"
-      @click="go_printable_works"
       :badge="true"
       :badge_icon="'mdi-open-in-new'"
       :badge_color="'grey'"
       :badge_offset_x="18"
       :badge_offset_y="18"
-    />
-
-    <CustomButton
-      v-if="$is_editor"
-      :icon="'mdi-plus'"
-      :height="40"
-      :color="'green'"
-      :dark="!add_loading"
-      class="ml-1 mb-1"
-      :tooltip="lang.views.radium.add_work_tooltip[lg]"
-      :disabled="add_loading"
-      :loading="add_loading"
-      @click="$emit('add-work')"
+      @click="go_printable_works"
     />
 
     <CustomButton
@@ -147,7 +134,22 @@
       :badge="true"
       :badge_content="String($current_component.message_count)"
       :badge_color="$current_component.message_count == 0 ? 'blue' : 'red'"
+      :badge_offset_x="18"
+      :badge_offset_y="18"
       @click="$emit('open-messages-dialog')"
+    />
+
+    <CustomButton
+      v-if="$is_editor"
+      :icon="'mdi-plus'"
+      :height="40"
+      :color="'green'"
+      :dark="!add_loading"
+      class="ml-1 mb-1"
+      :tooltip="lang.views.radium.add_work_tooltip[lg]"
+      :disabled="add_loading"
+      :loading="add_loading"
+      @click="$emit('add-work')"
     />
   </div>
 

@@ -216,7 +216,7 @@
       />
 
       <CustomButton
-        :text="lang.generic.save[lg]"
+        :text="$mobile_breakpoint ? lang.generic.save[lg] : ''"
         :icon="'mdi-content-save'"
         :dark="selected_sort ? true : false"
         :color="'blue'"
@@ -281,7 +281,7 @@
     <Loader :size="100" :width="10" class="my-16" v-if="messages_loading" />
 
     <div v-else>
-      <div v-if="messages.length == 0" class="d-flex justify-center pa-16">
+      <div v-if="messages.length == 0" class="d-flex justify-center pa-13">
         {{ lang.views.radium.messages_no_message[lg] }}
       </div>
 
