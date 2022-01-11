@@ -206,8 +206,8 @@
     :title_text="lang.views.draft.edit_project[lg]"
     :title_bg_color="'teal lighten-4'"
     @cancel="edit_dialog = false"
-    :cancel_icon="'mdi-close'"
-    :cancel_text="lang.generic.cancel[lg]"
+    :cancel_icon="$mobile_breakpoint ? 'mdi-close' : ''"
+    :cancel_text="$mobile_breakpoint ? lang.generic.cancel[lg] : ''"
     :confirm_icon="'mdi-content-save'"
     :confirm_text="lang.generic.save[lg]"
     :confirm_color="'teal'"
@@ -285,6 +285,7 @@
     :title_text="lang.views.draft.task_models[lg]"
     :title_bg_color="'purple lighten-4'"
     :title_icon="'mdi-webpack'"
+    :content_padding="$mobile_breakpoint ? undefined : 5"
     @cancel="templates_dialog = false"
   >
     <Loader :size="100" :width="10" class="my-12" v-if="templates_loading" />
@@ -336,6 +337,7 @@
         :elevation="1"
         :tooltip="lang.views.draft.add_template[lg]"
         @click="add_template"
+        :style="$mobile_breakpoint ? 'position: relative; top: 10px; left: 15px;' : ''"
       />
     </div>
   </CustomDialog>
@@ -822,7 +824,7 @@ export default {
   border: 1px black solid;
   border-radius: 5px;
   padding: 10px;
-  width: 400px;
+  width: 375px;
   margin: auto;
 }
 

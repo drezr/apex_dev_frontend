@@ -346,7 +346,7 @@
       :color="'red'"
       :dark="true"
       :icon="'mdi-delete'"
-      :text="lang.generic.delete[lg]"
+      :text="$mobile_breakpoint ? lang.generic.delete[lg] : ''"
       :badge="true"
       :badge_icon="'mdi-shield-account'"
       class="mr-3"
@@ -358,7 +358,7 @@
       :color="'purple'"
       :dark="true"
       :icon="'mdi-account-remove'"
-      :text="lang.generic.remove[lg]"
+      :text="$mobile_breakpoint ? lang.generic.remove[lg] : ''"
       class="mr-3"
     ></CustomButton>
 
@@ -368,7 +368,7 @@
       :color="'teal'"
       :dark="can_save"
       :icon="'mdi-content-save'"
-      :text="lang.generic.save[lg]"
+      :text="$mobile_breakpoint ? lang.generic.save[lg] : ''"
       :disabled="!can_save"
     ></CustomButton>
 

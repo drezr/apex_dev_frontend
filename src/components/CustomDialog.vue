@@ -32,7 +32,10 @@
       </div>
     </v-card-title>
 
-    <v-card-text>
+    <v-card-text :style="
+        content_padding != undefined ? `padding: ${content_padding}px; ` : ''
+      "
+    >
 
       <slot></slot>
       
@@ -184,7 +187,11 @@ export default {
     move_window: {
       type: Boolean,
       required: false,
-    },    
+    },
+    content_padding: {
+      type: Number,
+      required: false,
+    },
   },
 
   data() {

@@ -35,7 +35,7 @@
         </div>
 
         <div class="board-planned-title">
-          <div class="board-copy-tip">
+          <div class="board-copy-tip" v-if="$mobile_breakpoint">
             {{ lang.views.planner.board_copy_tip[lg] }}
           </div>
 
@@ -1349,7 +1349,7 @@ export default {
   margin-top: -24px;
   position: relative;
   top: 33px;
-  left: -26px;
+  left: -19px;
   opacity: 0.3;
   cursor: default;
   transition: opacity 0.5s;
