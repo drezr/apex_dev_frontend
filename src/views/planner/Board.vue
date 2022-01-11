@@ -1352,6 +1352,7 @@ export default {
   left: -26px;
   opacity: 0.3;
   cursor: default;
+  transition: opacity 0.5s;
 }
 
 .board-copy-tip:hover {
