@@ -97,7 +97,7 @@
         ></v-text-field>
       </v-col>
 
-      <v-col cols="5">
+      <v-col cols="5" class="pl-0">
         <v-text-field
           outlined
           clearable
@@ -145,7 +145,7 @@
         tabindex="7"
       ></v-checkbox>
 
-      <div>
+      <div style="width: 95px;">
         <CustomButton
           :icon="'mdi-account-check'"
           :tooltip="lang.views.team.access_give_all_access[lg]"

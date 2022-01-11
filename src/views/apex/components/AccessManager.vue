@@ -40,8 +40,8 @@
         :disabled="!picked_profiles || picked_profiles.length == 0"
         @click="add_links"
       >
-        <v-icon class="mr-3">mdi-account-arrow-left</v-icon>
-        {{ lang.generic.add[lg] }}
+        <v-icon :class="$mobile_breakpoint ? 'mr-3' : ''">mdi-account-arrow-left</v-icon>
+        {{ $mobile_breakpoint ? lang.generic.add[lg] : '' }}
       </v-btn>
     </div>
   </v-card-text>
