@@ -55,7 +55,7 @@
     <v-list>
       <v-list-item link @click="password_dialog = true">
         <v-list-item-title>
-          <v-icon class="mr-3">mdi-lock</v-icon>
+          <v-icon class="mr-3">mdi-lock-reset</v-icon>
           {{ lang.generic.change_password[lg] }}
         </v-list-item-title>
       </v-list-item>
@@ -104,6 +104,7 @@
     :open="password_dialog"
     :width="500"
     :title_text="lang.views.home.change_password[lg]"
+    :title_icon="'mdi-lock-reset'"
     :confirm_icon="'mdi-send'"
     :confirm_text="lang.generic.send[lg]"
     :confirm_color="'green'"
