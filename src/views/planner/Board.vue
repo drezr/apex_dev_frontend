@@ -35,10 +35,9 @@
         </div>
 
         <div class="board-planned-title">
-        <div class="board-copy-tip">
-          {{ lang.views.planner.board_copy_tip[lg] }}
-        </div>
-
+          <div class="board-copy-tip">
+            {{ lang.views.planner.board_copy_tip[lg] }}
+          </div>
 
           {{ lang.views.planner.planned[lg] }}
         </div>
