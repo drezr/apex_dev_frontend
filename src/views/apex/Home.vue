@@ -5,61 +5,21 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <v-card
-        class="mx-auto mt-16"
-        max-width="600"
-        v-if="user_teams.length > 0"
-      >
-        <v-toolbar color="blue" dark>
-          <v-toolbar-title>
-            {{ user_teams.length > 1 ? lang.views.home.my_teams[lg] : lang.views.home.my_team[lg] }}
-          </v-toolbar-title>
-        </v-toolbar>
+      <div class="mx-auto" style="max-width: 600px;">
+        <v-card
+          class="mt-16 mx-3"
+          max-width="600"
+          v-if="user_teams.length > 0"
+        >
+          <v-toolbar color="blue" dark>
+            <v-toolbar-title>
+              {{ user_teams.length > 1 ? lang.views.home.my_teams[lg] : lang.views.home.my_team[lg] }}
+            </v-toolbar-title>
+          </v-toolbar>
 
-        <v-list>
-          <v-list-item
-            v-for="team in user_teams"
-            :key="team.name"
-            :to="`/team/${team.id}`"
-            link
-            class="pl-6"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="team.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card>
-
-      <v-card
-        class="mx-auto my-6"
-        max-width="600"
-        v-if="circles.length > 0"
-      >
-        <v-toolbar color="teal" dark>
-          <v-toolbar-title>
-            {{ circles.length > 1 ? lang.views.home.my_circles[lg] : lang.views.home.my_circle[lg] }}
-          </v-toolbar-title>
-        </v-toolbar>
-
-        <v-list>
-          <v-list-group
-            v-for="(circle, i) in circles"
-            :key="i"
-            :value="i == 0 ? circles.length == 1 ? true : false : false"
-            no-action
-          >
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title v-text="circle.name"></v-list-item-title>
-              </v-list-item-content>
-            </template>
-
+          <v-list>
             <v-list-item
-              v-for="team in circle.teams"
+              v-for="team in user_teams"
               :key="team.name"
               :to="`/team/${team.id}`"
               link
@@ -72,9 +32,51 @@
                 <v-list-item-title v-text="team.name"></v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-        </v-list>
-      </v-card>
+          </v-list>
+        </v-card>
+
+        <v-card
+          class="my-6 mx-3"
+          max-width="600"
+          v-if="circles.length > 0"
+        >
+          <v-toolbar color="teal" dark>
+            <v-toolbar-title>
+              {{ circles.length > 1 ? lang.views.home.my_circles[lg] : lang.views.home.my_circle[lg] }}
+            </v-toolbar-title>
+          </v-toolbar>
+
+          <v-list>
+            <v-list-group
+              v-for="(circle, i) in circles"
+              :key="i"
+              :value="i == 0 ? circles.length == 1 ? true : false : false"
+              no-action
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title v-text="circle.name"></v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item
+                v-for="team in circle.teams"
+                :key="team.name"
+                :to="`/team/${team.id}`"
+                link
+                class="pl-6"
+              >
+                <v-list-item-icon>
+                  <v-icon>mdi-chevron-right</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title v-text="team.name"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+        </v-card>
+      </div>
     </div>
   </transition>
 
