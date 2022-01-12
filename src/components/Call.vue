@@ -391,11 +391,15 @@ Calculate time delta between start and end of the call in decimal
 
     menu_action(event) {
       if (event == 'copy') {
-        console.log('copy')
+        this.$store.commit('set_copying_element', this.self)
       }
 
       else if (event == 'move') {
-        console.log('move')
+        this.$store.commit('set_moving_element', this.self)
+
+        if (this.$current_view == 'calendar') {
+          this.$store.commit('set_moving_old_parent', this.$current_component.detail_full_object)
+        }
       }
 
       else if (event == 'delete') {

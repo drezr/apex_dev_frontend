@@ -190,6 +190,38 @@
       <div class="d-flex justify-end" v-if="$has_xs(['watcher_is_editor'])">
         <div class="command-buttons-bg detail-command-buttons-position">
           <CustomButton
+            v-if="$store.state.copying_element && $store.state.copying_element.type == 'call'"
+            :icon="'mdi-content-copy'"
+            :fab="true"
+            :small="true"
+            :color="'indigo'"
+            :dark="!copy_loading"
+            :disabled="copy_loading"
+            :loading="copy_loading"
+            :elevation="1"
+            :tooltip="this.lang.generic.to_copy[this.lg]"
+            class="mr-2"
+            @click="copy_call"
+            :tooltip_top="true"
+          />
+
+          <CustomButton
+            v-if="$store.state.moving_element && $store.state.moving_element.type == 'call'"
+            :icon="'mdi-flip-to-front'"
+            :fab="true"
+            :small="true"
+            :color="'light-blue'"
+            :dark="!has_moving_call"
+            :disabled="has_moving_call"
+            :loading="move_loading"
+            :elevation="1"
+            :tooltip="this.lang.generic.move[this.lg]"
+            class="mr-2"
+            @click="move_call"
+            :tooltip_top="true"
+          />
+
+          <CustomButton
             :icon="'mdi-pencil'"
             :fab="true"
             :color="'teal'"
@@ -284,6 +316,8 @@ export default {
       palette_mode: 'border',
       detail_object_short: '',
       update_timer: null,
+      copy_loading: false,
+      move_loading: false,
     }
   },
 
@@ -431,6 +465,16 @@ export default {
 
     max_y() {
       return (this.profiles.length * 2) - 1
+    },
+
+    has_moving_call() {
+      if (this.detail_full_object) {
+        let has_call = this.detail_full_object.children.find(t => t.id == this.$store.state.moving_element.id && t.type == this.$store.state.moving_element.type)
+
+        return has_call ? true : false
+      }
+
+      return false
     },
   },
 
@@ -731,6 +775,83 @@ export default {
       this.trigger_all_quotas = true
 
       setTimeout(() => this.trigger_all_quotas = false, 10)
+    },
+
+    async copy_call() {
+      this.copy_loading = true
+      let call = this.$store.state.copying_element
+
+      let request = await this.$http.post('element', {
+        'action': 'copy',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'new_parent_type': 'cell',
+        'new_parent_id': this.detail_full_object.id,
+        'element_type': call.type,
+        'element_id': call.id,
+      })
+
+      let children = this.$tool.get_fused_children(request.call)
+      this.$set(request.call, 'children', children)
+
+      this.detail_full_object.children.push(request.call)
+
+      this.$store.commit('set_copying_element', null)
+
+      for (let profile of this.profiles) {
+        for (let date of profile.dates) {
+          if (date.cell.id == this.detail_full_object.id) {
+            date.cell.has_call = true
+          }
+        }
+      }
+
+      this.copy_loading = false
+    },
+
+    async move_call() {
+      this.move_loading = true
+      let call = this.$store.state.moving_element
+      let old_parent = this.$store.state.moving_old_parent
+      let new_parent = this.detail_full_object
+
+      let request = await this.$http.post('element', {
+        'action': 'move',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': 'cell',
+        'parent_id': old_parent.id,
+        'new_parent_type': 'cell',
+        'new_parent_id': new_parent.id,
+        'element_type': 'call',
+        'element_id': call.id,
+      })
+
+      let children = this.$tool.get_fused_children(request.call)
+      this.$set(request.call, 'children', children)
+
+      this.detail_full_object.children.push(request.call)
+
+      this.$store.commit('set_moving_element', null)
+      this.$store.commit('set_moving_old_parent', null)
+
+      for (let profile of this.profiles) {
+        for (let date of profile.dates) {
+          if (date.cell.id == new_parent.id) {
+            date.cell.has_call = true
+          }
+
+          if (date.cell.id == old_parent.id) {
+            if (old_parent.children.filter(c => c.type == 'call').length == 1) {
+              date.cell.has_call = false
+            }
+          }
+        }
+      }
+
+      this.move_loading = false
     },
   },
 
