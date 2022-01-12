@@ -124,7 +124,11 @@
         ></v-select>
       </div>
 
-      <v-card class="mx-auto my-6 pb-1" max-width="600">
+      <v-card
+        class="mx-auto my-6 pb-1"
+        max-width="600"
+        style="margin-bottom: 100px !important;"
+      >
         <v-toolbar color="deep-purple" class="elevation-1" dark>
           <v-toolbar-title>
             <v-icon x-large class="mr-3">
@@ -168,6 +172,36 @@
 
       <div class="d-flex justify-end" v-if="has_access">
         <div class="project-command-buttons-position command-buttons-bg">
+          <CustomButton
+            v-if="$store.state.copying_element && $store.state.copying_element.type == 'task'"
+            :icon="'mdi-content-copy'"
+            :fab="true"
+            :color="'indigo'"
+            :dark="!copy_loading"
+            :disabled="copy_loading"
+            :loading="copy_loading"
+            :elevation="1"
+            :tooltip="this.lang.generic.to_copy[this.lg]"
+            class="mr-2"
+            @click="copy_task"
+            :tooltip_top="true"
+          />
+
+          <CustomButton
+            v-if="$store.state.moving_element && $store.state.moving_element.type == 'task'"
+            :icon="'mdi-flip-to-front'"
+            :fab="true"
+            :color="'light-blue'"
+            :dark="!has_moving_task"
+            :disabled="has_moving_task"
+            :loading="move_loading"
+            :elevation="1"
+            :tooltip="this.lang.generic.move[this.lg]"
+            class="mr-2"
+            @click="move_task"
+            :tooltip_top="true"
+          />
+
           <CustomButton
             v-if="detail_edit_mode"
             :icon="'mdi-plus'"
@@ -399,6 +433,8 @@ export default {
     return {
       loading: true,
       add_loading: false,
+      copy_loading: false,
+      move_loading: false,
       team: Object(),
       app: Object(),
       project: Object(),
@@ -632,6 +668,12 @@ export default {
 
       return count == 0 ? false : true
     },
+
+    has_moving_task() {
+      let has_task = this.computed_tasks.find(t => t.id == this.$store.state.moving_element.id && t.type == this.$store.state.moving_element.type)
+
+      return has_task ? true : false
+    },
   },
 
   methods: {
@@ -789,6 +831,60 @@ export default {
         'app_id': this.$current_app_id,
         'value': this.selected_template,
       })
+    },
+
+    async copy_task() {
+      this.copy_loading = true
+      let task = this.$store.state.copying_element
+
+      let request = await this.$http.post('element', {
+        'action': 'copy',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'new_parent_type': 'project',
+        'new_parent_id': this.project.id,
+        'element_type': task.type,
+        'element_id': task.id,
+      })
+
+      let children = this.$tool.get_fused_children(request.task)
+      this.$set(request.task, 'children', children)
+
+      this.project.children.push(request.task)
+
+      this.$store.commit('set_copying_element', null)
+      this.copy_loading = false
+    },
+
+    async move_task() {
+      this.move_loading = true
+      let task = this.$store.state.moving_element
+      let old_parent = this.$store.state.moving_old_parent
+      let new_parent = this.project
+
+      let request = await this.$http.post('element', {
+        'action': 'move',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': 'project',
+        'parent_id': old_parent.id,
+        'new_parent_type': 'project',
+        'new_parent_id': new_parent.id,
+        'element_type': 'task',
+        'element_id': task.id,
+      })
+
+      let children = this.$tool.get_fused_children(request.task)
+      this.$set(request.task, 'children', children)
+
+      this.project.children.push(request.task)
+
+      this.$store.commit('set_moving_element', null)
+      this.$store.commit('set_moving_old_parent', null)
+
+      this.move_loading = false
     },
   },
 

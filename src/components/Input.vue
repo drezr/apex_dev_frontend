@@ -25,7 +25,7 @@
         :flat="!(edit_mode && $is_editor)"
         :background-color="edit_mode ? 'white' : 'transparent'"
         @input="update"
-        :placeholder="lang.generic['input_' + self.kind][lg]"
+        :placeholder="lang.generic.input_title[lg]"
       ></v-textarea>
 
       <v-textarea

@@ -507,11 +507,15 @@ export default {
   methods: {
     menu_action(event) {
       if (event == 'copy') {
-        console.log('copy')
+        this.$store.commit('set_copying_element', this.self)
       }
 
       else if (event == 'move') {
-        console.log('move')
+        this.$store.commit('set_moving_element', this.self)
+
+        if (this.$current_view == 'project') {
+          this.$store.commit('set_moving_old_parent', this.$current_component.project)
+        }
       }
 
       else if (event == 'link') {
@@ -562,6 +566,14 @@ export default {
 
     async remove() {
       this.delete_dialog = false
+
+      let ce = this.$store.state.copying_element
+      let me = this.$store.state.moving_element
+
+      if ((ce && ce.id == this.self.id && ce.type == this.self.type) || (me && me.id == this.self.id && me.type == this.self.type)) {
+        this.$store.commit('set_copying_element', null)
+        this.$store.commit('set_moving_element', null)
+      }
 
       this.parent.children = this.parent.children.filter(
         c => c.id !== this.self.id || c.type !== this.self.type)

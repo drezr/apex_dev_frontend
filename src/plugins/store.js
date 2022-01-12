@@ -16,6 +16,9 @@ export default new Vuex.Store({
     language: null,
     moving_work: null,
     copying_work: null,
+    moving_element: null,
+    moving_old_parent: null,
+    copying_element: null,
   },
 
   mutations: {
@@ -41,6 +44,18 @@ export default new Vuex.Store({
 
     set_copying_work(state, work) {
       state.copying_work = work
+    },
+
+    set_moving_element(state, element) {
+      state.moving_element = element
+    },
+
+    set_moving_old_parent(state, old_parent) {
+      state.moving_old_parent = old_parent
+    },
+
+    set_copying_element(state, element) {
+      state.copying_element = element
     },
 
     toggle_palette(state, toggled) {
