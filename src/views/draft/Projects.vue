@@ -81,6 +81,10 @@
             </router-link>
           </VueDraggable>
         </v-list>
+
+        <div class="pb-3" style="margin-top: -6px;" v-if="add_project_loading">
+          <Loader :size="50" :width="5" />
+        </div>
       </v-card>
 
       <v-card class="mx-auto mb-10" max-width="600">
@@ -239,6 +243,7 @@ export default {
       new_project_name: null,
       new_project_date: null,
       new_project_private: null,
+      add_project_loading: false,
     }
   },
 
@@ -356,6 +361,7 @@ export default {
 
     async create_project() {
       this.create_dialog = false
+      this.add_project_loading = true
 
       let request = await this.$http.post('projects', {
         'action': 'create_project',
@@ -369,6 +375,7 @@ export default {
         },
       })
 
+      this.add_project_loading = false
       this.app.projects.push(request.project)
       this.ongoing = this.get_ongoing()
     },

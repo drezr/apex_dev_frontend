@@ -43,7 +43,9 @@
       :key="i"
       class="mx-3 mt-3"
     >
-      <Loader :size="100" :width="10" class="pa-16" :left="true" v-if="loading" />
+      <div class="part-loader-box" v-if="loading && (!shift.parts || shift.parts.length == 0)">
+        <Loader :size="100" :width="10" />
+      </div>
 
       <div class="d-flex">
         <Part
@@ -53,10 +55,20 @@
           :parent="shift"
           :parent_cpnt="$current_instance"
         />
+
+        <v-card
+          min-width="350"
+          max-width="350"
+          class="mr-3 mb-3 elevation-3 d-flex align-center justify-center"
+          style="height: 200px;"
+          v-if="add_part_loading"
+        >
+          <Loader :size="100" :width="10" />
+        </v-card>
       </div>
 
       <div
-        v-if="!loading && shift.parts.length == 0"
+        v-if="!loading && !add_part_loading && shift.parts.length == 0"
         class="my-9 mx-6 white--text"
       >
         {{ lang.views.radium.no_participating_teams[lg] }}
@@ -82,7 +94,8 @@
       :dark="true"
       :icon="'mdi-account-multiple-plus'"
       :tooltip="lang.views.radium.link_teams_tooltip[lg]"
-      :disabled="!parent.shifts[selected_shift].date"
+      :disabled="!parent.shifts[selected_shift].date || add_part_loading"
+      :loading="add_part_loading"
       class="mx-3 mb-3"
       @click="link_teams_dialog = true"
     />
@@ -175,6 +188,7 @@ export default {
       selected_shift: 0,
       link_teams_dialog: false,
       link_selected_teams: Array(),
+      add_part_loading: false,
     }
   },
 
@@ -203,6 +217,7 @@ export default {
   methods: {
     async link_teams() {
       this.link_teams_dialog = false
+      this.add_part_loading = true
 
       let selected_shift = this.parent.shifts[this.selected_shift]
 
@@ -223,6 +238,7 @@ export default {
       }
 
       this.link_selected_teams = Array()
+      this.add_part_loading = false
     },
 
     toggle_team(team_id) {
@@ -259,6 +275,15 @@ export default {
 .work-link-expension-panel {
   border: 1px rgba(0, 0, 0, 0.3) solid;
   margin-top: 10px;
+}
+
+.part-loader-box {
+  height: 140px;
+  width: 140px;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 </style>

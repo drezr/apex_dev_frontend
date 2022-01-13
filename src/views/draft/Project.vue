@@ -467,6 +467,11 @@ export default {
     })
 
     this.team = this.request.team
+
+    if (this.request.project.private && !this.$has_xs(['draft_can_see_private'])) {
+      this.$router.push(`/team/${this.$current_team_id}/draft/${this.$current_app_id}/projects`)
+    }
+
     this.app = this.request.app
     this.project = this.request.project
     this.selected_template = this.request.app.template
@@ -854,6 +859,12 @@ export default {
       this.project.children.push(request.task)
 
       this.$store.commit('set_copying_element', null)
+
+      setTimeout(() => {
+        let main_frame = document.getElementById('main-frame')
+        main_frame.scrollTo(0, main_frame.scrollHeight)
+      }, 100)
+      
       this.copy_loading = false
     },
 
@@ -883,6 +894,11 @@ export default {
 
       this.$store.commit('set_moving_element', null)
       this.$store.commit('set_moving_old_parent', null)
+
+      setTimeout(() => {
+        let main_frame = document.getElementById('main-frame')
+        main_frame.scrollTo(0, main_frame.scrollHeight)
+      }, 100)
 
       this.move_loading = false
     },

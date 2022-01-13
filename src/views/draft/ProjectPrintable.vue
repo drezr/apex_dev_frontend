@@ -160,6 +160,11 @@ export default {
     })
 
     this.team = this.request.team
+
+    if (this.request.project.private && !this.$has_xs(['draft_can_see_private'])) {
+      this.$router.push(`/team/${this.$current_team_id}/draft/${this.$current_app_id}/projects`)
+    }
+    
     this.app = this.request.app
     this.project = this.request.project
 

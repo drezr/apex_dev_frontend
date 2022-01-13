@@ -25,7 +25,7 @@
         <DecimalCalculator v-if="decimal_calculator" />
       </div>
 
-      <div class="calendar-frame" ref="frame">
+      <div class="calendar-frame" ref="frame" v-if="profiles.length > 0">
         <div class="calendar-days">
           <div class="calendar-spacer d-flex align-center justify-center">
             <CustomButton
@@ -82,7 +82,15 @@
         </div>
       </div>
       
-      <div class="today-frame" ref="today_frame"></div>
+      <div
+        class="today-frame"
+        ref="today_frame"
+        v-if="profiles.length > 0"
+      ></div>
+
+      <div v-if="profiles.length == 0" class="pa-16 text-center">
+        {{ lang.views.watcher.calendar_no_profile[lg] }}
+      </div>
     </div>
   </transition>
 
@@ -185,7 +193,7 @@
         </div>
       </VueDraggable>
 
-      <Loader :size="50" :width="10" class="my-3" v-if="add_child_loading" />
+      <Loader :size="50" :width="7" class="my-3" v-if="add_child_loading" />
 
       <div class="d-flex justify-end" v-if="$has_xs(['watcher_is_editor'])">
         <div class="command-buttons-bg detail-command-buttons-position">

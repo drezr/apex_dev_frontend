@@ -188,7 +188,7 @@
             {{ lang.generic.task_no_element[lg] }}
           </div>
 
-          <Loader :size="50" :width="10" class="my-3" v-if="add_child_loading" />
+          <Loader :size="50" :width="7" class="my-3" v-if="add_child_loading" />
 
           <div v-if="edit_mode && $is_editor" class="d-flex justify-space-around mb-2">
             <CustomButton
@@ -542,7 +542,7 @@ export default {
           'parent_id': this.parent.id,
           'element_type': 'task',
           'element_id': this.self.id,
-          'name': this.self.name,
+          'name': this.$is_user && !this.$is_editor ? null : this.self.name,
           'status': this.self.status,
         })
       }, 1000)

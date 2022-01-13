@@ -137,7 +137,7 @@ export default {
           'parent_id': this.parent.id,
           'element_type': 'subtask',
           'element_id': this.self.id,
-          'name': this.self.name,
+          'name': this.$is_user && !this.$is_editor ? null : this.self.name,
           'status': this.self.status,
         })
       }, 1000)

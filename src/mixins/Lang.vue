@@ -1260,6 +1260,16 @@ export default {
               "nl": "Alle quota weergeven",
               "en": "Display all quotas"
             },
+            "calendar_no_profile":{
+              "fr": "Il n'y a personne dans ce calendrier ou vous n'avez pas les accès pour visualiser cette équipe.",
+              "nl": "Er staat niemand in deze agenda of je hebt geen toegang om dit team te bekijken.",
+              "en": "There is no one in this calendar or you do not have the access to view this team."
+            },
+            "quota_no_access":{
+              "fr": "Vous n'avez pas les accès pour visualiser les quotas de cette personne.",
+              "nl": "U heeft geen toegang om de quota van deze persoon te bekijken.",
+              "en": "You do not have the access to view this person's quotas."
+            },
             "paint_border":{
               "fr": "Colorer les bordures de cellules",
               "nl": "Verkleur de cellen",
@@ -1996,6 +2006,11 @@ export default {
               "fr": "Nom du dossier",
               "nl": "Naam van de dossier",
               "en": "Folder name"
+            },
+            "folder_max_six":{
+              "fr": "Maximum 6 dossiers",
+              "nl": "Maximaal 6 mappen",
+              "en": "Maximum 6 folders"
             },
             "add_folder":{
               "fr": "Ajouter un dossier",

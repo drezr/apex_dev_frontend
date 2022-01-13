@@ -278,6 +278,12 @@ export default {
       }
 
       else {
+        if (!this.$logged_profile) {
+          while (!this.$logged_profile) {
+            this.$logged_profile
+          }
+        }
+
         profiles = profiles.filter(p => p.id == this.$logged_profile.id)
       }
 

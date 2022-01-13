@@ -49,7 +49,7 @@
             </v-tab>
 
             <v-tab
-              v-for="(profile, i) in team.profiles"
+              v-for="(profile, i) in visible_profiles"
               :key="i"
               class="call-tab"
             >
@@ -199,7 +199,7 @@ export default {
   computed: {
     filtered_calls() {
       if (this.tab > 0) {
-        let profile = this.team.profiles[this.tab - 1]
+        let profile = this.visible_profiles[this.tab - 1]
 
         return this.calls.filter(c => {
           return (c.profile.id == profile.id) && (this.with_d27 ? (c.files.length > 0 || c.links.length > 0) : true)
@@ -209,6 +209,18 @@ export default {
       return this.calls.filter(c => {
         return this.with_d27 ? (c.files.length > 0 || c.links.length > 0) : true
       })
+    },
+
+    visible_profiles() {
+      let visible_profiles = Array()
+
+      for (let profile of this.team.profiles) {
+        if (this.$has_xs(['watcher_can_see_cells']) || profile.id == this.$logged_profile.id) {
+          visible_profiles.push(profile)
+        }
+      }
+      
+      return visible_profiles
     },
   },
 

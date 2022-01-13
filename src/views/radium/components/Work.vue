@@ -364,11 +364,13 @@
           :text="lang.generic.message[lg]"
           :rounded="true"
           :color="'deep-orange'"
-          :dark="true"
           :icon="'mdi-android-messages'"
           :tooltip="lang.views.radium.message_tooltip[lg]"
           class="mr-3"
           @click="message_dialog = true"
+          :loading="add_message_loading"
+          :disabled="add_message_loading"
+          :dark="!add_message_loading"
         />
 
         <CustomButton
@@ -399,11 +401,13 @@
           :text="lang.generic.to_link[lg]"
           :rounded="true"
           :color="'purple'"
-          :dark="true"
           :icon="'mdi-link-variant-plus'"
           :tooltip="lang.views.radium.link_radiums_tooltip[lg]"
           class="mr-3"
           @click="link_radiums_dialog = true"
+          :dark="!link_radiums_loading"
+          :disabled="link_radiums_loading"
+          :loading="link_radiums_loading"
         />
       </div>
     </div>
@@ -675,6 +679,7 @@ export default {
       message_selected_radiums: Array(),
       message_preset: 0,
       message_priority: 'important',
+      add_message_loading: false,
       remove_dialog: false,
       add_loading: false,
       remove_child_dialog: false,
@@ -682,6 +687,7 @@ export default {
       remove_child_item: null,
       link_radiums_snackbar: false,
       link_radiums_timeout: 4000,
+      link_radiums_loading: false,
       original_self: null,
       file_kind: null,
       file_replace: null,
@@ -1270,6 +1276,7 @@ export default {
 
     async send_message() {
       this.message_dialog = false
+      this.add_message_loading = true
 
       await this.$http.post('works', {
         'action': 'send_message',
@@ -1291,9 +1298,13 @@ export default {
 
       this.message = ''
       this.message_selected_radiums = Array()
+      this.add_message_loading = false
     },
 
     async link_radiums() {
+      this.link_radiums_loading = true
+      this.link_radiums_dialog = false
+
       await this.$http.post('works', {
         'action': 'link_radiums',
         'view': this.$current_view,
@@ -1309,8 +1320,9 @@ export default {
       }
 
       this.link_selected_radiums = Array()
-      this.link_radiums_dialog = false
       this.link_radiums_snackbar = true
+
+      this.link_radiums_loading = false
     },
   },
 

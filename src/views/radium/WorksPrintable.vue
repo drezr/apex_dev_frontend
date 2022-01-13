@@ -29,6 +29,7 @@
         />
 
         <CustomButton
+          v-if="$is_editor"
           :icon="'mdi-tune-vertical'"
           :height="40"
           :outlined="true"

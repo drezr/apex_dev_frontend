@@ -11,140 +11,146 @@
 
       <NavigationBar class="mb-6" />
 
-      <div class="d-flex flex-wrap justify-center">
-        <div
-          v-for="(leave_type, i) in leaves_data"
-          :key="i"
-        >
-          <v-tooltip
-            :top="true"
-            color="black"
-            :disabled="leave_type.desc ? false : true"
+      <div v-if="$has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id">
+        <div  class="d-flex flex-wrap justify-center">
+          <div
+            v-for="(leave_type, i) in leaves_data"
+            :key="i"
           >
-            <template v-slot:activator="{ on: show_tooltip }">
-              <div
-                class="leave-frame"
-                :class="selected_type == leave_type.code ? 'leave-outlined' : ''"
-                @click="selected_type = leave_type.code"
-                v-on="show_tooltip"
-              >
-                <div class="leave-upper">
+            <v-tooltip
+              :top="true"
+              color="black"
+              :disabled="leave_type.desc ? false : true"
+            >
+              <template v-slot:activator="{ on: show_tooltip }">
+                <div
+                  class="leave-frame"
+                  :class="selected_type == leave_type.code ? 'leave-outlined' : ''"
+                  @click="selected_type = leave_type.code"
+                  v-on="show_tooltip"
+                >
+                  <div class="leave-upper">
+                    <div
+                      style="height: 100%;"
+                      class="lighten-4 text--darken-4 white--text d-flex justify-center align-center"
+                      :class="[
+                        leave_type.color,
+                        leave_type.color + '--text',
+                      ]"
+                    >
+                      <b>{{ leave_type.code.toUpperCase() }}</b>
+                    </div>
+                  </div>
+
                   <div
-                    style="height: 100%;"
-                    class="lighten-4 text--darken-4 white--text d-flex justify-center align-center"
-                    :class="[
-                      leave_type.color,
-                      leave_type.color + '--text',
-                    ]"
+                    class="leave-lower"
                   >
-                    <b>{{ leave_type.code.toUpperCase() }}</b>
+                    {{ computed_quotas[leave_type.code.toLowerCase()] }}
                   </div>
                 </div>
+              </template>
 
+              <span>{{ leave_type.desc }}</span>
+            </v-tooltip>
+          </div>
+        </div>
+
+        <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
+          <div v-if="selected_type.toLowerCase() == type">
+            <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
+              <div class="quota-table-row">
+                <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
+                <div class="quota-table-value">{{ base_quotas[type] }}</div>
+              </div>
+            </div>
+
+            <div v-for="(month, number) in months" :key="number">
+              <div v-if="month.length > 0">
                 <div
-                  class="leave-lower"
+                  class="text-center mt-2 mb-2"
+                  :class="number < 13 ? '' : 'mt-6'"
                 >
-                  {{ computed_quotas[leave_type.code.toLowerCase()] }}
+                  <b>{{ months_name[number] }}</b>
+                </div>
+
+                <div class="quota-table">
+                  <div
+                    v-for="(cell, i) in month"
+                    :key="i"
+                    class="quota-table-parent"
+                  >
+                    <div class="quota-table-row">
+                      <div
+                        class="d-flex flex-grow-1"
+                        v-if="number < 13"
+                      >
+                        <div class="quota-table-presence">
+                          {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
+                        </div>
+
+                        <div class="quota-table-presence">
+                          {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
+                        </div>
+
+                        <div class="quota-table-date">
+                          {{ $tool.format_date(cell['date']) }}
+                        </div>
+                      </div>
+
+
+                      <div
+                        class="d-flex flex-grow-1 justify-center align-center"
+                        v-else
+                      >
+                        <b>28 {{ lang.generic.absences[lg].toLowerCase() }}</b>
+                      </div>
+
+                      <div class="quota-table-value">
+                        <div 
+                          class="quota-table-value-color lighten-4 text--darken-4 m-1"
+                          :class="String(cell['count']).charAt(0) == '-' ? 'red red--text' : 'green green--text'"
+                        >
+                          {{ cell['count'] }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </template>
+            </div>
 
-            <span>{{ leave_type.desc }}</span>
-          </v-tooltip>
+            <div
+              class="quota-table mt-5 green lighten-3 green--text text--darken-4"
+              v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type)"
+            >
+              <div class="quota-table-row">
+                <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
+                <div class="quota-table-value">{{ obtained[type] }}</div>
+              </div>
+            </div>
+
+            <div
+              class="quota-table red lighten-3 red--text text--darken-4"
+              :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type) ? 'mt-2' : 'mt-5'"
+            >
+              <div class="quota-table-row">
+                <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>
+                <div class="quota-table-value">{{ Math.abs(took[type]) }}</div>
+              </div>
+            </div>
+
+            <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
+              <div class="quota-table-row">
+                <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
+                <div class="quota-table-value">{{ computed_quotas[type] }}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
-        <div v-if="selected_type.toLowerCase() == type">
-          <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
-            <div class="quota-table-row">
-              <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
-              <div class="quota-table-value">{{ base_quotas[type] }}</div>
-            </div>
-          </div>
-
-          <div v-for="(month, number) in months" :key="number">
-            <div v-if="month.length > 0">
-              <div
-                class="text-center mt-2 mb-2"
-                :class="number < 13 ? '' : 'mt-6'"
-              >
-                <b>{{ months_name[number] }}</b>
-              </div>
-
-              <div class="quota-table">
-                <div
-                  v-for="(cell, i) in month"
-                  :key="i"
-                  class="quota-table-parent"
-                >
-                  <div class="quota-table-row">
-                    <div
-                      class="d-flex flex-grow-1"
-                      v-if="number < 13"
-                    >
-                      <div class="quota-table-presence">
-                        {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
-                      </div>
-
-                      <div class="quota-table-presence">
-                        {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
-                      </div>
-
-                      <div class="quota-table-date">
-                        {{ $tool.format_date(cell['date']) }}
-                      </div>
-                    </div>
-
-
-                    <div
-                      class="d-flex flex-grow-1 justify-center align-center"
-                      v-else
-                    >
-                      <b>28 {{ lang.generic.absences[lg].toLowerCase() }}</b>
-                    </div>
-
-                    <div class="quota-table-value">
-                      <div 
-                        class="quota-table-value-color lighten-4 text--darken-4 m-1"
-                        :class="String(cell['count']).charAt(0) == '-' ? 'red red--text' : 'green green--text'"
-                      >
-                        {{ cell['count'] }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="quota-table mt-5 green lighten-3 green--text text--darken-4"
-            v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type)"
-          >
-            <div class="quota-table-row">
-              <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
-              <div class="quota-table-value">{{ obtained[type] }}</div>
-            </div>
-          </div>
-
-          <div
-            class="quota-table red lighten-3 red--text text--darken-4"
-            :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type) ? 'mt-2' : 'mt-5'"
-          >
-            <div class="quota-table-row">
-              <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>
-              <div class="quota-table-value">{{ Math.abs(took[type]) }}</div>
-            </div>
-          </div>
-
-          <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
-            <div class="quota-table-row">
-              <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
-              <div class="quota-table-value">{{ computed_quotas[type] }}</div>
-            </div>
-          </div>
-        </div>
+      <div v-else class="pa-16 text-center">
+        {{ lang.views.watcher.quota_no_access[lg] }}
       </div>
     </div>
   </transition>

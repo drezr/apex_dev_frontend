@@ -39,6 +39,7 @@
     />
 
     <CustomButton
+      v-if="$current_component.profiles.length > 0"
       :icon="'mdi-printer'"
       :height="40"
       :outlined="true"
@@ -53,6 +54,7 @@
     />
 
     <CustomButton
+      v-if="$current_component.profiles.length > 0"
       :icon="'mdi-hammer-screwdriver'"
       :height="40"
       :outlined="true"
@@ -90,6 +92,7 @@
     />
 
     <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-sort'"
       :height="40"
       :outlined="true"

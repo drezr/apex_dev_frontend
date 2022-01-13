@@ -35,7 +35,7 @@
         </div>
 
         <div class="board-planned-title">
-          <div class="board-copy-tip" v-if="$mobile_breakpoint">
+          <div class="board-copy-tip" v-if="$mobile_breakpoint && $is_editor">
             {{ lang.views.planner.board_copy_tip[lg] }}
           </div>
 
@@ -440,7 +440,8 @@
     :confirm_icon="'mdi-folder-plus'"
     :confirm_color="'green'"
     :confirm_text="lang.views.planner.add_folder[lg]"
-    :confirm_disabled="folders.length == 6"
+    :confirm_disabled="add_folder_loading || folders.length == 6"
+    :confirm_loading="add_folder_loading"
     @confirm="add_folder"
   >
     <VueDraggable
@@ -509,6 +510,10 @@
         />
       </div>
     </VueDraggable>
+
+    <div class="text-center mt-6 red--text" v-if="folders.length == 6">
+      <i>{{ lang.views.planner.folder_max_six[lg] }}</i>
+    </div>
   </CustomDialog>
 
   <CustomDialog
@@ -597,6 +602,7 @@ export default {
       short_override_timeout: 4000,
       folders_dialog: false,
       delete_folder_dialog: false,
+      add_folder_loading: false,
       deleting_folder: null,
       move_old_parent: null,
       move_new_parent: null,
@@ -694,13 +700,17 @@ export default {
       this.control_key_pressed = e.ctrlKey
     }
 
-    window.addEventListener('keydown', this.key_handler)
-    window.addEventListener('keyup', this.key_handler)
+    if (this.$is_editor) {
+      window.addEventListener('keydown', this.key_handler)
+      window.addEventListener('keyup', this.key_handler)
+    }
   },
 
   beforeDestroy() {
-    window.removeEventListener('keydown', this.key_handler)
-    window.removeEventListener('keyup', this.key_handler)
+    if (this.$is_editor) {
+      window.removeEventListener('keydown', this.key_handler)
+      window.removeEventListener('keyup', this.key_handler)
+    }
   },
 
   computed: {
@@ -1000,6 +1010,8 @@ export default {
     },
 
     async add_folder() {
+      this.add_folder_loading = true
+
       let request = await this.$http.post('board', {
         'action': 'add_folder',
         'view': this.$current_view,
@@ -1010,6 +1022,8 @@ export default {
       request.folder.children = Array()
 
       this.folders.push(request.folder)
+
+      this.add_folder_loading = false
     },
 
     async update_folders_position() {

@@ -75,8 +75,16 @@
         @click="$emit('confirm')"
         :disabled="confirm_disabled"
       >
+        <Loader
+          :size="18"
+          :width="3"
+          :color="'white'"
+          v-if="confirm_loading"
+          :class="confirm_text ? 'mr-2' : ''"
+        />
+
         <v-icon
-          v-if="confirm_icon"
+          v-if="!confirm_loading && confirm_icon"
           :class="[
             confirm_text ? 'mr-2' : '',
             confirm_text_color ? confirm_text_color + '--text' : 'white--text',
@@ -162,6 +170,10 @@ export default {
     }, 
     confirm_icon: {
       type: String,
+      required: false,
+    },
+    confirm_loading: {
+      type: Boolean,
       required: false,
     },
     confirm_text: {

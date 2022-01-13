@@ -318,17 +318,17 @@
           ></v-checkbox>
 
           <v-checkbox
-            v-model="copy.link.watcher_can_see_quotas"
-            :label="lang.views.team.access_watcher_can_see_quotas[lg]"
-            :hint="lang.views.team.access_watcher_can_see_quotas_hint[lg]"
+            v-model="copy.link.watcher_can_see_cells"
+            :label="lang.views.team.access_watcher_can_see_cells[lg]"
+            :hint="lang.views.team.access_watcher_can_see_cells_hint[lg]"
             :disabled="copy.link.watcher_is_editor"
             persistent-hint
           ></v-checkbox>
 
           <v-checkbox
-            v-model="copy.link.watcher_can_see_cells"
-            :label="lang.views.team.access_watcher_can_see_cells[lg]"
-            :hint="lang.views.team.access_watcher_can_see_cells_hint[lg]"
+            v-model="copy.link.watcher_can_see_quotas"
+            :label="lang.views.team.access_watcher_can_see_quotas[lg]"
+            :hint="lang.views.team.access_watcher_can_see_quotas_hint[lg]"
             :disabled="copy.link.watcher_is_editor"
             persistent-hint
           ></v-checkbox>

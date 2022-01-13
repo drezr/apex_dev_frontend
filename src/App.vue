@@ -138,6 +138,10 @@ html {
   cursor: cell !important;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
 .opacity-0 {
   opacity: 0 !important;
 }

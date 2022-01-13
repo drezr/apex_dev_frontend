@@ -396,7 +396,7 @@ export default {
       config_is_updating: false,
       config_update_timer: null,
       is_moving: false,
-      doc_width: 0,
+      doc_width: 1980,
       moving_work_loading: false,
       copying_work_loading: false,
     }
@@ -413,6 +413,7 @@ export default {
     this.team = this.request.team
     this.app = this.request.app
     this.config = this.request.config
+
     this.works = this.request.works
     this.column_configs = this.get_column_configs()
     this.message_count = this.request.message_count

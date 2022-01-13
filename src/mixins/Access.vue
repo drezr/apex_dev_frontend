@@ -37,7 +37,11 @@ export default {
     },
 
     $is_editor() {
-      if (this.$current_view == 'calendar') {
+      if (this.$is_staff) {
+        return true
+      }
+
+      else if (this.$current_view == 'calendar') {
         return this.$has_xs(['watcher_is_editor'])
       }
 
@@ -61,7 +65,11 @@ export default {
     },
 
     $is_user() {
-      if (this.$current_view == 'calendar') {
+      if (this.$is_staff) {
+        return true
+      }
+
+      else if (this.$current_view == 'calendar') {
         return this.$has_xs(['watcher_is_user'])
       }
 
@@ -83,9 +91,9 @@ export default {
 
   methods: {
     $has_xs(xs_list) {
-/*      if (this.$is_staff) {
+      if (this.$is_staff) {
         return true
-      }*/
+      }
 
       for (let xs of xs_list) {
         if (this.$xs[xs] == true) {
