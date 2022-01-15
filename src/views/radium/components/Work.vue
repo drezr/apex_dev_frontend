@@ -90,11 +90,12 @@
           <textarea
             v-model="self.columns[column_config.name].value"
             @input="set_textarea_height($event, column_config, 2)"
-            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value)"
+            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value, self.columns[column_config.name].uid)"
             style="width: 100%;"
             class="work-textarea my-2 text--accent-4"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
             :disabled="!edit_mode"
+            :ref="self.columns[column_config.name].uid"
           ></textarea>
         </div>
 
@@ -896,6 +897,7 @@ export default {
             'text_color': null,
             'is_edited': false,
             'rows' : Array(),
+            'uid': this.$tool.gen_uid(),
           }
         }
       }
@@ -908,13 +910,17 @@ export default {
       event.target.style.height = `${event.target.scrollHeight}px `
     },
 
-    get_textarea_style(column, extra_height, value) {
-      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+    get_textarea_style(column, extra_height, value, uid) {
+      if (this.$refs[uid]) {
+        let height = this.$refs[uid][0].scrollHeight
+      
+        return `font-size: ${column.textsize}px;
+                height: ${height}px;
+                padding-top: ${extra_height}px;
+                padding-bottom: ${extra_height}px; `
+      }
 
-      return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize * (line_count)) + (extra_height * 2) + 1}px;
-              padding-top: ${extra_height}px;
-              padding-bottom: ${extra_height}px; `
+      return ''
     },
 
     value_click(event, column_config, column) {
