@@ -298,13 +298,13 @@
   <CustomDialog
     v-if="teammates_dialog"
     :open="teammates_dialog"
-    :width="500"
+    :width="600"
     :title_text="lang.views.planner.edit_teammates[lg]"
     @cancel="teammates_dialog = false"
   >
     <div class="mt-6" style="width: fit-content; margin: auto;">
       <div
-        v-for="(profile, i) in team.profiles"
+        v-for="(profile, i) in team.profiles.filter(p => p.link.watcher_is_visible)"
         :key="i"
         class="d-flex"
       >
@@ -644,6 +644,8 @@ export default {
     this.profiles = this.request.team.profiles
     this.app = this.request.app
     this.days = this.request.days
+
+    this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
     let children = this.$tool.get_fused_children(this.app)
     children = this.$tool.deepcopy(children)

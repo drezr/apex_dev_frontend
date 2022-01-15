@@ -40,7 +40,7 @@
 
           <DayCell
             v-for="date in calendar"
-            :key="date.day_number + $tool.gen_uid()"
+            :key="date.day_number + 88888888888888"
             :type="'day'"
             :date="date"
             @open_detail_dialog="open_detail_dialog"
@@ -56,7 +56,7 @@
 
           <DayCell
             v-for="(date, x) in profile.dates"
-            :key="x + $tool.gen_uid()"
+            :key="x + y"
             :type="'cell'"
             :date="date"
             :parent_cpnt="$current_instance"
@@ -73,7 +73,7 @@
 
           <DayCell
             v-for="date in calendar"
-            :key="date.day_number + $tool.gen_uid()"
+            :key="date.day_number +  99999999999"
             :type="'day'"
             :date="date"
             :parent_cpnt="$current_instance"

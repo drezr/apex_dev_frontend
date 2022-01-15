@@ -143,6 +143,7 @@
         persistent-hint
         class="mt-0 mb-6 mx-3"
         tabindex="7"
+        @click="copy.can_see_calendars = copy.link.is_manager ? true : copy.can_see_calendars"
       ></v-checkbox>
 
       <div style="width: 95px;">
@@ -330,6 +331,16 @@
             :label="lang.views.team.access_watcher_can_see_quotas[lg]"
             :hint="lang.views.team.access_watcher_can_see_quotas_hint[lg]"
             :disabled="copy.link.watcher_is_editor"
+            persistent-hint
+          ></v-checkbox>
+
+          <v-divider class="mt-4"></v-divider>
+
+          <v-checkbox
+            v-model="copy.can_see_calendars"
+            :label="lang.views.team.access_can_see_calendars[lg]"
+            :hint="lang.views.team.access_can_see_calendars_hint[lg]"
+            :disabled="copy.link.is_manager"
             persistent-hint
           ></v-checkbox>
         </v-expansion-panel-content>

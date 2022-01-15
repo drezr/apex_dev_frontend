@@ -1082,6 +1082,16 @@ export default {
               "nl": "Verlaat ook andere agenten.",
               "en": "Also leave of other officers."
             },
+            "access_can_see_calendars":{
+              "fr": "Peut voir tous les calendriers",
+              "nl": "Kan alle agenda's zien",
+              "en": "Can see all calendars"
+            },
+            "access_can_see_calendars_hint":{
+              "fr": "Également le calendrier des autres équipes.",
+              "nl": "Ook het agenda van andere teams.",
+              "en": "Also the calendar of other teams."
+            },
             "access_password_dialog_title":{
               "fr": "Êtes-vous sûr de vouloir envoyer un nouveau mot de passe à cet utilisateur ?",
               "nl": "Weet je zeker dat je een nieuw wachtwoord naar deze gebruiker wilt sturen?",
@@ -1469,9 +1479,13 @@ export default {
               "fr": "Reste",
               "nl": "Verblijf",
               "en": "Remains"
-            }
+            },
+            "quota_add_leave_type":{
+              "fr": "Pour en ajouter, naviguez vers le menu « Gestion des congés ».",
+              "nl": "Om meer toe te voegen, navigeert u naar het menu « Verlofbeheer ».",
+              "en": "To add more, navigate to the « Leave Management » menu."
+            },
           },
-
 
 
 

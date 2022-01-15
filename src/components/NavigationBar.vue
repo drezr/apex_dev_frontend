@@ -35,7 +35,7 @@
       class="ml-1 mb-1"
       @click="go_leaves"
       :tooltip="lang.views.watcher.leaves_management[lg]"
-      v-if="$is_editor"
+      v-if="$has_xs(['is_manager'])"
     />
 
     <CustomButton
@@ -66,6 +66,18 @@
       :badge_color="'grey'"
       :badge_offset_x="18"
       :badge_offset_y="18"
+    />
+  </div>
+
+  <div class="d-flex flex-wrap justify-center" v-if="$current_view == 'quota'">
+    <CustomButton
+      :icon="'mdi-calendar-account'"
+      :height="40"
+      :outlined="true"
+      class="ml-1 mb-1"
+      @click="go_leaves"
+      :tooltip="lang.views.watcher.leaves_management[lg]"
+      v-if="$has_xs(['is_manager'])"
     />
   </div>
 

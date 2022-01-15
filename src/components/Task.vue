@@ -603,6 +603,10 @@ export default {
 
         this.self.status = status[this.self.status]
 
+        if (!this.self.status) {
+          this.self.status = 'pending'
+        }
+
         this.update()
       }
     },

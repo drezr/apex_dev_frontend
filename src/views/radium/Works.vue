@@ -871,6 +871,7 @@ export default {
   padding-top: 10px;
   padding-bottom: 5px;
   background-color: white;
+  z-index: 5;
 }
 
 .works-navigation-inner {

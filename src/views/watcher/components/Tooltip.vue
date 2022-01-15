@@ -315,6 +315,7 @@ export default {
 
 .tooltip-teammates {
   display: flex;
+  flex-wrap: wrap;
   font-size: 11px;
   font-weight: bold;
   margin-left: 5px;

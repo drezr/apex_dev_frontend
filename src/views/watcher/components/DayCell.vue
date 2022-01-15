@@ -204,17 +204,18 @@ export default {
         if (this.parent_cpnt && this.parent_cpnt.leave_config) {
           let config =this.parent_cpnt.leave_config
 
+          let ignore_types = config.leave_types.filter(
+            l => l.kind == 'ignore')
+
           let presence_types = config.leave_types.filter(
-            l => l.kind == 'presence'
-          )
+            l => l.kind == 'presence')
 
-          for (let presence_type of presence_types) {
-            let code = presence_type.code.toUpperCase()
-            value = value.toUpperCase()
+          let ignore_type_match = ignore_types.find(t => t.code.toUpperCase() == value.toUpperCase())
 
-            if (value.includes(code)) {
-              color = `${presence_type.color}--text text--darken-2`
-            }
+          let presence_type_match = presence_types.find(t => t.code.toUpperCase() == value.toUpperCase())
+
+          if (presence_type_match && !ignore_type_match) {
+            color = `${presence_type_match.color}--text text--darken-2`
           }
         }
       }
@@ -396,6 +397,7 @@ export default {
 
 .day-has-content {
   background-color: #0078ad;
+  color: white;
 }
 
 .day-step {

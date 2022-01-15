@@ -11,7 +11,7 @@
 
       <NavigationBar class="mb-6" />
 
-      <div v-if="$has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id">
+      <div v-if="($has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id) && selected_type">
         <div  class="d-flex flex-wrap justify-center">
           <div
             v-for="(leave_type, i) in leaves_data"
@@ -149,8 +149,13 @@
         </div>
       </div>
 
-      <div v-else class="pa-16 text-center">
+      <div v-else-if="!($has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id) && selected_type" class="pa-16 text-center">
         {{ lang.views.watcher.quota_no_access[lg] }}
+      </div>
+
+      <div v-else class="pa-16 text-center">
+        {{ lang.views.watcher.leaves_no_leave_set_1[lg] }}<br>
+        <small v-if="$has_xs(['is_manager'])">{{ lang.views.watcher.quota_add_leave_type[lg] }}</small>
       </div>
     </div>
   </transition>
@@ -230,7 +235,10 @@ export default {
     this.leaves_data = this.leaves_data.filter(l => !['recovery', 'presence'].includes(l.kind))
     this.leaves_data.sort((a, b) => a.position - b.position)
 
-    this.selected_type = this.leaves_data[0]['code']
+    if (this.leaves_data.length > 0) {
+      this.selected_type = this.leaves_data[0]['code']
+    }
+    
 
     for (let code in this.base_quotas) {
       this.base_quotas[code] = Number(this.base_quotas[code])

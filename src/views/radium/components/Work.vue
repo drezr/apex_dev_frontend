@@ -8,6 +8,7 @@
   color="purple"
   icon="mdi-link-variant"
   :value="$show_link_badge"
+  class="work-badge"
 >
 <div class="pr-3" style="min-width: min-content;">
 <div
@@ -86,12 +87,12 @@
 
         <!-- ############## Textarea ############## -->
 
-        <div v-if="!column_config.multiple" style="width: 100%;">
+        <div v-if="!column_config.multiple" style="width: 100%; display: flex; justify-content: center;">
           <textarea
             v-model="self.columns[column_config.name].value"
             @input="set_textarea_height($event, column_config, 2)"
             :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value, self.columns[column_config.name].uid)"
-            style="width: 100%;"
+            style="width: calc(100% - 4px); overflow-x: hidden;"
             class="work-textarea my-2 text--accent-4"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
             :disabled="!edit_mode"
@@ -906,12 +907,25 @@ export default {
     },
 
     set_textarea_height(event, column, extra_height) {
-      event.target.style.height = `${Number(column.textsize) + ((extra_height * 2))}px `
-      event.target.style.height = `${event.target.scrollHeight}px `
+      column
+      extra_height
+      event.target.style.height = `auto`
+      event.target.style.height = `${event.target.scrollHeight}px`
     },
 
     get_textarea_style(column, extra_height, value, uid) {
-      if (this.$refs[uid]) {
+      uid
+      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+
+      return `font-size: ${column.textsize}px;
+              height: ${Number(column.textsize * (line_count)) + (extra_height * 2) + 1}px;
+              padding-top: ${extra_height}px;
+              padding-bottom: ${extra_height}px; `
+
+
+
+
+/*      if (this.$refs[uid]) {
         let height = this.$refs[uid][0].scrollHeight
       
         return `font-size: ${column.textsize}px;
@@ -920,7 +934,7 @@ export default {
                 padding-bottom: ${extra_height}px; `
       }
 
-      return ''
+      return ''*/
     },
 
     value_click(event, column_config, column) {
@@ -1339,8 +1353,16 @@ export default {
 
 </script>
 
-
 <style>
+
+.work-badge .v-badge__badge {
+  z-index: 3;
+}
+
+</style>
+
+
+<style scoped>
 
 .work-overframe {
   border: 1px black solid;
@@ -1469,6 +1491,9 @@ export default {
   min-width: 50px;
   width: 50px;
   cursor: pointer;
+  position: sticky;
+  left: 0;
+  z-index: 2;
 }
 
 .work-expand-button:hover {
