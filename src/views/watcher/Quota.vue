@@ -4,7 +4,7 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading">
+    <div v-if="!loading" style="padding-bottom: 50px;">
       <div class="team-title mt-3">
         {{ profile.name }}
       </div>
@@ -363,7 +363,7 @@ export default {
 
 .quota-table {
   box-shadow: 0 0px 0px 2px rgb(235, 235, 235);
-  width: 500px;
+  width: 375px;
   margin: auto;
   text-align: center;
   border-radius: 5px;

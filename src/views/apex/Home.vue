@@ -4,7 +4,7 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading">
+    <div v-if="!loading" style="padding-bottom: 20px;">
       <div class="mx-auto" style="max-width: 600px;">
         <v-card
           class="mt-16 mx-3"

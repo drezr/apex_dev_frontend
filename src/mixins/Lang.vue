@@ -125,6 +125,11 @@ export default {
             "nl": "Bezoek bezoek",
             "en": "Visit"
           },
+          "define":{
+            "fr": "Definir",
+            "nl": "Definiëren",
+            "en": "Define"
+          },
           "override":{
             "fr": "Écraser",
             "nl": "♪",
@@ -1429,6 +1434,31 @@ export default {
               "fr": "Ajouter un type de congé",
               "nl": "Voeg een soort verlof toe",
               "en": "Add a type of leave"
+            },
+            "leaves_set_leave_config":{
+              "fr": "Définir une configuration",
+              "nl": "Definieer een configuratie",
+              "en": "Define a configuration"
+            },
+            "leaves_set_leave_config_alert":{
+              "fr": "Attention, définir une configuration supprimera définitivement votre configuration actuelle avant d'ajouter la nouvelle.",
+              "nl": "Wees voorzichtig, het definiëren van een configuratie zal uw huidige configuratie permanent verwijderen voordat u de nieuwe toevoegt.",
+              "en": "Be careful, defining a configuration will permanently delete your current configuration before adding the new one."
+            },
+            "leaves_leave_config_french_default":{
+              "fr": "Configuration francaise (défault)",
+              "nl": "Franse configuratie (standaard)",
+              "en": "French configuration (default)"
+            },
+            "leaves_leave_config_dutch_default":{
+              "fr": "Configuration néérlandaise (défault)",
+              "nl": "Nederlandse configuratie (standaard)",
+              "en": "Dutch configuration (default)"
+            },
+            "leaves_leave_config_empty_config":{
+              "fr": "Aucune (supprimera la configuration actuelle)",
+              "nl": "Geen (verwijdert de huidige configuratie)",
+              "en": "None (will delete current configuration)"
             },
             "calls_title":{
               "fr": "Récapitulatif des interventions",

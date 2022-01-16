@@ -249,6 +249,8 @@ export default {
       this.$current_component.config.leave_types = leave_types.filter(
         l => l != this.leave_type)
 
+      this.$current_component.rerender_count = this.$tool.gen_uid()
+
       this.delete_dialog = false
 
       if (this.leave_type.id) {
