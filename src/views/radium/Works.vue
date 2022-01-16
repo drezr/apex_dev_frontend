@@ -840,7 +840,8 @@ export default {
 <style scoped>
 
 .works-frame {
-
+  display: flex;
+  flex-direction: column;
 }
 
 .works-customize-row {

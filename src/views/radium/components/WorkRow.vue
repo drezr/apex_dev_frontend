@@ -14,11 +14,12 @@
     <textarea
       v-model="self[column_name]"
       @input="parent_cpnt.set_textarea_height($event, column_config, 5)"
-      :style="parent_cpnt.get_textarea_style(column_config, 5, self[column_name])"
-      class="work-textarea no-focus text--accent-4"
+      :style="get_textarea_style(column_config, 5, self[column_name], (column_name + self.id))"
+      class="work-textarea no-focus text--accent-4 hide-scrollbar"
       :class="text_color"
       style="width: 100%;"
       :disabled="!parent_cpnt.edit_mode"
+      :ref="column_name + self.id"
     ></textarea>
   </div>
 </div>
@@ -82,6 +83,23 @@ export default {
 
         this.$emit('update')
       }
+    },
+
+    get_textarea_style(column, extra_height, value, uid) {
+      setTimeout(() => {
+        if (this.$refs[uid]) {
+          let textarea = this.$refs[uid][0]
+          textarea.style.height = `10px`
+          textarea.style.height = `${textarea.scrollHeight}px`
+          textarea.style.paddingTop = `${extra_height}px`
+          textarea.style.paddingBottom = `${extra_height}px`
+          textarea.style.fontSize = `${column.textsize}px`
+
+          setTimeout(() => {
+            textarea.style.height = `${textarea.scrollHeight}px`
+          }, 1)
+        }
+      }, 1)
     },
   },
 

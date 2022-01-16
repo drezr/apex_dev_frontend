@@ -74,13 +74,12 @@
         @click="value_click($event, column_config, self.columns[column_config.name])"
         @blur.capture="value_blur($event)"
         :class="[
-          edit_mode ? 'white' : self.columns[column_config.name].bg_color,
-          !edit_mode && self.columns[column_config.name].value || self.columns[column_config.name].rows.length > 0 ? 'lighten-4' : 'lighten-2 accent-1',
+          edit_mode ? 'white' : (self.columns[column_config.name].bg_color ? self.columns[column_config.name].bg_color : self.color),
+          !edit_mode && self.columns[column_config.name].value || self.columns[column_config.name].rows.length > 0 ? 'lighten-4' : 'lighten-3',
           self.columns[column_config.name].clickable && !edit_mode ? 'work-column-value-clickable' : '',
           $current_component.palette && !edit_mode ? 'work-column-value-painter' : '',
         ]"
       >
-
 
 
 
@@ -92,8 +91,8 @@
             v-model="self.columns[column_config.name].value"
             @input="set_textarea_height($event, column_config, 2)"
             :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value, self.columns[column_config.name].uid)"
-            style="width: calc(100% - 4px); overflow-x: hidden;"
-            class="work-textarea my-2 text--accent-4"
+            style="width: calc(100% - 4px); overflow-x: hidden; padding: 0 5px;"
+            class="work-textarea my-2 text--accent-4 hide-scrollbar"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
             :disabled="!edit_mode"
             :ref="self.columns[column_config.name].uid"
@@ -914,27 +913,20 @@ export default {
     },
 
     get_textarea_style(column, extra_height, value, uid) {
-      uid
-      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+      setTimeout(() => {
+        if (this.$refs[uid]) {
+          let textarea = this.$refs[uid][0]
+          textarea.style.height = `10px`
+          textarea.style.height = `${textarea.scrollHeight}px`
+          textarea.style.paddingTop = `${extra_height}px`
+          textarea.style.paddingBottom = `${extra_height}px`
+          textarea.style.fontSize = `${column.textsize}px`
 
-      return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize * (line_count)) + (extra_height * 2) + 1}px;
-              padding-top: ${extra_height}px;
-              padding-bottom: ${extra_height}px; `
-
-
-
-
-/*      if (this.$refs[uid]) {
-        let height = this.$refs[uid][0].scrollHeight
-      
-        return `font-size: ${column.textsize}px;
-                height: ${height}px;
-                padding-top: ${extra_height}px;
-                padding-bottom: ${extra_height}px; `
-      }
-
-      return ''*/
+          setTimeout(() => {
+            textarea.style.height = `${textarea.scrollHeight}px`
+          }, 1)
+        }
+      }, 1)
     },
 
     value_click(event, column_config, column) {
