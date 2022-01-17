@@ -502,6 +502,9 @@ export default {
         document.getElementById('main-frame').scrollTop = 999999999
       }, 100)
 
+      // Might be removed
+      this.update_work_position()
+
       this.add_loading = false
     },
 

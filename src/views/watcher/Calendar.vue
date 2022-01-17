@@ -5,12 +5,11 @@
 
   <transition name="fade">
     <div v-if="!loading" style="height: 300px;">
-      <div class="team-title my-3">
+      <div class="team-title">
         {{ team.name }}
       </div>
 
       <NavigationBar
-        class="mb-3"
         @toggle-palette="palette = !palette"
         @toggle-decimal-calculator="decimal_calculator = !decimal_calculator"
       />
@@ -26,7 +25,7 @@
       </div>
 
       <div class="calendar-frame" ref="frame" v-if="profiles.length > 0">
-        <div class="calendar-days">
+        <div class="calendar-days calendar-days-top">
           <div class="calendar-spacer d-flex align-center justify-center">
             <CustomButton
               @click="show_all_quotas"
@@ -68,7 +67,7 @@
           <Profile :profile="profile" :start="false" />
         </div>
 
-        <div class="calendar-days">
+        <div class="calendar-days calendar-days-bottom">
           <div class="calendar-spacer"></div>
 
           <DayCell
@@ -316,6 +315,7 @@ export default {
       detail_edit_mode: false,
       leave_config: Object(),
       trigger_all_quotas: false,
+      trigger_all_quotas_loading: false,
       palette: false,
       palette_color: 'red',
       decimal_calculator: false,
@@ -779,10 +779,21 @@ export default {
       }
     },
 
-    show_all_quotas() {
+    async show_all_quotas() {
+      this.trigger_all_quotas_loading = true
+
+      await this.$http.post('leaves', {
+        'action': 'create_quotas',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'year': this.$current_year,
+      })
+
       this.trigger_all_quotas = true
 
       setTimeout(() => this.trigger_all_quotas = false, 10)
+      setTimeout(() => this.trigger_all_quotas_loading = false, 10)
     },
 
     async copy_call() {
@@ -893,7 +904,17 @@ export default {
 }
 
 .calendar-days {
+  position: sticky;
   display: flex;
+  z-index: 3;
+}
+
+.calendar-days-top {
+  top: 0;
+}
+
+.calendar-days-bottom {
+  bottom: 0;
 }
 
 .calendar-profiles {

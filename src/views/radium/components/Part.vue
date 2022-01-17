@@ -90,7 +90,7 @@
     ></v-text-field>
 
     <div
-      v-for="(profile, i) in team.profiles"
+      v-for="(profile, i) in team.profiles.filter(p => p.link.watcher_is_visible)"
       :key="i"
       class="d-flex"
     >

@@ -141,13 +141,14 @@ export default {
     trigger_all_quotas() {
       return this.$current_component.trigger_all_quotas
     },
+
+    trigger_all_quotas_loading() {
+      return this.$current_component.trigger_all_quotas_loading
+    },
   },
 
   methods: {
     async get_quota(end) {
-      this.quota_loading = true
-      this.quota_toggled = true
-
       let request = await this.$http.get('quotalight', {
         'end': end,
         'app_id': this.$current_app_id,
@@ -167,7 +168,14 @@ export default {
       if (value) {
         this.get_quota('month_' + (this.start ? 'start' : 'end'))
       }
-    }
+    },
+
+    trigger_all_quotas_loading(value) {
+      if (value) {
+        this.quota_toggled = true
+        this.quota_loading = true
+      }
+    },
   }
 }
 
