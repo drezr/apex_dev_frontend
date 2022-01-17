@@ -12,14 +12,13 @@
     :style="`width: ${config[column_name]['width']};`"
   >
     <textarea
+      :ref="column_name"
       v-model="self[column_name]"
-      @input="parent_cpnt.set_textarea_height($event, column_config, 5)"
-      :style="get_textarea_style(column_config, 5, self[column_name], (column_name + self.id))"
+      :style="get_textarea_style(column_name)"
       class="work-textarea no-focus text--accent-4 hide-scrollbar"
       :class="text_color"
-      style="width: 100%;"
+      style="width: 100%; padding: 5px 0;"
       :disabled="!parent_cpnt.edit_mode"
-      :ref="column_name + self.id"
     ></textarea>
   </div>
 </div>
@@ -85,27 +84,32 @@ export default {
       }
     },
 
-    get_textarea_style(column, extra_height, value, uid) {
-      setTimeout(() => {
-        if (this.$refs[uid]) {
-          let textarea = this.$refs[uid][0]
-          textarea.style.height = `10px`
-          textarea.style.height = `${textarea.scrollHeight}px`
-          textarea.style.paddingTop = `${extra_height}px`
-          textarea.style.paddingBottom = `${extra_height}px`
-          textarea.style.fontSize = `${column.textsize}px`
+    get_textarea_style(column_name) {
+      this.$nextTick(() => {
+        if (this.$refs[column_name]) {
+          let textarea = this.$refs[column_name][0]
 
-          setTimeout(() => {
+          if (textarea) {
+            textarea.style.fontSize = `${this.column_config.textsize}px`
+            textarea.style.height = `5px`
             textarea.style.height = `${textarea.scrollHeight}px`
-          }, 1)
+          }
         }
-      }, 1)
+      })
     },
   },
 
   watch: {
+    column_config: {
+      deep: true,
 
-  }
+      handler() {
+        for (let column_name in this.config) {
+          this.get_textarea_style(column_name)
+        }
+      },
+    }
+  },
 }
 
 </script>

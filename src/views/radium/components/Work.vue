@@ -66,9 +66,6 @@
 
 
 
-
-
-
       <div
         class="work-column-value"
         @click="value_click($event, column_config, self.columns[column_config.name])"
@@ -82,20 +79,17 @@
       >
 
 
-
-
         <!-- ############## Textarea ############## -->
 
         <div v-if="!column_config.multiple" style="width: 100%; display: flex; justify-content: center;">
           <textarea
+            :ref="self.id + '_' + i"
             v-model="self.columns[column_config.name].value"
-            @input="set_textarea_height($event, column_config, 2)"
-            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value, self.columns[column_config.name].uid)"
+            :style="get_textarea_style(column_config, $refs[self.id + '_' + i])"
             style="width: calc(100% - 4px); overflow-x: hidden; padding: 0 5px;"
             class="work-textarea my-2 text--accent-4 hide-scrollbar"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
             :disabled="!edit_mode"
-            :ref="self.columns[column_config.name].uid"
           ></textarea>
         </div>
 
@@ -793,19 +787,19 @@ export default {
       return {
         'from_line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '6%',
+          'width': '7%',
         },
         'from_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '18%',
+          'width': '17%',
         },
         'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
-          'width': '5%',
+          'width': '7%',
         },
         'from_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '13%',
+          'width': '11%',
         },
         'from_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
@@ -813,19 +807,19 @@ export default {
         },
         'to_line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '6%',
+          'width': '7%',
         },
         'to_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '18%',
+          'width': '17%',
         },
         'to_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
-          'width': '5%',
+          'width': '7%',
         },
         'to_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '13%',
+          'width': '11%',
         },
         'to_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
@@ -905,28 +899,16 @@ export default {
       return columns
     },
 
-    set_textarea_height(event, column, extra_height) {
-      column
-      extra_height
-      event.target.style.height = `auto`
-      event.target.style.height = `${event.target.scrollHeight}px`
-    },
+    get_textarea_style(column_config, refs) {
+      if (refs) {
+        let textarea = refs[0]
 
-    get_textarea_style(column, extra_height, value, uid) {
-      setTimeout(() => {
-        if (this.$refs[uid]) {
-          let textarea = this.$refs[uid][0]
-          textarea.style.height = `10px`
+        if (textarea) {
+          textarea.style.fontSize = `${column_config.textsize}px`
+          textarea.style.height = `15px`
           textarea.style.height = `${textarea.scrollHeight}px`
-          textarea.style.paddingTop = `${extra_height}px`
-          textarea.style.paddingBottom = `${extra_height}px`
-          textarea.style.fontSize = `${column.textsize}px`
-
-          setTimeout(() => {
-            textarea.style.height = `${textarea.scrollHeight}px`
-          }, 1)
         }
-      }, 1)
+      }
     },
 
     value_click(event, column_config, column) {
