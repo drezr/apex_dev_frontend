@@ -1073,7 +1073,6 @@ export default {
           column_is_updated = true
         }
 
-
         if (!column_is_updated && new_column.rows.length > 0) {
           for (let index in new_column.rows) {
             if (row_is_updated) break
@@ -1165,7 +1164,7 @@ export default {
 
       else {
         this.self.columns[column_name].rows.push(request.child)
-        this.original_self.columns[column_name].rows.push(request.child)
+        this.original_self.columns[column_name].rows.push(this.$tool.deepcopy(request.child))
       }
 
       this.add_loading = false

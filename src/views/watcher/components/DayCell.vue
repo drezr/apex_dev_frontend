@@ -188,11 +188,11 @@ export default {
     },
 
     offset_x() {
-      return this.$refs.frame.offsetLeft
+      return this.$refs.frame.getBoundingClientRect().x
     },
 
     offset_y() {
-      return this.$refs.frame.offsetTop
+      return this.$refs.frame.getBoundingClientRect().y
     },
   },
 
