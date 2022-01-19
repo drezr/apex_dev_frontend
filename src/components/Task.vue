@@ -364,7 +364,9 @@ export default {
   },
 
   created() {
-    // this.self.disabled = false
+    if (!this.self.status) {
+      this.self.status = 'pending'
+    }
   },
 
   computed: {
