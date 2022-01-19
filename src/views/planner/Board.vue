@@ -40,6 +40,12 @@
           </div>
 
           {{ lang.views.planner.planned[lg] }}
+
+          <v-switch
+            class="board-simplified-switch"
+            v-model="simplified"
+            hide-details
+          ></v-switch>
         </div>
       </div>
 
@@ -176,6 +182,7 @@
                   <Part
                     :self="part"
                     :parent="date.data"
+                    style="flex-grow: 1;"
                   />
                 </div>
 
@@ -221,7 +228,7 @@
                   control_key_pressed && move_is_file ? 'board-dropzone-highlight-error' : '',
                 ]"
                 style="
-                  min-height: 60px;
+                  min-height: 48px;
                   position: relative;
                   width: calc(100% + 61px);
                   left: -61px;
@@ -235,23 +242,29 @@
                   class="board-date-children-frame"
                   :data-type="child.type"
                 >
-                  <div class="board-date-children-child">
+                  <div
+                    class="board-date-children-child"
+                    :style="date.data.children.length == 1 ? 'min-height: 48px;' : ''"
+                  >
                     <Task
                       v-if="child.type == 'task'"
                       :self="child"
                       :parent="date.data"
+                      style="flex-grow: 1;"
                     />
                     
                     <Note
                       v-if="child.type == 'note'"
                       :self="child"
                       :parent="date.data"
+                      style="flex-grow: 1;"
                     />
                     
                     <File
                       v-if="child.type == 'file'"
                       :self="child"
                       :parent="date.data"
+                      style="flex-grow: 1;"
                     />
                   </div>
 
@@ -279,7 +292,9 @@
                       v-else
                       class="d-flex justify-center align-center"
                     >
-                      <v-icon>mdi-account-group</v-icon>
+                      <span
+                        class="mdi mdi-account-group mdi-24px grey--text cursor-pointer"
+                      ></span>
                     </div>
                   </div>
                 </div>
@@ -607,6 +622,7 @@ export default {
       control_key_pressed: false,
       mouse_pressed: false,
       move_is_file: false,
+      simplified: false,
       folder_colors: [
         'red',
         'pink',
@@ -1159,18 +1175,17 @@ export default {
   font-weight: bold;
   font-size: 18px;
   padding-top: 10px;
-  margin: 0 10px;
   text-align: center;
 }
 
 .board-planned-title {
   width: 65%;
-  min-width: 880px;
+  min-width: 941px;
   font-weight: bold;
   font-size: 18px;
   padding-top: 10px;
-  margin: 0 10px;
   text-align: center;
+  margin: 10px 10px 0px 10px;
 }
 
 .board-tab-button {
@@ -1218,7 +1233,6 @@ export default {
 
 .board-date {
   display: flex;
-  min-height: 75px;
 }
 
 .board-date:not(:last-child) {
@@ -1228,7 +1242,6 @@ export default {
 .board-date-day {
   width: 60px;
   min-width: 60px;
-  height: available;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1248,10 +1261,12 @@ export default {
 }
 
 .board-date-children-child {
+  display: flex;
   flex-grow: 1;
   width: 70%;
   min-width: 450px;
   padding: 6px;
+  align-items: center;
 }
 
 .board-date-children-teammates {
@@ -1343,7 +1358,7 @@ export default {
 
 .board-dropzone-highlight {
   background-color: rgba(0, 255, 0, 0.2);
-  min-height: 70px !important;
+  min-height: 48px !important;
 }
 
 .board-dropzone-highlight-error {
@@ -1351,7 +1366,6 @@ export default {
 }
 
 .board-copy-tip {
-  margin-left: 6px;
   border: 1px black solid;
   border-radius: 3px;
   font-size: 12px;
@@ -1361,7 +1375,6 @@ export default {
   margin-top: -24px;
   position: relative;
   top: 33px;
-  left: -19px;
   opacity: 0.3;
   cursor: default;
   transition: opacity 0.5s;
@@ -1369,6 +1382,20 @@ export default {
 
 .board-copy-tip:hover {
   opacity: 1;
+}
+
+.board-simplified-switch {
+  height: 30px;
+  margin-left: 6px;
+  border: 1px black solid;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 2px 4px;
+  width: fit-content;
+  margin-top: -30px;
+  position: relative;
+  top: 33px;
+  float: right;
 }
 
 </style>

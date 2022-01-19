@@ -37,6 +37,7 @@
     <div
       class="task-frame"
       :class="expanded ? 'task-frame-expanded' : ''"
+      v-if="!$current_component.simplified || $current_component.simplified == false"
     >
       <v-list-group @click="expand_toggle">
         <template v-slot:activator>
@@ -82,7 +83,7 @@
                 :disabled="!(edit_mode && $is_editor)"
                 :flat="!(edit_mode && $is_editor)"
                 :background-color="edit_mode ? 'white' : 'transparent'"
-                @input="update"
+                @input="update()"
                 :placeholder="lang.generic.empty_task[lg]"
                 @click.native.stop
               ></v-textarea>
@@ -246,19 +247,43 @@
       ></div>
     </div>
 
-    <CustomDialog
-      :open="delete_dialog"
-      :width="500"
-      :title_text="lang.generic.are_you_sure[lg]"
-      :cancel_icon="'mdi-close'"
-      :cancel_text="lang.generic.cancel[lg]"
-      :confirm_icon="'mdi-delete'"
-      :confirm_text="lang.generic.delete[lg]"
-      :confirm_color="'red'"
-      @cancel="delete_dialog = false"
-      @confirm="remove"
-    ></CustomDialog>
+    <div class="task-frame d-flex" v-else>
+      <span
+        class="mdi mdi-drag mdi-24px handle pink--text"
+        @mousedown="$set_is_grabbing(true)"
+        @mouseup="$set_is_grabbing(false)"
+        @mouseleave="$set_is_grabbing(false)"
+        :style="`cursor : ${grab_cursor};`"
+      ></span>
+
+      <input
+        type="text"
+        v-model="self.name"
+        class="tast-simple-input"
+        :disabled="!(edit_mode && $is_editor)"
+        @input="update()"
+      >
+
+      <span
+        class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
+        @click="delete_dialog = true"
+      ></span>
+    </div>
   </v-badge>
+
+
+  <CustomDialog
+    :open="delete_dialog"
+    :width="500"
+    :title_text="lang.generic.are_you_sure[lg]"
+    :cancel_icon="'mdi-close'"
+    :cancel_text="lang.generic.cancel[lg]"
+    :confirm_icon="'mdi-delete'"
+    :confirm_text="lang.generic.delete[lg]"
+    :confirm_color="'red'"
+    @cancel="delete_dialog = false"
+    @confirm="remove"
+  ></CustomDialog>
 
   <PhotoSwipeWrapper
     :isOpen="is_photoswipe_open"
@@ -725,6 +750,12 @@ export default {
   opacity: 0.3;
   pointer-events: none;
   transition: opacity 0.2s;
+}
+
+.tast-simple-input {
+  flex-grow: 1;
+  padding: 3px;
+  font-size: 14px;
 }
 
 </style>
