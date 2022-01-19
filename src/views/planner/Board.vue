@@ -41,11 +41,16 @@
 
           {{ lang.views.planner.planned[lg] }}
 
-          <v-switch
-            class="board-simplified-switch"
-            v-model="simplified"
-            hide-details
-          ></v-switch>
+          <div class="board-simplified-switch">
+            {{ lang.views.planner.board_simplified[lg] }}
+
+            <v-switch
+              v-model="simplified"
+              class="ma-0 pa-0 ml-3"
+              hide-details
+              @change="update_simplified()"
+            ></v-switch>
+          </div>
         </div>
       </div>
 
@@ -652,6 +657,8 @@ export default {
       'year': this.$current_year,
     })
 
+    this.simplified = this.$logged_profile.pref_planner_simplified
+
     this.team = this.request.team
     this.profiles = this.request.team.profiles
     this.app = this.request.app
@@ -1123,6 +1130,21 @@ export default {
       this.short_override_snackbar = true
     },
 
+    update_simplified() {
+      setTimeout(async () => {
+        await this.$http.post('board', {
+          'action': 'update_simplified',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'profile_id': this.$logged_profile.id,
+          'value': this.simplified,
+        })
+
+        this.$logged_profile.pref_planner_simplified = this.simplified
+      }, 100)
+    },
+
     check_is_file(event) {
       this.move_is_file = false
 
@@ -1385,13 +1407,13 @@ export default {
 }
 
 .board-simplified-switch {
+  display: flex;
+  align-items: center;
   height: 30px;
-  margin-left: 6px;
-  border: 1px black solid;
-  border-radius: 3px;
-  font-size: 12px;
+  font-size: 14px;
   padding: 2px 4px;
   width: fit-content;
+  margin-left: 6px;
   margin-top: -30px;
   position: relative;
   top: 33px;

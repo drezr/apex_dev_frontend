@@ -2076,6 +2076,11 @@ export default {
               "nl": "Houd de Ctrl-toets ingedrukt voordat u elementen verplaatst om ze te kopiëren",
               "en": "Hold the Ctrl key before moving elements to copy them"
             },
+            "board_simplified":{
+              "fr": "Elements simplifiés",
+              "nl": "Vereenvoudigde elementen",
+              "en": "Simplified elements"
+            },
           },
 
 
