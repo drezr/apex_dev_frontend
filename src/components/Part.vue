@@ -15,53 +15,72 @@
     </v-chip>
   </div>
 
-  <v-card
-    :color="self.work.color + ' darken-1'"
-    class="mb-1 pa-1 d-flex justify-space-between align-center"
-    dark
-  >
-    <div class="ml-2">
-      <b>{{ lang.generic.shift[lg] }}: {{ self.shift.shift ? self.shift.shift : '---' }}</b>
-    </div>
-
-    <div>
-      <CustomButton
-        :disabled="ilts.length == 0"
-        :icon="'mdi-file-pdf'"
-        :text="lang.generic.ilt[lg]"
-        :small="true"
-        :menus="ilts_list"
-        @menu_action="get_file($event)"
-        class="mr-1"
-      />
-
-      <CustomButton
-        :disabled="bnxs.length == 0"
-        :icon="'mdi-file-pdf'"
-        :text="lang.generic.bnx[lg]"
-        :small="true"
-        :menus="bnxs_list"
-        @menu_action="get_file($event)"
-      />
-    </div>
-  </v-card>
-
-  <v-card
-    :color="self.work.color + ' lighten-4'"
-    class="d-flex pa-2 align-center"
-  >
-    <img :src="$tool.get_logo('radium_50x50')" class="mr-6" />
-
-    <div class="work-simple-description">
-      {{ description }}
-
-      <div v-if="self.description">
-        <v-divider class="my-3"></v-divider>
-        {{ self.description }}
+  <div v-if="!$current_component.simplified || $current_component.simplified == false">
+    <v-card
+      :color="self.work.color + ' darken-1'"
+      class="mb-1 pa-1 d-flex justify-space-between align-center"
+      dark
+    >
+      <div class="ml-2">
+        <b>{{ lang.generic.shift[lg] }}: {{ self.shift.shift ? self.shift.shift : '---' }}</b>
       </div>
-    </div>
-  </v-card>
 
+      <div>
+        <CustomButton
+          :disabled="ilts.length == 0"
+          :icon="'mdi-file-pdf'"
+          :text="lang.generic.ilt[lg]"
+          :small="true"
+          :menus="ilts_list"
+          @menu_action="get_file($event)"
+          class="mr-1"
+        />
+
+        <CustomButton
+          :disabled="bnxs.length == 0"
+          :icon="'mdi-file-pdf'"
+          :text="lang.generic.bnx[lg]"
+          :small="true"
+          :menus="bnxs_list"
+          @menu_action="get_file($event)"
+        />
+      </div>
+    </v-card>
+
+    <v-card
+      :color="self.work.color + ' lighten-4'"
+      class="d-flex pa-2 align-center"
+    >
+      <img :src="$tool.get_logo('radium_50x50')" class="mr-6" />
+
+      <div class="work-simple-description">
+        {{ description }}
+
+        <div v-if="self.description">
+          <v-divider class="my-3"></v-divider>
+          {{ self.description }}
+        </div>
+      </div>
+    </v-card>
+  </div>
+
+  <div v-else>
+    <v-card
+      :color="self.work.color + ' lighten-4'"
+      class="mb-1 pa-1 d-flex justify-space-between align-center"
+    >
+      <img :src="$tool.get_logo('radium_30x30')" class="mr-6" />
+
+      <div class="work-simple-description" style="font-size: 14px;">
+        {{ description }}
+
+        <div v-if="self.description">
+          <v-divider class="my-1"></v-divider>
+          {{ self.description }}
+        </div>
+      </div>
+    </v-card>
+  </div>
 </div>
 
 </template>

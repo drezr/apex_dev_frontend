@@ -247,7 +247,7 @@
       ></div>
     </div>
 
-    <div class="task-frame d-flex" v-else>
+    <div class="task-frame d-flex align-center" v-else>
       <span
         class="mdi mdi-drag mdi-24px handle pink--text"
         @mousedown="$set_is_grabbing(true)"
@@ -256,10 +256,19 @@
         :style="`cursor : ${grab_cursor};`"
       ></span>
 
+      <span
+        @click="swap_status()"
+        class="mdi cursor-pointer mr-1"
+        :class="[
+          status_icon,
+          status_color + '--text',
+        ]"
+      ></span>
+
       <input
         type="text"
         v-model="self.name"
-        class="tast-simple-input"
+        class="task-simple-input"
         :disabled="!(edit_mode && $is_editor)"
         @input="update()"
       >
@@ -754,7 +763,7 @@ export default {
   transition: opacity 0.2s;
 }
 
-.tast-simple-input {
+.task-simple-input {
   flex-grow: 1;
   padding: 3px;
   font-size: 14px;

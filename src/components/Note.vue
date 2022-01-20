@@ -23,7 +23,10 @@
     icon="mdi-link-variant"
     :value="$show_link_badge"
   >
-    <div class="note-frame">
+    <div
+      class="note-frame"
+      v-if="!$current_component.simplified || $current_component.simplified == false"
+    >
       <div class="d-flex align-center">
         <CustomButton
           v-if="!$is_in_task && $current_view == 'board'"
@@ -91,6 +94,33 @@
       >
         <small>{{ by_author_on_date }}</small>
       </div>
+    </div>
+
+    <div class="note-frame d-flex align-center" v-else>
+      <span
+        class="mdi mdi-drag mdi-24px handle pink--text"
+        @mousedown="$set_is_grabbing(true)"
+        @mouseup="$set_is_grabbing(false)"
+        @mouseleave="$set_is_grabbing(false)"
+        :style="`cursor : ${grab_cursor};`"
+      ></span>
+
+      <span class="mdi mdi-chat cyan--text mr-1"></span>
+
+      <textarea
+        v-model="self.value"
+        class="note-simple-textarea hide-scrollbar"
+        :disabled="!(edit_mode && $is_editor)"
+        :style="autoresize()"
+        @input="update()"
+        no-resize
+        ref="textarea"
+      ></textarea>
+
+      <span
+        class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
+        @click="delete_dialog = true"
+      ></span>
     </div>
   </v-badge>
 
@@ -273,6 +303,19 @@ export default {
 
       await this.$http.post('element', data)
     },
+
+    autoresize() {
+      this.$nextTick(() => {
+        if (this.$refs['textarea']) {
+          let textarea = this.$refs['textarea']
+
+          if (textarea) {
+            textarea.style.height = `5px`
+            textarea.style.height = `${textarea.scrollHeight}px`
+          }
+        }
+      })
+    },
   },
 
   watch: {
@@ -300,6 +343,14 @@ export default {
   opacity: 0.3;
   pointer-events: none;
   transition: opacity 0.2s;
+}
+
+.note-simple-textarea {
+  flex-grow: 1;
+  padding: 3px;
+  font-size: 14px;
+  resize: none;
+  padding: 5px;
 }
 
 </style>

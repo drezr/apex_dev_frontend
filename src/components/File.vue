@@ -27,6 +27,7 @@
       class="file-frame"
       @click="get_file(false)"
       :class="!edit_mode ? 'cursor-pointer' : ''"
+      v-if="!$current_component.simplified || $current_component.simplified == false"
     >
       <CustomButton
         v-if="!$is_in_task && $current_view == 'board'"
@@ -120,6 +121,66 @@
           @click="delete_dialog = true"
         />
       </div>
+    </div>
+
+    <div class="file-frame d-flex align-center" v-else>
+      <span
+        class="mdi mdi-drag mdi-24px handle pink--text"
+        @mousedown="$set_is_grabbing(true)"
+        @mouseup="$set_is_grabbing(false)"
+        @mouseleave="$set_is_grabbing(false)"
+        :style="`cursor : ${grab_cursor};`"
+      ></span>
+
+      <span
+        @click="get_file(true)"
+        class="mdi cursor-pointer mr-1 pink--text"
+        :class="$tool.get_file_icon(self.extension)"
+      ></span>
+
+      <input
+        type="text"
+        v-model="self.name"
+        class="file-simple-input"
+        :class="is_valid ? 'file-input-valid' : 'file-input-invalid'"
+        :disabled="!(edit_mode && $is_editor)"
+      >
+
+      <CustomButton
+        v-if="edit_mode && $is_editor && !file_loading"
+        :icon="'mdi-content-save'"
+        :small_fab="true"
+        :text_color="'teal'"
+        :tooltip="lang.generic.save[lg]"
+        @click="update_name"
+        :disabled="!is_valid || self.name == initial_name"
+      />
+
+      <Loader
+        :size="20"
+        :width="3"
+        class="mx-2"
+        v-if="file_loading"
+      />
+
+      <CustomButton
+        v-if="edit_mode && $is_editor"
+        :icon="'mdi-backup-restore'"
+        :small_fab="true"
+        :text_color="'blue'"
+        :tooltip="lang.generic.restore[lg]"
+        @click="restore_name"
+        :disabled="self.name == initial_name"
+      />
+
+
+
+
+
+      <span
+        class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
+        @click="delete_dialog = true"
+      ></span>
     </div>
   </v-badge>
 
@@ -411,6 +472,12 @@ export default {
   opacity: 0.3;
   pointer-events: none;
   transition: opacity 0.2s;
+}
+
+.file-simple-input {
+  flex-grow: 1;
+  padding: 3px;
+  font-size: 14px;
 }
 
 </style>
