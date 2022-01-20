@@ -188,11 +188,11 @@ export default {
     },
 
     offset_x() {
-      return this.$refs.frame.getBoundingClientRect().x
+      return this.$refs.frame.getBoundingClientRect().x + document.getElementById('main-frame').scrollLeft
     },
 
     offset_y() {
-      return this.$refs.frame.getBoundingClientRect().y
+      return this.$refs.frame.getBoundingClientRect().y + document.getElementById('main-frame').scrollTop
     },
   },
 
