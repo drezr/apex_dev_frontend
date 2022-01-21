@@ -14,7 +14,7 @@
       <div v-if="($has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id) && selected_type">
         <div  class="d-flex flex-wrap justify-center">
           <div
-            v-for="(leave_type, i) in leaves_data"
+            v-for="(leave_type, i) in leaves_data.filter(l => l.kind != 'ignore')"
             :key="i"
           >
             <v-tooltip

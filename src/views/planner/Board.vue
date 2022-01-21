@@ -161,7 +161,7 @@
           </div>
         </div>
 
-        <div class="board-planned">
+        <div class="board-planned" ref="planned">
           <div
             v-for="(date, i) in dates"
             :key="i"
@@ -169,7 +169,8 @@
           >
             <div
               class="board-date-day lighten-3"
-              :class="get_day_color(date.day_name)"
+              :class="get_day_color(date)"
+              :ref="date.data.date"
             >
               <div class="text-center">
                 <small>{{ lang.generic[date.day_name][lg].toUpperCase().substring(0,3) }}</small><br>
@@ -200,15 +201,15 @@
                     v-if="part.teammates.length > 0"
                     class="d-flex justify-center flex-wrap"
                   >
-                    <v-chip
+                    <div
                       v-for="(teammate, i) in $get_sorted_teammates(part.teammates)"
                       :key="i"
-                      class="mb-1 px-2 mx-1 lighten-4 cursor-pointer"
-                      :color="teammate.color"
-                      small
+                      class="px-2 mx-1 lighten-4 cursor-pointer rounded-lg"
+                      :class="teammate.color"
+                      style="font-size: 12px; margin: 1px 0;"
                     >
                       {{ teammate.name }}
-                    </v-chip>
+                    </div>
                   </div>
 
                   <div
@@ -282,15 +283,15 @@
                       v-if="child.teammates.length > 0"
                       class="d-flex justify-center flex-wrap"
                     >
-                      <v-chip
+                      <div
                         v-for="(teammate, i) in $get_sorted_teammates(child.teammates)"
                         :key="i"
-                        class="mb-1 px-2 mx-1 lighten-4 cursor-pointer"
-                        :color="teammate.color"
-                        small
+                        class="px-2 mx-1 lighten-4 cursor-pointer rounded-lg"
+                        :class="teammate.color"
+                        style="font-size: 12px; margin: 1px 0;"
                       >
                         {{ teammate.name }}
-                      </v-chip>
+                      </div>
                     </div>
 
                     <div
@@ -602,6 +603,7 @@ export default {
       app: Object(),
       folders: Array(),
       days: Array(),
+      holidays: Array(),
       dates: Array(),
       detail_edit_mode: true,
       teammates_dialog: false,
@@ -628,6 +630,8 @@ export default {
       mouse_pressed: false,
       move_is_file: false,
       simplified: false,
+      today: null,
+      scroll_timer: null,
       folder_colors: [
         'red',
         'pink',
@@ -663,6 +667,7 @@ export default {
     this.profiles = this.request.team.profiles
     this.app = this.request.app
     this.days = this.request.days
+    this.holidays = this.request.holidays
 
     this.team.profiles.sort((a, b) => a.link.position - b.link.position)
 
@@ -707,7 +712,25 @@ export default {
       this.dates.push(day_data)
     }
 
+    this.today = new Date().toISOString().split('T')[0]
+
     this.loading = false
+
+
+    if (this.dates.find(d => d.data.date == this.today)) {
+      this.scroll_timer = setInterval(() => {
+        if (this.$refs[this.today] && this.$refs['planned']) {
+          clearInterval(this.scroll_timer)
+
+          let planned_frame = this.$refs.planned
+          let today_frame = this.$refs[this.today][0]
+          
+          planned_frame.scrollTo({
+            top: today_frame.offsetTop - today_frame.offsetHeight - 200, behavior: 'smooth'
+          })
+        }
+      }, 100)
+    }
 
     let request = await this.$http.get('all_profiles')
     this.all_profiles = request['all_profiles']
@@ -835,12 +858,20 @@ export default {
       this.control_key_pressed = false
     },
 
-    get_day_color(day_name) {
-      if (day_name == 'saturday') {
+    get_day_color(date) {
+      if (this.today == date.data.date) {
+        return 'green'
+      }
+
+      else if (this.holidays.find(h => h.date == date.data.date)) {
+        return 'orange'
+      }
+
+      else if (date.day_name == 'saturday') {
         return 'blue'
       }
 
-      else if (day_name == 'sunday') {
+      else if (date.day_name == 'sunday') {
         return 'red'
       }
 

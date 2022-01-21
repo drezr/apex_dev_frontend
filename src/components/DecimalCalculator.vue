@@ -1,10 +1,10 @@
 <template>
 
-<div class="card mt-0">
+<div class="card mt-2">
   <v-text-field
     class="field mr-3 d-block"
     v-model="hour"
-    label="Heure"
+    :label="lang.generic.hour[lg]"
     outlined
     @input="calc_decimal"
     @focus="arrow = 'mdi-arrow-right'"
@@ -15,7 +15,7 @@
   <v-text-field
     class="field mr-3 d-block"
     v-model="minute"
-    label="Minute"
+    :label="lang.generic.minute[lg]"
     outlined
     @input="calc_decimal"
     @focus="arrow = 'mdi-arrow-right'"
@@ -26,7 +26,7 @@
   <v-text-field
     class="field d-block"
     v-model="decimal"
-    label="Décimal"
+    :label="lang.generic.decimal[lg]"
     outlined
     @input="calc_hour"
     @focus="arrow = 'mdi-arrow-left'"

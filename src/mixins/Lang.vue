@@ -275,6 +275,16 @@ export default {
             "nl": "Uur",
             "en": "Hour"
           },
+          "minute":{
+            "fr": "Minute",
+            "nl": "Minuut",
+            "en": "Minute"
+          },
+          "decimal":{
+            "fr": "Décimale",
+            "nl": "Decimale",
+            "en": "Decimal"
+          },
           "day":{
             "fr": "Jour",
             "nl": "Dag",
