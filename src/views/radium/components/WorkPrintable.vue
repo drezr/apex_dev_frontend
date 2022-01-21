@@ -61,18 +61,17 @@
 
         <!-- ############## Textarea ############## -->
 
-        <div v-if="!column_config.multiple" style="width: 100%;">
+        <div v-if="!column_config.multiple" style="width: 100%; display: flex; justify-content: center;">
           <textarea
+            :ref="column_config.name"
             v-model="self.columns[column_config.name].value"
-            @input="set_textarea_height($event, column_config, 2)"
-            :style="get_textarea_style(column_config, 2, self.columns[column_config.name].value)"
-            style="width: 100%;"
-            class="work-textarea my-2 text--accent-4"
+            :style="get_textarea_style(column_config.name)"
+            style="width: calc(100% - 4px); overflow-x: hidden; padding: 0 5px;"
+            class="work-textarea my-2 text--accent-4 hide-scrollbar"
             :class="self.columns[column_config.name].text_color ? self.columns[column_config.name].text_color + '--text' : ''"
             :disabled="!edit_mode"
           ></textarea>
         </div>
-
 
 
 
@@ -404,14 +403,19 @@ export default {
       return columns
     },
 
-    get_textarea_style(column, extra_height, value) {
-      let line_count = value ? value.split(/\r\n|\r|\n/).length : 1
+    get_textarea_style(column_name) {
+      this.$nextTick(() => {
+        if (this.$refs[column_name]) {
+          let textarea = this.$refs[column_name][0]
 
-      return `font-size: ${column.textsize}px;
-              height: ${Number(column.textsize * line_count) + (extra_height * 2)}px;
-              padding-top: ${extra_height}px;
-              padding-bottom: ${extra_height}px;
-              line-height: ${column.textsize}px; `
+          if (textarea) {
+            let column_config = this.column_configs.find(c => c.name == column_name)
+            textarea.style.fontSize = `${column_config.textsize}px`
+            textarea.style.height = `5px`
+            textarea.style.height = `${textarea.scrollHeight}px`
+          }
+        }
+      })
     },
   },
 

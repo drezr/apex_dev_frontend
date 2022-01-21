@@ -241,6 +241,7 @@ For reset password button disabling
       this.reset_loading = true
       this.reset_success = false
       this.reset_error = false
+      this.login_error = false
 
       let request = await this.$http.post(`reset_password`, {
         'username': this.reset_email,
