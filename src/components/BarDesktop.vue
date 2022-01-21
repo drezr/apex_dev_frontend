@@ -8,7 +8,7 @@
       offset-y="54"
       offset-x="35"
       class="bar-beta"
-      :value="true"
+      :value="$mobile_breakpoint"
     >
       <router-link class="navigation" :to="'/'">
         <img :src="$tool.get_logo('apex_50x50')" class="logo" />
