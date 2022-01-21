@@ -144,6 +144,7 @@
         :label="lang.views.radium.short_override[lg]"
         v-model="short_override"
         class="ml-3"
+        :name="Math.random()"
       ></v-text-field>
 
       <CustomButton

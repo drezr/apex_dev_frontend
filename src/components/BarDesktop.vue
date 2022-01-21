@@ -2,10 +2,19 @@
 
 <div class="bar-desktop elevation-1" v-if="bar_is_visible">
   <div class="d-flex">
-    <router-link class="navigation" :to="'/'">
-      <img :src="$tool.get_logo('apex_50x50')" class="logo" />
-      <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">APEX</span>
-    </router-link>
+    <v-badge
+      color="red lighten-2"
+      content="BETA"
+      offset-y="54"
+      offset-x="35"
+      class="bar-beta"
+      :value="true"
+    >
+      <router-link class="navigation" :to="'/'">
+        <img :src="$tool.get_logo('apex_50x50')" class="logo" />
+        <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">APEX</span>
+      </router-link>
+    </v-badge>
 
     <div class="d-flex" v-if="$current_team_id">
       <v-icon>mdi-chevron-right</v-icon>
@@ -382,6 +391,10 @@ export default {
 
 
 <style>
+
+.bar-beta .v-badge__badge {
+  pointer-events: none;
+}
 
 </style>
 

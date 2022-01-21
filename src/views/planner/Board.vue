@@ -434,6 +434,7 @@
         dense
         :label="lang.views.radium.short_override[lg]"
         v-model="short_override"
+        hide-details
       ></v-text-field>
 
       <CustomButton
