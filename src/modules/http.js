@@ -11,9 +11,9 @@ class Http {
   constructor() {
     this.header = null
     this.local = local_backend
-    this.site = this.local ? 'http://127.0.0.1:8080/' : 'http://beta.apex.wf/'
-    this.api = this.local ? 'http://127.0.0.1:8000/' : 'http://dev.apex.wf/'
-    this.ws = this.local ? 'ws://127.0.0.1:8000/ws/' : 'ws://ws.apex.wf/'
+    this.site = this.local ? 'http://127.0.0.1:8080/' : 'https://apex.wf/'
+    this.api = this.local ? 'http://127.0.0.1:8000/' : 'https://api.apex.wf/'
+    this.ws = this.local ? 'ws://127.0.0.1:8000/ws/' : 'wss://ws.apex.wf/'
     this.media = this.local ? 'http://127.0.0.1:8888/' : 'https://media.apex.wf/'
   }
 
