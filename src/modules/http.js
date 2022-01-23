@@ -3,7 +3,7 @@ import axios from 'axios'
 let local_backend = true
 
 // Force local_backend to be false if host is 'apex.wf'
-if (window.location.host == 'beta.apex.wf') {
+if (window.location.host == 'apex.wf') {
   local_backend = false
 }
 
