@@ -485,7 +485,7 @@
   <div v-if="log_dialog">
     <CustomDialog
       :open="log_dialog"
-      :width="1300"
+      :width="1500"
       :title_text="lang.views.radium.log_title[lg]"
       :title_icon="'mdi-clock-time-four-outline'"
       @cancel="log_dialog = false"
