@@ -248,6 +248,7 @@ For reset password button disabling
       this.reset_email = this.reset_email.replaceAll(/\s/g,'')
 
       let request = await this.$http.post(`reset_password`, {
+        'action': 'reset_password',
         'username': this.reset_email,
         'lang': this.lg,
       })

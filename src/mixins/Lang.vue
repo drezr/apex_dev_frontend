@@ -1181,7 +1181,17 @@ export default {
               "fr": "Retirer tous les accès",
               "nl": "Verwijder alle toegang",
               "en": "Remove all access"
-            }
+            },
+            "send_password_success":{
+              "fr": "Un email contenant un nouveau mot de passe a été envoyé avec succès.",
+              "nl": "Een e-mail met een nieuw wachtwoord is succesvol verzonden.",
+              "en": "An email containing a new password has been sent successfully."
+            },
+            "send_password_error":{
+              "fr": "Une erreur est survenue lors de l'envoi de l'email.",
+              "nl": "Er is een fout opgetreden tijdens het verzenden van de e-mail.",
+              "en": "An error occurred while sending the email."
+            },
           },
 
 

@@ -125,6 +125,14 @@
     ></v-text-field>
 
     <div class="text-center" v-if="mode == 'edit'">
+      <v-alert v-if="send_password_success" type="success">
+        {{ lang.views.team.send_password_success[lg] }}
+      </v-alert>
+
+      <v-alert v-if="send_password_error" type="error">
+        {{ lang.views.team.send_password_error[lg] }}
+      </v-alert>
+
       <CustomButton
         :color="'blue'"
         :dark="true"
@@ -511,6 +519,8 @@ export default {
       is_checking_profiles: false,
       checking_profiles_timer: null,
       profiles_exist: Array(),
+      send_password_success: false,
+      send_password_error: false,
 
       not_empty_rule: [
         value => !!value || this.lang.generic.not_empty_field[this.lg],
@@ -559,8 +569,30 @@ export default {
       this.copy.link.watcher_color = color
     },
 
-    send_new_password() {
+    async send_new_password() {
       this.password_dialog = false
+
+      let request = await this.$http.post(`reset_password`, {
+        'action': 'send_password',
+        'username': this.copy.username,
+        'lang': this.lg,
+      })
+
+      if (request.result == 'success') {
+        this.send_password_success = true
+
+        setTimeout(() => {
+          this.send_password_success = false
+        }, 5000)
+      }
+
+      else if (request.result == 'error') {
+        this.send_password_error = true
+
+        setTimeout(() => {
+          this.send_password_error = false
+        }, 5000)
+      }
     },
 
     async delete_link() {
