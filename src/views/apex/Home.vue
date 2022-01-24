@@ -47,12 +47,15 @@
               <ul>
                 <li>La version mobile (<a href="https://mobile.apex.wf" target="_blank">mobile.apex.wf</a>) est hors service pour le moment mais reviendra très bientôt. Les utilisateurs de la version mobile seront redirigés vers la version ordinateur (<a href="https://apex.wf">apex.wf</a>) temporairement.</li>
 
+                <li>Les managers d'équipes devront réassigner les accès des membres de leurs équipes.</li>
+
                 <li>Pour des raisons techniques, plusieurs données ne seront pas importées dans la nouvelle version mais sont toujours accessibles depuis <a href="https://old.apex.wf" target="_blank">old.apex.wf</a>. Ces données sont :</li>
 
                 <ul>
                   <li>Le pointage Watcher de 2021</li>
                   <li>Les projets Draft</li>
                   <li>Les fichiers</li>
+                  <li>Les messages présents dans Radium</li>
                 </ul>
               </ul>
             </small>
