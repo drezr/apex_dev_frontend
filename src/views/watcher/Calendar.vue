@@ -521,7 +521,7 @@ export default {
     set_profiles() {
       let profiles = this.$tool.deepcopy(this.team.profiles)
 
-      if (this.$has_xs(['watcher_can_see_cells'])) {
+      if (this.$has_xs(['watcher_can_see_cells']) || this.$logged_profile.can_see_calendars) {
         profiles.sort((a, b) => a.link.position - b.link.position)
       }
 
