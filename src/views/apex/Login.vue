@@ -210,6 +210,7 @@ For reset password button disabling
 */
     async login() {
       this.login_email = this.login_email.toLowerCase()
+      this.login_email = this.login_email.replaceAll(/\s/g,'')
 
       let token = await this.$http.post(`api-token-auth`, {
         'username': this.login_email,
@@ -242,6 +243,9 @@ For reset password button disabling
       this.reset_success = false
       this.reset_error = false
       this.login_error = false
+      
+      this.reset_email = this.reset_email.toLowerCase()
+      this.reset_email = this.reset_email.replaceAll(/\s/g,'')
 
       let request = await this.$http.post(`reset_password`, {
         'username': this.reset_email,
