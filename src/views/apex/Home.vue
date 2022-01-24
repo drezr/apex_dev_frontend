@@ -53,6 +53,7 @@
 
                 <ul>
                   <li>Le pointage Watcher de 2021</li>
+                  <li>Les quotas des agents</li>
                   <li>Les projets Draft</li>
                   <li>Les fichiers</li>
                   <li>Les messages présents dans Radium</li>
