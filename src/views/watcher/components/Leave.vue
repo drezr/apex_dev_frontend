@@ -37,7 +37,7 @@
         class="leave-lower"
         v-model="profile.quotas.find(q => q.code == leave_type['code']).value"
         @input="update_leave(leave_type['code'])"
-        onkeydown="return ![69, 107, 109].includes(event.keyCode)"
+        onkeydown="return ![69, 107].includes(event.keyCode)"
         @focus="$event.target.select()"
       >  
     </div>
@@ -84,9 +84,11 @@ export default {
     async update_leave(code) {
       let quota = this.profile.quotas.find(q => q.code == code)
 
-      quota.value == '' ? quota.value = 0 : quota.value
+      setTimeout(() => {
+        quota.value == '' ? quota.value = 0 : quota.value
+        quota.value = Math.round((parseFloat(quota.value) + Number.EPSILON) * 100) / 100
+      }, 5000)
 
-      quota.value = Math.round((parseFloat(quota.value) + Number.EPSILON) * 100) / 100
 
       if (!this.is_updating) {
         clearInterval(this.update_timer)

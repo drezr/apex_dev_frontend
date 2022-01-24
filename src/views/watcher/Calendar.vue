@@ -344,6 +344,8 @@ export default {
     this.holidays = this.request.holidays
     this.leave_config = this.request.leave_config
 
+    this.leave_config.leave_types.sort((a, b) => a.position - b.position)
+
     this.cvs = this.get_cvs()
     this.calendar = this.set_calendar()
     this.profiles = this.set_profiles()

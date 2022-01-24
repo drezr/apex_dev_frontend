@@ -202,7 +202,7 @@ export default {
 
       if (value) {
         if (this.parent_cpnt && this.parent_cpnt.leave_config) {
-          let config =this.parent_cpnt.leave_config
+          let config = this.parent_cpnt.leave_config
 
           let ignore_types = config.leave_types.filter(
             l => l.kind == 'ignore')
@@ -210,9 +210,9 @@ export default {
           let presence_types = config.leave_types.filter(
             l => l.kind == 'presence')
 
-          let ignore_type_match = ignore_types.find(t => t.code.toUpperCase() == value.toUpperCase())
+          let ignore_type_match = ignore_types.find(t => value.toUpperCase().includes(t.code.toUpperCase()))
 
-          let presence_type_match = presence_types.find(t => t.code.toUpperCase() == value.toUpperCase())
+          let presence_type_match = presence_types.find(t => value.toUpperCase().includes(t.code.toUpperCase()))
 
           if (presence_type_match && !ignore_type_match) {
             color = `${presence_type_match.color}--text text--darken-2`
