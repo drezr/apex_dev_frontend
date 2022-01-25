@@ -22,12 +22,12 @@ export default {
           },
           "save":{
             "fr": "Enregistrer",
-            "nl": "Besparen",
+            "nl": "Opslaan",
             "en": "Save"
           },
           "apply":{
             "fr": "Appliquer",
-            "nl": "Implementie",
+            "nl": "Toepassen",
             "en": "Apply"
           },
           "add":{
@@ -37,7 +37,7 @@ export default {
           },
           "delete":{
             "fr": "Supprimer",
-            "nl": "Verwijder",
+            "nl": "Verwijderen",
             "en": "Delete"
           },
           "remove":{
@@ -47,7 +47,7 @@ export default {
           },
           "move":{
             "fr": "Déplacer",
-            "nl": "Aan de kant",
+            "nl": "Verplaatsen",
             "en": "Move"
           },
           "replace":{
@@ -62,7 +62,7 @@ export default {
           },
           "sort":{
             "fr": "Trier",
-            "nl": "Triest",
+            "nl": "Sorteren",
             "en": "Sort"
           },
           "filter":{
@@ -72,7 +72,7 @@ export default {
           },
           "update_position":{
             "fr": "Changer l'ordre",
-            "nl": "Verandering",
+            "nl": "Order veranderen",
             "en": "Change order"
           },
           "needs":{
@@ -82,27 +82,27 @@ export default {
           },
           "cancel":{
             "fr": "Annuler",
-            "nl": "Annulering",
+            "nl": "Annuleren",
             "en": "Cancel"
           },
           "confirm":{
             "fr": "Confirmer",
-            "nl": "Bevestig het",
+            "nl": "Bevestigen",
             "en": "Confirm"
           },
           "edit":{
             "fr": "Modifier",
-            "nl": "Amen",
+            "nl": "Wijzegen",
             "en": "Edit"
           },
           "lock":{
             "fr": "Verrouiller",
-            "nl": "Lock",
+            "nl": "Vergrendelen",
             "en": "Lock"
           },
           "unlock":{
             "fr": "Déverrouiller",
-            "nl": "Doe open",
+            "nl": "Ontgrendelen",
             "en": "Unlock"
           },
           "acquit":{
@@ -112,17 +112,17 @@ export default {
           },
           "create":{
             "fr": "Créer",
-            "nl": "Create",
+            "nl": "Creeren",
             "en": "Create"
           },
           "go":{
             "fr": "Aller",
-            "nl": "Ga",
+            "nl": "Gaan",
             "en": "Go"
           },
           "visit":{
             "fr": "Visiter",
-            "nl": "Bezoek bezoek",
+            "nl": "Bezoeken",
             "en": "Visit"
           },
           "define":{
@@ -132,27 +132,27 @@ export default {
           },
           "override":{
             "fr": "Écraser",
-            "nl": "♪",
+            "nl": "verpleteren",
             "en": "Override"
           },
           "to_copy":{
             "fr": "Copier",
-            "nl": "Kopie",
+            "nl": "Kopieren",
             "en": "Copy"
           },
           "to_link":{
             "fr": "Lier",
-            "nl": "Liegen",
+            "nl": "Verbinden",
             "en": "Link"
           },
           "connection":{
             "fr": "Connexion",
-            "nl": "Verbindingsverbinding",
+            "nl": "Inloggen",
             "en": "Connection"
           },
           "disconnect":{
             "fr": "Déconnexion",
-            "nl": "Ontsluiting",
+            "nl": "Uitloggen",
             "en": "Disconnect"
           },
           "change_password":{
@@ -177,7 +177,7 @@ export default {
           },
           "grade":{
             "fr": "Grade",
-            "nl": "Cijfer",
+            "nl": "Graad",
             "en": "Grade"
           },
           "field":{
@@ -192,27 +192,27 @@ export default {
           },
           "coordinates":{
             "fr": "Coordonées",
-            "nl": "Coördinaten",
+            "nl": "Gegevens",
             "en": "Coordinates"
           },
           "not_empty_field":{
             "fr": "Ce champ ne peut pas être vide.",
-            "nl": "Dit veld kan niet leeg zijn.",
+            "nl": "Dit veld mag niet leeg zijn.",
             "en": "This field cannot be empty."
           },
           "no_result":{
             "fr": "Aucun résultat",
-            "nl": "Geen resultaat",
+            "nl": "Geen enkel resultaat",
             "en": "No result"
           },
           "shift":{
             "fr": "Prestation",
-            "nl": "Bezorging",
+            "nl": "Prestatie",
             "en": "Shift"
           },
           "by_author_on_date":{
             "fr": "Par ### le @@@",
-            "nl": "Door ### op @@@",
+            "nl": "Door ### de @@@",
             "en": "By ### the @@@"
           },
           "edit_options":{
@@ -232,17 +232,17 @@ export default {
           },
           "empty_subtask":{
             "fr": "Sous-tâche vide",
-            "nl": "Lege sublet",
+            "nl": "Lege subtaak",
             "en": "Empty subtask"
           },
           "file_name":{
             "fr": "Nom du fichier",
-            "nl": "Bestand",
+            "nl": "Bestandsnaam",
             "en": "File name"
           },
           "team":{
             "fr": "Équipe",
-            "nl": "Team",
+            "nl": "Ploeg",
             "en": "Team"
           },
           "start":{
@@ -297,7 +297,7 @@ export default {
           },
           "previous_day":{
             "fr": "Jour précédent",
-            "nl": "Eerder",
+            "nl": "Vorige dag",
             "en": "Previous day"
           },
           "next_day":{
@@ -312,7 +312,7 @@ export default {
           },
           "schedule":{
             "fr": "Horaire",
-            "nl": "Schema.",
+            "nl": "Uurrooster",
             "en": "Schedule"
           },
           "month":{
@@ -347,7 +347,7 @@ export default {
           },
           "date":{
             "fr": "Date",
-            "nl": "Date",
+            "nl": "Datum",
             "en": "Date"
           },
           "january":{
@@ -452,7 +452,7 @@ export default {
           },
           "counter":{
             "fr": "Compteur",
-            "nl": "Contra",
+            "nl": "Teller",
             "en": "Counter"
           },
           "counter_sick":{
@@ -462,17 +462,17 @@ export default {
           },
           "counter_special":{
             "fr": "Circonstance",
-            "nl": "Omstandig.",
+            "nl": "Omstandigheid.",
             "en": "Counter"
           },
           "counter_unjustified":{
             "fr": "Injustifié",
-            "nl": "Onrechtvaardig.",
+            "nl": "Onwettig.",
             "en": "Counter"
           },
           "counter_strike":{
             "fr": "Grève",
-            "nl": "Stakingsaanval.",
+            "nl": "Staking.",
             "en": "Strike"
           },
           "counter_wounded":{
@@ -487,7 +487,7 @@ export default {
           },
           "pending":{
             "fr": "En attente",
-            "nl": "Pendel",
+            "nl": "In afwachting",
             "en": "Pending"
           },
           "normal_leave":{
@@ -497,12 +497,12 @@ export default {
           },
           "credit_day":{
             "fr": "Jours de crédit",
-            "nl": "Dagen van krediet",
+            "nl": "Kredietdagen",
             "en": "Credit days"
           },
           "variable_leave":{
             "fr": "Congés variables",
-            "nl": "Variabele verlof",
+            "nl": "Variabel verlof",
             "en": "Variable leave days"
           },
           "working":{
@@ -522,7 +522,7 @@ export default {
           },
           "print":{
             "fr": "Imprimer",
-            "nl": "Vingerafdrukken.",
+            "nl": "Uitprinten.",
             "en": "Print"
           },
           "expand":{
@@ -552,7 +552,7 @@ export default {
           },
           "recovery":{
             "fr": "Récupération",
-            "nl": "Herstel",
+            "nl": "Recup",
             "en": "Recovery"
           },
           "message":{
@@ -562,12 +562,12 @@ export default {
           },
           "task_no_element":{
             "fr": "Il n'y pas d'élément dans cette tâche.",
-            "nl": "Er is geen element in deze taak.",
+            "nl": "Er zijn geen gegevens in deze taak.",
             "en": "There is no element in this task."
           },
           "log":{
             "fr": "Historique",
-            "nl": "Historische geschiedenis",
+            "nl": "Geschiedenis",
             "en": "History"
           },
           "text":{
@@ -577,7 +577,7 @@ export default {
           },
           "add_input_tooltip":{
             "fr": "Ajouter un champ de texte",
-            "nl": "Voeg een sms-veld toe.",
+            "nl": "Voeg een textveld toe.",
             "en": "Add input field"
           },
           "loading":{
@@ -602,17 +602,17 @@ export default {
           },
           "add_note_tooltip":{
             "fr": "Ajouter une note",
-            "nl": "Voeg een briefje toe.",
+            "nl": "Voeg een notitie toe.",
             "en": "Add note"
           },
           "file":{
             "fr": "Fichier",
-            "nl": "Bestand dossier dossier dossier dossier dossier dossier dossier dossier dossier.",
+            "nl": "Bestand.",
             "en": "File"
           },
           "add_file_tooltip":{
             "fr": "Ajouter un fichier",
-            "nl": "Voeg een dossier toe.",
+            "nl": "Voeg een bestand toe.",
             "en": "Add file"
           },
           "subtask":{
@@ -622,12 +622,12 @@ export default {
           },
           "add_subtask_tooltip":{
             "fr": "Ajouter une sous-tâche",
-            "nl": "Voeg een subtask",
+            "nl": "Voeg een subtaak toe",
             "en": "Add subtask"
           },
           "teams":{
             "fr": "Équipes",
-            "nl": "Teams",
+            "nl": "Ploegen",
             "en": "Teams"
           },
           "log_edited_by":{
@@ -637,7 +637,7 @@ export default {
           },
           "log_old_value":{
             "fr": "Ancienne valeur",
-            "nl": "Oud",
+            "nl": "Oude waarde",
             "en": "Old value"
           },
           "log_new_value":{
@@ -647,7 +647,7 @@ export default {
           },
           "log_datetime":{
             "fr": "Date de la modification",
-            "nl": "Verandering",
+            "nl": "Datum laatste wijzeging",
             "en": "Edit date"
           },
           "visible":{
@@ -657,12 +657,12 @@ export default {
           },
           "column_width":{
             "fr": "Largeur de la colonne",
-            "nl": "Width of the column",
+            "nl": "Breedte van de kolom",
             "en": "Column width"
           },
           "text_size":{
             "fr": "Taille du texte",
-            "nl": "Sm maat",
+            "nl": "Tekstmaat",
             "en": "Text size"
           },
           "calendar":{
@@ -677,7 +677,7 @@ export default {
           },
           "input_long":{
             "fr": "Texte long",
-            "nl": "Lange sms",
+            "nl": "Lange tekst",
             "en": "Long text"
           },
           "input_title":{
@@ -687,7 +687,7 @@ export default {
           },
           "input_date":{
             "fr": "Date",
-            "nl": "Date",
+            "nl": "Datum",
             "en": "Date"
           },
           "input_gps":{
@@ -744,12 +744,12 @@ export default {
           "login":{
             "forgot_password":{
               "fr": "Mot de passe oublié ?",
-              "nl": "Vergeten wachtwoord ?",
+              "nl": "Wachtwoord vergeten ?",
               "en": "Forgot password ?"
             },
             "back_to_login":{
               "fr": "Retour à l'écran de connexion",
-              "nl": "Terug naar links",
+              "nl": "Terug naar beginscherm",
               "en": "Back to connection screen"
             },
             "error_message":{
@@ -764,7 +764,7 @@ export default {
             },
             "success_message_reset":{
               "fr": "Votre nouveau mot de passe a été envoyé par email.",
-              "nl": "Je nieuwe wachtwoord is door e-mail gestuurd.",
+              "nl": "Je nieuwe wachtwoord is per e-mail verstuurd.",
               "en": "Your new password has been sent by email."
             },
             "reset_password_title":{
@@ -774,17 +774,17 @@ export default {
             },
             "reset_password_subtitle":{
               "fr": "(Vous receverez un nouveau mot de passe par email)",
-              "nl": "(Je krijgt een nieuw wachtwoord per e-mail)",
+              "nl": "(Je zal een nieuw wachtwoord per e-mail krijgen)",
               "en": "(You will receive a new password by email)"
             },
             "error_insert_email":{
               "fr": "Veuillez introduire une adresse email.",
-              "nl": "Ga alsjeblieft een e-mailadres binnen.",
+              "nl": "Geef een e-mailadres.",
               "en": "Please enter an email address."
             },
             "error_format_email":{
               "fr": "Le format n'est pas valide.",
-              "nl": "De formaat is niet geldig.",
+              "nl": "Het format is niet geldig.",
               "en": "The format is not valid."
             },
             "error_email_exist":{
@@ -805,12 +805,12 @@ export default {
           "home":{
             "my_team":{
               "fr": "Mon équipe",
-              "nl": "Mijn team",
+              "nl": "Mijn ploeg",
               "en": "My team"
             },
             "my_teams":{
               "fr": "Mes équipes",
-              "nl": "Mijn teams",
+              "nl": "Mijn ploegen",
               "en": "My teams"
             },
             "circles":{
@@ -845,7 +845,7 @@ export default {
             },
             "new_password_confirm":{
               "fr": "Confirmez le mot de passe",
-              "nl": "Bevestig het wachtwoord",
+              "nl": "Bevestig uw wachtwoord",
               "en": "Confirm new password"
             },
             "min_8_character":{
@@ -870,7 +870,7 @@ export default {
             },
             "error_password_bad":{
               "fr": "Votre mot de passe actuel est incorrect.",
-              "nl": "Je huidige wachtwoord is niet correct.",
+              "nl": "Je huidig wachtwoord is niet correct.",
               "en": "Your current password is incorrect."
             },
             "select_language":{
@@ -906,7 +906,7 @@ export default {
             },
             "fleet_desc":{
               "fr": "Gestion des véhicules",
-              "nl": "Beheer van voertuigen",
+              "nl": "Beheer van de voertuigen",
               "en": "Vehicles management"
             },
             "planner_desc":{
@@ -921,7 +921,7 @@ export default {
             },
             "watcher_desc":{
               "fr": "Calendrier d'équipe",
-              "nl": "Team kalender",
+              "nl": "Ploeg kalender",
               "en": "Team calendar"
             },
             "nexus_desc":{
@@ -936,7 +936,7 @@ export default {
             },
             "access_manager_edit":{
               "fr": "Éditer les informations de",
-              "nl": "Editing informatie",
+              "nl": "Bewerk informatie van",
               "en": "Editing information"
             },
             "access_grades":{
@@ -979,7 +979,7 @@ export default {
             },
             "access_draft_is_user_hint":{
               "fr": "Peut changer le statut des tâches et des sous-tâches.",
-              "nl": "Kan de status van taken en subtassen veranderen.",
+              "nl": "Kan de status van taken en subtaken veranderen.",
               "en": "May change the status of tasks and sub-tasks."
             },
             "access_draft_can_see_private":{
@@ -994,7 +994,7 @@ export default {
             },
             "access_planner_title":{
               "fr": "Paramètres liés à Planner",
-              "nl": "Planner instellingen",
+              "nl": "Planner parameters",
               "en": "Planner settings"
             },
             "access_planner_is_editor":{
@@ -1014,7 +1014,7 @@ export default {
             },
             "access_planner_is_user_hint":{
               "fr": "Peut changer le statut des tâches et des sous-tâches.",
-              "nl": "Kan de status van taken en subtassen veranderen.",
+              "nl": "Kan de status van taken en subtaken veranderen.",
               "en": "May change the status of tasks and sub-tasks."
             },
             "access_radium_title":{
@@ -1029,7 +1029,7 @@ export default {
             },
             "access_radium_is_editor_hint":{
               "fr": "Peut créer, modifier et supprimer les chantiers.",
-              "nl": "Kan creëren, de werkzaamheden aanpassen.",
+              "nl": "Kan creëren, aanpassen en verwijderen van werkzaamheden.",
               "en": "Can create, modify and delete the works."
             },
             "access_watcher_title":{
@@ -1054,7 +1054,7 @@ export default {
             },
             "access_watcher_is_user_hint":{
               "fr": "Peut changer le statut des tâches et des sous-tâches.",
-              "nl": "Kan de status van taken en subtassen veranderen.",
+              "nl": "Kan de status van taken en subtaken veranderen.",
               "en": "May change the status of tasks and sub-tasks."
             },
             "access_watcher_is_visible":{
@@ -1064,7 +1064,7 @@ export default {
             },
             "access_watcher_is_visible_hint":{
               "fr": "Apparaît dans le calendrier.",
-              "nl": "Lijkt in de kalender.",
+              "nl": "verschijnt in de kalender.",
               "en": "Appears in the calendar."
             },
             "access_watcher_is_printable":{
@@ -1074,7 +1074,7 @@ export default {
             },
             "access_watcher_is_printable_hint":{
               "fr": "Apparaît dans le calendrier imprimable.",
-              "nl": "Lijkt op de drukke kalender.",
+              "nl": "Verschijnt op de afdrukbare kalender.",
               "en": "Appears in the printable calendar."
             },
             "access_watcher_can_see_cells":{
@@ -1084,17 +1084,17 @@ export default {
             },
             "access_watcher_can_see_cells_hint":{
               "fr": "Également les cellules des autres agents.",
-              "nl": "Ook de cellen van andere agenten.",
+              "nl": "Ook de cellen van andere bedienden.",
               "en": "Also the cells of other agents."
             },
             "access_watcher_can_see_quotas":{
               "fr": "Peut voir tous les congés",
-              "nl": "Ik zie alle verlof",
+              "nl": "Mag alle verlof zien",
               "en": "Can see all leave"
             },
             "access_watcher_can_see_quotas_hint":{
               "fr": "Également les congés des autres agents.",
-              "nl": "Verlaat ook andere agenten.",
+              "nl": "Eveneens het verlof van andere bedienden.",
               "en": "Also leave of other officers."
             },
             "access_can_see_calendars":{
@@ -1104,7 +1104,7 @@ export default {
             },
             "access_can_see_calendars_hint":{
               "fr": "Également le calendrier des autres équipes.",
-              "nl": "Ook het agenda van andere teams.",
+              "nl": "Ook de agenda van andere ploegen.",
               "en": "Also the calendar of other teams."
             },
             "access_password_dialog_title":{
@@ -1114,22 +1114,22 @@ export default {
             },
             "access_password_dialog_warning":{
               "fr": "Attention, cela réinitialisera le mot de passe actuel de l'utilisateur et il ne pourra se connecter qu'avec le nouveau mot de passe qui lui sera envoyé par email.",
-              "nl": "Attentie, dit zal het huidige wachtwoord van de gebruiker herstarten en het zal alleen in staat zijn om te verbinden met het nieuwe wachtwoord dat zal worden gestuurd door e-mail.",
+              "nl": "Attentie, dit zal het huidige wachtwoord van de gebruiker herinstellen en zich alleen kunnen verbinden met het nieuwe wachtwoord dat zal worden opgestuurd per e-mail.",
               "en": "Attention, this will reset the user's current password and it will only be able to connect with the new password that will be sent to it by email."
             },
             "access_delete_dialog_title":{
               "fr": "Êtes-vous sûr de vouloir retirer tous les accès de cet utilisateur ?",
-              "nl": "Weet je zeker dat je alle toegang van deze gebruiker wilt verwijderen?",
+              "nl": "Weet je zeker dat je alle toegangen van deze gebruiker wilt verwijderen?",
               "en": "Are you sure you want to remove all access from this user?"
             },
             "access_delete_dialog_warning":{
               "fr": "Le compte utilisateur ne sera pas supprimé d'Apex mais uniquement ses accès à cette équipe.",
-              "nl": "De gebruikersrekening zal niet worden verwijderd van Apex maar alleen zijn toegang tot dit team.",
+              "nl": "het gebruikersprofiel zal niet worden verwijderd van Apex maar alleen zijn toegang tot dit team.",
               "en": "The user account will not be deleted from apex but only its access to this team."
             },
             "access_remove_access":{
               "fr": "Retirer les accès",
-              "nl": "Verwijder toegang",
+              "nl": "Verwijder toegangen",
               "en": "Remove access"
             },
             "access_create_user":{
@@ -1159,7 +1159,7 @@ export default {
             },
             "access_confirm_create_user_send_password_hint":{
               "fr": "L'utilisateur recevera un mot de passe par email et pourra se connecter à Apex.",
-              "nl": "De gebruiker krijgt een wachtwoord per e-mail en kan inloggen op Apex.",
+              "nl": "De gebruiker krijgt een wachtwoord per e-mail en zal kunnen inloggen op Apex.",
               "en": "The user will receive a password by email and can log in to apex."
             },
             "access_info_profile_exists":{
@@ -1169,17 +1169,17 @@ export default {
             },
             "access_warning_user_exists":{
               "fr": "Avant de créer un nouvel utilisateur, assurez-vous qu'il n'existe pas. Sinon, utilisez le champ \"Ajouter un utilisateur exisitant\".",
-              "nl": "Voordat je een nieuwe gebruiker maakt, zorg ervoor dat het niet bestaat. Gebruik anders het \"aded a exisiting gebruiker\" veld.",
+              "nl": "Voordat je een nieuwe gebruiker maakt, zorg ervoor dat hij niet bestaat. Gebruik anders het \"Voeg een bestaande gebruiker toe\" veld.",
               "en": "Before creating a new user, make sure it doesn't exist. otherwise use the \"add an exisiting user\" field."
             },
             "access_give_all_access":{
               "fr": "Donner tous les accès",
-              "nl": "Geef alle toegang",
+              "nl": "Geef alle toegangen",
               "en": "Give all access"
             },
             "access_remove_all_access":{
               "fr": "Retirer tous les accès",
-              "nl": "Verwijder alle toegang",
+              "nl": "Verwijder alle toegangen",
               "en": "Remove all access"
             },
             "send_password_success":{
@@ -1200,17 +1200,17 @@ export default {
           "myapex":{
             "my_applications":{
               "fr": "Mes applications",
-              "nl": "Mijn aanvragen",
+              "nl": "Mijn toepassingen",
               "en": "My applications"
             },
             "not_installed_apps":{
               "fr": "Applications pas encore installées",
-              "nl": "Nog niet geïnstalleerd",
+              "nl": "Toepassingen nog niet geïnstalleerd",
               "en": "Applications not yet installed"
             },
             "install_apps":{
               "fr": "Installer des applications",
-              "nl": "Installatie aanvragen",
+              "nl": "Installatie toepassingen aanvragen",
               "en": "Install applications"
             }
           },
@@ -1221,7 +1221,7 @@ export default {
           "nexus":{
             "select_date":{
               "fr": "Sélectionner une date",
-              "nl": "Kies een date",
+              "nl": "Kies een datum",
               "en": "Select a date"
             },
             "add_new_contact":{
@@ -1257,12 +1257,12 @@ export default {
             },
             "calendar_detail_short_hint":{
               "fr": "Ce texte sera affiché dans la troisième case de la cellule.",
-              "nl": "Deze sms zal worden vertoond in de derde doos van de cel.",
+              "nl": "Deze tekst zal worden vertoond in het derde vakje van de cel.",
               "en": "This text will be displayed in the third box of the cell."
             },
             "calendar_detail_no_element":{
               "fr": "Pas encore d'élément dans cette journée.",
-              "nl": "Nog geen element in deze dag.",
+              "nl": "Nog geen elementen op deze dag.",
               "en": "Not yet any element in this day."
             },
             "calendar_add_element_tooltip":{
@@ -1272,7 +1272,7 @@ export default {
             },
             "calendar_edit_elements_tooltip":{
               "fr": "Éditer les éléments",
-              "nl": "Editing elementen",
+              "nl": "Bewerk de elementen",
               "en": "Editing elements"
             },
             "calendar_add_call":{
@@ -1282,7 +1282,7 @@ export default {
             },
             "calendar_add_note":{
               "fr": "Ajouter une note",
-              "nl": "Voeg een briefje toe",
+              "nl": "Voeg een notitie toe",
               "en": "Add a note"
             },
             "calendar_add_file":{
@@ -1312,17 +1312,17 @@ export default {
             },
             "paint_cell":{
               "fr": "Colorer l'intérieur des cellules",
-              "nl": "De kleur van de cellen",
+              "nl": "Kleur binenste van de cellen",
               "en": "Color inside the cells"
             },
             "call_name":{
               "fr": "Description du dérangement",
-              "nl": "Beschrijving van de verstoring",
+              "nl": "Beschrijving van de storing",
               "en": "Description of the disturbance"
             },
             "call_kind":{
               "fr": "Type d'intervention",
-              "nl": "Een soort interventie",
+              "nl": "Soort interventie",
               "en": "Type of intervention"
             },
             "call_description":{
@@ -1382,12 +1382,12 @@ export default {
             },
             "palette_cells":{
               "fr": "Colorer les cellules",
-              "nl": "Kleurende cellen",
+              "nl": "Kleur de cellen",
               "en": "Coloring cells"
             },
             "hour_calculator":{
               "fr": "Convertisseur heure/décimale",
-              "nl": "Decimale convert",
+              "nl": "Decimale converter",
               "en": "Hour/decimal converter"
             },
             "printable_calendar":{
@@ -1397,17 +1397,17 @@ export default {
             },
             "leaves_management":{
               "fr": "Gestion des congés",
-              "nl": "Verlaat het management",
+              "nl": "Verlof beheren",
               "en": "Leave management"
             },
             "leaves_config":{
               "fr": "Configuration des congés",
-              "nl": "Configuratie verlaten",
+              "nl": "Verlof instellingen",
               "en": "Leave configuration"
             },
             "leaves_no_leave_set_1":{
               "fr": "Il n'y a pas encore de types de congé configurés pour cette équipe.",
-              "nl": "Er zijn nog geen soorten verlof voor dit team.",
+              "nl": "Er zijn nog geen soorten verlof voor dit team ingesteld.",
               "en": "There are no types of leave set for this team yet."
             },
             "leaves_no_leave_set_2":{
@@ -1417,37 +1417,37 @@ export default {
             },
             "leaves_leave_name":{
               "fr": "Nom du congé",
-              "nl": "Naam van verlof",
+              "nl": "Naam van het verlof",
               "en": "Leave name"
             },
             "leaves_leave_desc":{
               "fr": "Déscription du congé",
-              "nl": "Beschrijving van verlof",
+              "nl": "Beschrijving van het verlof",
               "en": "Leave description"
             },
             "leaves_leave_color":{
               "fr": "Couleur du congé",
-              "nl": "Kleur van verlof",
+              "nl": "Kleur van het verlof",
               "en": "Leave color"
             },
             "leaves_leave_type":{
               "fr": "Type de congé",
-              "nl": "Een soort verlof",
+              "nl": "Soort verlof",
               "en": "Type of leave"
             },
             "leaves_leave_count":{
               "fr": "Nombre de types de congés",
-              "nl": "Nummer van verlof",
+              "nl": "Aantal soorten verlof",
               "en": "Number of types of leave"
             },
             "leaves_remove_leave_type":{
               "fr": "Retirer un type de congé",
-              "nl": "Een soort verlof",
+              "nl": "Een soort verlof verwijderen",
               "en": "Withdraw a type of leave"
             },
             "leaves_remove_leave_type_warning":{
               "fr": "Attention, si vous supprimez ce type de congé, vous supprimerez églamenent les quotas associés des membres de l'équipe.",
-              "nl": "Attentie, als je dit soort verlof verwijdert, verwijder je de geassocieerde quotas van teamleden.",
+              "nl": "Attentie, als je dit soort verlof verwijdert, verwijder je de geassocieerde quotas van de teamleden.",
               "en": "Attention, if you delete this type of leave, you will remove the associated quotas from team members."
             },
             "leaves_add_leave_type":{
@@ -1527,12 +1527,12 @@ export default {
             },
             "quota_left":{
               "fr": "Reste",
-              "nl": "Verblijf",
+              "nl": "Overschot",
               "en": "Remains"
             },
             "quota_add_leave_type":{
               "fr": "Pour en ajouter, naviguez vers le menu « Gestion des congés ».",
-              "nl": "Om meer toe te voegen, navigeert u naar het menu « Verlofbeheer ».",
+              "nl": "Om toe te voegen, navigeert u naar het menu « Verlofbeheer ».",
               "en": "To add more, navigate to the « Leave Management » menu."
             },
           },
@@ -1542,32 +1542,32 @@ export default {
           "radium":{
             "palette_works_tooltip":{
               "fr": "Colorer les chantier",
-              "nl": "De bouwplaats kleuren",
+              "nl": "De werf kleuren",
               "en": "Color works"
             },
             "filter_works_tooltip":{
               "fr": "Filtrer les chantiers",
-              "nl": "Filter yards",
+              "nl": "De werven filteren",
               "en": "Filter works"
             },
             "sort_works_tooltip":{
               "fr": "Trier les chantiers",
-              "nl": "Sorteer werken",
+              "nl": "Werven sorteren",
               "en": "Sort works"
             },
             "sort_works_by_placeholder":{
               "fr": "Trier les chantiers par",
-              "nl": "Sorteer werken op",
+              "nl": "Sorteer werven op",
               "en": "Sort works by"
             },
             "original_order":{
               "fr": "Ordre original",
-              "nl": "Originele orde",
+              "nl": "Oospronkele order",
               "en": "Original order"
             },
             "sort_works_by_increasing_day_tooltip":{
               "fr": "Trier les chantiers par jour croissant",
-              "nl": "Sorteer werken door dag te verhogen",
+              "nl": "Sorteer werven door kruisende dagen",
               "en": "Sort works by increasing day"
             },
             "printable_tooltip":{
@@ -1577,7 +1577,7 @@ export default {
             },
             "customize_tooltip":{
               "fr": "Personnaliser Radium",
-              "nl": "Gebruikelijke radium",
+              "nl": "Personaliseer raduim",
               "en": "Customize Radium"
             },
             "add_work_tooltip":{
@@ -1592,17 +1592,17 @@ export default {
             },
             "message_priority":{
               "fr": "Priorité du message",
-              "nl": "Prioriteit van de boodschap",
+              "nl": "Prioriteit van het breicht",
               "en": "Message priority"
             },
             "column_title_shifts":{
               "fr": "Prestations",
-              "nl": "Voordelen",
+              "nl": "Prestaties",
               "en": "Shifts"
             },
             "column_title_dates":{
               "fr": "Dates",
-              "nl": "Data",
+              "nl": "Datum",
               "en": "Dates"
             },
             "column_title_schedules":{
@@ -1622,7 +1622,7 @@ export default {
             },
             "column_title_ilt":{
               "fr": "ILT",
-              "nl": "ILT?",
+              "nl": "TLO",
               "en": "???"
             },
             "column_title_files":{
@@ -1632,12 +1632,12 @@ export default {
             },
             "column_title_ilts":{
               "fr": "ILT",
-              "nl": "ILT?",
+              "nl": "TLO",
               "en": "???"
             },
             "column_title_bnxs":{
               "fr": "BNX",
-              "nl": "BNX?",
+              "nl": "BNX",
               "en": "BNX?"
             },
             "column_title_fmhts":{
@@ -1667,7 +1667,7 @@ export default {
             },
             "column_title_limits":{
               "fr": "Limites de mise hors service",
-              "nl": "Buitenbedrijfstellingslimieten",
+              "nl": "Begrenzingen",
               "en": "Limits"
             },
             "column_title_s460s":{
@@ -1682,12 +1682,12 @@ export default {
             },
             "column_title_cascat":{
               "fr": "Cas caténaire",
-              "nl": "CC?",
+              "nl": "Bovenleidingsgevallen",
               "en": "CC?"
             },
             "column_title_grue":{
               "fr": "Grue RR",
-              "nl": "Cranerr",
+              "nl": "Wegspoorkraan",
               "en": "Backhoe"
             },
             "column_title_osv":{
@@ -1712,7 +1712,7 @@ export default {
             },
             "column_title_pn":{
               "fr": "PN",
-              "nl": "PN?",
+              "nl": "OW",
               "en": "RC"
             },
             "column_title_art":{
@@ -1742,92 +1742,92 @@ export default {
             },
             "column_title_extra":{
               "fr": "Divers",
-              "nl": "Extra",
+              "nl": "Diversen",
               "en": "Extra"
             },
             "column_title_supervisor":{
               "fr": "Responsable",
-              "nl": "Verantwoord",
+              "nl": "Verantwoordelijke",
               "en": "Supervisor"
             },
             "column_title_line":{
               "fr": "Ligne",
-              "nl": "Line",
+              "nl": "Lijn",
               "en": "Line"
             },
             "edit_tooltip":{
               "fr": "Déverrouiller et modifier ce chantier",
-              "nl": "Ontsluiting en beweeg deze werk.",
+              "nl": "Ontgrendel en bewerk deze werf.",
               "en": "Unlock and edit this work"
             },
             "lock_tooltip":{
               "fr": "Verrouiller ce chantier",
-              "nl": "Sluit deze tuin",
+              "nl": "Vergrendel deze werf",
               "en": "Lock this work"
             },
             "delete_tooltip":{
               "fr": "Supprimer ce chantier",
-              "nl": "Verwijder dit werk.",
+              "nl": "Verwijder dit werf.",
               "en": "Delete this work"
             },
             "message_tooltip":{
               "fr": "Envoyer un message concernant ce chantier",
-              "nl": "Stuur een bericht over deze werk.",
+              "nl": "Stuur een bericht over deze werf.",
               "en": "Send a message about this work"
             },
             "copy_tooltip":{
               "fr": "Créer une copie de ce chantier ici ou dans un autre mois",
-              "nl": "Creëer een kopie van deze werk hier of een maand",
+              "nl": "Creëer een kopie van deze werf hier of in een andere maand",
               "en": "Create a copy of this work here or in another month"
             },
             "move_tooltip":{
               "fr": "Déplacer ce chantier dans un autre mois",
-              "nl": "Verplaats deze werk nog een maand",
+              "nl": "Verplaats deze werf in een andere maand",
               "en": "Move this work to another month"
             },
             "link_radiums_tooltip":{
               "fr": "Lier ce chantier à d'autres Radium",
-              "nl": "Verbind deze tuin met andere radium",
+              "nl": "Verbind deze werf met andere radiums",
               "en": "Link this work to other Radium"
             },
             "link_radiums_snackbar":{
               "fr": "Ce chantier à bien été liés aux Radium sélectionnés.",
-              "nl": "Deze werk is gelinkt aan het geselecteerde radium.",
+              "nl": "Deze werf is gelinkt aan het geselecteerde radium.",
               "en": "This work has been successfully linked to selected Radium."
             },
             "link_teams_tooltip":{
               "fr": "Ajouter des équipes à cette prestation",
-              "nl": "Voeg teams toe aan deze dienst",
+              "nl": "Voeg teams toe aan deze prestatie",
               "en": "Add teams to this shift"
             },
             "participating_teams":{
               "fr": "Equipes participantes au chantier",
-              "nl": "Teams die deelnemen aan de bouwplaats",
+              "nl": "Teams die deelnemen aan de werf",
               "en": "Teams participating in the work"
             },
             "part_needs":{
               "fr": "Besoin de",
-              "nl": "Nodig",
+              "nl": "Benodigheden",
               "en": "Need"
             },
             "participating_profiles":{
               "fr": "Agents participants",
-              "nl": "Deelnemende agenten",
+              "nl": "Deelnemende bedienden",
               "en": "Participating people"
             },
             "no_participating_teams":{
               "fr": "Aucune équipe ne participe à cette prestation.",
-              "nl": "Geen team deelnames in deze prestatie.",
+              "nl": "Geen enkele ploeg zal deelnemen tijdensdeze prestatie.",
               "en": "No team participates in this shift."
             },
             "no_shift":{
               "fr": "Pas encore de prestation pour ce chantier.",
-              "nl": "Nog geen dienst voor dit project.",
+              "nl": "Nog geen prestatie voor deze werf.",
               "en": "No shift for this work yet."
             },
             "no_shift_date":{
               "fr": "Veuillez introduire une date à cette prestation pour ajouter une équipe.",
-              "nl": "Geef een datum aan dit voordeel om een team toe te voegen.",
+              "nl": "Geef een datum aan deze prestatie om een ploeg toe te voegen.",
               "en": "Please enter a date for this shift to add a team."
             },
             "remove_project":{
@@ -1837,32 +1837,32 @@ export default {
             },
             "remove_part":{
               "fr": "Supprimer la participation de l'équipe",
-              "nl": "Verwijder team deelname",
+              "nl": "Verwijder ploeg deelname",
               "en": "Send a message to team members"
             },
             "send_team_message":{
               "fr": "Envoyer un message aux membres de l'équipe",
-              "nl": "Stuur een bericht naar teamleden",
+              "nl": "Stuur een bericht naar ploegleden",
               "en": "Send a message to team members"
             },
             "lock_part":{
               "fr": "Verrouiller la participation",
-              "nl": "Sluiten deelname",
+              "nl": "Vergrendel de deelname",
               "en": "Lock participation"
             },
             "unlock_part":{
               "fr": "Déverrouiller la participation",
-              "nl": "De deelname ontgrendeld",
+              "nl": "De deelname ontgrendelen",
               "en": "Unlock participation"
             },
             "locked_part":{
               "fr": "Cette participation est verrouillée.",
-              "nl": "Deze deelname is op slot.",
+              "nl": "Deze deelname is vergrendeld.",
               "en": "This participation is locked."
             },
             "short_override":{
               "fr": "Écraser la troisième case des cellules Watcher",
-              "nl": "Verpletter de derde wachter cel",
+              "nl": "Verpletter het derde vak in wachter",
               "en": "Overwrite the third cells box"
             },
             "part_description":{
@@ -1872,7 +1872,7 @@ export default {
             },
             "short_override_confirm":{
               "fr": "La troisième case des cellules des participants ont bien été écrasées dans le calendrier Watcher.",
-              "nl": "De derde doos van de deelnemers is verpletterd in de wachter kalender.",
+              "nl": "De derde vakje van de deelnemers is verpletterd in de wachter kalender.",
               "en": "The third box of the participants' cells has been overwritten in the Watcher calendar."
             },
             "log_title":{
@@ -1887,12 +1887,12 @@ export default {
             },
             "no_works":{
               "fr": "Il n'y a pas encore de chantier ce mois.",
-              "nl": "Er is geen bouwplaats deze maand.",
+              "nl": "Er is nog geen werf deze maand.",
               "en": "There is no work yet this month."
             },
             "no_filters_result":{
               "fr": "Il n'y a pas de chantier correspondant aux filtres appliqués.",
-              "nl": "Er is geen tuin die overeenkomt met de toegepaste filters.",
+              "nl": "Er is geen werf die overeenkomt met de toegepaste filters.",
               "en": "There is no work corresponding to the filters applied."
             },
             "message_to_linked_radiums":{
@@ -1912,17 +1912,17 @@ export default {
             },
             "message_preset_date_updated":{
               "fr": "La date du chantier a été modifiée.",
-              "nl": "De bouwdatum is aangepast.",
+              "nl": "De werfdatum is aangepast.",
               "en": "The work's date has been updated."
             },
             "message_preset_shift_updated":{
               "fr": "La prestation du chantier à été modifiée.",
-              "nl": "De levering van de bouwplaats is aangepast.",
+              "nl": "De prestatie van de werf is aangepast.",
               "en": "The work's shift has been updated."
             },
             "message_preset_desc_updated":{
               "fr": "La description du chantier a été mise à jour.",
-              "nl": "De site beschrijving is geüpload.",
+              "nl": "De werfbeschrijving is up to date.",
               "en": "The work's description has been updated."
             },
             "message_preset_note_added":{
@@ -1932,27 +1932,27 @@ export default {
             },
             "message_preset_bnx_added":{
               "fr": "Un nouveau BNX a été publié.",
-              "nl": "Een nieuwe bnx werd gepubliceerd.",
+              "nl": "Een nieuwe BNX werd gepubliceerd.",
               "en": "A new ??? has been published."
             },
             "message_preset_ilt_added":{
               "fr": "Une nouvelle ILT a été publiée.",
-              "nl": "Een nieuw ilt werd gepubliceerd.",
+              "nl": "Een nieuwe TLO werd gepubliceerd.",
               "en": "A new ??? has been published."
             },
             "message_preset_work_canceled":{
               "fr": "Le chantier est annulé.",
-              "nl": "De tuin is geannuleerd.",
+              "nl": "De werf is afgeschaft.",
               "en": "The work is canceled."
             },
             "messages_dialog_title":{
               "fr": "Messages concernant les chantiers de ce Radium",
-              "nl": "Berichten over de werk van dit radium",
+              "nl": "Berichten over de werf van dit radium",
               "en": "Radium's works' messages"
             },
             "messages_work_date":{
               "fr": "Chantier du",
-              "nl": "Werk van",
+              "nl": "Werf van",
               "en": "Work of"
             },
             "messages_no_message":{
@@ -1962,22 +1962,22 @@ export default {
             },
             "paint_works":{
               "fr": "Colorer les chantiers",
-              "nl": "Kleurende werk",
+              "nl": "Kleur de werf",
               "en": "Color works"
             },
             "paint_columns_bg":{
               "fr": "Colorer la couleur de fond des colonnes",
-              "nl": "De kleur van de achtergrond van de columns",
+              "nl": "Achtergrond van de kolommen kleuren",
               "en": "Color columns background"
             },
             "paint_columns_text":{
               "fr": "Colorer le texte des colonnes",
-              "nl": "De tekst van de columns kleuren",
+              "nl": "De tekst van de Kolommen kleuren",
               "en": "Color columns text"
             },
             "paint_rows_bg":{
               "fr": "Colorer la couleur de fond des lignes",
-              "nl": "De kleur van de achtergrond van de lijnen",
+              "nl": "De achtergrondlijnen kleuren",
               "en": "Color row background"
             },
             "paint_rows_text":{
@@ -1987,7 +1987,7 @@ export default {
             },
             "line":{
               "fr": "Ligne",
-              "nl": "Line",
+              "nl": "Lijn",
               "en": "Line"
             },
             "station":{
@@ -2002,17 +2002,17 @@ export default {
             },
             "signal":{
               "fr": "Signal",
-              "nl": "Signaal",
+              "nl": "Sein",
               "en": "Signal"
             },
             "pk":{
               "fr": "PK",
-              "nl": "PK",
+              "nl": "KP",
               "en": "PK"
             },
             "from":{
               "fr": "De",
-              "nl": "De",
+              "nl": "Van",
               "en": "From"
             },
             "to":{
@@ -2022,7 +2022,7 @@ export default {
             },
             "printable_works":{
               "fr": "Chantiers",
-              "nl": "Plaatsen",
+              "nl": "Werven",
               "en": "Works"
             }
           },
@@ -2033,7 +2033,7 @@ export default {
           "planner":{
             "to_be_planned":{
               "fr": "A planifier",
-              "nl": "Een plan",
+              "nl": "Te plannen",
               "en": "To be planned"
             },
             "planned":{
@@ -2043,22 +2043,22 @@ export default {
             },
             "printable_board":{
               "fr": "Version imprimable du planning",
-              "nl": "Gedrukte versie van het schema",
+              "nl": "Afdrukbare versie van het planning",
               "en": "Printable version of the schedule"
             },
             "edit_teammates":{
               "fr": "Modifier les agents participants",
-              "nl": "Bewerk deelnemende mensen",
+              "nl": "Bewerk deelnemende bedienden",
               "en": "Edit participating people"
             },
             "add_foreign_user":{
               "fr": "Ajouter un membre d'une autre équipe",
-              "nl": "Voeg een lid van een ander team toe",
+              "nl": "Voeg een lid van een ander ploeg toe",
               "en": "Add a member of another team"
             },
             "planning":{
               "fr": "Planning",
-              "nl": "Schema",
+              "nl": "Planning",
               "en": "Schedule"
             },
             "folders_setting":{
@@ -2068,7 +2068,7 @@ export default {
             },
             "folder_name":{
               "fr": "Nom du dossier",
-              "nl": "Naam van de dossier",
+              "nl": "Naam van het dossier",
               "en": "Folder name"
             },
             "folder_max_six":{
@@ -2109,7 +2109,7 @@ export default {
           "draft":{
             "ongoing_projects":{
               "fr": "Projets en cours",
-              "nl": "Projecten volgen",
+              "nl": "Projecten in uitvoering",
               "en": "On going projects"
             },
             "archived_projects":{
@@ -2144,7 +2144,7 @@ export default {
             },
             "project_date":{
               "fr": "Début du projet",
-              "nl": "Project start",
+              "nl": "Start van het project",
               "en": "Project's start date"
             },
             "add_task":{
@@ -2154,17 +2154,17 @@ export default {
             },
             "edit_project":{
               "fr": "Editer le projet",
-              "nl": "Edit het project",
+              "nl": "Berwerk het project",
               "en": "Edit project"
             },
             "ongoing":{
               "fr": "En cours",
-              "nl": "Voortgaande",
+              "nl": "Bezig",
               "en": "On going"
             },
             "archived":{
               "fr": "Archivé",
-              "nl": "Archief",
+              "nl": "Gearchiveerd",
               "en": "Archived"
             },
             "private":{
@@ -2179,22 +2179,22 @@ export default {
             },
             "delete_project":{
               "fr": "Supprimer le projet",
-              "nl": "Verwijder het ontwerp",
+              "nl": "Verwijder het project",
               "en": "Delete project"
             },
             "delete_project_warning":{
               "fr": "Attention, tous les éléments de ce projet seront supprimés de façon permanente.",
-              "nl": "Warning, every elements in this project will be permanently deleted.",
+              "nl": "Opgelet, alle elementenvan dit project permanenent verwijderd worden.",
               "en": "Delete project"
             },
             "delete_project_info":{
               "fr": "Si un projet est terminé, vous pouvez aussi l'archiver. Vous concerverez ainsi le projet, mais il n'apparaîtra plus dans la liste des projets en cours.",
-              "nl": "If you no longer need this project, you can also archive it. This will keep the project, but it will no longer appear in the list of on going projects.",
+              "nl": "Als dit project gedaan is mag je deze ook archiveren. Op deze manier behoud u dit project maar deze zal niet meer tevoorschijn komen bij de lopende projecten.",
               "en": "Delete project"
             },
             "private_hint":{
               "fr": "Seules les personnes autorisées peuvent consulter ce projet.",
-              "nl": "Alleen goedgekeurde personen kunnen dit project raadplegen.",
+              "nl": "Alleen toegelaten personen kunnen dit project raadplegen.",
               "en": "Only authorized users can view this project."
             },
             "archived_hint":{
@@ -2239,12 +2239,12 @@ export default {
             },
             "initial_order":{
               "fr": "Ordre initial",
-              "nl": "Initiaal",
+              "nl": "Initieel order",
               "en": "Initial order"
             },
             "task_models":{
               "fr": "Modèles de tâche",
-              "nl": "Telmodellen",
+              "nl": "Taak modellen",
               "en": "Task models"
             },
             "add_template":{
