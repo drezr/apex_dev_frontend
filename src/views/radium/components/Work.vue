@@ -1479,7 +1479,7 @@ export default {
 }
 
 .work-log-button {
-  cursor:  pointer;
+  cursor: pointer;
   position: absolute;
   top: -4px;
   opacity: 0;
@@ -1488,8 +1488,7 @@ export default {
 
 .work-log-cell {
   white-space: pre;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  padding: 10px !important;
 }
 
 .work-rows {
