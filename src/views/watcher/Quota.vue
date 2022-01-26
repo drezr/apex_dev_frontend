@@ -121,7 +121,7 @@
 
             <div
               class="quota-table mt-5 green lighten-3 green--text text--darken-4"
-              v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type)"
+              v-if="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == selected_type.toLowerCase()).kind)"
             >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_obtained[lg] }}</div>
@@ -131,7 +131,7 @@
 
             <div
               class="quota-table red lighten-3 red--text text--darken-4"
-              :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == type).type) ? 'mt-2' : 'mt-5'"
+              :class="['saturday', 'sunday', 'holiday', 'hour'].includes(leaves_data.find(ld => ld.code.toLowerCase() == selected_type.toLowerCase()).kind) ? 'mt-2' : 'mt-5'"
             >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_took[lg] }}</div>

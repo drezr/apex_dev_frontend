@@ -57,8 +57,8 @@
           auto-grow
           hide-details
           solo
-          :disabled="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
-          :flat="!(edit_mode && $is_editor && self.profile == $logged_profile.id)"
+          :disabled="!(edit_mode || $is_editor || self.profile == $logged_profile.id)"
+          :flat="!(edit_mode || $is_editor || self.profile == $logged_profile.id)"
           background-color="white"
           @input="update"
           :placeholder="lang.generic.empty_note[lg]"
@@ -103,9 +103,10 @@
         @mouseup="$set_is_grabbing(false)"
         @mouseleave="$set_is_grabbing(false)"
         :style="`cursor : ${grab_cursor};`"
+        v-if="edit_mode && $is_editor"
       ></span>
 
-      <span class="mdi mdi-chat cyan--text mr-1"></span>
+      <span class="mdi mdi-chat mdi-24px cyan--text text--darken-2 mr-1"></span>
 
       <textarea
         v-model="self.value"
@@ -118,8 +119,9 @@
       ></textarea>
 
       <span
-        class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
+        class="mdi mdi-delete handle red--text cursor-pointer mx-1"
         @click="delete_dialog = true"
+        v-if="edit_mode && $is_editor"
       ></span>
     </div>
   </v-badge>

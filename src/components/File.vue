@@ -130,6 +130,7 @@
         @mouseup="$set_is_grabbing(false)"
         @mouseleave="$set_is_grabbing(false)"
         :style="`cursor : ${grab_cursor};`"
+        v-if="edit_mode && $is_editor"
       ></span>
 
       <span
@@ -173,13 +174,10 @@
         :disabled="self.name == initial_name"
       />
 
-
-
-
-
       <span
         class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
         @click="delete_dialog = true"
+        v-if="edit_mode && $is_editor"
       ></span>
     </div>
   </v-badge>

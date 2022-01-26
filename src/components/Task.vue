@@ -247,36 +247,169 @@
       ></div>
     </div>
 
-    <div class="task-frame d-flex align-center" v-else>
-      <span
-        class="mdi mdi-drag mdi-24px handle pink--text"
-        @mousedown="$set_is_grabbing(true)"
-        @mouseup="$set_is_grabbing(false)"
-        @mouseleave="$set_is_grabbing(false)"
-        :style="`cursor : ${grab_cursor};`"
-      ></span>
+    <div
+      v-else
+      class="task-frame"
+      :class="expanded ? 'task-frame-expanded' : ''"
+    >
+      <div class="d-flex align-center">
+        <span
+          class="mdi mdi-drag mdi-24px handle pink--text"
+          @mousedown="$set_is_grabbing(true)"
+          @mouseup="$set_is_grabbing(false)"
+          @mouseleave="$set_is_grabbing(false)"
+          :style="`cursor : ${grab_cursor};`"
+          v-if="edit_mode && $is_editor"
+        ></span>
 
-      <span
-        @click="swap_status()"
-        class="mdi cursor-pointer mr-1"
-        :class="[
-          status_icon,
-          status_color + '--text',
-        ]"
-      ></span>
+        <span
+          @click="swap_status()"
+          class="mdi cursor-pointer mr-1"
+          :class="[
+            status_icon,
+            status_color + '--text',
+          ]"
+        ></span>
 
-      <input
-        type="text"
-        v-model="self.name"
-        class="task-simple-input"
-        :disabled="!(edit_mode && $is_editor)"
-        @input="update()"
+        <textarea
+          v-model="self.name"
+          class="task-simple-textarea hide-scrollbar"
+          :disabled="!(edit_mode && $is_editor)"
+          :style="autoresize()"
+          @input="update()"
+          no-resize
+          ref="textarea"
+        ></textarea>
+
+        <span
+          class="mdi mdi-delete handle red--text cursor-pointer"
+          @click="delete_dialog = true"
+          v-if="edit_mode && $is_editor"
+        ></span>
+
+        <span
+          class="mdi grey--text cursor-pointer mx-1"
+          :class="expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+          @click="expanded = !expanded"
+        ></span>
+      </div>
+
+      <!-- TO DO remove code duplication -->
+
+      <div
+        class="task-expension"
+        v-if="expanded"
       >
+        <VueDraggable
+          v-model="self.children"
+          @change="update_children_position"
+          :animation="100"
+          easing="cubic-bezier(1, 0, 0, 1)"
+          handle=".handle-children"
+        >
+          <div
+            v-for="(child, i) in self.children"
+            :key="i"
+          >
+            <Input
+              v-if="child.type == 'input'"
+              :self="child"
+              :parent="self"
+              :class="i + 1 == self.children.length ? 'mb-3' : ''"
+              :is_template="is_template"
+            />
 
-      <span
-        class="mdi mdi-delete mdi-24px handle red--text cursor-pointer"
-        @click="delete_dialog = true"
-      ></span>
+            <Subtask
+              v-if="child.type == 'subtask'"
+              :self="child"
+              :parent="self"
+              class="mx-3 mb-3"
+              :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+              :is_template="is_template"
+            />
+
+            <Note
+              v-if="child.type == 'note'"
+              :self="child"
+              :parent="self"
+              class="mx-3 mb-3"
+              :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+              :is_template="is_template"
+            />
+
+            <File
+              v-if="child.type == 'file'"
+              :self="child"
+              :parent="self"
+              class="mx-3 mb-3"
+              :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+              v-on:open-image="try_open_photo(child)"
+            />
+          </div>
+        </VueDraggable>
+
+        <div
+          v-if="self.children.length == 0 && !add_child_loading"
+          class="pt-6 pb-9 text-center black--text"
+        >
+          {{ lang.generic.task_no_element[lg] }}
+        </div>
+
+        <Loader :size="50" :width="7" class="my-3" v-if="add_child_loading" />
+
+        <div v-if="edit_mode && $is_editor" class="d-flex justify-space-around mb-2">
+          <CustomButton
+            :icon="'mdi-form-textbox'"
+            :small="true"
+            :color="'purple'"
+            :text_color="'white'"
+            :text="$mobile_breakpoint ? lang.generic.text[lg] : ''"
+            :tooltip="lang.generic.add_input_tooltip[lg]"
+            :menus="input_menus"
+            v-on:menu_action="create_child('input', $event)"
+            :disabled="add_child_loading"
+          />
+
+          <CustomButton
+            :icon="'mdi-clipboard-check'"
+            :small="true"
+            :color="'green darken-1'"
+            :text_color="'white'"
+            :text="$mobile_breakpoint ? lang.generic.subtask[lg] : ''"
+            :tooltip="lang.generic.add_subtask_tooltip[lg]"
+            @click="create_child('subtask')"
+            :disabled="add_child_loading"
+          />
+
+          <CustomButton
+            :icon="'mdi-chat'"
+            :small="true"
+            :color="'cyan darken-2'"
+            :text_color="'white'"
+            :text="$mobile_breakpoint ? lang.generic.note[lg] : ''"
+            :tooltip="lang.generic.add_note_tooltip[lg]"
+            @click="create_child('note')"
+            :disabled="add_child_loading"
+          />
+
+          <CustomButton
+            :icon="'mdi-file'"
+            :small="true"
+            :color="'pink'"
+            :text_color="'white'"
+            :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
+            :tooltip="lang.generic.add_file_tooltip[lg]"
+            v-if="!is_template"
+            @click="$refs['file-input'].click()"
+            :disabled="add_child_loading"
+          />
+        </div>
+      </div>
+
+      <div 
+        v-if="!expanded && self.children.length > 0"
+        class="blue task-has-children"
+      ></div>
     </div>
   </v-badge>
 
@@ -708,6 +841,19 @@ export default {
         this.self.children.push(child)
       })
     },
+
+    autoresize() {
+      this.$nextTick(() => {
+        if (this.$refs['textarea']) {
+          let textarea = this.$refs['textarea']
+
+          if (textarea) {
+            textarea.style.height = `5px`
+            textarea.style.height = `${textarea.scrollHeight}px`
+          }
+        }
+      })
+    },
   },
 
   watch: {
@@ -763,10 +909,19 @@ export default {
   transition: opacity 0.2s;
 }
 
-.task-simple-input {
+.task-simple-textarea {
   flex-grow: 1;
   padding: 3px;
   font-size: 14px;
+  resize: none;
+  padding: 3px;
+  margin-top: 1px;
 }
+
+.task-simple-textarea:disabled {
+  color: black;
+}
+
+
 
 </style>
