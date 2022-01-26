@@ -1,13 +1,19 @@
 <template>
 
 <router-link
+  :is="$current_component.palette && $current_component.palette_mode == 'profile' ? 'span' : 'router-link'"
   :to="`/team/${$current_team_id}/watcher/${$current_app_id}/quota/profile/${profile.id}/year/${$current_year}`"
   class="profile-frame lighten-4"
   :class="[
     color + ' lighten-4',
     color + '--text text--darken-4',
     (!$has_xs(['watcher_can_see_quotas']) && profile.id != $logged_profile.id) ? 'pointer-events-none' : '',
+    $current_component.palette && $current_component.palette_mode == 'profile' ? 'cursor-fill' : '',
   ]"
+  :style="border_color ? `box-shadow: inset 0px 0px 0px 3px ${hex_colors[border_color]};` : ''"
+  @mouseover="hover = true"
+  @mouseleave="hover = false"
+  @click="try_set_color()"
 >
   <div v-if="!quota_toggled" style="position: relative;">
     <div><b>{{ profile.name }}</b></div>
@@ -108,6 +114,27 @@ export default {
       quota_loading: true,
       quota_toggled: false,
       quota: null,
+      hover: false,
+      hex_colors: {
+        'white': '#FFFFFF',
+        'red': '#D50000',
+        'pink': '#E91E63',
+        'purple': '#9C27B0',
+        'deep-purple': '#673AB7',
+        'indigo': '#3F51B5',
+        'light-blue': '#03A9F4',
+        'cyan': '#00BCD4',
+        'teal': '#009688',
+        'green': '#4CAF50',
+        'light-green': '#8BC34A',
+        'lime': '#CDDC39',
+        'yellow': '#FFEB3B',
+        'amber': '#FFC107',
+        'orange': '#FF9800',
+        'deep-orange': '#FF5722',
+        'brown': '#795548',
+        'blue-grey': '#607D8B',
+      },
     }
   },
 
@@ -126,6 +153,14 @@ export default {
       }
 
       return this.profile.link.watcher_color
+    },
+
+    border_color() {
+      if (this.profile.link.watcher_border_color == 'red accent-4') {
+        return 'red'
+      }
+
+      return this.profile.link.watcher_border_color
     },
 
     leaves() {
@@ -162,6 +197,22 @@ export default {
       this.quota = request.quota
 
       this.quota_loading = false
+    },
+
+    async try_set_color() {
+      if (this.$current_component.palette && this.$current_component.palette_mode == 'profile') {
+        let color = this.$current_component.palette_color
+        this.profile.link.watcher_border_color = color
+
+        await this.$http.post('calendar', {
+          'action': 'update_profile_border',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'profile_id': this.profile.id,
+          'color': color,
+        })
+      }
     },
   },
 

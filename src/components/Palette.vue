@@ -127,6 +127,10 @@ export default {
           'name': this.lang.views.watcher.paint_cell[this.lg],
           'value': 'cell',
         },
+        {
+          'name': this.lang.views.watcher.paint_profile_border[this.lg],
+          'value': 'profile',
+        },
       ]
     },
   },

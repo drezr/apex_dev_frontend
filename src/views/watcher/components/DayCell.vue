@@ -40,7 +40,7 @@
        $current_view != 'myapexcontacts' ? '' : 'max-height: 56px !important; min-height: 56px !important; pointer-events: none;'
       "
       :class="[
-        $current_component.palette ? 'cursor-fill' : '',
+        $current_component.palette && $current_component.palette_mode != 'profile' ? 'cursor-fill' : '',
       ]"
       @click="try_set_color('border')"
     >
@@ -275,7 +275,7 @@ export default {
     },
 
     async try_set_color(target) {
-      if (this.$current_component.palette) {
+      if (this.$current_component.palette && this.$current_component.palette_mode != 'profile') {
         if (!this.date.cell.id) {
           await this.get_object()
         }

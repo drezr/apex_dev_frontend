@@ -1308,12 +1308,17 @@ export default {
             "paint_border":{
               "fr": "Colorer les bordures de cellules",
               "nl": "Verkleur de cellen",
-              "en": "Color the cell edges"
+              "en": "Color the cell borders"
             },
             "paint_cell":{
               "fr": "Colorer l'intérieur des cellules",
               "nl": "Kleur binenste van de cellen",
               "en": "Color inside the cells"
+            },
+            "paint_profile_border":{
+              "fr": "Colorer le bord des membres de l'équipe",
+              "nl": "Kleur de rand van de teamleden",
+              "en": "Color the border of the team members"
             },
             "call_name":{
               "fr": "Description du dérangement",
