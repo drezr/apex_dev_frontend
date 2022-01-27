@@ -198,6 +198,7 @@ export default {
     },
 
     async create_user(profile) {
+      console.log(profile)
       this.profile_create_loading = true
       profile.lang = this.lg
 
@@ -276,6 +277,7 @@ export default {
           'watcher_can_see_cells': false,
           'watcher_can_see_quotas': false,
           'watcher_color': 'blue',
+          'can_see_calendars': false,
           'team': this.$current_team_id,
         },
       }
