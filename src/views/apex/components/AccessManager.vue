@@ -276,9 +276,9 @@ export default {
           'watcher_can_see_cells': false,
           'watcher_can_see_quotas': false,
           'watcher_color': 'blue',
-          'can_see_calendars': false,
           'team': this.$current_team_id,
         },
+        'can_see_calendars': false,
       }
     },
   },
