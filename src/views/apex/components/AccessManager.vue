@@ -198,7 +198,6 @@ export default {
     },
 
     async create_user(profile) {
-      console.log(profile)
       this.profile_create_loading = true
       profile.lang = this.lg
 
