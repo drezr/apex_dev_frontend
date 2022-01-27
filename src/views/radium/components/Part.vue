@@ -41,9 +41,34 @@
     </div>
   </div>
 
+  <div v-if="edit_mode && self.locked" class="my-3 text-center grey--text">
+    {{ lang.views.radium.locked_part[lg] }}
+  </div>
+    
+  <div
+    class="d-flex justify-center mb-3"
+    v-if="!self.locked && is_my_team"
+  >
+    <CustomButton
+      v-if="logged_profile_is_available"
+      :text="lang.views.radium.part_set_available[lg]"
+      :icon="'mdi-account-check'"
+      :text_color="'green'"
+      @click="toggle_profile($logged_profile.id, 'is_available')"
+    />
+
+    <CustomButton
+      v-else
+      :text="lang.views.radium.part_set_unavailable[lg]"
+      :icon="'mdi-account-remove'"
+      :text_color="'red'"
+      @click="toggle_profile($logged_profile.id, 'is_available')"
+    />
+  </div>
+
   <div v-if="participants.length > 0 && (!edit_mode || self.locked)">
-    <div class="px-3 pb-3" v-if="self.needs && !self.locked">
-     <small>{{ lang.views.radium.part_needs[lg] }} <b>{{ self.needs }}</b></small>
+    <div class="d-flex justify-center pb-3" v-if="self.needs && !self.locked">
+      <small>{{ lang.views.radium.part_needs[lg] }} <b>{{ self.needs }}</b></small>
     </div>
 
     <v-list dense>
@@ -72,10 +97,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-  </div>
-
-  <div v-if="edit_mode && self.locked" class="my-9 text-center grey--text">
-    {{ lang.views.radium.locked_part[lg] }}
   </div>
 
   <div v-if="edit_mode && !self.locked">
@@ -164,7 +185,7 @@
     :class="edit_mode ? '' : 'mt-3'"
   >
     <v-textarea
-      v-if="self.description || edit_mode"
+      v-if="self.description || (edit_mode && !self.locked)"
       outlined
       clearable
       dense
@@ -301,7 +322,18 @@ export default {
     },
 
     participants() {
-      return this.self.profiles.filter(p => p.link.is_participant)
+      let participants = this.self.profiles.filter(p => p.link.is_participant)
+
+      if (this.team && this.team.profiles) {
+        for (let participant of participants) {
+          let profile = this.team.profiles.find(p => p.id == participant.id)
+          participant.link.position = profile.link.position
+        }
+      }
+
+      participants.sort((a, b) => a.link.position - b.link.position)
+      
+      return participants
     },
 
     availables() {
@@ -310,6 +342,21 @@ export default {
 
     edit_mode() {
       return this.parent_cpnt.parent_cpnt.edit_mode
+    },
+
+    is_my_team() {
+      let f = null
+
+      if (this.team && this.team.profiles) {
+        f = this.team.profiles.find(p => p.id == this.$logged_profile.id)
+      }
+      
+      return f ? true : false
+    },
+
+    logged_profile_is_available() {
+      let f = this.availables.find(p => p.id == this.$logged_profile.id)
+      return f ? true : false
     },
   },
 

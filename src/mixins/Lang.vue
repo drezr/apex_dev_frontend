@@ -1810,6 +1810,16 @@ export default {
               "nl": "Teams die deelnemen aan de werf",
               "en": "Teams participating in the work"
             },
+            "part_set_available":{
+              "fr": "Je suis disponible",
+              "nl": "Ik ben beschikbaar",
+              "en": "I'm available"
+            },
+            "part_set_unavailable":{
+              "fr": "Je ne suis pas disponible",
+              "nl": "Ik ben niet beschikbaar",
+              "en": "I am not available"
+            },
             "part_needs":{
               "fr": "Besoin de",
               "nl": "Benodigheden",
