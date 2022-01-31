@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div class="day-step day-step-week" v-if="date.week_step">
+      <div class="day-step day-step-week" v-if="date.week_step || date.week_step == 0">
         {{ date.week_step }}
       </div>
 
