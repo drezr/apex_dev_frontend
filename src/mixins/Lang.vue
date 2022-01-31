@@ -1627,7 +1627,7 @@ export default {
             },
             "column_title_ilt":{
               "fr": "ILT",
-              "nl": "TLO",
+              "nl": "TPO",
               "en": "???"
             },
             "column_title_files":{
@@ -1637,7 +1637,7 @@ export default {
             },
             "column_title_ilts":{
               "fr": "ILT",
-              "nl": "TLO",
+              "nl": "TPO",
               "en": "???"
             },
             "column_title_bnxs":{
@@ -1952,7 +1952,7 @@ export default {
             },
             "message_preset_ilt_added":{
               "fr": "Une nouvelle ILT a été publiée.",
-              "nl": "Een nieuwe TLO werd gepubliceerd.",
+              "nl": "Een nieuwe TPO werd gepubliceerd.",
               "en": "A new ??? has been published."
             },
             "message_preset_work_canceled":{
