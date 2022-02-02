@@ -308,6 +308,7 @@ export default {
       team: Object(),
       is_updating: false,
       update_timer: null,
+      profiles: Array(),
     }
   },
 
