@@ -116,7 +116,7 @@
               <VueDraggable
                 v-model="folders[selected_folder].children"
                 @change="update_children_position($event, folders[selected_folder])"
-                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
+                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone'}"
                 handle=".handle"
                 style="height: 100%;"
                 @start="set_is_grabbing(true); check_is_file($event);"
@@ -130,7 +130,7 @@
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
-                  :key="i"
+                  :key="i + child.id"
                   :data-type="child.type"
                 >
                   <Task
@@ -222,7 +222,7 @@
               <VueDraggable
                 v-model="date.data.children"
                 @change="update_children_position($event, date.data)"
-                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
+                :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone'}"
                 handle=".handle"
                 @start="set_is_grabbing(true); check_is_file($event);"
                 @end="set_is_grabbing(false); move_is_file = false;"
@@ -242,7 +242,7 @@
               >
                 <div
                   v-for="(child, i) in date.data.children"
-                  :key="i"
+                  :key="i + child.id"
                   class="board-date-children-frame"
                   :data-type="child.type"
                 >

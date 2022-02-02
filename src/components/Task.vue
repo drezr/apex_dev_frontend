@@ -181,7 +181,7 @@
               />
 
               <Code
-                v-if="child.type == 'subtask'"
+                v-if="child.type == 'code'"
                 :self="child"
                 :parent="self"
                 class="mx-3 mb-3"
@@ -242,7 +242,7 @@
               :text_color="'white'"
               :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
               :tooltip="lang.generic.add_file_tooltip[lg]"
-              v-if="!is_template"
+              v-if="!is_template && $is_staff"
               @click="$refs['file-input'].click()"
               :disabled="add_child_loading"
             />
@@ -354,6 +354,15 @@
               :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
               v-on:open-image="try_open_photo(child)"
             />
+
+            <Code
+              v-if="child.type == 'code'"
+              :self="child"
+              :parent="self"
+              class="mx-3 mb-3"
+              :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+              :is_template="is_template"
+            />
           </div>
         </VueDraggable>
 
@@ -366,7 +375,10 @@
 
         <Loader :size="50" :width="7" class="my-3" v-if="add_child_loading" />
 
-        <div v-if="edit_mode && $is_editor" class="d-flex justify-space-around mb-2">
+        <div
+          v-if="edit_mode && $is_editor"
+          class="d-flex justify-space-around mb-2"
+        >
           <CustomButton
             :icon="'mdi-form-textbox'"
             :small="true"
@@ -410,6 +422,18 @@
             :tooltip="lang.generic.add_file_tooltip[lg]"
             v-if="!is_template"
             @click="$refs['file-input'].click()"
+            :disabled="add_child_loading"
+          />
+
+          <CustomButton
+            :icon="'mdi-calendar-month'"
+            :small="true"
+            :color="'indigo '"
+            :text_color="'white'"
+            :text="$mobile_breakpoint ? lang.generic.code_cats[lg] : ''"
+            :tooltip="lang.generic.add_cats_tooltip[lg]"
+            v-if="!is_template && $is_staff"
+            @click="create_child('code')"
             :disabled="add_child_loading"
           />
         </div>

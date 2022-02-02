@@ -615,6 +615,11 @@ export default {
             "nl": "Voeg een bestand toe.",
             "en": "Add file"
           },
+          "add_cats_tooltip":{
+            "fr": "Ajouter un pointage CATS",
+            "nl": "???",
+            "en": "???"
+          },
           "subtask":{
             "fr": "Sous-tâche",
             "nl": "Subtaak:",
@@ -734,7 +739,62 @@ export default {
             "fr": "Remarque",
             "nl": "Opmerking",
             "en": "Notice"
-          }
+          },
+          "code_presence":{
+            "fr": "Code de présence",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_work":{
+            "fr": "Tâche",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_place":{
+            "fr": "Centre de coût",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_hour":{
+            "fr": "Heures",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_start":{
+            "fr": "Début",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_end":{
+            "fr": "Fin",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_project":{
+            "fr": "Code projet",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_other":{
+            "fr": "Autre",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_activity":{
+            "fr": "Activité",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_network":{
+            "fr": "Réseau",
+            "nl": "???",
+            "en": "???"
+          },
+          "code_cats":{
+            "fr": "CATS",
+            "nl": "CATS",
+            "en": "CATS"
+          },
         },
 
 
