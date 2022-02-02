@@ -273,6 +273,7 @@ class Tools {
       'file',
       'input',
       'note',
+      'code',
       'call',
       'link',
       'template',

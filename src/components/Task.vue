@@ -179,6 +179,15 @@
                 :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
                 v-on:open-image="try_open_photo(child)"
               />
+
+              <Code
+                v-if="child.type == 'subtask'"
+                :self="child"
+                :parent="self"
+                class="mx-3 mb-3"
+                :class="(self.children[i - 1] && self.children[i - 1].type == 'input') || i == 0 ? 'mt-3' : ''"
+                :is_template="is_template"
+              />
             </div>
           </VueDraggable>
 
@@ -451,6 +460,7 @@ import Input from '@/components/Input.vue'
 import Subtask from '@/components/Subtask.vue'
 import Note from '@/components/Note.vue'
 import File from '@/components/File.vue'
+import Code from '@/components/Code.vue'
 
 export default {
   name: 'Task',
@@ -461,6 +471,7 @@ export default {
     Note,
     File,
     Input,
+    Code,
   },
 
   props: {
