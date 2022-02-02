@@ -814,6 +814,10 @@ export default {
       child.children = Array()
 
       this.self.children.push(child)
+
+      setTimeout(() => {
+        this.update_children_position()
+      }, 100)
     },
 
     add_file(e) {

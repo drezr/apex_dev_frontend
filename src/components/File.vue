@@ -27,7 +27,7 @@
       class="file-frame"
       @click="get_file(false)"
       :class="!edit_mode ? 'cursor-pointer' : ''"
-      v-if="!$current_component.simplified || $current_component.simplified == false"
+      v-if="!$current_component.simplified || $current_component.simplified == false || $is_in_task"
     >
       <CustomButton
         v-if="!$is_in_task && $current_view == 'board'"

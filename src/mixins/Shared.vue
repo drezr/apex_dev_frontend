@@ -143,7 +143,18 @@ export default {
     },
 
     $child_task_component() {
-      return this.$parent.$parent.$parent.$parent
+      let component = null
+      let parent = this.$parent
+
+      while (parent && !component) {
+        if (parent.$options.name === 'Task') {
+          component = parent
+        }
+        
+        parent = parent.$parent
+      }
+
+      return component
     },
 
     lg() {

@@ -25,7 +25,7 @@
   >
     <div
       class="note-frame"
-      v-if="!$current_component.simplified || $current_component.simplified == false"
+      v-if="!$current_component.simplified || $current_component.simplified == false || $is_in_task"
     >
       <div class="d-flex align-center">
         <CustomButton
