@@ -84,15 +84,25 @@
                         class="d-flex flex-grow-1"
                         v-if="number < 13"
                       >
-                        <div class="quota-table-presence">
+                        <div
+                          class="quota-table-presence"
+                          :class="select_text_color(cell['presence'])"
+                        >
                           {{ cell['presence'] ? cell['presence'].toUpperCase() : '' }}
                         </div>
 
-                        <div class="quota-table-presence">
+                        <div
+                          class="quota-table-presence"
+                          :class="select_text_color(cell['absence'])"
+                        >
                           {{ cell['absence'] ? cell['absence'].toUpperCase() : '' }}
                         </div>
 
                         <div class="quota-table-date">
+                          <small class="grey--text">
+                            {{ get_day_name(cell['date']) }}
+                          </small>
+
                           {{ $tool.format_date(cell['date']) }}
                         </div>
                       </div>
@@ -207,6 +217,26 @@ export default {
         'deep-orange',
         'blue-grey',
       ],
+      hex_colors: {
+        'white': '#FFFFFF',
+        'red': '#D50000',
+        'pink': '#E91E63',
+        'purple': '#9C27B0',
+        'deep-purple': '#673AB7',
+        'indigo': '#3F51B5',
+        'light-blue': '#03A9F4',
+        'cyan': '#00BCD4',
+        'teal': '#009688',
+        'green': '#4CAF50',
+        'light-green': '#8BC34A',
+        'lime': '#CDDC39',
+        'yellow': '#FFEB3B',
+        'amber': '#FFC107',
+        'orange': '#FF9800',
+        'deep-orange': '#FF5722',
+        'brown': '#795548',
+        'blue-grey': '#607D8B',
+      },
       selected_type: null,
       sorted_detailed_quotas: Object(),
       took: Object(),
@@ -230,6 +260,8 @@ export default {
     this.detailed_quotas = this.request.detailed_quotas
     this.profile = this.request.profile
     this.config = this.request.config
+
+    this.config.leave_types.sort((a, b) => a.position - b.position)
 
     this.leaves_data = this.config.leave_types
     this.leaves_data = this.leaves_data.filter(l => !['recovery', 'presence'].includes(l.kind))
@@ -308,7 +340,37 @@ export default {
   },
 
   methods: {
+    select_text_color(value) {
+      let color = 'red--text text--accent-4'
 
+      if (value) {
+        if (this.config) {
+          let config = this.config
+
+          let ignore_types = config.leave_types.filter(
+            l => l.kind == 'ignore')
+
+          let presence_types = config.leave_types.filter(
+            l => l.kind == 'presence')
+
+          let ignore_type_match = ignore_types.find(t => value.toUpperCase().includes(t.code.toUpperCase()))
+
+          let presence_type_match = presence_types.find(t => value.toUpperCase().includes(t.code.toUpperCase()))
+
+          if (presence_type_match && !ignore_type_match) {
+            color = `${presence_type_match.color}--text text--darken-2`
+          }
+        }
+      }
+
+      return color
+    },
+
+    get_day_name(date) {
+      let day = new Date(date).toLocaleString('fr-FR', { weekday: 'long' })
+
+      return day.charAt(0).toUpperCase() + day.slice(1)
+    },
   },
 
   watch: {
@@ -403,11 +465,14 @@ export default {
 
 .quota-table-date {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
   border-left: 1px rgba(0, 0, 0, 0.2) solid;
   border-right: 1px rgba(0, 0, 0, 0.2) solid;
+  line-height: 15px;
+  padding-bottom: 8px;
 }
 
 .quota-table-value {
