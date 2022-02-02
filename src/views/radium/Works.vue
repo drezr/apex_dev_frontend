@@ -300,7 +300,7 @@
           dark
           prominent
         >
-          <div class="px-3" style="white-space: pre;">
+          <div class="px-3" style="white-space: pre-line;">
             <big>{{ message.message }}</big>
           </div>
 
