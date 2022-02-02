@@ -117,8 +117,6 @@
                 v-model="folders[selected_folder].children"
                 @change="update_children_position($event, folders[selected_folder])"
                 :group="{name: 'drag', pull: !control_key_pressed ? true : 'clone', put: true}"
-                :animation="100"
-                easing="cubic-bezier(1, 0, 0, 1)"
                 handle=".handle"
                 style="height: 100%;"
                 @start="set_is_grabbing(true); check_is_file($event);"
@@ -857,6 +855,18 @@ export default {
       }
 
       this.control_key_pressed = false
+
+      let position_updates = this.$set_position_updates(parent)
+      
+      await this.$http.post('element', {
+        'action': 'position',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': parent.type,
+        'element_id': parent.id,
+        'position_updates': position_updates,
+      })
     },
 
     get_day_color(date) {

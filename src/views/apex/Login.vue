@@ -214,6 +214,11 @@ For reset password button disabling
   - Display an error message.
 */
     async login() {
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+
       this.login_email = this.login_email.toLowerCase()
       this.login_email = this.login_email.replaceAll(/\s/g,'')
 
