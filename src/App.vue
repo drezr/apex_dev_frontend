@@ -72,6 +72,8 @@ export default {
 
       document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
       document.cookie = `username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
 
       setTimeout(() => {
         this.$store.commit('set_logged_profile', null)

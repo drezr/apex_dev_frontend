@@ -151,6 +151,11 @@ export default {
   },
 
   async created() {
+    document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+    document.cookie = `username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+    document.cookie = `sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+    document.cookie = `csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+
     this.handler = (e) => {
       if (e.keyCode == 13) {
         if (this.mode == 'login') {
