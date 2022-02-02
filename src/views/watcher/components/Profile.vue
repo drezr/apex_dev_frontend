@@ -185,6 +185,7 @@ export default {
   methods: {
     async get_quota(end) {
       this.quota_toggled = true
+      this.quota_loading = true
 
       let request = await this.$http.get('quotalight', {
         'end': end,
