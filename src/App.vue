@@ -76,7 +76,7 @@ export default {
       setTimeout(() => {
         this.$store.commit('set_logged_profile', null)
         this.$router.push({'path': '/login'})
-      }, 1000)
+      }, 100)
     },
 
     set_language() {
