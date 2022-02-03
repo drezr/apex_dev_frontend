@@ -53,6 +53,10 @@ export default {
         return this.$has_xs(['radium_is_editor'])
       }
 
+      else if (this.$current_view == 'worksprintable') {
+        return this.$has_xs(['radium_is_editor'])
+      }
+
       else if (this.$current_view == 'board') {
         return this.$has_xs(['planner_is_editor'])
       }
