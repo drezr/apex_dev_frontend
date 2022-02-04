@@ -367,7 +367,7 @@
     </div>
 
     <div
-      v-if="foreign_profiles.length > 0"
+      v-if="foreign_profiles.length > 0 && teammates_object.type != 'part'"
       style="width: fit-content; margin: auto;"
       class="mt-3"
     >
