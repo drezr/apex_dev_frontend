@@ -2099,7 +2099,12 @@ export default {
               "fr": "Chantiers",
               "nl": "Werven",
               "en": "Works"
-            }
+            },
+            "clear_is_edited":{
+              "fr": "Acquitter la modification",
+              "nl": "Erken verandering",
+              "en": "Acknowledge change"
+            },
           },
 
 

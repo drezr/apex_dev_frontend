@@ -77,6 +77,12 @@
           $current_component.palette && !edit_mode ? 'work-column-value-painter' : '',
         ]"
       >
+        <div
+          v-if="self.columns[column_config.name].is_edited && !edit_mode"
+          class="work-is-edited"
+          :title="lang.views.radium.clear_is_edited[lg]"
+          @click="clear_is_edited(self.columns[column_config.name])"
+        ></div>
 
 
         <!-- ############## Textarea ############## -->
@@ -301,8 +307,6 @@
             >
               <v-icon color="white">mdi-delete</v-icon>
             </div>
-
-
           </div>
         </VueDraggable>
       </div>
@@ -1104,6 +1108,7 @@ export default {
           'color': this.self.color,
           'columns': columns,
           'logs': logs,
+          'is_new': this.self.is_new ? this.self.is_new : false,
         },
       })
 
@@ -1111,6 +1116,13 @@ export default {
         for (let attr in column) {
           if (attr != 'rows') {
             this.self.columns[column.name][attr] = column[attr]
+            if (this.self.is_new) {
+              this.self.columns[column.name].is_edited = false
+            }
+
+            else {
+              this.self.columns[column.name].is_edited = true
+            }
           }
         }
 
@@ -1118,6 +1130,7 @@ export default {
       }
 
       this.original_self = this.$tool.deepcopy(this.self)
+      this.self.is_new = false
     },
 
     async remove() {
@@ -1316,6 +1329,20 @@ export default {
       this.link_radiums_snackbar = true
 
       this.link_radiums_loading = false
+    },
+
+    async clear_is_edited(column) {
+      await this.$http.post('works', {
+        'action': 'clear_is_edited',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'element_type': this.self.type,
+        'element_id': this.self.id,
+        'value': column.id,
+      })
+
+      column.is_edited = false
     },
   },
 
@@ -1593,6 +1620,22 @@ export default {
 .work-textarea:disabled {
   color: black;
   cursor: text;
+}
+
+.work-is-edited {
+  width: 16px;
+  height: 16px;
+  background-color: #fc0303;
+  border-radius: 8px;
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  cursor: pointer;
+  border: 2px white solid;
+}
+
+.work-is-edited:hover {
+  background-color: #ff7a7a;
 }
 
 </style>

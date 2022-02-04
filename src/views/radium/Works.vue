@@ -497,6 +497,7 @@ export default {
       let work = request.work
       work.newly_created = true
       this.filtered_works.push(work)
+      work.is_new = true
 
       setTimeout(() => {
         document.getElementById('main-frame').scrollTop = 999999999
