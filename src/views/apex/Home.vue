@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 20px;">
-      <v-alert
+<!--       <v-alert
         text
         color="info"
         type="info"
@@ -78,12 +78,12 @@
             </small></i>
           </div>
         </div>
-      </v-alert>
+      </v-alert> -->
 
 
       <div class="mx-auto" style="max-width: 600px;">
         <v-card
-          class="mt-5 mx-3"
+          class="mt-12 mx-3"
           max-width="600"
           v-if="user_teams.length > 0"
         >
