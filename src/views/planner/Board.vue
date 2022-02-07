@@ -130,7 +130,7 @@
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
-                  :key="i + child.id"
+                  :key="i + child.id + child.type"
                   :data-type="child.type"
                 >
                   <Task
@@ -242,7 +242,7 @@
               >
                 <div
                   v-for="(child, i) in date.data.children"
-                  :key="i + child.id"
+                  :key="String(i) + String(child.id) + child.type"
                   class="board-date-children-frame"
                   :data-type="child.type"
                 >
