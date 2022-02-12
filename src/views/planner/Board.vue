@@ -41,7 +41,7 @@
 
           {{ lang.views.planner.planned[lg] }}
 
-          <div class="board-simplified-switch">
+<!--           <div class="board-simplified-switch">
             {{ lang.views.planner.board_simplified[lg] }}
 
             <v-switch
@@ -50,7 +50,7 @@
               hide-details
               @change="update_simplified()"
             ></v-switch>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -660,7 +660,8 @@ export default {
       'year': this.$current_year,
     })
 
-    this.simplified = this.$logged_profile.pref_planner_simplified
+    this.simplified = true
+    // this.simplified = this.$logged_profile.pref_planner_simplified
 
     this.team = this.request.team
     this.profiles = this.request.team.profiles
