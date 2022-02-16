@@ -229,6 +229,19 @@
           />
 
           <CustomButton
+            v-if="detail_full_object.type == 'cell'"
+            :icon="'mdi-clock-time-four-outline'"
+            :fab="true"
+            :dark="true"
+            :color="'blue-grey'"
+            :elevation="1"
+            :small="true"
+            class="mr-2"
+            :tooltip="lang.views.radium.log_title[lg]"
+            @click="open_log_dialog(detail_full_object.id)"
+          />
+
+          <CustomButton
             :icon="'mdi-pencil'"
             :fab="true"
             :color="'teal'"
@@ -256,6 +269,58 @@
             :disabled="add_child_loading"
           />
         </div>
+      </div>
+    </div>
+  </CustomDialog>
+
+
+  <CustomDialog
+    :open="log_dialog"
+    :width="800"
+    :title_text="lang.views.radium.log_title[lg]"
+    :title_icon="'mdi-clock-time-four-outline'"
+    @cancel="log_dialog = false"
+  >
+    <Loader
+      :size="100"
+      :width="10"
+      :mt="120"
+      :mb="100"
+      v-if="log_dialog_loading"
+    />
+
+    <div class="mt-3" v-else>
+      <v-simple-table v-if="logs.length > 0">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                {{ lang.generic.log_edited_by[lg] }}
+              </th>
+              <th class="text-left">
+                {{ lang.generic.log_new_value[lg] }}
+              </th>
+              <th class="text-left">
+                {{ lang.generic.log_old_value[lg] }}
+              </th>
+              <th class="text-left">
+                {{ lang.generic.log_datetime[lg] }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(log, i) in logs" :key="i">
+              <td><b>{{ log.author }}</b></td>
+              <td class="work-log-cell">{{ log.new_value }}</td>
+              <td class="work-log-cell">{{ log.old_value }}</td>
+              <td>{{ $tool.format_datetime(log.date) }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+
+      <div class="pa-16 d-flex justify-center" v-else>
+        {{ lang.views.radium.log_no_log[lg] }}
       </div>
     </div>
   </CustomDialog>
@@ -326,6 +391,9 @@ export default {
       update_timer: null,
       copy_loading: false,
       move_loading: false,
+      log_dialog: false,
+      log_dialog_loading: false,
+      logs: Array(),
     }
   },
 
@@ -873,6 +941,24 @@ export default {
       }
 
       this.move_loading = false
+    },
+
+    async open_log_dialog(cell_id) {
+      this.log_dialog = true
+      this.log_dialog_loading = true
+
+      this.request = await this.$http.get('logs', {
+        'cell_id': cell_id,
+      })
+
+      this.logs = this.request.logs
+
+      for (let log of this.logs) {
+        log.old_value = log.old_value.replaceAll('&#%$', ' | ')
+        log.new_value = log.new_value.replaceAll('&#%$', ' | ')
+      }
+
+      this.log_dialog_loading = false
     },
   },
 

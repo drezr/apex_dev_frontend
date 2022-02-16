@@ -5,6 +5,53 @@
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 20px;">
+      <v-alert
+        text
+        color="info"
+        type="info"
+        outlined
+        max-width="600"
+        class="mx-auto mt-5"
+        border="left"
+      >
+        <div @click="show_changelog = !show_changelog" style="cursor: pointer;">
+          <b>Ajout de fonctionnalités !</b> (16/02/2022) <small><i>(cliquez ici pour plus d'informations)</i></small>
+          <v-icon class="float-right">
+            {{ show_changelog ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+          </v-icon>
+        </div>
+
+        <div v-if="show_changelog" class="mt-5">
+          Deux nouvelles fonctionnalités sont disponibles dans Apex.
+
+          <v-divider class="my-9"></v-divider>
+
+          L'historique des modifications d'une cellule Watcher est maintenant disponible.<br>
+          Dans la fenêtre d'informations supplémentaires d'une cellule, cliquez sur le bouton en dessous à droite de la fenêtre :<br><br>
+
+          <img src="https://media.apex.wf/cell_log_1.png" style="width: 100%; color: red !important;"><br><br>
+
+          Vous obtiendrez la liste des modifications réalisées sur cette cellule :<br><br>
+
+          <img src="https://media.apex.wf/cell_log_2.png" style="width: 100%; color: red !important;">
+
+          <v-divider class="my-9"></v-divider>
+
+          Lors d'une copie d'un élément dans Planner (tâche ou note) à partir d'un jour vers un autre, la liste des participants est également copiée vers le nouveau jour.<br><br>
+
+          <img src="https://media.apex.wf/planner_teammates_copy.png" style="width: 100%; color: red !important;">
+
+          <div class="mt-5">
+            <i><small>
+              Apex est toujours en développement.<br>
+              N'hésitez pas à poser vos questions, faire parvenir vos rapports de bugs et demandes d'améliorations à <b>ronan.dumont@infrabel.be</b>
+            </small></i>
+          </div>
+        </div>
+      </v-alert>
+
+
+
 <!--       <v-alert
         text
         color="info"
@@ -83,7 +130,7 @@
 
       <div class="mx-auto" style="max-width: 600px;">
         <v-card
-          class="mt-12 mx-3"
+          class="mt-6 mx-3"
           max-width="600"
           v-if="user_teams.length > 0"
         >

@@ -1951,9 +1951,9 @@ export default {
               "en": "The third box of the participants' cells has been overwritten in the Watcher calendar."
             },
             "log_title":{
-              "fr": "Historique des modifications de la colonne",
-              "nl": "Geschiedenis van kolomwijziging",
-              "en": "History of columns updates"
+              "fr": "Historique des modifications de la cellule",
+              "nl": "Geschiedenis van celwisseling",
+              "en": "Cell modification history"
             },
             "log_no_log":{
               "fr": "Pas de modification pour cette cellule.",
