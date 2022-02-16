@@ -30,6 +30,7 @@
             {{ teammate.name }}{{ i == part.teammates.length - 1 ? '' : ',' }}
           </div>
         </div>
+
         <div class="tooltip-child-frame">
           <div class="d-flex justify-center align-center mr-3">
             <img :src="$tool.get_logo('radium_30x30')" />
@@ -59,7 +60,7 @@
         class="tooltip-margin-bottom"
       >
         <div
-          v-if="child.type == 'task' && child.teammates.length > 0"
+          v-if="(child.type == 'task' || child.type == 'note') && child.teammates.length > 0"
           class="tooltip-teammates"
         >
           <div

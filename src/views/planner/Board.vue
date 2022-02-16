@@ -805,6 +805,8 @@ export default {
             'view': this.$current_view,
             'team_id': this.$current_team_id,
             'app_id': this.$current_app_id,
+            'parent_type': this.move_old_parent.type,
+            'parent_id': this.move_old_parent.id,
             'new_parent_type': this.move_new_parent.type,
             'new_parent_id': this.move_new_parent.id,
             'new_parent_date': this.move_new_parent.date,
