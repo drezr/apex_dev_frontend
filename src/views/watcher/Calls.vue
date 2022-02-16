@@ -214,11 +214,13 @@ export default {
     visible_profiles() {
       let visible_profiles = Array()
 
-      for (let profile of this.team.profiles) {
+      for (let profile of this.team.profiles.filter(p => p.link.watcher_is_visible)) {
         if (this.$has_xs(['watcher_can_see_cells']) || profile.id == this.$logged_profile.id) {
           visible_profiles.push(profile)
         }
       }
+
+      visible_profiles.sort((a, b) => a.link.position - b.link.position)
       
       return visible_profiles
     },
