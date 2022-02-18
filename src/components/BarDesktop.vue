@@ -12,6 +12,7 @@
     >
       <router-link class="navigation" :to="'/'">
         <img :src="$tool.get_logo('apex_50x50')" class="logo" />
+
         <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">APEX</span>
       </router-link>
     </v-badge>
@@ -21,6 +22,7 @@
 
       <router-link class="navigation" :to="`/team/${$current_team_id}`">
         <img :src="$tool.get_logo('hub_50x50')" class="logo" />
+
         <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">
           {{ lang.generic.team[lg].toUpperCase() }}
         </span>
@@ -32,6 +34,7 @@
 
       <router-link class="navigation" :to="`/myapex`">
         <img :src="$tool.get_logo('myapex_50x50')" class="logo" />
+
         <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">MYAPEX</span>
       </router-link>
     </div>
@@ -41,6 +44,7 @@
 
       <router-link class="navigation" :to="app_path">
         <img :src="$tool.get_logo($route.meta.app + '_50x50')" class="logo" />
+
         <span class="text-h6 ml-3 mr-3" v-if="$mobile_breakpoint">{{ $route.meta.app.toUpperCase() }}</span>
       </router-link>
     </div>
@@ -55,6 +59,7 @@
         v-on="on"
       >
         <v-icon class="user-icon">mdi-account-circle</v-icon>
+        
         <span v-if="$mobile_breakpoint">
           {{ $logged_profile.name }}
         </span>

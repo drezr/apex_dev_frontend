@@ -19,6 +19,10 @@ import Project from '@/views/draft/Project.vue'
 import ProjectPrintable from '@/views/draft/ProjectPrintable.vue'
 import Contacts from '@/views/nexus/Contacts.vue'
 
+import CalendarMobile from '@/views/mobile/CalendarMobile.vue'
+import QuotaMobile from '@/views/mobile/QuotaMobile.vue'
+import WorksMobile from '@/views/mobile/WorksMobile.vue'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -212,6 +216,37 @@ const router = new VueRouter({
         'app': 'nexus',
         'view': 'myapexcontacts',
         'title': 'Nexus',
+      },
+    },
+    {
+      path: '/mobile',
+      alias: '/mobile/calendar/day/:day/month/:month/year/:year',
+      name: 'CalendarMobile',
+      component: CalendarMobile,
+      meta: {
+        'app': 'mobile',
+        'view': 'calendarmobile',
+        'title': 'Apex Mobile',
+      },
+    },
+    {
+      path: '/mobile/quota/year/:year',
+      name: 'QuotaMobile',
+      component: QuotaMobile,
+      meta: {
+        'app': 'mobile',
+        'view': 'quotamobile',
+        'title': 'Apex Mobile',
+      },
+    },
+    {
+      path: '/mobile/works/month/:month/year/:year',
+      name: 'WorksMobile',
+      component: WorksMobile,
+      meta: {
+        'app': 'mobile',
+        'view': 'worksmobile',
+        'title': 'Apex Mobile',
       },
     },
   ]

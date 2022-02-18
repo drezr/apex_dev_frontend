@@ -1,10 +1,100 @@
 <template>
 
 <v-app>
-  <div class="main-frame" id="main-frame">
+  <div
+    class="main-frame"
+    id="main-frame"
+    v-if="!$current_view.includes('mobile')"
+  >
     <BarDesktop v-if="$logged_profile" />
 
     <router-view :key="$route.fullPath" style="max-height: 0px;" />
+  </div>
+
+  <div
+    class="mobile-frame"
+    id="mobile-frame"
+    v-else-if="$current_view.includes('mobile') && !mobile_loading"
+  >
+    <BarMobile v-if="$logged_profile" />
+
+    <router-view :key="$route.fullPath" style="max-height: 0px;" />
+
+    <v-navigation-drawer
+      v-model="drawer"
+      width="300"
+      absolute
+      temporary
+    >
+      <div class="d-flex justify-space-between ma-3">
+        <div class="drawer-profile-name">
+          <b>
+            <v-icon style="position: relative; top: -3px;">mdi-account</v-icon>
+            {{ $logged_profile ? $logged_profile.name : '' }}
+          </b>
+        </div>
+
+        <v-icon @click="drawer = false">
+          mdi-close
+        </v-icon>
+      </div>
+
+      <v-divider class="my-3"></v-divider>
+
+      <v-list
+        nav
+        dense
+      >
+        <v-list-item-group
+          v-model="group"
+          active-class="blue--text text--accent-4"
+        >
+          <v-list-item @click="go_to('calendar')">
+            <v-list-item-icon>
+              <v-icon>mdi-calendar-check</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-title>
+              {{ lang.views.mobile.my_calendar[lg] }}
+            </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="go_to('quota')">
+            <v-list-item-icon>
+              <v-icon>mdi-calendar-range</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-title>
+              {{ lang.views.mobile.my_quotas[lg] }}
+            </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="go_to('works')">
+            <v-list-item-icon>
+              <v-icon>mdi-hammer-wrench</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-title>
+              {{ lang.views.mobile.my_works[lg] }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
+      <template v-slot:append>
+        <div class="pa-2">
+          <CustomButton
+            :text="lang.generic.disconnect[lg]"
+            :color="'blue'"
+            :dark="true"
+            :icon="'mdi-logout'"
+            :block="true"
+            style="width: 100%;"
+            @click="logout()"
+          />
+        </div>
+      </template>
+    </v-navigation-drawer>
   </div>
 </v-app>
 
@@ -14,12 +104,14 @@
 <script>
 
 import BarDesktop from '@/components/BarDesktop.vue'
+import BarMobile from '@/components/BarMobile.vue'
 
 export default {
   name: 'App',
 
   components: {
     BarDesktop,
+    BarMobile,
   },
 
   props: {
@@ -28,7 +120,9 @@ export default {
 
   data() {
     return {
-
+      drawer: false,
+      group: 0,
+      mobile_loading: true,
     }
   },
 
@@ -96,10 +190,34 @@ export default {
         this.$store.commit('set_language', language)
       }
     },
+
+    go_to(view) {
+      this.drawer = false
+      let route = null
+
+      if (view == 'calendar') {
+        route = `/mobile/calendar/day/${this.$current_day}/month/${this.$current_month}/year/${this.$current_year}`
+      }
+
+      else if (view == 'quota') {
+        route = `/mobile/quota/year/${this.$current_year}`
+      }
+
+      else if (view == 'works') {
+        route = `/mobile/works/month/${this.$current_month}/year/${this.$current_year}`
+      }
+
+      if (this.$route.fullPath != route) {
+        this.$router.push(route)
+      }
+    },
   },
 
   watch: {
-
+    $logged_profile(value) {
+      if (value) this.mobile_loading = false
+      else this.mobile_loading = true
+    }
   },
 }
 
@@ -235,6 +353,18 @@ html {
   padding: 0 !important;
   margin: 0 !important;
   overflow: auto !important;
+}
+
+.mobile-frame {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.drawer-profile-name {
+  white-space: nowrap;
+  width: 240px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 </style>

@@ -2337,6 +2337,26 @@ export default {
               "nl": "Er is nog geen model.",
               "en": "There is no model yet."
             }
+          },
+
+
+
+          "mobile": {
+            "my_calendar":{
+              "fr": "Mon calendrier",
+              "nl": "Mijn kalender",
+              "en": "My calendar"
+            },
+            "my_quotas":{
+              "fr": "Mes quotas",
+              "nl": "Mijn quota",
+              "en": "My quotas"
+            },
+            "my_works":{
+              "fr": "Mes chantiers",
+              "nl": "Mijn werk",
+              "en": "My works"
+            },
           }
         }
       },
