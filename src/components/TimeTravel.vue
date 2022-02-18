@@ -150,7 +150,7 @@ export default {
 
     mode() {
       let day_mode_views = ['myapexcontacts', ]
-      let month_mode_views = ['calendar', 'calls', 'works', 'board', ]
+      let month_mode_views = ['calendar', 'calls', 'works', 'board', 'worksmobile', ]
 
       if (month_mode_views.includes(this.$current_view)) {
         return 'month'
@@ -300,6 +300,10 @@ export default {
 
       else if (this.$current_view == 'board') {
         this.$router.push(`/team/${this.$current_team_id}/planner/${this.$current_app_id}/board/month/${Number(month)}/year/${year}`)
+      }
+
+      else if (this.$current_view == 'worksmobile') {
+        this.$router.push(`/mobile/works/month/${Number(month)}/year/${year}`)
       }
     },
   },
