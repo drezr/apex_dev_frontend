@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 20px;">
-      <v-alert
+<!--       <v-alert
         text
         color="info"
         type="info"
@@ -48,7 +48,7 @@
             </small></i>
           </div>
         </div>
-      </v-alert>
+      </v-alert> -->
 
 
 

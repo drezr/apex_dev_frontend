@@ -57,7 +57,10 @@
 
         <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
           <div v-if="selected_type.toLowerCase() == type">
-            <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
+            <div
+              class="quota-table mt-8 blue lighten-3 blue--text text--darken-4"
+              v-if="!leaves_data.find(ld => ld.code == selected_type).kind.includes('counter')"
+            >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
                 <div class="quota-table-value">{{ base_quotas[type] }}</div>
@@ -149,7 +152,10 @@
               </div>
             </div>
 
-            <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
+            <div
+              class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4"
+              v-if="!leaves_data.find(ld => ld.code == selected_type).kind.includes('counter')"
+            >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
                 <div class="quota-table-value">{{ computed_quotas[type] }}</div>

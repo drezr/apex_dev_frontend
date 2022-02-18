@@ -1,11 +1,16 @@
 <template>
 
 <div>
-  <Loader :size="100" :width="10" :mt="200" v-if="loading" />
+  <NavigationBar class="my-3" />
+  
+  <Loader
+    v-if="loading"
+    class="mt-16"
+    :size="70"
+  />
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 5px;">
-      <NavigationBar class="my-3" />
 
       <div v-if="($has_xs(['watcher_can_see_quotas']) || profile.id == $logged_profile.id) && selected_type">
         <div  class="d-flex flex-wrap justify-center mx-auto" style="max-width: 350px;">
@@ -42,7 +47,10 @@
 
         <div v-for="(months, type) in sorted_detailed_quotas" :key="type">
           <div v-if="selected_type.toLowerCase() == type">
-            <div class="quota-table mt-8 blue lighten-3 blue--text text--darken-4">
+            <div
+              class="quota-table mt-8 blue lighten-3 blue--text text--darken-4"
+              v-if="!leaves_data.find(ld => ld.code == selected_type).kind.includes('counter')"
+            >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_base_quota[lg] }}</div>
                 <div class="quota-table-value">{{ base_quotas[type] }}</div>
@@ -134,7 +142,10 @@
               </div>
             </div>
 
-            <div class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4">
+            <div
+              class="quota-table mt-5 mb-8 blue lighten-3 blue--text text--darken-4"
+              v-if="!leaves_data.find(ld => ld.code == selected_type).kind.includes('counter')"
+            >
               <div class="quota-table-row">
                 <div class="quota-table-title">{{ lang.views.watcher.quota_left[lg] }}</div>
                 <div class="quota-table-value">{{ computed_quotas[type] }}</div>

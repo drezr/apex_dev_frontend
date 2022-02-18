@@ -66,6 +66,44 @@
 
   <div v-else>
     <v-card
+      v-if="$current_view == 'worksmobile'"
+      :color="self.work.color + ' darken-1'"
+      class="mb-1 d-flex justify-space-between align-center"
+      dark
+    >
+      <div class="ml-2">
+        <small>
+            <b>
+              {{ $tool.format_date_no_year(self.date) }} |
+              {{ self.shift.shift ? self.shift.shift : '---' }}
+            </b>
+        </small>
+      </div>
+
+      <div>
+        <CustomButton
+          :disabled="ilts.length == 0"
+          :icon="'mdi-file-pdf'"
+          :text="lang.generic.ilt[lg]"
+          :xsmall="true"
+          :menus="ilts_list"
+          @menu_action="get_file($event)"
+          class="mr-1 mb-1"
+        />
+
+        <CustomButton
+          :disabled="bnxs.length == 0"
+          :icon="'mdi-file-pdf'"
+          :text="lang.generic.bnx[lg]"
+          :xsmall="true"
+          :menus="bnxs_list"
+          @menu_action="get_file($event)"
+          class="mr-1 my-1"
+        />
+      </div>
+    </v-card>
+
+    <v-card
       :color="self.work.color + ' lighten-4'"
       class="mb-1 pa-1 d-flex justify-space-between align-center"
     >

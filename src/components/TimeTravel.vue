@@ -305,6 +305,10 @@ export default {
       else if (this.$current_view == 'worksmobile') {
         this.$router.push(`/mobile/works/month/${Number(month)}/year/${year}`)
       }
+
+      else if (this.$current_view == 'quotamobile') {
+        this.$router.push(`/mobile/quota/year/${year}`)
+      }
     },
   },
 

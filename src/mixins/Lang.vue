@@ -2357,6 +2357,11 @@ export default {
               "nl": "Mijn werk",
               "en": "My works"
             },
+            "youre_participating":{
+              "fr": "Vous participez à ce chantier",
+              "nl": "Je neemt deel aan dit werk",
+              "en": "You participate in this work"
+            },
           }
         }
       },
