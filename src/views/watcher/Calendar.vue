@@ -448,12 +448,15 @@ export default {
         
         let obj = new Date(date)
         let day_number = obj.getDate()
+        let name_short_en = obj.toLocaleDateString(
+          'en-EN', {weekday: 'short'})
         let name_long = obj.toLocaleDateString(language_code, {weekday: 'long'})
         let name_short = name_long.substring(0,3)
 
         dates.push({
           'name_short': name_short,
           'name_long': name_long,
+          'name_short_en': name_short_en,
           'day_number': day_number,
           'month': month + 1,
           'year': year,

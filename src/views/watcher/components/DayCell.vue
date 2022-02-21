@@ -182,8 +182,8 @@ export default {
   computed: {
     cell_backgroud() {
       if (this.date.is_holiday) return 'holi'
-      else if (this.date.name_short == 'sam') return 'sat'
-      else if (this.date.name_short == 'dim') return 'sun'
+      else if (this.date.name_short_en == 'Sat') return 'sat'
+      else if (this.date.name_short_en == 'Sun') return 'sun'
       else return 'week'
     },
 
