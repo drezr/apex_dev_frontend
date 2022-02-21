@@ -46,7 +46,7 @@
         dense
       >
         <v-list-item-group
-          v-model="group"
+          v-model="mobile_view"
           active-class="blue--text text--accent-4"
         >
           <v-list-item @click="go_to('calendar')">
@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       drawer: false,
-      group: 0,
+      mobile_view: 0,
       mobile_loading: true,
     }
   },
@@ -129,6 +129,14 @@ export default {
   async created() {
     this.set_language()
     this.log_user()
+
+    if (this.$current_view == 'quotamobile') {
+      this.mobile_view = 1
+    }
+
+    else if (this.$current_view == 'worksmobile') {
+      this.mobile_view = 2
+    }
   },
 
   computed: {
@@ -196,7 +204,7 @@ export default {
       let route = null
 
       if (view == 'calendar') {
-        route = `/mobile/calendar/day/${this.$current_day}/month/${this.$current_month}/year/${this.$current_year}`
+        route = `/mobile/calendar/month/${this.$current_month}/year/${this.$current_year}`
       }
 
       else if (view == 'quota') {

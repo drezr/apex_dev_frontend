@@ -203,7 +203,9 @@ export default {
 
   computed: {
     x() {
-      let scroll_left = document.getElementById('main-frame').scrollLeft
+      let main_frame = document.getElementById('main-frame')
+
+      let scroll_left = main_frame ? main_frame.scrollLeft : 0
 
       return this.offset_x - 178 - scroll_left
     },
@@ -213,7 +215,9 @@ export default {
     set_y_position() {
       let height_delta = window.innerHeight - this.offset_y
       let height_center = window.innerHeight / 2
-      let scroll_top = document.getElementById('main-frame').scrollTop
+
+      let main_frame = document.getElementById('main-frame')
+      let scroll_top = main_frame ? main_frame.scrollTop : 0
 
       if (height_delta > height_center) {
         if (this.type == 'day') {

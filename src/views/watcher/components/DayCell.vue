@@ -101,7 +101,7 @@
   </div>
 
   <Tooltip
-    v-if="hover && (date[type].has_call || date[type].has_content)"
+    v-if="hover && (date[type].has_call || date[type].has_content) && $current_view != 'calendarmobile'"
     :date="date"
     :type="type"
     :offset_x="offset_x"
@@ -188,10 +188,14 @@ export default {
     },
 
     offset_x() {
+      if (!document.getElementById('main-frame')) return 0
+
       return this.$refs.frame.getBoundingClientRect().x + document.getElementById('main-frame').scrollLeft
     },
 
     offset_y() {
+      if (!document.getElementById('main-frame')) return 0
+
       return this.$refs.frame.getBoundingClientRect().y + document.getElementById('main-frame').scrollTop
     },
   },

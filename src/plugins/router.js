@@ -220,7 +220,16 @@ const router = new VueRouter({
     },
     {
       path: '/mobile',
-      alias: '/mobile/calendar/day/:day/month/:month/year/:year',
+      name: '_CalendarMobile',
+      component: CalendarMobile,
+      meta: {
+        'app': 'mobile',
+        'view': 'calendarmobile',
+        'title': 'Apex Mobile',
+      },
+    },
+    {
+      path: '/mobile/calendar/month/:month/year/:year',
       name: 'CalendarMobile',
       component: CalendarMobile,
       meta: {

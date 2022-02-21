@@ -50,7 +50,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        :value="months.find(m => m.month_number == $current_month).month_name"
+        :value="months.find(m => Number(m.month_number) == Number($current_month)).month_name"
         :label="lang.views.nexus.select_date[lg]"
         readonly
         v-bind="attrs"
@@ -124,10 +124,11 @@ export default {
   },
 
   created() {
-    this.current_month = this.$current_month
-    this.current_year = this.$current_year
+    this.current_day = this.$tool.deepcopy(this.$current_day)
+    this.current_month = this.$tool.deepcopy(this.$current_month)
+    this.current_year = this.$tool.deepcopy(this.$current_year)
 
-    this.date = `${this.$route.params.year}-${this.$route.params.month}-${this.$route.params.day}`
+    this.date = `${this.current_year}-${this.current_month}-${this.current_day}`
   },
 
   computed: {
@@ -150,7 +151,7 @@ export default {
 
     mode() {
       let day_mode_views = ['myapexcontacts', ]
-      let month_mode_views = ['calendar', 'calls', 'works', 'board', 'worksmobile', ]
+      let month_mode_views = ['calendar', 'calls', 'works', 'board', 'worksmobile', 'calendarmobile', ]
 
       if (month_mode_views.includes(this.$current_view)) {
         return 'month'
@@ -259,7 +260,13 @@ export default {
           target_year = month == 12 ? String(year + 1) : String(year)
         }
 
-        this.$router.replace({params: {month: target_month, year: target_year}})
+        if (this.$current_view == 'calendarmobile') {
+          this.$router.push(`/mobile/calendar/month/${Number(target_month)}/year/${target_year}`)
+        }
+
+        else {
+          this.$router.replace({params: {month: target_month, year: target_year}})
+        }
       }
 
       else if (this.mode == 'year') {
@@ -300,6 +307,10 @@ export default {
 
       else if (this.$current_view == 'board') {
         this.$router.push(`/team/${this.$current_team_id}/planner/${this.$current_app_id}/board/month/${Number(month)}/year/${year}`)
+      }
+
+      else if (this.$current_view == 'calendarmobile') {
+        this.$router.push(`/mobile/calendar/month/${Number(month)}/year/${year}`)
       }
 
       else if (this.$current_view == 'worksmobile') {
