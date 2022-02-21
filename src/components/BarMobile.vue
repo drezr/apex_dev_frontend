@@ -1,6 +1,6 @@
 <template>
 
-<div class="bar-mobile-frame teal lighten-2">
+<div class="bar-mobile-frame lighten-2" style="background-color: #00AEB3;">
   <div class="d-flex">
     <div class="d-flex" style="width: 33%;">
       <v-icon

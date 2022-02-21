@@ -83,6 +83,37 @@
 
       <template v-slot:append>
         <div class="pa-2">
+          <div class="text-center my-6">
+            <v-icon class="mr-3 mb-1">mdi-translate</v-icon>
+            {{ lang.views.home.select_language[lg] }}
+
+            <div class="d-flex justify-space-around mt-3">
+              <div
+                class="cursor-pointer blue--text"
+                :class="is_language('fr') ? 'lang-selected' : ''"
+                @click="change_language(0)"
+              >
+                FR
+              </div>
+
+              <div
+                class="cursor-pointer blue--text"
+                :class="is_language('nl') ? 'lang-selected' : ''"
+                @click="change_language(1)"
+              >
+                NL
+              </div>
+
+              <div
+                class="cursor-pointer blue--text"
+                :class="is_language('en') ? 'lang-selected' : ''"
+                @click="change_language(2)"
+              >
+                EN
+              </div>
+            </div>
+          </div>
+
           <CustomButton
             :text="lang.generic.disconnect[lg]"
             :color="'blue'"
@@ -123,6 +154,7 @@ export default {
       drawer: false,
       mobile_view: 0,
       mobile_loading: true,
+      selected_language: null,
     }
   },
 
@@ -137,10 +169,27 @@ export default {
     else if (this.$current_view == 'worksmobile') {
       this.mobile_view = 2
     }
+
+    this.selected_language = this.languages.indexOf(this.languages.find(l => l.value == this.lg))
   },
 
   computed: {
-
+    languages() {
+      return [
+        {
+          'name': this.lang.views.home.language_french[this.lg],
+          'value': 'fr',
+        },
+        {
+          'name': this.lang.views.home.language_dutch[this.lg],
+          'value': 'nl',
+        },
+        {
+          'name': this.lang.views.home.language_english[this.lg],
+          'value': 'en',
+        },
+      ]
+    },
   },
 
   methods: {
@@ -218,6 +267,18 @@ export default {
       if (this.$route.fullPath != route) {
         this.$router.push(route)
       }
+    },
+
+    change_language(lg_index) {
+      let lg = this.languages[lg_index].value
+      this.selected_language = lg_index
+
+      document.cookie = `language=${lg}; expires=Thu, 31 Dec 2023 12:00:00 UTC;`
+      this.$store.commit('set_language', lg)
+    },
+
+    is_language(lg) {
+      return this.lg == lg
     },
   },
 
@@ -373,6 +434,10 @@ html {
   width: 240px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.lang-selected {
+  font-weight: bold;
 }
 
 </style>

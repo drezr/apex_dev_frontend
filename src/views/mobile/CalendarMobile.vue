@@ -272,9 +272,8 @@ export default {
         let day_number = obj.getDate()
         let name_short_en = obj.toLocaleDateString(
           'en-EN', {weekday: 'short'})
-        let name_short = obj.toLocaleDateString(
-          language_code, {weekday: 'short'}).slice(0, -1)
         let name_long = obj.toLocaleDateString(language_code, {weekday: 'long'})
+        let name_short = name_long.substring(0,3)
 
         dates.push({
           'name_short_en': name_short_en,
@@ -448,7 +447,7 @@ export default {
 .mobile-cell-dummy {
   width: 47px;
   height: 118px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 100, 190, 0.1);
   border-radius: 5px;
 }
 

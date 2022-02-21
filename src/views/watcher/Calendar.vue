@@ -444,11 +444,12 @@ export default {
       let dates = Array()
       
       while (date.getMonth() === month) {
+        let language_code = this.lg + '-' + this.lg.toUpperCase()
+        
         let obj = new Date(date)
         let day_number = obj.getDate()
-        let name_short = obj.toLocaleDateString(
-          'fr-FR', {weekday: 'short'}).slice(0, -1)
-        let name_long = obj.toLocaleDateString('fr-FR', {weekday: 'long'})
+        let name_long = obj.toLocaleDateString(language_code, {weekday: 'long'})
+        let name_short = name_long.substring(0,3)
 
         dates.push({
           'name_short': name_short,
