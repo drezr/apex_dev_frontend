@@ -425,11 +425,11 @@ export default {
 
 <style>
 
-.mobile-detail-dialog .v-dialog>.v-card>.v-card__subtitle, .v-dialog>.v-card>.v-card__text {
+/*.mobile-detail-dialog .v-dialog>.v-card>.v-card__subtitle, .v-dialog>.v-card>.v-card__text {
   padding-left: 10px !important;
   padding-right: 10px !important;
   min-height: 400px;
-}
+}*/
 
 </style>
 
