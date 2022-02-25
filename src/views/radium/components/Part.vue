@@ -341,7 +341,7 @@ export default {
     },
 
     edit_mode() {
-      return this.is_my_team && this.parent_cpnt.parent_cpnt.edit_mode
+      return (this.is_my_team && this.parent_cpnt.parent_cpnt.edit_mode && this.$is_editor) || this.$is_staff
     },
 
     is_my_team() {
