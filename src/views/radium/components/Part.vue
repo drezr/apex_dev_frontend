@@ -341,10 +341,20 @@ export default {
     },
 
     edit_mode() {
-      return (this.is_my_team && this.parent_cpnt.parent_cpnt.edit_mode && this.$is_editor) || (this.parent_cpnt.parent_cpnt.edit_mode && this.$is_staff)
+      return (this.can_edit && this.parent_cpnt.parent_cpnt.edit_mode && this.$is_editor) || (this.parent_cpnt.parent_cpnt.edit_mode && this.$is_staff)
     },
 
     is_my_team() {
+      let f = null
+
+      if (this.team && this.team.profiles) {
+        f = this.team.profiles.find(p => p.id == this.$logged_profile.id)
+      }
+      
+      return f ? true : false
+    },
+
+    can_edit() {
       let f = null
 
       if (this.team && this.team.profiles) {
