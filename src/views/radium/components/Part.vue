@@ -341,7 +341,7 @@ export default {
     },
 
     edit_mode() {
-      return (this.is_my_team && this.parent_cpnt.parent_cpnt.edit_mode && this.$is_editor) || this.$is_staff
+      return (this.is_my_team && this.parent_cpnt.parent_cpnt.edit_mode && this.$is_editor) || (this.parent_cpnt.parent_cpnt.edit_mode && this.$is_staff)
     },
 
     is_my_team() {
@@ -351,7 +351,7 @@ export default {
         f = this.team.profiles.find(p => p.id == this.$logged_profile.id)
       }
       
-      return f ? true : false
+      return f ? f.link.radium_is_editor : false
     },
 
     logged_profile_is_available() {
