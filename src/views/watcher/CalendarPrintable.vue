@@ -38,7 +38,7 @@
                          'grey darken-4 white--text']"
         >
           <span>
-          <b>{{ new Date(day.year, day.month, day.day_number).toLocaleString('fr-fr', { 'weekday': 'short' }).toUpperCase().slice(0, -1) }}</b><br>
+          <b>{{ day.name_short.toUpperCase() }}</b><br>
           {{ day.day_number }}
           </span>
         </div>
@@ -198,15 +198,19 @@ export default {
       let dates = Array()
       
       while (date.getMonth() === month) {
+        let language_code = this.lg + '-' + this.lg.toUpperCase()
+        
         let obj = new Date(date)
         let day_number = obj.getDate()
-        let name_short = obj.toLocaleDateString(
-          'fr-FR', {weekday: 'short'}).slice(0, -1)
-        let name_long = obj.toLocaleDateString('fr-FR', {weekday: 'long'})
+        let name_short_en = obj.toLocaleDateString(
+          'en-EN', {weekday: 'short'})
+        let name_long = obj.toLocaleDateString(language_code, {weekday: 'long'})
+        let name_short = name_long.substring(0,3)
 
         dates.push({
           'name_short': name_short,
           'name_long': name_long,
+          'name_short_en': name_short_en,
           'day_number': day_number,
           'month': month + 1,
           'year': year,
