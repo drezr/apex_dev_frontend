@@ -11,10 +11,10 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center" style="overflow-y: scroll;">
         <div
           class="d-flex flex-wrap"
-          style="max-width: 357px;"
+          style="max-width: 357px; overflow-y: scroll;"
         >
           <div
             v-for="(date, i) in dates"
