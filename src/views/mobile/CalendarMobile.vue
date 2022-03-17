@@ -11,9 +11,12 @@
 
   <transition name="fade">
     <div v-if="!loading">
-      <div class="d-flex justify-center" style="overflow-y: scroll;">
+      <div
+        class="d-flex justify-center hide-scrollbar"
+        style="overflow-y: scroll;"
+      >
         <div
-          class="d-flex flex-wrap"
+          class="d-flex flex-wrap hide-scrollbar"
           style="max-width: 357px; overflow-y: scroll;"
         >
           <div
