@@ -1307,8 +1307,8 @@ export default {
             },
             "calendar_detail_subtitle_cell":{
               "fr": "Pour ### le @@@",
-              "nl": "Voor ## op @@@",
-              "en": "For ## the @@@"
+              "nl": "Voor ### op @@@",
+              "en": "For ### the @@@"
             },
             "calendar_detail_short":{
               "fr": "Texte court",
