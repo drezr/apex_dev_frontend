@@ -63,6 +63,13 @@
           mdi-drag-horizontal-variant
         </v-icon>
 
+        <div
+          class="profile-circle"
+          :class="profile.link.watcher_color"
+        >
+          
+        </div>
+
         <v-list-item-content>
           <v-list-item-title v-text="profile.name"></v-list-item-title>
         </v-list-item-content>
@@ -300,6 +307,14 @@ export default {
 
 .border-bottom:not(:last-child) {
   border-bottom: 1px grey solid;
+}
+
+.profile-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 10px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
 </style>
