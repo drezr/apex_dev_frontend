@@ -130,7 +130,7 @@
               >
                 <div
                   v-for="(child, i) in folders[selected_folder].children"
-                  :key="i + child.id + child.type"
+                  :key="i + 'u' + child.id + child.type"
                   :data-type="child.type"
                 >
                   <Task
