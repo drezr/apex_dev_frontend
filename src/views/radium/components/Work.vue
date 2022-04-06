@@ -1121,7 +1121,7 @@ export default {
             }
 
             else {
-              this.self.columns[column.name].is_edited = true
+              this.self.columns[column.name].is_edited = column.is_edited
             }
           }
         }
