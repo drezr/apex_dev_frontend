@@ -412,7 +412,14 @@ export default {
       let children = this.$tool.get_fused_children(this.detail_full_object)
       children = this.$tool.deepcopy(children)
       this.$set(this.detail_full_object, 'children', children)
-      this.detail_full_object.parts.sort((a, b) => a.shift.shift.localeCompare(b.shift.shift))
+      
+      this.detail_full_object.parts.sort((a, b) => {
+        if (a.shift.shift && b.shift.shift) {
+          return a.shift.shift.localeCompare(b.shift.shift)
+        }
+        
+        return 0
+      })
 
       this.detail_dialog_loading = false
     },

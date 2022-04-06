@@ -172,7 +172,14 @@ export default {
         this.children = this.$tool.get_fused_children(request.day)
         this.children.sort((a, b) => a.link.position - b.link.position)
         this.parts = request.day.parts
-        this.parts.sort((a, b) => a.shift.shift.localeCompare(b.shift.shift))
+        
+        this.parts.sort((a, b) => {
+          if (a.shift.shift && b.shift.shift) {
+            return a.shift.shift.localeCompare(b.shift.shift)
+          }
+          
+          return 0
+        })
       }
 
       else if (this.type == 'cell') {
@@ -184,7 +191,14 @@ export default {
         this.children = this.$tool.get_fused_children(request.cell)
         this.children.sort((a, b) => a.link.position - b.link.position)
         this.parts = request.cell.parts
-        this.parts.sort((a, b) => a.shift.shift.localeCompare(b.shift.shift))
+
+        this.parts.sort((a, b) => {
+          if (a.shift.shift && b.shift.shift) {
+            return a.shift.shift.localeCompare(b.shift.shift)
+          }
+          
+          return 0
+        })
       }
 
       this.loading = false
