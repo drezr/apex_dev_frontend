@@ -2,9 +2,9 @@ const uuidv4 = require('uuid/v4')
 
 
 Date.prototype.getWeek = function() {
-    var onejan = new Date(this.getFullYear(),0,1)
-    var millisecsInDay = 86400000
-    return Math.ceil((((this - onejan) /millisecsInDay) + onejan.getDay()-1)/7) - 1
+    let startDate = new Date(this.getFullYear(), 0, 1)
+    var days = Math.floor((this - startDate) / (24 * 60 * 60 * 1000))
+    return Math.ceil((this.getDay() + 1 + days) / 7) - 1
 }
 
 function drag_dialog() {
