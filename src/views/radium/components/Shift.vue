@@ -1,6 +1,10 @@
 <template>
 
-<div class="shift-frame" style="width: 100%;">
+<div
+  class="shift-frame"
+  style="width: 100%;"
+  :style="small ? 'height: 33px' : ''"
+>
   <div class="shift-cell" style="width: calc(30% - 1px);">
     <div
       class="d-flex justify-center align-center lighten-3"
@@ -43,13 +47,14 @@
         :key="i"
         class="shift-date-color lighten-1"
         :class="color"
+        :style="small ? 'height: 5px;' : ''"
       ></div>
     </div>
 
     <v-combobox
       v-model="self.shift"
       :items="shift_types"
-      class="shift-combobox"
+      :class="small ? 'shift-combobox-small' : 'shift-combobox'"
       :style="`font-size: ${column.textsize}px;`"
       hide-details
       :append-icon="null"
@@ -64,6 +69,7 @@
         :key="i"
         class="shift-date-color lighten-1"
         :class="color"
+        :style="small ? 'height: 5px;' : ''"
       ></div>
     </div>
   </div>
@@ -100,6 +106,7 @@ export default {
     parent: Object,
     column: Object,
     edit_mode: Boolean,
+    small: Boolean,
   },
 
   data() {
@@ -255,7 +262,16 @@ export default {
 
 .shift-combobox input {
   text-align: center;
-  height: 31px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+}
+
+.shift-combobox-small input {
+  text-align: center;
+  height: 23px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -266,12 +282,25 @@ export default {
   color: black !important;
 }
 
+.shift-combobox-small input:disabled {
+  color: black !important;
+}
+
 .shift-combobox.v-text-field {
   padding: 0px;
   margin: 0px;
 }
 
+.shift-combobox-small.v-text-field {
+  padding: 0px;
+  margin: 0px;
+}
+
 .shift-combobox .v-input__slot:before {
+  border: none !important;
+}
+
+.shift-combobox-small .v-input__slot:before {
   border: none !important;
 }
 
@@ -281,7 +310,7 @@ export default {
 <style scoped>
 
 .shift-frame {
-  height: 50px;
+  height: 40px;
   display: flex;
   border-bottom: 1px grey solid;
 }
@@ -308,7 +337,7 @@ export default {
 }
 
 .shift-date-color {
-  height: 9px;
+  height: 7px;
   width: 50%;
 }
 

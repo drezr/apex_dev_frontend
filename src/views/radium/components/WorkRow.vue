@@ -4,6 +4,7 @@
   class="d-flex lighten-4"
   :class="parent_cpnt.edit_mode ? '' : self.bg_color"
   @click="set_color()"
+  style="width: 100%;"
 >
   <div
     v-for="(field, column_name) in config"

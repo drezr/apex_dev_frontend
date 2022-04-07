@@ -104,6 +104,7 @@
               :parent="self"
               :column="column_config"
               :edit_mode="edit_mode"
+              :small="true"
             />
 
             <div

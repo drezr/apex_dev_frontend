@@ -1815,6 +1815,93 @@ export default {
               "nl": "Verantwoordelijke",
               "en": "Supervisor"
             },
+
+
+
+            "column_title_principle":{
+              "fr": "Principe de planification",
+              "nl": "",
+              "en": "Planning principle"
+            },
+            "column_title_ctl_zx":{
+              "fr": "CTL Zx",
+              "nl": "CTL Zx",
+              "en": "CTL Zx"
+            },
+            "column_title_change_request":{
+              "fr": "Change Request",
+              "nl": "Change Request",
+              "en": "Change Request"
+            },
+            "column_title_prodigis":{
+              "fr": "Prodigis",
+              "nl": "Prodigis",
+              "en": "Prodigis"
+            },
+            "column_title_upm_detail":{
+              "fr": "Particularité demande UPM",
+              "nl": "",
+              "en": "UPM details"
+            },
+            "column_title_vhs_circulation":{
+              "fr": "Circulation sur VHS",
+              "nl": "",
+              "en": "VHS traffic"
+            },
+            "column_title_mht":{
+              "fr": "Mise HT",
+              "nl": "",
+              "en": "Shutdown"
+            },
+            "column_title_riparian":{
+              "fr": "Riverains",
+              "nl": "",
+              "en": "Riparians"
+            },
+            "column_title_massification_date":{
+              "fr": "Date réunion massification",
+              "nl": "",
+              "en": "Massification meeting date"
+            },
+            "column_title_service":{
+              "fr": "Service",
+              "nl": "",
+              "en": "Service"
+            },
+            "column_title_other_vehicles":{
+              "fr": "Autre engins",
+              "nl": "",
+              "en": "Other vehicles"
+            },
+            "column_title_wielding_alu":{
+              "fr": "Soudure ALU",
+              "nl": "",
+              "en": "ALU Wielding"
+            },
+            "column_title_wielding_ai":{
+              "fr": "Soudure AI",
+              "nl": "",
+              "en": "AI Wielding"
+            },
+            "column_title_atwtx_m":{
+              "fr": "ATW Tx +",
+              "nl": "ATW Tx +",
+              "en": "ATW Tx +"
+            },
+            "column_title_mhs_hours":{
+              "fr": "Heures de MHS",
+              "nl": "",
+              "en": "Out of service hours"
+            },
+            "column_title_pvas":{
+              "fr": "Protection voie adjacente",
+              "nl": "",
+              "en": "Adjacent lane protection"
+            },
+
+
+
+
             "column_title_line":{
               "fr": "Ligne",
               "nl": "Lijn",
@@ -2094,6 +2181,21 @@ export default {
               "fr": "À",
               "nl": "Naar",
               "en": "To"
+            },
+            "zone":{
+              "fr": "Zone",
+              "nl": "Zone",
+              "en": "Zone"
+            },
+            "subzone":{
+              "fr": "Subzone",
+              "nl": "Subzone",
+              "en": "Subzone"
+            },
+            "kind":{
+              "fr": "Type",
+              "nl": "Type",
+              "en": "Type"
             },
             "printable_works":{
               "fr": "Chantiers",

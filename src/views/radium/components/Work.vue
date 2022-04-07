@@ -45,7 +45,7 @@
 
       <div>
         <div
-          v-if="['shifts', 'limits', 's460s'].includes(column_config.name)"
+          v-if="['shifts', 'limits', 's460s', 'atwtx_m', 'mhs_hours', 'pvas'].includes(column_config.name)"
           class="d-flex lighten-4"
         >
           <div class="work-drag-spacer" v-if="edit_mode"></div>
@@ -219,6 +219,7 @@
                 :parent="self"
                 :column="column_config"
                 :edit_mode="edit_mode"
+                :small="false"
               />
 
               <div
@@ -293,6 +294,54 @@
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
               :config="s460s_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## ATW Tx multiple ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'atwtx_m'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="atwtx_m_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## MHS Hours ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'mhs_hours'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="mhs_hours_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## PVAS ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'pvas'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="pvas_table_config"
               @update="update()"
             />
 
@@ -764,9 +813,12 @@ export default {
     table_configs() {
       return {
         'shifts': this.shifts_table_config,
+        'files': this.files_table_config,
         'limits': this.limits_table_config,
         's460s': this.s460s_table_config,
-        'files': this.files_table_config,
+        'atwtx_m': this.atwtx_m_table_config,
+        'mhs_hours': this.mhs_hours_table_config,
+        'pvas': this.pvas_table_config,
       }
     },
 
@@ -783,6 +835,27 @@ export default {
         'schedule': {
           'name' : this.lang.generic.schedule[this.lg],
           'width': '40%',
+        },
+      }
+    },
+
+    files_table_config() {
+      return {
+        'ilt': {
+          'name' : this.lang.views.radium.column_title_ilts[this.lg],
+          'width': '25%',
+        },
+        'bnx': {
+          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
+          'width': '25%',
+        },
+        'fmht': {
+          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
+          'width': '25%',
+        },
+        'other': {
+          'name' : this.lang.views.radium.column_title_others[this.lg],
+          'width': '25%',
         },
       }
     },
@@ -853,23 +926,57 @@ export default {
       }
     },
 
-    files_table_config() {
+    atwtx_m_table_config() {
       return {
-        'ilt': {
-          'name' : this.lang.views.radium.column_title_ilts[this.lg],
-          'width': '25%',
+        'from_date': {
+          'name' : this.lang.generic.date[this.lg],
+          'width': '30%',
         },
-        'bnx': {
-          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
-          'width': '25%',
+        'zone': {
+          'name' : this.lang.views.radium.zone[this.lg],
+          'width': '35%',
         },
-        'fmht': {
-          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
-          'width': '25%',
+        'subzone': {
+          'name' : this.lang.views.radium.subzone[this.lg],
+          'width': '35%',
         },
-        'other': {
-          'name' : this.lang.views.radium.column_title_others[this.lg],
-          'width': '25%',
+      }
+    },
+
+    mhs_hours_table_config() {
+      return {
+        'from_date': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '50%',
+        },
+        'to_date': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '50%',
+        },
+      }
+    },
+
+    pvas_table_config() {
+      return {
+        'kind': {
+          'name' : this.lang.views.radium.kind[this.lg],
+          'width': '16%',
+        },
+        'from_line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '17%',
+        },
+        'from_lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '11%',
+        },
+        'from_pk': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '28%',
+        },
+        'to_pk': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '28%',
         },
       }
     },
@@ -1388,7 +1495,9 @@ export default {
 
 .work-column-title {
   font-size: 14px;
-  height: 20px;
+  height: fit-content;
+  min-height: 20px;
+  text-align: center;
   font-weight: bold;
   border-bottom: 1px grey solid;
   position: relative;
