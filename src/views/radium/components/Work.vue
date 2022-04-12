@@ -1268,8 +1268,6 @@ export default {
           }
         }
       }
-
-      console.log(this.self.newly_created)
       
       let request = await this.$http.post('works', {
         'action': 'update_work',
