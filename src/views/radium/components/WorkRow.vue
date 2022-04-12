@@ -10,7 +10,8 @@
     v-for="(field, column_name) in config"
     :key="column_name"
     class="work-row-field d-flex align-center"
-    :style="`width: ${config[column_name]['width']};`"
+    :style="`width: ${config[column_name]['width']}; max-width: ${config[column_name]['width']}; min-width: ${config[column_name]['width']}; overflow: hidden; flex-grow: 1;`"
+
   >
     <textarea
       :ref="column_name"

@@ -45,21 +45,21 @@
 
       <div>
         <div
-          v-if="['shifts', 'limits', 's460s', 'atwtx_m', 'mhs_hours', 'pvas'].includes(column_config.name)"
+          v-if="column_config.multiple"
           class="d-flex lighten-4"
         >
-          <div class="work-drag-spacer" v-if="edit_mode"></div>
+          <div class="work-drag-spacer" v-if="edit_mode && column_config.name != 'files'"></div>
 
           <div
             class="work-column-subtitle"
             v-for="(data, field) in table_configs[column_config.name]"
             :key="field"
-            :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
+            :style="`width: ${data.width}; max-width: ${data.width}; overflow: hidden; flex-grow: 1;`"
           >
             {{ data.name }}
           </div>
 
-          <div class="work-delete-spacer" v-if="edit_mode"></div>
+          <div class="work-delete-spacer" v-if="edit_mode && column_config.name != 'files'"></div>
         </div>
       </div>
 
@@ -110,17 +110,6 @@
           style="width: 100%; height: 100%;"
           class="align-self-start d-flex flex-column"
         >
-          <div class="d-flex">
-            <div
-              class="work-column-subtitle"
-              v-for="(data, subcolumn) in table_configs[column_config.name]"
-              :key="subcolumn"
-              :style="`width: ${data.width}; max-width: ${data.width}%; overflow: hidden;`"
-            >
-              {{ data.name }}
-            </div>
-          </div>
-
           <div class="d-flex flex-grow-1">
             <div
               class="work-subcolumn-content"
@@ -319,13 +308,13 @@
             <!-- ############## MHS Hours ############## -->
 
             <WorkRow
-              v-if="column_config.name == 'mhs_hours'"
+              v-if="column_config.name == 'mhs_hour_m'"
               :self="row"
               :parent="self.columns[column_config.name]"
               :column_config="column_config"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
-              :config="mhs_hours_table_config"
+              :config="mhs_hour_m_table_config"
               @update="update()"
             />
 
@@ -335,19 +324,31 @@
             <!-- ############## PVAS ############## -->
 
             <WorkRow
-              v-if="column_config.name == 'pvas'"
+              v-if="column_config.name == 'pva_m'"
               :self="row"
               :parent="self.columns[column_config.name]"
               :column_config="column_config"
               :parent_cpnt="$current_instance"
               :edit_mode="edit_mode"
-              :config="pvas_table_config"
+              :config="pva_m_table_config"
               @update="update()"
             />
 
 
 
 
+            <!-- ############## Generics ############## -->
+
+            <WorkRow
+              v-if="table_configs.generics.includes(column_config.name)"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="generic_multiple_table_config"
+              @update="update()"
+            />
 
             <div
               v-if="edit_mode && column_config.multiple"
@@ -359,10 +360,6 @@
           </div>
         </VueDraggable>
       </div>
-
-
-
-
 
       <div
         v-if="edit_mode && column_config.multiple && column_config.name != 'files'"
@@ -746,6 +743,9 @@ export default {
     if (this.self.newly_created) {
       this.edit_mode = true
       this.expanded = true
+    }
+
+    else {
       this.self.newly_created = false
     }
 
@@ -816,9 +816,54 @@ export default {
         'files': this.files_table_config,
         'limits': this.limits_table_config,
         's460s': this.s460s_table_config,
+
         'atwtx_m': this.atwtx_m_table_config,
-        'mhs_hours': this.mhs_hours_table_config,
-        'pvas': this.pvas_table_config,
+        'mhs_hour_m': this.mhs_hour_m_table_config,
+        'pva_m': this.pva_m_table_config,
+
+        'service_m': this.generic_multiple_table_config,
+        'other_vehicle_m': this.generic_multiple_table_config,
+        'wielding_alu_m': this.generic_multiple_table_config,
+        'wielding_ai_m': this.generic_multiple_table_config,
+        'supervisor_m': this.generic_multiple_table_config,
+        'change_request_m': this.generic_multiple_table_config,
+        'mht_m': this.generic_multiple_table_config,
+        'circulation_m': this.generic_multiple_table_config,
+        'description_m': this.generic_multiple_table_config,
+        'note_m': this.generic_multiple_table_config,
+        'ilt_m': this.generic_multiple_table_config,
+        'upm_m': this.generic_multiple_table_config,
+        'colt_m': this.generic_multiple_table_config,
+        'cascat_m': this.generic_multiple_table_config,
+        'grue_m': this.generic_multiple_table_config,
+        'osv_m': this.generic_multiple_table_config,
+        'loco_m': this.generic_multiple_table_config,
+        'hgs_m': this.generic_multiple_table_config,
+        'extra_m': this.generic_multiple_table_config,
+
+
+
+        'generics': [
+          'service_m',
+          'other_vehicle_m',
+          'wielding_alu_m',
+          'wielding_ai_m',
+          'supervisor_m',
+          'change_request_m',
+          'mht_m',
+          'circulation_m',
+          'description_m',
+          'note_m',
+          'ilt_m',
+          'upm_m',
+          'colt_m',
+          'cascat_m',
+          'grue_m',
+          'osv_m',
+          'loco_m',
+          'hgs_m',
+          'extra_m',
+        ],
       }
     },
 
@@ -926,6 +971,22 @@ export default {
       }
     },
 
+
+    generic_multiple_table_config() {
+      return {
+        'from_date': {
+          'name' : this.lang.generic.date[this.lg],
+          'width': '80px',
+        },
+        'value': {
+          'name' : this.lang.generic.input_value[this.lg],
+          'width': '',
+        },
+      }
+    },
+
+
+
     atwtx_m_table_config() {
       return {
         'from_date': {
@@ -943,7 +1004,7 @@ export default {
       }
     },
 
-    mhs_hours_table_config() {
+    mhs_hour_m_table_config() {
       return {
         'from_date': {
           'name' : this.lang.views.radium.from[this.lg],
@@ -956,27 +1017,31 @@ export default {
       }
     },
 
-    pvas_table_config() {
+    pva_m_table_config() {
       return {
+        'from_date': {
+          'name' : this.lang.generic.date[this.lg],
+          'width': '20%',
+        },
         'kind': {
           'name' : this.lang.views.radium.kind[this.lg],
           'width': '16%',
         },
         'from_line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '17%',
+          'width': '15%',
         },
         'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
-          'width': '11%',
+          'width': '15%',
         },
         'from_pk': {
           'name' : this.lang.views.radium.from[this.lg],
-          'width': '28%',
+          'width': '17%',
         },
         'to_pk': {
           'name' : this.lang.views.radium.to[this.lg],
-          'width': '28%',
+          'width': '17%',
         },
       }
     },
@@ -1203,6 +1268,8 @@ export default {
           }
         }
       }
+
+      console.log(this.self.newly_created)
       
       let request = await this.$http.post('works', {
         'action': 'update_work',
@@ -1215,7 +1282,7 @@ export default {
           'color': this.self.color,
           'columns': columns,
           'logs': logs,
-          'is_new': this.self.is_new ? this.self.is_new : false,
+          'is_new': this.self.newly_created ? this.self.newly_created : false,
         },
       })
 
@@ -1223,7 +1290,7 @@ export default {
         for (let attr in column) {
           if (attr != 'rows') {
             this.self.columns[column.name][attr] = column[attr]
-            if (this.self.is_new) {
+            if (this.self.newly_created) {
               this.self.columns[column.name].is_edited = false
             }
 
@@ -1237,7 +1304,7 @@ export default {
       }
 
       this.original_self = this.$tool.deepcopy(this.self)
-      this.self.is_new = false
+      this.self.newly_created = false
     },
 
     async remove() {
@@ -1504,6 +1571,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2px;
 }
 
 .work-column-subtitle {

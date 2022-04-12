@@ -1660,6 +1660,10 @@ export default {
               "nl": "Prioriteit van het breicht",
               "en": "Message priority"
             },
+
+
+
+
             "column_title_shifts":{
               "fr": "Prestations",
               "nl": "Prestaties",
@@ -1828,11 +1832,6 @@ export default {
               "nl": "CTL Zx",
               "en": "CTL Zx"
             },
-            "column_title_change_request":{
-              "fr": "Change Request",
-              "nl": "Change Request",
-              "en": "Change Request"
-            },
             "column_title_prodigis":{
               "fr": "Prodigis",
               "nl": "Prodigis",
@@ -1842,16 +1841,6 @@ export default {
               "fr": "Particularité demande UPM",
               "nl": "",
               "en": "UPM details"
-            },
-            "column_title_vhs_circulation":{
-              "fr": "Circulation sur VHS",
-              "nl": "",
-              "en": "VHS traffic"
-            },
-            "column_title_mht":{
-              "fr": "Mise HT",
-              "nl": "",
-              "en": "Shutdown"
             },
             "column_title_riparian":{
               "fr": "Riverains",
@@ -1863,22 +1852,26 @@ export default {
               "nl": "",
               "en": "Massification meeting date"
             },
-            "column_title_service":{
+
+
+
+
+            "column_title_service_m":{
               "fr": "Service",
               "nl": "",
               "en": "Service"
             },
-            "column_title_other_vehicles":{
+            "column_title_other_vehicle_m":{
               "fr": "Autre engins",
               "nl": "",
               "en": "Other vehicles"
             },
-            "column_title_wielding_alu":{
+            "column_title_wielding_alu_m":{
               "fr": "Soudure ALU",
               "nl": "",
               "en": "ALU Wielding"
             },
-            "column_title_wielding_ai":{
+            "column_title_wielding_ai_m":{
               "fr": "Soudure AI",
               "nl": "",
               "en": "AI Wielding"
@@ -1888,15 +1881,90 @@ export default {
               "nl": "ATW Tx +",
               "en": "ATW Tx +"
             },
-            "column_title_mhs_hours":{
+            "column_title_mhs_hour_m":{
               "fr": "Heures de MHS",
               "nl": "",
               "en": "Out of service hours"
             },
-            "column_title_pvas":{
+            "column_title_pva_m":{
               "fr": "Protection voie adjacente",
               "nl": "",
               "en": "Adjacent lane protection"
+            },
+            "column_title_supervisor_m":{
+              "fr": "Responsable +",
+              "nl": "",
+              "en": "Supervisor +"
+            },
+            "column_title_change_request_m":{
+              "fr": "Change Request",
+              "nl": "Change Request",
+              "en": "Change Request"
+            },
+            "column_title_mht_m":{
+              "fr": "Mise HT",
+              "nl": "",
+              "en": "Shutdown"
+            },
+            "column_title_circulation_m":{
+              "fr": "Circulation sur VHS",
+              "nl": "",
+              "en": "VHS traffic"
+            },
+            "column_title_description_m":{
+              "fr": "Description +",
+              "nl": "Beschrijving +",
+              "en": "Description +"
+            },
+            "column_title_note_m":{
+              "fr": "Remarques +",
+              "nl": "Opmerking +",
+              "en": "Note +"
+            },
+            "column_title_ilt_m":{
+              "fr": "ILT +",
+              "nl": "TPO +",
+              "en": "??? +"
+            },
+            "column_title_upm_m":{
+              "fr": "UPM +",
+              "nl": "UPM +",
+              "en": "UPM +"
+            },
+            "column_title_colt_m":{
+              "fr": "CoLT +",
+              "nl": "CoLT +",
+              "en": "CoLT +"
+            },
+            "column_title_cascat_m":{
+              "fr": "Cas caténaire +",
+              "nl": "Bovenleidingsgevallen +",
+              "en": "CC? +"
+            },
+            "column_title_grue_m":{
+              "fr": "Grue RR +",
+              "nl": "Wegspoorkraan +",
+              "en": "Backhoe +"
+            },
+            "column_title_osv_m":{
+              "fr": "OSV +",
+              "nl": "OSV +",
+              "en": "OSV +"
+            },
+            "column_title_loco_m":{
+              "fr": "Loco +",
+              "nl": "Loco +",
+              "en": "Loco +"
+            },
+            "column_title_hgs_m":{
+              "fr": "HGS +",
+              "nl": "HGS +",
+              "en": "HGS +"
+            },
+            "column_title_extra_m":{
+              "fr": "Divers +",
+              "nl": "Diversen +",
+              "en": "Extra +"
             },
 
 
