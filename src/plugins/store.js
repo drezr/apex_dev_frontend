@@ -16,6 +16,7 @@ export default new Vuex.Store({
     language: null,
     moving_work: null,
     copying_work: null,
+    copying_part: null,
     moving_element: null,
     moving_old_parent: null,
     copying_element: null,
@@ -56,6 +57,10 @@ export default new Vuex.Store({
 
     set_copying_element(state, element) {
       state.copying_element = element
+    },
+
+    set_copying_part(state, part) {
+      state.copying_part = part
     },
 
     toggle_palette(state, toggled) {

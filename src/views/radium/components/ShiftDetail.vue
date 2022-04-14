@@ -86,19 +86,37 @@
       {{ lang.views.radium.no_shift[lg] }}
     </div>
 
-    <CustomButton
-      v-if="parent.shifts.length > 0 && $is_editor"
-      :text="lang.generic.teams[lg]"
-      :rounded="true"
-      :color="'yellow darken-3'"
-      :dark="true"
-      :icon="'mdi-account-multiple-plus'"
-      :tooltip="lang.views.radium.link_teams_tooltip[lg]"
-      :disabled="!parent.shifts[selected_shift].date || add_part_loading"
-      :loading="add_part_loading"
-      class="mx-3 mb-3"
-      @click="link_teams_dialog = true"
-    />
+    <div class="d-flex">
+      <CustomButton
+        v-if="parent.shifts.length > 0 && $is_editor"
+        :text="lang.generic.teams[lg]"
+        :rounded="true"
+        :color="'yellow darken-3'"
+        :dark="true"
+        :icon="'mdi-account-multiple-plus'"
+        :tooltip="lang.views.radium.link_teams_tooltip[lg]"
+        :disabled="!parent.shifts[selected_shift].date || add_part_loading"
+        :loading="add_part_loading"
+        class="mx-3 mb-3"
+        @click="link_teams_dialog = true"
+      />
+
+      <CustomButton
+        v-if="$store.state.copying_part != null"
+        :rounded="true"
+        :color="'indigo'"
+        :dark="true"
+        :fab="true"
+        :small="true"
+        :icon="'mdi-content-copy'"
+        :tooltip="lang.generic.to_copy[lg]"
+        :disabled="copy_part_disabled"
+        :loading="add_part_loading"
+        class="mr-3 mb-3"
+        style="position: relative; top: -2px;"
+        @click="copy_part()"
+      />
+    </div>
   </v-tabs-items>
 
   <CustomDialog
@@ -158,6 +176,14 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+
+
+      <v-checkbox
+        v-if="loading == false"
+        :label="lang.views.radium.add_for_all_shifts[lg]"
+        v-model="add_for_all_shifts"
+        hide-details
+      ></v-checkbox>
     </div>
   </CustomDialog>
 </v-card>
@@ -189,6 +215,7 @@ export default {
       link_teams_dialog: false,
       link_selected_teams: Array(),
       add_part_loading: false,
+      add_for_all_shifts: false,
     }
   },
 
@@ -211,7 +238,20 @@ export default {
   computed: {
     shifts() {
       return this.parent.shifts
-    }
+    },
+
+    copy_part_disabled() {
+      let selected_shift = this.parent.shifts[this.selected_shift]
+      let copying_part = this.$store.state.copying_part
+
+      if (copying_part == null) {
+        return true
+      }
+
+      let has_team = selected_shift.parts.find(p => p.team.id == copying_part.team.id)
+
+      return has_team != null
+    },
   },
 
   methods: {
@@ -219,22 +259,45 @@ export default {
       this.link_teams_dialog = false
       this.add_part_loading = true
 
-      let selected_shift = this.parent.shifts[this.selected_shift]
+      if (!this.add_for_all_shifts) {
+        let selected_shift = this.parent.shifts[this.selected_shift]
 
-      let request = await this.$http.post('works', {
-        'action': 'create_parts',
-        'view': this.$current_view,
-        'team_id': this.$current_team_id,
-        'app_id': this.$current_app_id,
-        'parent_type': 'work',
-        'parent_id': this.parent.id,
-        'element_type': 'shift',
-        'element_id': selected_shift.id,
-        'value': this.link_selected_teams,
-      })
+        let request = await this.$http.post('works', {
+          'action': 'create_parts',
+          'view': this.$current_view,
+          'team_id': this.$current_team_id,
+          'app_id': this.$current_app_id,
+          'parent_type': 'work',
+          'parent_id': this.parent.id,
+          'element_type': 'shift',
+          'element_id': selected_shift.id,
+          'value': this.link_selected_teams,
+        })
 
-      for (let part of request.parts) {
-        selected_shift.parts.push(part)
+        for (let part of request.parts) {
+          selected_shift.parts.push(part)
+        }
+      }
+
+
+      else {
+        for (let shift of this.parent.shifts) {
+          let request = await this.$http.post('works', {
+            'action': 'create_parts',
+            'view': this.$current_view,
+            'team_id': this.$current_team_id,
+            'app_id': this.$current_app_id,
+            'parent_type': 'work',
+            'parent_id': this.parent.id,
+            'element_type': 'shift',
+            'element_id': shift.id,
+            'value': this.link_selected_teams,
+          })
+
+          for (let part of request.parts) {
+            shift.parts.push(part)
+          }
+        }
       }
 
       this.link_selected_teams = Array()
@@ -250,6 +313,32 @@ export default {
       else {
         this.link_selected_teams.push(team_id)
       }
+    },
+
+    async copy_part() {
+      this.add_part_loading = true
+
+      let selected_shift = this.parent.shifts[this.selected_shift]
+
+      let request = await this.$http.post('works', {
+        'action': 'copy_part',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'parent_type': 'work',
+        'parent_id': this.parent.id,
+        'element_type': 'shift',
+        'element_id': selected_shift.id,
+        'value': this.$store.state.copying_part,
+      })
+
+      if (request.part) {
+        selected_shift.parts.push(request.part)
+      }
+
+      this.add_part_loading = false
+
+      this.$store.commit('set_copying_part', null)
     },
   },
 

@@ -2275,6 +2275,16 @@ export default {
               "nl": "Erken verandering",
               "en": "Acknowledge change"
             },
+            "clear_all_is_edited":{
+              "fr": "Acquitter toutes les modifications",
+              "nl": "Erken alle wijzigingen",
+              "en": "Acknowledge all changes"
+            },
+            "add_for_all_shifts":{
+              "fr": "Ajouter pour toutes les prestations",
+              "nl": "Voeg toe voor alle voordelen",
+              "en": "Add for all shifts"
+            },
           },
 
 

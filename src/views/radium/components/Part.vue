@@ -23,6 +23,16 @@
 
       <CustomButton
         v-if="edit_mode"
+        :icon="'mdi-content-copy'"
+        :text_color="'indigo'"
+        :small_fab="true"
+        :tooltip="lang.generic.to_copy[lg]"
+        :disabled="$store.state.copying_part != null && $store.state.copying_part.id == self.id"
+        @click="copy_part()"
+      />
+
+      <CustomButton
+        v-if="edit_mode"
         :icon="self.locked ? 'mdi-lock' : 'mdi-lock-open'"
         :text_color="self.locked ? 'orange' : 'blue'"
         :small_fab="true"
@@ -544,6 +554,10 @@ export default {
 
       this.short_override = ''
       this.short_override_snackbar = true
+    },
+
+    copy_part() {
+      this.$store.commit('set_copying_part', this.self)
     },
   },
 
