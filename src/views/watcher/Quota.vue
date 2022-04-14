@@ -294,7 +294,7 @@ export default {
       }
 
       this.detailed_quotas[type].sort((a, b) => {
-        return new Date(b.date) + new Date(a.date)
+        return new Date(a.date) - new Date(b.date)
       })
 
       for (let cell of this.detailed_quotas[type]) {
