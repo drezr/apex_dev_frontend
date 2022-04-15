@@ -34,7 +34,7 @@
       <div
         class="work-column-title"
         :class="!column_config.multiple ? 'cursor-pointer' : ''"
-        @click="open_log_dialog(column_config.name)"
+        @click="open_log_dialog(column_config.name, column_config)"
       >
         {{ lang.views.radium['column_title_' + column_config.name][lg] }}
       </div>
@@ -45,7 +45,7 @@
 
       <div>
         <div
-          v-if="column_config.multiple"
+          v-if="column_config.multiple && !table_configs.generics.includes(column_config.name)"
           class="d-flex lighten-4"
         >
           <div class="work-drag-spacer" v-if="edit_mode && column_config.name != 'files'"></div>
@@ -840,6 +840,8 @@ export default {
         'loco_m': this.generic_multiple_table_config,
         'hgs_m': this.generic_multiple_table_config,
         'extra_m': this.generic_multiple_table_config,
+        'bnx_m': this.generic_multiple_table_config,
+        'prodigis_m': this.generic_multiple_table_config,
 
 
 
@@ -863,6 +865,8 @@ export default {
           'loco_m',
           'hgs_m',
           'extra_m',
+          'bnx_m',
+          'prodigis_m',
         ],
       }
     },
@@ -974,13 +978,9 @@ export default {
 
     generic_multiple_table_config() {
       return {
-        'from_date': {
-          'name' : this.lang.generic.date[this.lg],
-          'width': '80px',
-        },
         'value': {
           'name' : this.lang.generic.input_value[this.lg],
-          'width': '',
+          'width': '100%',
         },
       }
     },
@@ -1158,8 +1158,8 @@ export default {
       this.remove_child_dialog = true
     },
 
-    async open_log_dialog(column_name) {
-      if (this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
+    async open_log_dialog(column_name, column_config) {
+      if (!column_config.multiple && this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
         this.log_dialog = true
         this.log_dialog_loading = true
 

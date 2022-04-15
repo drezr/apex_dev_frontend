@@ -262,13 +262,13 @@ export default {
           },
           "bnx":{
             "fr": "BNX",
-            "nl": "BNX?:",
-            "en": "BNX?"
+            "nl": "BNX",
+            "en": "BNX"
           },
           "ilt":{
             "fr": "ILT",
-            "nl": "ILT?",
-            "en": "ILT?"
+            "nl": "ILT",
+            "en": "ILT"
           },
           "hour":{
             "fr": "Heure",
@@ -1712,7 +1712,7 @@ export default {
             "column_title_bnxs":{
               "fr": "BNX",
               "nl": "BNX",
-              "en": "BNX?"
+              "en": "BNX"
             },
             "column_title_fmhts":{
               "fr": "FMHT",
@@ -1931,6 +1931,11 @@ export default {
               "nl": "TPO +",
               "en": "??? +"
             },
+            "column_title_bnx_m":{
+              "fr": "BNX +",
+              "nl": "BNX +",
+              "en": "BNX +"
+            },
             "column_title_upm_m":{
               "fr": "UPM +",
               "nl": "UPM +",
@@ -1971,7 +1976,11 @@ export default {
               "nl": "Diversen +",
               "en": "Extra +"
             },
-
+            "column_title_prodigis_m":{
+              "fr": "Prodigis +",
+              "nl": "Prodigis +",
+              "en": "Prodigis +"
+            },
 
 
 
