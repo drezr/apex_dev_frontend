@@ -1645,6 +1645,11 @@ export default {
               "nl": "Personaliseer raduim",
               "en": "Customize Radium"
             },
+            "edit_all_tooltip":{
+              "fr": "Modifier tous les chantiers",
+              "nl": "Bewerk alle werken",
+              "en": "Edit all works"
+            },
             "add_work_tooltip":{
               "fr": "Ajouter un chantier",
               "nl": "Werk toevoegen",

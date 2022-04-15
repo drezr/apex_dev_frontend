@@ -140,6 +140,35 @@
 
     <CustomButton
       v-if="$is_editor"
+      :icon="'mdi-check'"
+      :height="40"
+      :color="'red lighten-1'"
+      class="ml-1 mb-1"
+      :tooltip="lang.views.radium.clear_all_is_edited[lg]"
+      @click="$emit('clear-all-is-edited')"
+      :dark="true"
+      :badge="true"
+      :badge_bordered="true"
+      :badge_dot="true"
+      :badge_color="'red accent-3'"
+      :badge_offset_x="12"
+      :badge_offset_y="12"
+    />
+
+    <CustomButton
+      v-if="$is_editor"
+      :icon="'mdi-pencil-plus'"
+      :height="40"
+      :color="'teal'"
+      class="ml-1 mb-1"
+      :tooltip="lang.views.radium.edit_all_tooltip[lg]"
+      @click="$emit('edit-all')"
+      :outlined="$current_component.edit_all ? true : false"
+      :dark="$current_component.edit_all ? false : true"
+    />
+
+    <CustomButton
+      v-if="$is_editor"
       :icon="'mdi-android-messages'"
       :height="40"
       :color="'deep-orange'"

@@ -9,6 +9,7 @@
   overlap top right 
   :offset-x="badge_offset_x"
   :offset-y="badge_offset_y"
+  :bordered="badge_bordered"
 >
   <v-menu
     ref="menu" 
@@ -136,6 +137,7 @@ export default {
     badge_content: String,
     badge_icon: String,
     badge_dot: Boolean,
+    badge_bordered: Boolean,
     badge_offset_x: {
       type: Number,
       default: 0,

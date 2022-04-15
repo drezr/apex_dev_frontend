@@ -27,6 +27,8 @@
             @open-sort-dialog="sort_dialog = true"
             @open-messages-dialog="open_message_dialog()"
             @toggle-palette="palette = !palette"
+            @edit-all="toggle_edit_all()"
+            @clear-all-is-edited="clear_all_is_edited()"
             @add-work="add_work"
           />
 
@@ -399,6 +401,7 @@ export default {
       doc_width: 1980,
       moving_work_loading: false,
       copying_work_loading: false,
+      edit_all: false,
     }
   },
 
@@ -530,6 +533,26 @@ export default {
         'app_id': this.$current_app_id,
         'position_updates': position_updates,
       })
+    },
+
+    toggle_edit_all() {
+      let works = this.$children.filter(
+        w => w.$options._componentTag == 'Work')
+
+      if (this.edit_all) {
+        for (let work of works) {
+          work.edit_mode = false
+          work.update()
+        }
+      }
+
+      else {
+        for (let work of works) {
+          work.edit_mode = true
+        }
+      }
+
+      this.edit_all = !this.edit_all
     },
 
     get_column_configs() {
@@ -825,6 +848,26 @@ export default {
       }, 100)
 
       this.update_work_position()
+    },
+
+    async clear_all_is_edited() {
+      this.$http.post('works', {
+        'action': 'clear_all_is_edited',
+        'view': this.$current_view,
+        'team_id': this.$current_team_id,
+        'app_id': this.$current_app_id,
+        'month': this.$current_month,
+        'year': this.$current_year,
+      })
+
+      let works = this.$children.filter(
+        w => w.$options._componentTag == 'Work')
+
+      for (let work of works) {
+        for (let column_name in work.self.columns) {
+          work.self.columns[column_name].is_edited = false
+        }
+      }
     },
   },
 
