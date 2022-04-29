@@ -1160,8 +1160,8 @@ export default {
 
     async open_log_dialog(column_name, column_config) {
       column_config
-/*      if (!column_config.multiple && this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {*/
-      if (!this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
+      if (!column_config.multiple && this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
+/*      if (!this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {*/
         this.log_dialog = true
         this.log_dialog_loading = true
 
@@ -1246,7 +1246,7 @@ export default {
           })
         }
 
-        if (new_column.rows.length > 0) {
+/*        if (new_column.rows.length > 0) {
           for (let new_row_i in new_column.rows) {
             for (let field in new_column.rows[new_row_i]) {
               if (new_column.rows[new_row_i][field] != original_column.rows[new_row_i][field]) {
@@ -1272,7 +1272,7 @@ export default {
                 })
             }
           }
-        }
+        }*/
 
         if (!is_same_value || !is_same_bg_color || !is_same_text_color) {
           columns.push(new_column)
