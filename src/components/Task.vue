@@ -242,7 +242,7 @@
               :text_color="'white'"
               :text="$mobile_breakpoint ? lang.generic.file[lg] : ''"
               :tooltip="lang.generic.add_file_tooltip[lg]"
-              v-if="!is_template && $is_staff"
+              v-if="!is_template"
               @click="$refs['file-input'].click()"
               :disabled="add_child_loading"
             />
