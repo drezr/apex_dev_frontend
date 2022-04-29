@@ -1159,7 +1159,9 @@ export default {
     },
 
     async open_log_dialog(column_name, column_config) {
-      if (!column_config.multiple && this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
+      column_config
+/*      if (!column_config.multiple && this.self.columns[column_name].rows.length == 0 && !this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {*/
+      if (!this.$current_component.palette && column_name != 'shifts' && column_name != 'files') {
         this.log_dialog = true
         this.log_dialog_loading = true
 
@@ -1242,6 +1244,34 @@ export default {
             'new_value': new_column.value,
             'old_value': original_column.value,
           })
+        }
+
+        if (new_column.rows.length > 0) {
+          for (let new_row_i in new_column.rows) {
+            for (let field in new_column.rows[new_row_i]) {
+              if (new_column.rows[new_row_i][field] != original_column.rows[new_row_i][field]) {
+                logs.push({
+                  'column_name': column_name,
+                  'new_value': new_column.rows[new_row_i][field],
+                  'old_value': original_column.rows[new_row_i][field],
+                })
+              }
+            }
+          }
+        }
+
+        if (original_column.rows.length > 0) {
+          for (let original_row of original_column.rows) {
+            let find = new_column.rows.find(r => r.id == original_row.id)
+
+            if (!find) {
+                logs.push({
+                  'column_name': column_name,
+                  'new_value': '',
+                  'old_value': original_column.rows[new_row_i][field],
+                })
+            }
+          }
         }
 
         if (!is_same_value || !is_same_bg_color || !is_same_text_color) {
@@ -1385,7 +1415,7 @@ export default {
       })
     },
 
-    async update_child_position(column_name) {
+    async update_child_position(column_name, no_copy) {
       let position_updates = Array()
       let i = 0
       let list
@@ -1415,7 +1445,9 @@ export default {
         'position_updates': position_updates,
       })
 
-      this.original_self = this.$tool.deepcopy(this.self)
+      if (!no_copy) {
+        this.original_self = this.$tool.deepcopy(this.self)
+      }
     },
 
     async remove_child() {
@@ -1430,9 +1462,7 @@ export default {
       }
 
       else {
-        let rows = this.self.columns[column_name].rows.filter(
-          f => f.id != this.remove_child_item.id)
-        this.self.columns[column_name].rows = rows
+        this.self.columns[column_name].rows = this.self.columns[column_name].rows.filter(f => f.id != this.remove_child_item.id)
       }
 
       this.remove_child_dialog = false
@@ -1449,7 +1479,7 @@ export default {
         'value': {'column_name': column_name},
       })
 
-      this.update_child_position(column_name)
+      this.update_child_position(column_name, true)
     },
 
     async send_message() {
