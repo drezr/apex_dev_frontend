@@ -374,15 +374,10 @@ export default {
       return false
     },
 
-    color(cell) {
-      for (let holiday of this.holidays) {
-        if (holiday.date == cell.cell.date) {
-          return 'holi'
-        }
-      }
-
-      if (cell.name_short == 'sam') return 'sat'
-      else if (cell.name_short == 'dim') return 'sun'
+    color(date) {
+      if (date.is_holiday) return 'holi'
+      else if (date.name_short == 'sam') return 'sat'
+      else if (date.name_short == 'dim') return 'sun'
       else return 'week'
     },
   },
