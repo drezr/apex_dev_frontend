@@ -583,7 +583,7 @@ export default {
         let day_name = date.toLocaleDateString('en-en', { weekday: 'long' })
 
         if (day_name == 'Monday') {
-          day.week_step = date.getWeek() + 1
+          day.week_step = date.getWeek()
         }
 
         day.type = 'day'
