@@ -5,6 +5,31 @@
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 20px;">
+      <v-alert
+        text
+        color="warning"
+        type="warning"
+        outlined
+        max-width="600"
+        class="mx-auto mt-5"
+        border="left"
+      >
+        <div @click="show_changelog = !show_changelog" style="cursor: pointer;">
+          <b>Information importante</b> (20/05/2022) <small><i>(cliquez ici)</i></small>
+          <v-icon class="float-right">
+            {{ show_changelog ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+          </v-icon>
+        </div>
+
+        <div v-if="show_changelog" class="mt-5">
+          Le serveur de l'ancienne version d'Apex sera mis hors ligne le 01/06/2022.<br>
+
+          Vous pourrez toujours y accéder via <a href="https://old.apex.wf" target="blank">ce lien</a> jusqu'à cette date.<br><br>
+
+          Il est conseillé, si vous ne l'avez pas encore fait, de sauvegarder les données importantes de l'année 2021 se trouvant sur cette version. Une version imprimable dans les différentes applications vous permettra de sauvegarder ces données (en PDF ou en les imprimant).
+        </div>
+      </v-alert>
+
 <!--       <v-alert
         text
         color="info"
