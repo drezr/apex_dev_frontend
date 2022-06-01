@@ -109,7 +109,7 @@
                          'grey darken-4 white--text']"
         >
           <span>
-          <b>{{ new Date(day.year, day.month, day.day_number).toLocaleString('fr-fr', { 'weekday': 'short' }).toUpperCase().slice(0, -1) }}</b><br>
+          <b>{{ day.name_short.toUpperCase() }}</b><br>
           {{ day.day_number }}
           </span>
         </div>
