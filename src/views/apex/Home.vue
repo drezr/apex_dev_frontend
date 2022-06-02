@@ -5,7 +5,7 @@
 
   <transition name="fade">
     <div v-if="!loading" style="padding-bottom: 20px;">
-      <v-alert
+<!--       <v-alert
         text
         color="warning"
         type="warning"
@@ -28,7 +28,7 @@
 
           Il est conseillé, si vous ne l'avez pas encore fait, de sauvegarder les données importantes de l'année 2021 se trouvant sur cette version. Une version imprimable dans les différentes applications vous permettra de sauvegarder ces données (en PDF ou en les imprimant).
         </div>
-      </v-alert>
+      </v-alert> -->
 
 <!--       <v-alert
         text
