@@ -317,7 +317,7 @@
             :icon="'mdi-check'"
             :color="'green'"
             :dark="true"
-            @click="acquit_dialog = true"
+            @click="pending_message = message; acquit_dialog = true;"
           />
 
           <CustomDialog
@@ -330,7 +330,7 @@
             :confirm_text="lang.generic.acquit[lg]"
             :confirm_color="'green'"
             @cancel="acquit_dialog = false"
-            @confirm="acquit_message(message.id)"
+            @confirm="acquit_message()"
           ></CustomDialog>
         </div>
       </div>
@@ -402,6 +402,7 @@ export default {
       moving_work_loading: false,
       copying_work_loading: false,
       edit_all: false,
+      pending_message: null,
     }
   },
 
@@ -766,8 +767,8 @@ export default {
       return txt
     },
 
-    async acquit_message(message_id) {
-      this.messages = this.messages.filter(m => m.id !== message_id)
+    async acquit_message() {
+      this.messages = this.messages.filter(m => m.id !== this.pending_message.id)
       this.message_count--
       this.acquit_dialog = false
 
@@ -777,8 +778,10 @@ export default {
         'team_id': this.$current_team_id,
         'app_id': this.$current_app_id,
         'element_type': 'message',
-        'element_id': message_id,
+        'element_id': this.pending_message.id,
       })
+
+      this.pending_message = null
     },
 
     async open_message_dialog() {

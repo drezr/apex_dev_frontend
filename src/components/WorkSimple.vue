@@ -3,7 +3,7 @@
 <div>
   <v-card :color="self.color" dark class="py-1 px-3 mb-1">
     {{ lang.views.radium.messages_work_date[lg] }}
-    {{ $tool.format_date(self.date) }}
+    {{ self.shifts.length > 0 ? $tool.format_date(self.shifts[0].date) : '---' }}
   </v-card>
 
   <v-card
