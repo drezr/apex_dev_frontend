@@ -208,8 +208,8 @@ export default {
       this.profile_create_loading = true
       profile.lang = this.lg
 
-      profile.username = profile.replace(/\s/g, '')
-      profile.username = profile.toLowerCase()
+      profile.username = profile.username.replace(/\s/g, '')
+      profile.username = profile.username.toLowerCase()
 
       let request = await this.$http.post('team', {
         'action': 'create_user',
