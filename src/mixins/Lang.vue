@@ -1829,7 +1829,7 @@ export default {
 
             "column_title_principle":{
               "fr": "Principe de planification",
-              "nl": "",
+              "nl": "Planningsprincipe",
               "en": "Planning principle"
             },
             "column_title_ctl_zx":{
@@ -1844,17 +1844,17 @@ export default {
             },
             "column_title_upm_detail":{
               "fr": "Particularité demande UPM",
-              "nl": "",
+              "nl": "UPM details",
               "en": "UPM details"
             },
             "column_title_riparian":{
               "fr": "Riverains",
-              "nl": "",
+              "nl": "Bewoners",
               "en": "Riparians"
             },
             "column_title_massification_date":{
               "fr": "Date réunion massification",
-              "nl": "",
+              "nl": "Datum van de Massificatievergadering",
               "en": "Massification meeting date"
             },
 
@@ -1863,22 +1863,22 @@ export default {
 
             "column_title_service_m":{
               "fr": "Service",
-              "nl": "",
+              "nl": "Service",
               "en": "Service"
             },
             "column_title_other_vehicle_m":{
               "fr": "Autre engins",
-              "nl": "",
+              "nl": "Andere uitrusting",
               "en": "Other vehicles"
             },
             "column_title_wielding_alu_m":{
               "fr": "Soudure ALU",
-              "nl": "",
+              "nl": "ALU Lassen",
               "en": "ALU Wielding"
             },
             "column_title_wielding_ai_m":{
               "fr": "Soudure AI",
-              "nl": "",
+              "nl": "AI Lassen",
               "en": "AI Wielding"
             },
             "column_title_atwtx_m":{
@@ -1888,17 +1888,17 @@ export default {
             },
             "column_title_mhs_hour_m":{
               "fr": "Heures de MHS",
-              "nl": "",
+              "nl": "Buiten dienst uren",
               "en": "Out of service hours"
             },
             "column_title_pva_m":{
               "fr": "Protection voie adjacente",
-              "nl": "",
+              "nl": "Aangrenzende rijstrookbeveiliging",
               "en": "Adjacent lane protection"
             },
             "column_title_supervisor_m":{
               "fr": "Responsable +",
-              "nl": "",
+              "nl": "Aansprakelijk +",
               "en": "Supervisor +"
             },
             "column_title_change_request_m":{
@@ -1908,12 +1908,12 @@ export default {
             },
             "column_title_mht_m":{
               "fr": "Mise HT",
-              "nl": "",
+              "nl": "Stilgelegd",
               "en": "Shutdown"
             },
             "column_title_circulation_m":{
               "fr": "Circulation sur VHS",
-              "nl": "",
+              "nl": "Verkeer",
               "en": "VHS traffic"
             },
             "column_title_description_m":{
@@ -1980,6 +1980,67 @@ export default {
               "fr": "Prodigis +",
               "nl": "Prodigis +",
               "en": "Prodigis +"
+            },
+
+            "column_title_order_number":{
+              "fr": "Numéro d'ordre",
+              "nl": "Ordernummer",
+              "en": "Order number"
+            },
+            "column_title_wa_bnx":{
+              "fr": "WA-BNX",
+              "nl": "WA-BNX",
+              "en": "WA-BNX"
+            },
+            "column_title_crane":{
+              "fr": "Grue",
+              "nl": "Kraan",
+              "en": "Crane"
+            },
+            "column_title_track_train":{
+              "fr": "Voie",
+              "nl": "Baantrein",
+              "en": "Track Train"
+            },
+            "column_title_catenary":{
+              "fr": "Caténaire",
+              "nl": "Bovenleiding",
+              "en": "Catenary"
+            },
+            "column_title_ow_en_in_ga":{
+              "fr": "Ow-en in GA",
+              "nl": "Ow-en in GA",
+              "en": "Ow-en in GA"
+            },
+            "column_title_additional_security":{
+              "fr": "Sécurité supplémentaire",
+              "nl": "Bijkomende beveiliging",
+              "en": "Additional security"
+            },
+            "column_title_extra_service":{
+              "fr": "Service supplémentaire",
+              "nl": "Extra dienst",
+              "en": "Extra service"
+            },
+            "column_title_otm":{
+              "fr": "OTM",
+              "nl": "OTM",
+              "en": "OTM"
+            },
+            "column_title_contact_details":{
+              "fr": "Contact",
+              "nl": "Contactgegevens",
+              "en": "Contact details"
+            },
+            "column_title_cost_center":{
+              "fr": "Centre de coût",
+              "nl": "Kostenplaats",
+              "en": "Cost center"
+            },
+            "column_title_materials_supply":{
+              "fr": "Matériaux",
+              "nl": "Materialen Supply",
+              "en": "Materials Supply"
             },
 
 
