@@ -182,6 +182,66 @@
 
 
 
+            <!-- ############## ATW Tx multiple ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'atwtx_m'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="atwtx_m_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## MHS Hours ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'mhs_hour_m'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="mhs_hour_m_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## PVAS ############## -->
+
+            <WorkRow
+              v-if="column_config.name == 'pva_m'"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="pva_m_table_config"
+              @update="update()"
+            />
+
+
+
+
+            <!-- ############## Generics ############## -->
+
+            <WorkRow
+              v-if="table_configs.generics.includes(column_config.name)"
+              :self="row"
+              :parent="self.columns[column_config.name]"
+              :column_config="column_config"
+              :parent_cpnt="$current_instance"
+              :edit_mode="edit_mode"
+              :config="generic_multiple_table_config"
+              @update="update()"
+            />
 
 
             <div
@@ -288,8 +348,61 @@ export default {
     table_configs() {
       return {
         'shifts': this.shifts_table_config,
+        'files': this.files_table_config,
         'limits': this.limits_table_config,
         's460s': this.s460s_table_config,
+
+        'atwtx_m': this.atwtx_m_table_config,
+        'mhs_hour_m': this.mhs_hour_m_table_config,
+        'pva_m': this.pva_m_table_config,
+
+        'service_m': this.generic_multiple_table_config,
+        'other_vehicle_m': this.generic_multiple_table_config,
+        'wielding_alu_m': this.generic_multiple_table_config,
+        'wielding_ai_m': this.generic_multiple_table_config,
+        'supervisor_m': this.generic_multiple_table_config,
+        'change_request_m': this.generic_multiple_table_config,
+        'mht_m': this.generic_multiple_table_config,
+        'circulation_m': this.generic_multiple_table_config,
+        'description_m': this.generic_multiple_table_config,
+        'note_m': this.generic_multiple_table_config,
+        'ilt_m': this.generic_multiple_table_config,
+        'upm_m': this.generic_multiple_table_config,
+        'colt_m': this.generic_multiple_table_config,
+        'cascat_m': this.generic_multiple_table_config,
+        'grue_m': this.generic_multiple_table_config,
+        'osv_m': this.generic_multiple_table_config,
+        'loco_m': this.generic_multiple_table_config,
+        'hgs_m': this.generic_multiple_table_config,
+        'extra_m': this.generic_multiple_table_config,
+        'bnx_m': this.generic_multiple_table_config,
+        'prodigis_m': this.generic_multiple_table_config,
+
+
+
+        'generics': [
+          'service_m',
+          'other_vehicle_m',
+          'wielding_alu_m',
+          'wielding_ai_m',
+          'supervisor_m',
+          'change_request_m',
+          'mht_m',
+          'circulation_m',
+          'description_m',
+          'note_m',
+          'ilt_m',
+          'upm_m',
+          'colt_m',
+          'cascat_m',
+          'grue_m',
+          'osv_m',
+          'loco_m',
+          'hgs_m',
+          'extra_m',
+          'bnx_m',
+          'prodigis_m',
+        ],
       }
     },
 
@@ -310,23 +423,44 @@ export default {
       }
     },
 
+    files_table_config() {
+      return {
+        'ilt': {
+          'name' : this.lang.views.radium.column_title_ilts[this.lg],
+          'width': '25%',
+        },
+        'bnx': {
+          'name' : this.lang.views.radium.column_title_bnxs[this.lg],
+          'width': '25%',
+        },
+        'fmht': {
+          'name' : this.lang.views.radium.column_title_fmhts[this.lg],
+          'width': '25%',
+        },
+        'other': {
+          'name' : this.lang.views.radium.column_title_others[this.lg],
+          'width': '25%',
+        },
+      }
+    },
+
     limits_table_config() {
       return {
         'from_line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '6%',
+          'width': '7%',
         },
         'from_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '18%',
+          'width': '17%',
         },
         'from_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
-          'width': '5%',
+          'width': '7%',
         },
         'from_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '13%',
+          'width': '11%',
         },
         'from_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
@@ -334,19 +468,19 @@ export default {
         },
         'to_line': {
           'name' : this.lang.views.radium.line[this.lg],
-          'width': '6%',
+          'width': '7%',
         },
         'to_station': {
           'name' : this.lang.views.radium.station[this.lg],
-          'width': '18%',
+          'width': '17%',
         },
         'to_lane': {
           'name' : this.lang.views.radium.lane[this.lg],
-          'width': '5%',
+          'width': '7%',
         },
         'to_signal': {
           'name' : this.lang.views.radium.signal[this.lg],
-          'width': '13%',
+          'width': '11%',
         },
         'to_pk': {
           'name' : this.lang.views.radium.pk[this.lg],
@@ -372,6 +506,77 @@ export default {
         'to_pk': {
           'name' : this.lang.views.radium.to[this.lg],
           'width': '32%',
+        },
+      }
+    },
+
+
+    generic_multiple_table_config() {
+      return {
+        'value': {
+          'name' : this.lang.generic.input_value[this.lg],
+          'width': '100%',
+        },
+      }
+    },
+
+
+
+    atwtx_m_table_config() {
+      return {
+        'from_date': {
+          'name' : this.lang.generic.date[this.lg],
+          'width': '30%',
+        },
+        'zone': {
+          'name' : this.lang.views.radium.zone[this.lg],
+          'width': '35%',
+        },
+        'subzone': {
+          'name' : this.lang.views.radium.subzone[this.lg],
+          'width': '35%',
+        },
+      }
+    },
+
+    mhs_hour_m_table_config() {
+      return {
+        'from_date': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '50%',
+        },
+        'to_date': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '50%',
+        },
+      }
+    },
+
+    pva_m_table_config() {
+      return {
+        'from_date': {
+          'name' : this.lang.generic.date[this.lg],
+          'width': '20%',
+        },
+        'kind': {
+          'name' : this.lang.views.radium.kind[this.lg],
+          'width': '16%',
+        },
+        'from_line': {
+          'name' : this.lang.views.radium.line[this.lg],
+          'width': '15%',
+        },
+        'from_lane': {
+          'name' : this.lang.views.radium.lane[this.lg],
+          'width': '15%',
+        },
+        'from_pk': {
+          'name' : this.lang.views.radium.from[this.lg],
+          'width': '17%',
+        },
+        'to_pk': {
+          'name' : this.lang.views.radium.to[this.lg],
+          'width': '17%',
         },
       }
     },
