@@ -656,6 +656,8 @@ export default {
       this.copy.link.watcher_is_printable = value
       this.copy.link.watcher_can_see_cells = value
       this.copy.link.watcher_can_see_quotas = value
+
+      this.copy.can_see_calendars = value
     },
 
     async check_email_exist() {
