@@ -4,7 +4,7 @@
   <Loader :size="100" :width="10" :mt="200" v-if="loading" />
 
   <transition name="fade">
-    <div v-if="!loading" class="board-printable-area">
+    <div v-if="!loading" class="calendar-printable-area">
       <div class="d-flex flex-start align-center my-1 mx-3 text-h5">
         <CustomButton
           :icon="'mdi-chevron-left'"
@@ -411,6 +411,21 @@ export default {
 
 
 <style scoped>
+
+@media print {
+  .calendar-printable-area {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
 
 .content {
   margin: 15px;
