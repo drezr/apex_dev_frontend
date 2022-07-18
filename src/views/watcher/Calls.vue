@@ -206,9 +206,13 @@ export default {
         })
       }
 
-      return this.calls.filter(c => {
+      let calls = this.calls.filter(c => {
         return this.with_d27 ? (c.files.length > 0 || c.links.length > 0) : true
       })
+
+      calls.sort((a, b) => new Date(a.date) - new Date(b.date))
+
+      return calls
     },
 
     visible_profiles() {
