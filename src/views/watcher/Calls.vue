@@ -228,7 +228,20 @@ export default {
 
   methods: {
     get_d27(call) {
-      call
+      let link = call.links.find(c => c.type == 'link')
+
+      if (link && link.url) {
+        let url = link.url
+        window.open(url.match(/^http[s]?:\/\//) ? url : 'http://' + url)
+        return
+      }
+
+      let file = call.files.find(c => c.kind == 'd27')
+
+      if (file) {
+        window.open(`${this.$http.media}${file.uid}/${file.name}${file.extension ? '.' + file.extension : ''}`)
+        return
+      }
     },
   },
 
