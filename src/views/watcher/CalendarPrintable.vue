@@ -28,15 +28,22 @@
         />
       </div>
 
-
       <div class="d-flex mt-5">
         <div class="spacer"></div>
         <div
-          v-for="(day, i) in dates"
+          v-for="(day, i) in calendar"
           :key="i" class="day"
           :class="[is_cv(day.day) ? 'yellow accent-3 black--text' :
                          'grey darken-4 white--text']"
+          style="position: relative;"
         >
+          <div
+            v-if="day.name_short_en == 'Mon'"
+            class="calendar-week-step"
+          >
+            {{ day.week_step }}
+          </div>
+
           <span>
           <b>{{ day.name_short.toUpperCase() }}</b><br>
           {{ day.day_number }}
@@ -103,11 +110,19 @@
       <div class="d-flex">
         <div class="spacer"></div>
         <div
-          v-for="(day, i) in dates"
+          v-for="(day, i) in calendar"
           :key="i" class="day"
           :class="[is_cv(day.day) ? 'yellow accent-3 black--text' :
                          'grey darken-4 white--text']"
+          style="position: relative;"
         >
+          <div
+            v-if="day.name_short_en == 'Mon'"
+            class="calendar-week-step"
+          >
+            {{ day.week_step }}
+          </div>
+          
           <span>
           <b>{{ day.name_short.toUpperCase() }}</b><br>
           {{ day.day_number }}
@@ -517,6 +532,23 @@ export default {
 
 .cell-text-stroke {
   text-shadow: 0px 0px 3px white;
+}
+
+.calendar-week-step {
+    position: absolute;
+    top: 23px;
+    left: -2px;
+    border: 1px black solid;
+    background-color: rgb(99, 203, 255);
+    color: black;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
 }
 
 
