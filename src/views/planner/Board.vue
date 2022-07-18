@@ -169,9 +169,24 @@
               class="board-date-day lighten-3"
               :class="get_day_color(date)"
               :ref="date.data.date"
+              style="position: relative;"
             >
               <div class="text-center">
-                <small>{{ lang.generic[date.day_name][lg].toUpperCase().substring(0,3) }}</small><br>
+                <div
+                  v-if="date.day_name == 'monday'"
+                  class="board-week-step"
+                >
+                  {{ new Date(date.data.date).getWeek() }}
+                </div>
+
+                <small
+                  :class="date.day_name == 'monday' ? 'ml-5' : ''"
+                >
+                  {{ lang.generic[date.day_name][lg].toUpperCase().substring(0,3) }}
+                </small>
+
+                <br>
+
                 <b>{{ date.day }}/{{ date.month }}</b>
               </div>
             </div>
@@ -1463,6 +1478,23 @@ export default {
   position: relative;
   top: 33px;
   float: right;
+}
+
+.board-week-step {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    border: 1px black solid;
+    background-color: rgb(99, 203, 255);
+    color: black;
+    font-weight: bold;
+    width: 17px;
+    height: 17px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
 }
 
 </style>
