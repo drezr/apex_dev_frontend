@@ -27,7 +27,7 @@
       v-model="self.start"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.start[lg]"
-      @input="update"
+      @input="update($event)"
     />
 
     <input
@@ -35,7 +35,7 @@
       v-model="self.end"
       :disabled="!(edit_mode && $is_editor)"
       :placeholder="lang.generic.end[lg]"
-      @input="update"
+      @input="update($event)"
     />
 
     <div class="call-calc">
@@ -347,7 +347,17 @@ Calculate time delta between start and end of the call in decimal
   },
 
   methods: {
-    update() {
+    update(event) {
+      if (event.inputType != 'deleteContentBackward') {
+        if (this.self.start && this.self.start.length == 2) {
+          this.self.start = this.self.start + ':'
+        }
+
+        if (this.self.end && this.self.end.length == 2) {
+          this.self.end = this.self.end + ':'
+        }
+      }
+
       if (!this.is_updating) {
         clearInterval(this.update_timer)
       }
