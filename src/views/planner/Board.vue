@@ -179,9 +179,7 @@
                   {{ new Date(date.data.date).getWeek() }}
                 </div>
 
-                <small
-                  :class="date.day_name == 'monday' ? 'ml-5' : ''"
-                >
+                <small>
                   {{ lang.generic[date.day_name][lg].toUpperCase().substring(0,3) }}
                 </small>
 
@@ -1482,14 +1480,14 @@ export default {
 
 .board-week-step {
     position: absolute;
-    top: 4px;
-    left: 6px;
+    top: 1px;
+    left: 1px;
     border: 1px black solid;
     background-color: rgb(99, 203, 255);
     color: black;
     font-weight: bold;
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
