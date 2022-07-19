@@ -2042,6 +2042,11 @@ export default {
               "nl": "Materialen Supply",
               "en": "Materials Supply"
             },
+            "column_title_cmb_pvb":{
+              "fr": "CMB-PVB",
+              "nl": "CMB-PVB",
+              "en": "CMB-PVB"
+            },
 
 
 
